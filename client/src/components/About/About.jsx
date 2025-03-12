@@ -12,10 +12,10 @@ const About = () => {
 
   const teamMembers = [
     {
-      name: "Emily Johnson",
+      name: "Anwar Khan",
       role: "Founder & Creative Director",
       image: "/team-placeholder1.jpg",
-      bio: "With over 10 years of experience in design and branding, Emily leads our creative vision with passion and precision.",
+      bio: "With over 5 years of experience in design and branding, Anwar leads our creative vision with passion and precision.",
       social: {
         twitter: "#",
         linkedin: "#",
@@ -23,10 +23,10 @@ const About = () => {
       },
     },
     {
-      name: "Michael Chen",
+      name: "Pritam Das",
       role: "Lead Developer",
       image: "/team-placeholder2.jpg",
-      bio: "Michael brings technical expertise and innovative solutions to every project, ensuring flawless functionality.",
+      bio: "Pritam brings technical expertise and innovative solutions to every project, ensuring flawless functionality.",
       social: {
         twitter: "#",
         linkedin: "#",
@@ -34,10 +34,10 @@ const About = () => {
       },
     },
     {
-      name: "Sarah Rodriguez",
+      name: "Lisa Patel",
       role: "UX/UI Designer",
       image: "/team-placeholder3.jpg",
-      bio: "Sarah crafts intuitive user experiences that delight customers and drive engagement for our clients.",
+      bio: "Lisa crafts intuitive user experiences that delight customers and drive engagement for our clients.",
       social: {
         dribbble: "#",
         linkedin: "#",
@@ -45,10 +45,10 @@ const About = () => {
       },
     },
     {
-      name: "Alex Thompson",
+      name: "Sabia Khan",
       role: "Marketing Strategist",
       image: "/team-placeholder4.jpg",
-      bio: "Alex develops data-driven marketing strategies that connect brands with their ideal audiences.",
+      bio: "Sabia develops data-driven marketing strategies that connect brands with their ideal audiences.",
       social: {
         twitter: "#",
         linkedin: "#",
@@ -120,7 +120,7 @@ const About = () => {
             </h2>
             <p className="text-gray-600 text-lg">
               We're a team of passionate designers and developers creating
-              beautiful digital experiences for women and children's brands.
+              beautiful digital experiences for brands and individuals.
             </p>
           </motion.div>
 
@@ -132,9 +132,9 @@ const About = () => {
                 <p>
                   Founded in 2018, Veloria was born from a passion for creating
                   beautiful, functional websites specifically for brands that
-                  cater to women and children. We noticed that these brands
-                  often struggled to find design partners who truly understood
-                  their unique needs and audience.
+                  cater to individuals. We noticed that these brands often often
+                  struggled to find design partners who truly understood their
+                  unique needs and audience.
                 </p>
                 <p>
                   What started as a small studio has grown into a full-service
@@ -142,7 +142,7 @@ const About = () => {
                   brands shine in the digital space.
                 </p>
                 <p>
-                  Today, we're proud to have partnered with over 100 brands
+                  Today, we're proud to have partnered with over 30 brands
                   across the globe, creating digital experiences that resonate
                   with their audiences and drive meaningful results.
                 </p>
@@ -161,7 +161,7 @@ const About = () => {
                     <span className="text-white text-2xl font-bold">V</span>
                   </div>
                   <h4 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    Veloria Design
+                    Veloria Studio
                   </h4>
                   <p className="text-gray-600 mt-2">Established 2018</p>
                 </div>

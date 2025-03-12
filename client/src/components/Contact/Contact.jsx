@@ -47,29 +47,29 @@ const Contact = () => {
     {
       icon: <Mail size={24} />,
       title: "Email Us",
-      details: "hello@veloria.design",
+      details: "support@veloria.in",
       description: "We'll respond within 24 hours",
       color: "primary",
     },
     {
       icon: <Phone size={24} />,
       title: "Call Us",
-      details: "+1 (555) 123-4567",
+      details: "+91 9315 360 595",
       description: "Mon-Fri from 9am to 5pm",
       color: "secondary",
     },
     {
       icon: <MapPin size={24} />,
       title: "Visit Us",
-      details: "123 Design Street, Creative City",
+      details: "1603, Palava City",
       description: "Book an appointment first",
       color: "accent",
     },
     {
       icon: <Clock size={24} />,
       title: "Working Hours",
-      details: "Monday to Friday",
-      description: "9:00 AM - 5:00 PM",
+      details: "Monday to Saturday",
+      description: "10:00 AM - 7:00 PM",
       color: "light",
     },
   ];
@@ -185,22 +185,27 @@ const Contact = () => {
               variants={itemVariants}
             >
               {/* Replace with actual map if available */}
-              <div className="bg-gray-200 h-64 w-full relative">
+              <div className="bg-gray-200 h-64 w-full relative overflow-hidden">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center p-6">
-                    <MapPin size={32} className="mx-auto mb-3 text-primary" />
-                    <p className="text-gray-600">Map Placeholder</p>
-                    <p className="text-gray-500 text-sm">
-                      Interactive map would go here
-                    </p>
+                  <div className="w-full h-full">
+                    <iframe
+                      className="gmap_iframe w-full h-full"
+                      frameBorder="0"
+                      scrolling="no"
+                      marginHeight="0"
+                      marginWidth="0"
+                      src="https://maps.google.com/maps?q=1603+Palava+City+Downtown+Palava+phase+2,+Mumbai&ie=UTF8&t=&z=16&iwloc=&output=embed"
+                      style={{ border: 0 }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
                   </div>
                 </div>
               </div>
 
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-4">
-                  Veloria Design Studio
-                </h3>
+                <h3 className="text-xl font-bold mb-4">Veloria Studio</h3>
                 <p className="text-gray-600 mb-4">
                   Our creative space is located in the heart of the design
                   district, where inspiration meets innovation.
@@ -211,10 +216,10 @@ const Contact = () => {
                     <MapPin size={18} className="text-primary mt-1 mr-3" />
                     <div>
                       <p className="text-gray-800 font-medium">
-                        123 Design Street
+                        1603, Palava City
                       </p>
                       <p className="text-gray-600">
-                        Creative City, State 12345
+                        Downtown Palava phase 2, Mumbai
                       </p>
                     </div>
                   </div>
@@ -222,7 +227,7 @@ const Contact = () => {
                   <div className="flex items-center">
                     <Clock size={18} className="text-primary mr-3" />
                     <p className="text-gray-600">
-                      Open Monday to Friday, 9:00 AM - 5:00 PM
+                      Open Monday to Saturday, 10:00 AM - 7:00 PM
                     </p>
                   </div>
                 </div>

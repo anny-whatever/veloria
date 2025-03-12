@@ -143,23 +143,21 @@ const Footer = () => {
                     size={18}
                     className="text-accent mt-1 mr-3 flex-shrink-0"
                   />
-                  <span className="text-gray-400">hello@veloria.design</span>
+                  <span className="text-gray-400">suppor@veloria.in</span>
                 </li>
                 <li className="flex items-start">
                   <Phone
                     size={18}
                     className="text-accent mt-1 mr-3 flex-shrink-0"
                   />
-                  <span className="text-gray-400">+1 (555) 123-4567</span>
+                  <span className="text-gray-400">+91 9315 360 595</span>
                 </li>
                 <li className="flex items-start">
                   <MapPin
                     size={18}
                     className="text-accent mt-1 mr-3 flex-shrink-0"
                   />
-                  <span className="text-gray-400">
-                    123 Design Street, Creative City
-                  </span>
+                  <span className="text-gray-400">1603, Palava City</span>
                 </li>
               </ul>
 

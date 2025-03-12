@@ -3,70 +3,34 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import PortfolioItem from "./PortfolioItem";
+import PortfolioDetail from "./PortfolioDetail";
+import portfolioProjects from "../../data/portfolioProjects";
 
 const Portfolio = () => {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
   });
 
-  // Demo portfolio items - would be replaced with real projects
-  const portfolioItems = [
-    {
-      id: 1,
-      title: "Children's Clothing Brand",
-      category: "ecommerce",
-      image: "/placeholder1.jpg",
-      description:
-        "An e-commerce site for a premium children's clothing brand featuring custom checkout and inventory management.",
-    },
-    {
-      id: 2,
-      title: "Wellness Spa Website",
-      category: "branding",
-      image: "/placeholder2.jpg",
-      description:
-        "Complete branding and website for a luxury wellness spa targeting women.",
-    },
-    {
-      id: 3,
-      title: "Maternity Blog Platform",
-      category: "blog",
-      image: "/placeholder3.jpg",
-      description:
-        "Custom blog platform for a maternity influencer with content management system and newsletter integration.",
-    },
-    {
-      id: 4,
-      title: "Organic Baby Food Shop",
-      category: "ecommerce",
-      image: "/placeholder4.jpg",
-      description:
-        "E-commerce platform for organic baby food with subscription service and mobile app integration.",
-    },
-    {
-      id: 5,
-      title: "Women's Fitness Program",
-      category: "webapp",
-      image: "/placeholder5.jpg",
-      description:
-        "Interactive web application for women's fitness programs with progress tracking and community features.",
-    },
-    {
-      id: 6,
-      title: "Family Photography Portfolio",
-      category: "branding",
-      image: "/placeholder6.jpg",
-      description:
-        "Portfolio website for a family photographer with custom gallery features and booking system.",
-    },
+  const filters = [
+    { id: "all", label: "All Projects" },
+    { id: "ecommerce", label: "E-commerce" },
+    { id: "blog", label: "Blogs" },
+    { id: "branding", label: "Branding" },
+    { id: "portfolio", label: "Portfolios" },
+    { id: "landing", label: "Landing Pages" },
+    { id: "custom", label: "Custom Solutions" },
   ];
 
-  const filteredItems =
+  const filteredProjects =
     activeFilter === "all"
-      ? portfolioItems
-      : portfolioItems.filter((item) => item.category === activeFilter);
+      ? portfolioProjects
+      : portfolioProjects.filter(
+          (project) => project.category === activeFilter
+        );
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -88,13 +52,16 @@ const Portfolio = () => {
     },
   };
 
-  const filters = [
-    { id: "all", label: "All Projects" },
-    { id: "ecommerce", label: "E-commerce" },
-    { id: "branding", label: "Branding" },
-    { id: "webapp", label: "Web Apps" },
-    { id: "blog", label: "Blogs" },
-  ];
+  const handleProjectClick = (project) => {
+    setSelectedProject(project);
+    setShowModal(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    document.body.style.overflow = "auto";
+  };
 
   return (
     <section
@@ -134,7 +101,7 @@ const Portfolio = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Portfolio</h2>
           <p className="text-gray-600 text-lg">
             Explore our recent projects and see how we've helped brands achieve
-            their digital goals.
+            their digital goals. Click on any project for a detailed case study.
           </p>
         </motion.div>
 
@@ -169,8 +136,13 @@ const Portfolio = () => {
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          {filteredItems.map((item, index) => (
-            <PortfolioItem key={item.id} item={item} index={index} />
+          {filteredProjects.map((project, index) => (
+            <PortfolioItem
+              key={project.id}
+              item={project}
+              index={index}
+              onClick={() => handleProjectClick(project)}
+            />
           ))}
         </motion.div>
 
@@ -190,6 +162,11 @@ const Portfolio = () => {
           </motion.button>
         </motion.div>
       </div>
+
+      {/* Project Detail Modal */}
+      {showModal && selectedProject && (
+        <PortfolioDetail project={selectedProject} onClose={closeModal} />
+      )}
     </section>
   );
 };
