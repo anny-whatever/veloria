@@ -1,5 +1,6 @@
 // src/components/Header/Header.jsx
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
@@ -8,6 +9,28 @@ const Header = () => {
     threshold: 0.1,
     triggerOnce: true,
   });
+
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      // Get the navbar height to offset the scroll position
+      const navbar = document.querySelector("nav");
+      const navbarHeight = navbar ? navbar.offsetHeight : 0;
+
+      // Calculate the target position (element position - navbar height - extra padding)
+      const targetPosition =
+        section.getBoundingClientRect().top +
+        window.pageYOffset -
+        navbarHeight -
+        20;
+
+      // Smooth scroll to the calculated position
+      window.scrollTo({
+        top: targetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
 
   // Animation variants
   const containerVariants = {
@@ -135,20 +158,23 @@ const Header = () => {
               className="flex sm:flex-row gap-4 justify-center md:justify-start"
               variants={itemVariants}
             >
-              <motion.button
-                className="btn-primary px-8 py-3 bg-gradient-to-r from-primary to-secondary text-white"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                Get Started
-              </motion.button>
+              <Link to="/get-started">
+                <motion.button
+                  className="btn-primary px-8 py-3 bg-gradient-to-r from-primary to-secondary text-white"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  Get Started
+                </motion.button>
+              </Link>
 
               <motion.button
                 className="btn-outline px-8 py-3"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                onClick={() => scrollToSection("portfolio")}
               >
                 View Portfolio
               </motion.button>

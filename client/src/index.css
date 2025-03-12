@@ -101,5 +101,17 @@ body {
   animation: textGradientAnimation 6s linear infinite;
 }
 
+/* src/styles/scrollbar-hide.css */
+
+/* Hide scrollbars for the tab navigation but keep scrolling functionality */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 /* These classes are defined directly in TailwindCSS, so we don't need to redefine them */
 /* Just add them as normal classes in your jsx files */

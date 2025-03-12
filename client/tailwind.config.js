@@ -1,3 +1,6 @@
+// tailwind.config.js
+const plugin = require("tailwindcss/plugin");
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -31,5 +34,22 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // Plugin to hide scrollbars while keeping scrolling functionality
+    plugin(function ({ addUtilities }) {
+      const newUtilities = {
+        ".scrollbar-hide": {
+          /* For Internet Explorer and Edge */
+          "-ms-overflow-style": "none",
+          /* For Firefox */
+          "scrollbar-width": "none",
+          /* For WebKit browsers */
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        },
+      };
+      addUtilities(newUtilities);
+    }),
+  ],
 };

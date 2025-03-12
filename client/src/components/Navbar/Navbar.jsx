@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import NavLink from "./NavLink";
 
@@ -107,14 +108,16 @@ const Navbar = () => {
             <NavLink href="#portfolio" text="Portfolio" />
             <NavLink href="#about" text="About" />
             <NavLink href="#contact" text="Contact" />
-            <motion.button
-              className="px-6 py-2 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-medium transition-all duration-300 hover:shadow-glow-primary"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            >
-              Get Started
-            </motion.button>
+            <Link to="/get-started">
+              <motion.button
+                className="px-6 py-2 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-medium transition-all duration-300 hover:shadow-glow-primary"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                Get Started
+              </motion.button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -202,15 +205,17 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                   />
                 </motion.div>
-                <motion.button
-                  className="mt-4 px-8 py-3 rounded-full w-4/5 bg-gradient-to-r from-primary to-secondary text-white font-medium transition-all duration-300 hover:shadow-glow-primary"
-                  variants={linkVariants}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Get Started
-                </motion.button>
+                <motion.div variants={linkVariants}>
+                  <Link to="/get-started" onClick={() => setIsOpen(false)}>
+                    <motion.button
+                      className="mt-4 px-8 py-3 rounded-full w-full bg-gradient-to-r from-primary to-secondary text-white font-medium transition-all duration-300 hover:shadow-glow-primary"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Get Started
+                    </motion.button>
+                  </Link>
+                </motion.div>
               </div>
             </motion.div>
           )}

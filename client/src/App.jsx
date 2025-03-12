@@ -78,7 +78,7 @@ function App() {
                   "primary",
                   "secondary",
                   "accent",
-                  "light",
+                  "primary",
                   "secondary",
                   "primary",
                   "secondary",
