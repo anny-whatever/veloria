@@ -339,27 +339,6 @@ const PortfolioDetail = ({ project, onClose }) => {
                           <p className="font-medium">{project.clientName}</p>
                         </div>
                       </li>
-                      {project.liveUrl && (
-                        <li className="flex items-start">
-                          <ExternalLink
-                            size={18}
-                            className="text-primary mt-1 mr-3 flex-shrink-0"
-                          />
-                          <div>
-                            <p className="text-sm text-gray-500">
-                              Live Website
-                            </p>
-                            <a
-                              href={project.liveUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="font-medium text-primary hover:underline"
-                            >
-                              Visit Site
-                            </a>
-                          </div>
-                        </li>
-                      )}
                     </ul>
 
                     {/* Tags */}

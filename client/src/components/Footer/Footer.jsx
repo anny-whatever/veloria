@@ -143,7 +143,7 @@ const Footer = () => {
                     size={18}
                     className="text-accent mt-1 mr-3 flex-shrink-0"
                   />
-                  <span className="text-gray-400">suppor@veloria.in</span>
+                  <span className="text-gray-400">support@veloria.in</span>
                 </li>
                 <li className="flex items-start">
                   <Phone
