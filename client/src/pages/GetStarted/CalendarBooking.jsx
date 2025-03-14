@@ -12,6 +12,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { scheduleDiscoveryCall } from "../../api";
 
 const CalendarBooking = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -30,6 +31,8 @@ const CalendarBooking = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [apiError, setApiError] = useState("");
+  const [bookingDetails, setBookingDetails] = useState(null);
 
   // Current date for the calendar
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -224,18 +227,31 @@ const CalendarBooking = () => {
     window.scrollTo(0, 0);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setApiError("");
 
     if (validateStep()) {
       setIsSubmitting(true);
 
-      // Simulate API call
-      setTimeout(() => {
-        console.log("Booking submitted:", formData);
-        setIsSubmitting(false);
+      try {
+        // Call API to schedule the call
+        const response = await scheduleDiscoveryCall(formData);
+        console.log("Booking submitted:", response);
+
+        // Set booking details from response
+        setBookingDetails(response.booking);
         setIsSubmitted(true);
-      }, 1500);
+      } catch (error) {
+        console.error("Error scheduling call:", error);
+        setApiError(
+          typeof error === "string"
+            ? error
+            : "There was an error scheduling your call. Please try again."
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -249,22 +265,22 @@ const CalendarBooking = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="text-center py-12"
+        className="py-12 text-center"
       >
-        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 bg-green-100 rounded-full">
           <CheckCircle size={40} className="text-green-600" />
         </div>
-        <h3 className="text-2xl font-bold mb-2">Discovery Call Scheduled!</h3>
-        <p className="text-gray-600 mb-8 max-w-lg mx-auto">
+        <h3 className="mb-2 text-2xl font-bold">Discovery Call Scheduled!</h3>
+        <p className="max-w-lg mx-auto mb-8 text-gray-600">
           Your discovery call has been scheduled for{" "}
           {new Date(formData.date).toLocaleDateString()} at {formData.time}.
           You'll receive a confirmation email with the call details shortly.
         </p>
-        <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 max-w-md mx-auto mb-8">
+        <div className="max-w-md p-6 mx-auto mb-8 border border-gray-200 bg-gray-50 rounded-xl">
           <div className="flex items-start mb-4">
             <Calendar
               size={20}
-              className="text-primary mt-1 mr-3 flex-shrink-0"
+              className="flex-shrink-0 mt-1 mr-3 text-primary"
             />
             <div>
               <p className="font-medium">Date</p>
@@ -279,7 +295,7 @@ const CalendarBooking = () => {
             </div>
           </div>
           <div className="flex items-start mb-4">
-            <Clock size={20} className="text-primary mt-1 mr-3 flex-shrink-0" />
+            <Clock size={20} className="flex-shrink-0 mt-1 mr-3 text-primary" />
             <div>
               <p className="font-medium">Time</p>
               <p className="text-gray-600">
@@ -290,7 +306,7 @@ const CalendarBooking = () => {
           <div className="flex items-start">
             <VideoIcon
               size={20}
-              className="text-primary mt-1 mr-3 flex-shrink-0"
+              className="flex-shrink-0 mt-1 mr-3 text-primary"
             />
             <div>
               <p className="font-medium">Call Type</p>
@@ -301,10 +317,23 @@ const CalendarBooking = () => {
               </p>
             </div>
           </div>
+
+          {bookingDetails?.meetingDetails?.link && (
+            <div className="pt-4 mt-4 border-t border-gray-200">
+              <a
+                href={bookingDetails.meetingDetails.link}
+                className="font-medium text-primary hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Join Zoom Meeting
+              </a>
+            </div>
+          )}
         </div>
         <button
           onClick={() => (window.location.href = "/")}
-          className="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg"
+          className="px-6 py-3 text-white rounded-lg bg-gradient-to-r from-primary to-secondary"
         >
           Return to Home
         </button>
@@ -314,12 +343,19 @@ const CalendarBooking = () => {
 
   return (
     <div>
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold mb-2">Book a Discovery Call</h3>
+      <div className="mb-8 text-center">
+        <h3 className="mb-2 text-2xl font-bold">Book a Discovery Call</h3>
         <p className="text-gray-600">
           Schedule a free 30-minute consultation to discuss your project needs.
         </p>
       </div>
+
+      {/* API Error Message */}
+      {apiError && (
+        <div className="p-4 mb-6 text-red-700 border border-red-200 rounded-lg bg-red-50">
+          {apiError}
+        </div>
+      )}
 
       {/* Progress indicator */}
       <div className="mb-8">
@@ -329,7 +365,7 @@ const CalendarBooking = () => {
             {currentStep === 1 ? "50%" : "100%"} Complete
           </span>
         </div>
-        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="w-full h-2 overflow-hidden bg-gray-200 rounded-full">
           <motion.div
             className="h-full bg-gradient-to-r from-primary to-secondary"
             initial={{ width: "0%" }}
@@ -347,15 +383,15 @@ const CalendarBooking = () => {
       >
         {currentStep === 1 ? (
           <div>
-            <h4 className="text-xl font-semibold mb-6">Select Date & Time</h4>
+            <h4 className="mb-6 text-xl font-semibold">Select Date & Time</h4>
 
             {/* Calendar */}
             <div className="mb-8">
-              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="overflow-hidden bg-white border border-gray-200 rounded-lg">
                 <div className="flex items-center justify-between p-4 border-b border-gray-200">
                   <button
                     onClick={handlePrevMonth}
-                    className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                    className="p-2 transition-colors rounded-full hover:bg-gray-100"
                   >
                     <ChevronLeft size={20} />
                   </button>
@@ -367,7 +403,7 @@ const CalendarBooking = () => {
                   </h5>
                   <button
                     onClick={handleNextMonth}
-                    className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                    className="p-2 transition-colors rounded-full hover:bg-gray-100"
                   >
                     <ChevronRight size={20} />
                   </button>
@@ -379,7 +415,7 @@ const CalendarBooking = () => {
                       (day) => (
                         <div
                           key={day}
-                          className="text-center py-2 text-sm font-medium text-gray-600"
+                          className="py-2 text-sm font-medium text-center text-gray-600"
                         >
                           {day}
                         </div>
@@ -389,7 +425,7 @@ const CalendarBooking = () => {
                     {calendarDays.map((day, index) => (
                       <div
                         key={index}
-                        className="h-12 flex items-center justify-center"
+                        className="flex items-center justify-center h-12"
                       >
                         {day.day && (
                           <button
@@ -417,16 +453,16 @@ const CalendarBooking = () => {
                 </div>
               </div>
               {errors.date && (
-                <p className="text-red-500 mt-1">{errors.date}</p>
+                <p className="mt-1 text-red-500">{errors.date}</p>
               )}
             </div>
 
             {/* Time slots */}
             <div className="mb-8">
-              <label className="block text-gray-700 font-medium mb-2">
+              <label className="block mb-2 font-medium text-gray-700">
                 Select a Time
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {timeSlots.map((time) => (
                   <button
                     key={time}
@@ -442,14 +478,14 @@ const CalendarBooking = () => {
                 ))}
               </div>
               {errors.time && (
-                <p className="text-red-500 mt-1">{errors.time}</p>
+                <p className="mt-1 text-red-500">{errors.time}</p>
               )}
             </div>
 
             {/* Timezone */}
             <div className="mb-8">
               <label
-                className="block text-gray-700 font-medium mb-2"
+                className="block mb-2 font-medium text-gray-700"
                 htmlFor="timezone"
               >
                 Your Timezone
@@ -459,7 +495,7 @@ const CalendarBooking = () => {
                 name="timezone"
                 value={formData.timezone}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
                 {timezones.map((tz) => (
                   <option key={tz.value} value={tz.value}>
@@ -468,13 +504,13 @@ const CalendarBooking = () => {
                 ))}
               </select>
               {errors.timezone && (
-                <p className="text-red-500 mt-1">{errors.timezone}</p>
+                <p className="mt-1 text-red-500">{errors.timezone}</p>
               )}
             </div>
 
             {/* Call Type */}
             <div className="mb-8">
-              <label className="block text-gray-700 font-medium mb-2">
+              <label className="block mb-2 font-medium text-gray-700">
                 Call Type
               </label>
               <div className="grid grid-cols-2 gap-4">
@@ -508,19 +544,19 @@ const CalendarBooking = () => {
                 ))}
               </div>
               {errors.callType && (
-                <p className="text-red-500 mt-1">{errors.callType}</p>
+                <p className="mt-1 text-red-500">{errors.callType}</p>
               )}
             </div>
           </div>
         ) : (
           <div>
-            <h4 className="text-xl font-semibold mb-6">Your Information</h4>
+            <h4 className="mb-6 text-xl font-semibold">Your Information</h4>
 
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
                   <label
-                    className="block text-gray-700 font-medium mb-2"
+                    className="block mb-2 font-medium text-gray-700"
                     htmlFor="name"
                   >
                     Your Name
@@ -531,17 +567,17 @@ const CalendarBooking = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                     placeholder="Your full name"
                   />
                   {errors.name && (
-                    <p className="text-red-500 mt-1">{errors.name}</p>
+                    <p className="mt-1 text-red-500">{errors.name}</p>
                   )}
                 </div>
 
                 <div>
                   <label
-                    className="block text-gray-700 font-medium mb-2"
+                    className="block mb-2 font-medium text-gray-700"
                     htmlFor="email"
                   >
                     Email Address
@@ -552,19 +588,19 @@ const CalendarBooking = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                     placeholder="your.email@example.com"
                   />
                   {errors.email && (
-                    <p className="text-red-500 mt-1">{errors.email}</p>
+                    <p className="mt-1 text-red-500">{errors.email}</p>
                   )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
                   <label
-                    className="block text-gray-700 font-medium mb-2"
+                    className="block mb-2 font-medium text-gray-700"
                     htmlFor="phone"
                   >
                     Phone Number (Optional)
@@ -575,14 +611,14 @@ const CalendarBooking = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                     placeholder="Your contact number"
                   />
                 </div>
 
                 <div>
                   <label
-                    className="block text-gray-700 font-medium mb-2"
+                    className="block mb-2 font-medium text-gray-700"
                     htmlFor="company"
                   >
                     Company/Brand (Optional)
@@ -593,7 +629,7 @@ const CalendarBooking = () => {
                     name="company"
                     value={formData.company}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                     placeholder="Your company or brand name"
                   />
                 </div>
@@ -601,7 +637,7 @@ const CalendarBooking = () => {
 
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block mb-2 font-medium text-gray-700"
                   htmlFor="projectType"
                 >
                   What type of project are you interested in?
@@ -611,7 +647,7 @@ const CalendarBooking = () => {
                   name="projectType"
                   value={formData.projectType}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   <option value="">Select project type</option>
                   {projectTypes.map((type) => (
@@ -621,13 +657,13 @@ const CalendarBooking = () => {
                   ))}
                 </select>
                 {errors.projectType && (
-                  <p className="text-red-500 mt-1">{errors.projectType}</p>
+                  <p className="mt-1 text-red-500">{errors.projectType}</p>
                 )}
               </div>
 
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block mb-2 font-medium text-gray-700"
                   htmlFor="additionalInfo"
                 >
                   Anything specific you'd like to discuss? (Optional)
@@ -638,17 +674,17 @@ const CalendarBooking = () => {
                   value={formData.additionalInfo}
                   onChange={handleChange}
                   rows="4"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                   placeholder="Share any specific topics or questions you'd like to discuss during the call..."
                 ></textarea>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
                 <div className="flex items-center mb-3">
-                  <Users size={20} className="text-primary mr-3" />
+                  <Users size={20} className="mr-3 text-primary" />
                   <h5 className="font-medium">Your Discovery Call Details</h5>
                 </div>
-                <div className="pl-9 space-y-2 text-sm text-gray-600">
+                <div className="space-y-2 text-sm text-gray-600 pl-9">
                   <p>
                     <span className="font-medium">Date:</span>{" "}
                     {selectedDate &&
@@ -680,7 +716,7 @@ const CalendarBooking = () => {
         {currentStep > 1 ? (
           <button
             onClick={handlePrevious}
-            className="flex items-center px-6 py-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            className="flex items-center px-6 py-3 transition-colors bg-gray-100 rounded-lg hover:bg-gray-200"
           >
             <ChevronLeft size={20} className="mr-2" />
             Back
@@ -692,7 +728,7 @@ const CalendarBooking = () => {
         {currentStep < 2 ? (
           <button
             onClick={handleNext}
-            className="flex items-center px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:opacity-90 transition-opacity"
+            className="flex items-center px-6 py-3 text-white transition-opacity rounded-lg bg-gradient-to-r from-primary to-secondary hover:opacity-90"
           >
             Continue
             <ChevronRight size={20} className="ml-2" />
@@ -701,12 +737,12 @@ const CalendarBooking = () => {
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="flex items-center px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-70"
+            className="flex items-center px-6 py-3 text-white transition-opacity rounded-lg bg-gradient-to-r from-primary to-secondary hover:opacity-90 disabled:opacity-70"
           >
             {isSubmitting ? (
               <>
                 <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"

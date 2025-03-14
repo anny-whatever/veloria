@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, ChevronRight, ChevronLeft, Info } from "lucide-react";
+import { submitProjectForm } from "../../api";
 
 const ProjectForm = ({ setActiveSection }) => {
   const [step, setStep] = useState(1);
@@ -33,6 +34,7 @@ const ProjectForm = ({ setActiveSection }) => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   // Service definitions with minimum pricing and timelines
   const services = [
@@ -152,6 +154,16 @@ const ProjectForm = ({ setActiveSection }) => {
     { id: "not-sure", label: "Not sure yet", value: "not-sure", priority: 4 },
   ];
 
+  const projectGoalOptions = [
+    { id: "sales", label: "Increase Sales" },
+    { id: "leads", label: "Generate Leads" },
+    { id: "awareness", label: "Brand Awareness" },
+    { id: "traffic", label: "Drive Traffic" },
+    { id: "conversion", label: "Improve Conversion Rate" },
+    { id: "showcase", label: "Showcase Work/Products" },
+    { id: "information", label: "Share Information" },
+  ];
+
   // Filter budget ranges based on selected service
   const getAvailableBudgetRanges = () => {
     if (!formData.serviceType) return allBudgetRanges;
@@ -234,21 +246,13 @@ const ProjectForm = ({ setActiveSection }) => {
     }
   }, [formData.serviceType]);
 
-  const projectGoalOptions = [
-    { id: "sales", label: "Increase Sales" },
-    { id: "leads", label: "Generate Leads" },
-    { id: "awareness", label: "Brand Awareness" },
-    { id: "traffic", label: "Drive Traffic" },
-    { id: "conversion", label: "Improve Conversion Rate" },
-    { id: "showcase", label: "Showcase Work/Products" },
-    { id: "information", label: "Share Information" },
-  ];
-
   const validateStep = () => {
     const newErrors = {};
 
-    if (step === 1 && !formData.serviceType) {
-      newErrors.serviceType = "Please select a service type";
+    if (step === 1) {
+      if (!formData.serviceType) {
+        newErrors.serviceType = "Please select a service type";
+      }
     }
 
     if (step === 2) {
@@ -318,7 +322,7 @@ const ProjectForm = ({ setActiveSection }) => {
       [name]: value,
     });
 
-    // Clear error when field is changed
+    // Clear error when field is modified
     if (errors[name]) {
       setErrors({
         ...errors,
@@ -363,16 +367,25 @@ const ProjectForm = ({ setActiveSection }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setApiError("");
 
     if (validateStep()) {
       setIsSubmitting(true);
 
-      // Simulate form submission
-      setTimeout(() => {
-        console.log("Form data submitted:", formData);
-        setIsSubmitting(false);
+      try {
+        const response = await submitProjectForm(formData);
+        console.log("Form data submitted:", response);
         setIsSubmitted(true);
-      }, 1500);
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        setApiError(
+          typeof error === "string"
+            ? error
+            : "There was an error submitting your request. Please try again."
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -394,7 +407,7 @@ const ProjectForm = ({ setActiveSection }) => {
               Select the service that best matches your requirements:
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+            <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-3">
               {services.map((service) => (
                 <motion.div
                   key={service.id}
@@ -407,7 +420,7 @@ const ProjectForm = ({ setActiveSection }) => {
                   whileHover={{ y: -5 }}
                 >
                   <div className="flex items-start mb-3">
-                    <span className="text-2xl mr-3">{service.icon}</span>
+                    <span className="mr-3 text-2xl">{service.icon}</span>
                     <div>
                       <h4 className="font-bold">{service.title}</h4>
                       <p className="text-sm text-gray-600">
@@ -419,7 +432,7 @@ const ProjectForm = ({ setActiveSection }) => {
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
-                      className="mt-3 pt-3 border-t border-gray-200 text-sm text-gray-600"
+                      className="pt-3 mt-3 text-sm text-gray-600 border-t border-gray-200"
                     >
                       <p className="mb-2">{service.details}</p>
                       <div className="flex flex-col gap-1 mt-3">
@@ -437,7 +450,7 @@ const ProjectForm = ({ setActiveSection }) => {
             </div>
 
             {errors.serviceType && (
-              <p className="text-red-500 mt-2">{errors.serviceType}</p>
+              <p className="mt-2 text-red-500">{errors.serviceType}</p>
             )}
           </div>
         );
@@ -449,7 +462,7 @@ const ProjectForm = ({ setActiveSection }) => {
 
         return (
           <div className="space-y-6">
-            <div className="flex items-center space-x-3 mb-2">
+            <div className="flex items-center mb-2 space-x-3">
               <span className="text-2xl">{selectedService?.icon}</span>
               <h3 className="text-2xl font-bold">
                 {selectedService?.title} Details
@@ -459,10 +472,10 @@ const ProjectForm = ({ setActiveSection }) => {
               Tell us more about your project requirements:
             </p>
 
-            <div className="space-y-4 mt-6">
+            <div className="mt-6 space-y-4">
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block mb-2 font-medium text-gray-700"
                   htmlFor="projectName"
                 >
                   Project Name
@@ -473,17 +486,17 @@ const ProjectForm = ({ setActiveSection }) => {
                   name="projectName"
                   value={formData.projectName}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                   placeholder="e.g., My Online Store"
                 />
                 {errors.projectName && (
-                  <p className="text-red-500 mt-1">{errors.projectName}</p>
+                  <p className="mt-1 text-red-500">{errors.projectName}</p>
                 )}
               </div>
 
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block mb-2 font-medium text-gray-700"
                   htmlFor="projectDescription"
                 >
                   Project Description
@@ -494,21 +507,21 @@ const ProjectForm = ({ setActiveSection }) => {
                   value={formData.projectDescription}
                   onChange={handleChange}
                   rows="4"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                   placeholder="Describe your project, including key features and functionality you need..."
                 ></textarea>
                 {errors.projectDescription && (
-                  <p className="text-red-500 mt-1">
+                  <p className="mt-1 text-red-500">
                     {errors.projectDescription}
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-gray-700 font-medium mb-2">
+                <label className="block mb-2 font-medium text-gray-700">
                   Project Goals (select all that apply)
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
                   {projectGoalOptions.map((goal) => (
                     <div key={goal.id} className="flex items-center">
                       <input
@@ -518,7 +531,7 @@ const ProjectForm = ({ setActiveSection }) => {
                         value={goal.id}
                         checked={formData.projectGoals.includes(goal.id)}
                         onChange={handleCheckboxChange}
-                        className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
+                        className="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                       />
                       <label htmlFor={goal.id} className="ml-2 text-gray-700">
                         {goal.label}
@@ -527,7 +540,7 @@ const ProjectForm = ({ setActiveSection }) => {
                   ))}
                 </div>
                 {errors.projectGoals && (
-                  <p className="text-red-500 mt-1">{errors.projectGoals}</p>
+                  <p className="mt-1 text-red-500">{errors.projectGoals}</p>
                 )}
               </div>
             </div>
@@ -549,13 +562,13 @@ const ProjectForm = ({ setActiveSection }) => {
               Help us understand your project constraints:
             </p>
 
-            <div className="space-y-8 mt-6">
+            <div className="mt-6 space-y-8">
               <div>
-                <label className="block text-gray-700 font-medium mb-2">
+                <label className="block mb-2 font-medium text-gray-700">
                   What's your budget range?
                 </label>
                 {selectedServiceForBudget && (
-                  <div className="flex items-start gap-2 mb-3 bg-primary/5 p-3 rounded-lg">
+                  <div className="flex items-start gap-2 p-3 mb-3 rounded-lg bg-primary/5">
                     <Info
                       size={18}
                       className="text-primary flex-shrink-0 mt-0.5"
@@ -571,7 +584,7 @@ const ProjectForm = ({ setActiveSection }) => {
                     </p>
                   </div>
                 )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {availableBudgets.map((range) => (
                     <div
                       key={range.id}
@@ -604,16 +617,16 @@ const ProjectForm = ({ setActiveSection }) => {
                   ))}
                 </div>
                 {errors.budget && (
-                  <p className="text-red-500 mt-1">{errors.budget}</p>
+                  <p className="mt-1 text-red-500">{errors.budget}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-gray-700 font-medium mb-2">
+                <label className="block mb-2 font-medium text-gray-700">
                   When do you need this project completed?
                 </label>
                 {selectedServiceForBudget && (
-                  <div className="flex items-start gap-2 mb-3 bg-accent/5 p-3 rounded-lg">
+                  <div className="flex items-start gap-2 p-3 mb-3 rounded-lg bg-accent/5">
                     <Info
                       size={18}
                       className="text-accent flex-shrink-0 mt-0.5"
@@ -630,7 +643,7 @@ const ProjectForm = ({ setActiveSection }) => {
                     </p>
                   </div>
                 )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {availableTimelines.map((option) => (
                     <div
                       key={option.id}
@@ -663,7 +676,7 @@ const ProjectForm = ({ setActiveSection }) => {
                   ))}
                 </div>
                 {errors.timeline && (
-                  <p className="text-red-500 mt-1">{errors.timeline}</p>
+                  <p className="mt-1 text-red-500">{errors.timeline}</p>
                 )}
               </div>
             </div>
@@ -676,10 +689,10 @@ const ProjectForm = ({ setActiveSection }) => {
             <h3 className="text-2xl font-bold">Company/Brand Information</h3>
             <p className="text-gray-600">Tell us about your business:</p>
 
-            <div className="space-y-4 mt-6">
+            <div className="mt-6 space-y-4">
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block mb-2 font-medium text-gray-700"
                   htmlFor="companyName"
                 >
                   Company/Brand Name
@@ -690,17 +703,17 @@ const ProjectForm = ({ setActiveSection }) => {
                   name="companyName"
                   value={formData.companyName}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                   placeholder="Your company or brand name"
                 />
                 {errors.companyName && (
-                  <p className="text-red-500 mt-1">{errors.companyName}</p>
+                  <p className="mt-1 text-red-500">{errors.companyName}</p>
                 )}
               </div>
 
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block mb-2 font-medium text-gray-700"
                   htmlFor="companyWebsite"
                 >
                   Existing Website (if any)
@@ -711,14 +724,14 @@ const ProjectForm = ({ setActiveSection }) => {
                   name="companyWebsite"
                   value={formData.companyWebsite}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                   placeholder="https://www.example.com"
                 />
               </div>
 
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block mb-2 font-medium text-gray-700"
                   htmlFor="industry"
                 >
                   Industry/Sector
@@ -729,17 +742,17 @@ const ProjectForm = ({ setActiveSection }) => {
                   name="industry"
                   value={formData.industry}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                   placeholder="e.g., Fashion, Technology, Education"
                 />
                 {errors.industry && (
-                  <p className="text-red-500 mt-1">{errors.industry}</p>
+                  <p className="mt-1 text-red-500">{errors.industry}</p>
                 )}
               </div>
 
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block mb-2 font-medium text-gray-700"
                   htmlFor="targetAudience"
                 >
                   Target Audience
@@ -750,11 +763,11 @@ const ProjectForm = ({ setActiveSection }) => {
                   value={formData.targetAudience}
                   onChange={handleChange}
                   rows="3"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                   placeholder="Describe your target audience (age, interests, demographics)"
                 ></textarea>
                 {errors.targetAudience && (
-                  <p className="text-red-500 mt-1">{errors.targetAudience}</p>
+                  <p className="mt-1 text-red-500">{errors.targetAudience}</p>
                 )}
               </div>
             </div>
@@ -767,10 +780,10 @@ const ProjectForm = ({ setActiveSection }) => {
             <h3 className="text-2xl font-bold">Contact Information</h3>
             <p className="text-gray-600">How can we reach you?</p>
 
-            <div className="space-y-4 mt-6">
+            <div className="mt-6 space-y-4">
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block mb-2 font-medium text-gray-700"
                   htmlFor="name"
                 >
                   Your Name
@@ -781,17 +794,17 @@ const ProjectForm = ({ setActiveSection }) => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                   placeholder="Your full name"
                 />
                 {errors.name && (
-                  <p className="text-red-500 mt-1">{errors.name}</p>
+                  <p className="mt-1 text-red-500">{errors.name}</p>
                 )}
               </div>
 
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block mb-2 font-medium text-gray-700"
                   htmlFor="email"
                 >
                   Email Address
@@ -802,17 +815,17 @@ const ProjectForm = ({ setActiveSection }) => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                   placeholder="your.email@example.com"
                 />
                 {errors.email && (
-                  <p className="text-red-500 mt-1">{errors.email}</p>
+                  <p className="mt-1 text-red-500">{errors.email}</p>
                 )}
               </div>
 
               <div>
                 <label
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block mb-2 font-medium text-gray-700"
                   htmlFor="phone"
                 >
                   Phone Number (Optional)
@@ -823,12 +836,12 @@ const ProjectForm = ({ setActiveSection }) => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                   placeholder="Your contact number"
                 />
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-6">
+              <div className="p-4 mt-6 border border-gray-200 rounded-lg bg-gray-50">
                 <p className="text-sm text-gray-600">
                   By submitting this form, you agree to our privacy policy and
                   terms of service. We'll use your information to respond to
@@ -849,32 +862,32 @@ const ProjectForm = ({ setActiveSection }) => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="text-center py-12"
+        className="py-12 text-center"
       >
-        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 bg-green-100 rounded-full">
           <CheckCircle size={40} className="text-green-600" />
         </div>
-        <h3 className="text-2xl font-bold mb-2">
+        <h3 className="mb-2 text-2xl font-bold">
           Request Submitted Successfully!
         </h3>
-        <p className="text-gray-600 mb-6">
+        <p className="mb-6 text-gray-600">
           Thank you for your interest. We've received your project details and
           will get back to you within 24 hours.
         </p>
-        <p className="text-gray-600 mb-8">
+        <p className="mb-8 text-gray-600">
           Meanwhile, you might want to check our process or book a discovery
           call with our team.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col justify-center gap-4 sm:flex-row">
           <button
             onClick={() => setActiveSection("process")}
-            className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+            className="px-6 py-3 text-white transition-colors rounded-lg bg-primary hover:bg-primary/90"
           >
             View Our Process
           </button>
           <button
             onClick={() => setActiveSection("booking")}
-            className="px-6 py-3 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors"
+            className="px-6 py-3 transition-colors border rounded-lg border-primary text-primary hover:bg-primary/10"
           >
             Book a Discovery Call
           </button>
@@ -893,7 +906,7 @@ const ProjectForm = ({ setActiveSection }) => {
             {(step / 5) * 100}% Complete
           </span>
         </div>
-        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="w-full h-2 overflow-hidden bg-gray-200 rounded-full">
           <motion.div
             className="h-full bg-gradient-to-r from-primary to-secondary"
             initial={{ width: "0%" }}
@@ -902,6 +915,13 @@ const ProjectForm = ({ setActiveSection }) => {
           ></motion.div>
         </div>
       </div>
+
+      {/* API Error Message */}
+      {apiError && (
+        <div className="p-4 mb-6 text-red-700 border border-red-200 rounded-lg bg-red-50">
+          {apiError}
+        </div>
+      )}
 
       {/* Form content */}
       <AnimatePresence mode="wait">
@@ -922,7 +942,7 @@ const ProjectForm = ({ setActiveSection }) => {
         {step > 1 ? (
           <button
             onClick={handlePrevious}
-            className="flex items-center px-6 py-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            className="flex items-center px-6 py-3 transition-colors bg-gray-100 rounded-lg hover:bg-gray-200"
           >
             <ChevronLeft size={20} className="mr-2" />
             Previous
@@ -934,7 +954,7 @@ const ProjectForm = ({ setActiveSection }) => {
         {step < 5 ? (
           <button
             onClick={handleNext}
-            className="flex items-center px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:opacity-90 transition-opacity"
+            className="flex items-center px-6 py-3 text-white transition-opacity rounded-lg bg-gradient-to-r from-primary to-secondary hover:opacity-90"
           >
             Next
             <ChevronRight size={20} className="ml-2" />
@@ -943,12 +963,12 @@ const ProjectForm = ({ setActiveSection }) => {
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="flex items-center px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-70"
+            className="flex items-center px-6 py-3 text-white transition-opacity rounded-lg bg-gradient-to-r from-primary to-secondary hover:opacity-90 disabled:opacity-70"
           >
             {isSubmitting ? (
               <>
                 <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"

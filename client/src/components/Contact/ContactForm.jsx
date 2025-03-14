@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
+import { submitContactForm } from "../../api";
 
 const ContactForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const ContactForm = ({ onSubmit }) => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', or null
+  const [apiError, setApiError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,25 +63,14 @@ const ContactForm = ({ onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitStatus(null);
+    setApiError("");
 
     if (validateForm()) {
       setIsSubmitting(true);
 
       try {
         // API call to backend
-        const response = await fetch("http://localhost:5000/api/contact", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || "Something went wrong");
-        }
+        const response = await submitContactForm(formData);
 
         // Call the parent component's onSubmit handler if provided
         if (onSubmit) {
@@ -99,6 +90,11 @@ const ContactForm = ({ onSubmit }) => {
       } catch (error) {
         console.error("Error submitting form:", error);
         setSubmitStatus("error");
+        setApiError(
+          typeof error === "string"
+            ? error
+            : "There was an error sending your message. Please try again or contact us directly."
+        );
       } finally {
         setIsSubmitting(false);
       }
@@ -121,8 +117,8 @@ const ContactForm = ({ onSubmit }) => {
 
       {submitStatus === "error" && (
         <div className="p-4 text-red-700 border border-red-200 rounded-lg bg-red-50">
-          There was a problem sending your message. Please try again or contact
-          us directly.
+          {apiError ||
+            "There was a problem sending your message. Please try again or contact us directly."}
         </div>
       )}
 

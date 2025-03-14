@@ -141,8 +141,8 @@ const ProcessTimeline = ({ setActiveSection }) => {
 
   return (
     <div>
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold mb-2">Our Development Process</h3>
+      <div className="mb-8 text-center">
+        <h3 className="mb-2 text-2xl font-bold">Our Development Process</h3>
         <p className="text-gray-600">
           We follow a structured approach to ensure your project is delivered on
           time and exceeds expectations.
@@ -173,7 +173,7 @@ const ProcessTimeline = ({ setActiveSection }) => {
               >
                 {/* Timeline dot */}
                 <div
-                  className={`absolute left-0 top-8 w-16 h-16 bg-${step.color}/20 rounded-full flex items-center justify-center hidden md:flex`}
+                  className={`absolute left-0 top-8 w-16 h-16 bg-${step.color}/20 rounded-full  items-center justify-center hidden md:flex`}
                   style={{ transform: "translateX(-50%)" }}
                 >
                   <div
@@ -183,7 +183,7 @@ const ProcessTimeline = ({ setActiveSection }) => {
                   </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row items-start">
+                <div className="flex flex-col items-start md:flex-row">
                   <div
                     className={`w-12 h-12 rounded-full bg-${step.color}/20 text-${step.color} flex items-center justify-center mb-4 md:hidden`}
                   >
@@ -198,7 +198,7 @@ const ProcessTimeline = ({ setActiveSection }) => {
                       }
                     >
                       <div>
-                        <div className="md:flex items-center">
+                        <div className="items-center md:flex">
                           <div
                             className={`hidden md:flex w-10 h-10 rounded-full bg-${step.color}/20 text-${step.color} items-center justify-center mr-4`}
                           >
@@ -206,7 +206,7 @@ const ProcessTimeline = ({ setActiveSection }) => {
                           </div>
                           <h4 className="text-lg font-bold">{step.title}</h4>
                         </div>
-                        <p className="text-gray-600 mt-2">{step.description}</p>
+                        <p className="mt-2 text-gray-600">{step.description}</p>
                       </div>
 
                       <button
@@ -215,7 +215,7 @@ const ProcessTimeline = ({ setActiveSection }) => {
                         }`}
                       >
                         {activeStep === step.id ? (
-                          <span className="text-gray-500">−</span>
+                          <span className="text-gray-500">-</span>
                         ) : (
                           <span className="text-gray-500">+</span>
                         )}
@@ -227,10 +227,10 @@ const ProcessTimeline = ({ setActiveSection }) => {
                         variants={detailsVariants}
                         initial="hidden"
                         animate="visible"
-                        className="mt-4 pl-0 md:pl-14"
+                        className="pl-0 mt-4 md:pl-14"
                       >
                         <div className="pt-4 border-t border-gray-200">
-                          <h5 className="font-semibold text-gray-800 mb-3">
+                          <h5 className="mb-3 font-semibold text-gray-800">
                             What happens in this stage:
                           </h5>
                           <ul className="space-y-2">
@@ -254,12 +254,12 @@ const ProcessTimeline = ({ setActiveSection }) => {
         </div>
       </div>
 
-      <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+      <div className="p-6 border border-gray-200 bg-gray-50 rounded-xl">
         <div className="flex items-start">
-          <Layers size={24} className="text-primary mr-4 flex-shrink-0 mt-1" />
+          <Layers size={24} className="flex-shrink-0 mt-1 mr-4 text-primary" />
           <div>
-            <h4 className="text-lg font-bold mb-2">Our Client Portal</h4>
-            <p className="text-gray-600 mb-4">
+            <h4 className="mb-2 text-lg font-bold">Our Client Portal</h4>
+            <p className="mb-4 text-gray-600">
               Once your project begins, you'll get access to our client portal
               where you can:
             </p>
@@ -284,11 +284,11 @@ const ProcessTimeline = ({ setActiveSection }) => {
         </div>
       </div>
 
-      <div className="mt-8 flex justify-center">
+      <div className="flex justify-center mt-8">
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="px-8 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg shadow-md"
+          className="px-8 py-3 text-white rounded-lg shadow-md bg-gradient-to-r from-primary to-secondary"
           onClick={() => setActiveSection("form")}
         >
           <div className="flex items-center">
