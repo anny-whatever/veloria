@@ -25,6 +25,18 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Function to toggle sidebar
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  // Close sidebar when route changes
+  useEffect(() => {
+    if (sidebarOpen) {
+      setSidebarOpen(false);
+    }
+  }, [location.pathname]);
+
   // If loading, show a loading spinner
   if (loading) {
     return (
@@ -41,15 +53,12 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <AdminSidebar
-        isOpen={sidebarOpen}
-        toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-      />
+      {/* Sidebar - no longer auto-open on desktop */}
+      <AdminSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
       {/* Main Content */}
       <div className="flex flex-col flex-1 overflow-hidden">
-        <AdminHeader toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+        <AdminHeader toggleSidebar={toggleSidebar} />
 
         <main className="flex-1 p-4 overflow-y-auto bg-gray-100 md:p-6">
           <Routes>

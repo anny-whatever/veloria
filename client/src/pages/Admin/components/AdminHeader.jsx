@@ -16,7 +16,7 @@ const AdminHeader = ({ toggleSidebar }) => {
       {/* Left: Hamburger and Search */}
       <div className="flex items-center">
         <button
-          className="p-2 mr-2 text-gray-500 rounded-md md:hidden hover:bg-gray-100 focus:outline-none"
+          className="p-2 mr-2 text-gray-500 rounded-md hover:bg-gray-100 focus:outline-none"
           onClick={toggleSidebar}
         >
           <Menu size={24} />

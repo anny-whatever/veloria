@@ -26,6 +26,19 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  // Set auth with token and update API headers
+  const setAuthWithToken = (tokenData, userData) => {
+    // Store in localStorage
+    localStorage.setItem("token", tokenData);
+    localStorage.setItem("user", JSON.stringify(userData));
+
+    // Set auth token for API requests
+    API.defaults.headers.common["Authorization"] = `Bearer ${tokenData}`;
+
+    // Update auth state
+    setAuth({ token: tokenData, user: userData });
+  };
+
   // Logout function
   const logout = () => {
     localStorage.removeItem("token");
@@ -35,7 +48,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth, logout, loading }}>
+    <AuthContext.Provider
+      value={{ auth, setAuth, setAuthWithToken, logout, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );

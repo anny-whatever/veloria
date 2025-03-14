@@ -10,7 +10,7 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { setAuth } = useAuth();
+  const { setAuthWithToken } = useAuth(); // Use the new function from context
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -21,16 +21,13 @@ const AdminLogin = () => {
     try {
       const response = await API.post("/auth/login", { email, password });
 
-      // Store the token and user info in local storage and auth context
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      // Use the new function to set auth and update API headers
+      setAuthWithToken(response.data.token, response.data.user);
 
-      setAuth({
-        token: response.data.token,
-        user: response.data.user,
-      });
-
-      navigate("/admin");
+      // Add a slight delay to ensure token is set in API headers
+      setTimeout(() => {
+        navigate("/admin");
+      }, 100);
     } catch (err) {
       console.error("Login error:", err);
       setError(

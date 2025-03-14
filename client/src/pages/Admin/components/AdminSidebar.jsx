@@ -59,12 +59,12 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       <motion.div
         className={`fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col`}
+        } transition-transform duration-300 ease-in-out flex flex-col`}
       >
         {/* Close button for mobile */}
         <button
           className="absolute text-gray-500 top-4 right-4 md:hidden"
-          onClick={toggleSidebar}
+          onClick={() => toggleSidebar()} // Ensure this is calling the function correctly
         >
           <X size={20} />
         </button>
