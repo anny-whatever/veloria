@@ -1,63 +1,48 @@
-// server/controllers/authController.js
-const User = require("../models/User");
+// server/middleware/authMiddleware.js
+const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
+const User = require("../models/User");
 
-// @desc    Login user
-// @route   POST /api/auth/login
-// @access  Public
-const login = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+// Protect routes
+const protect = asyncHandler(async (req, res, next) => {
+  let token;
 
-  // Validate email & password
-  if (!email || !password) {
-    res.status(400);
-    throw new Error("Please provide email and password");
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    try {
+      // Get token from header
+      token = req.headers.authorization.split(" ")[1];
+
+      // Verify token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      // Get user from the token
+      req.user = await User.findById(decoded.id).select("-password");
+
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(401);
+      throw new Error("Not authorized, token failed");
+    }
   }
 
-  // Check for user
-  const user = await User.findOne({ email }).select("+password");
-
-  if (!user) {
+  if (!token) {
     res.status(401);
-    throw new Error("Invalid credentials");
+    throw new Error("Not authorized, no token");
   }
-
-  // Check if password matches
-  const isMatch = await user.matchPassword(password);
-
-  if (!isMatch) {
-    res.status(401);
-    throw new Error("Invalid credentials");
-  }
-
-  // Create token
-  const token = user.getSignedJwtToken();
-
-  res.status(200).json({
-    success: true,
-    token,
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    },
-  });
 });
 
-// @desc    Get current logged in user
-// @route   GET /api/auth/me
-// @access  Private
-const getMe = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id);
-
-  res.status(200).json({
-    success: true,
-    data: user,
-  });
+// Admin middleware
+const admin = asyncHandler(async (req, res, next) => {
+  if (req.user && req.user.role === "admin") {
+    next();
+  } else {
+    res.status(403);
+    throw new Error("Not authorized as an admin");
+  }
 });
 
-module.exports = {
-  login,
-  getMe,
-};
+module.exports = { protect, admin };

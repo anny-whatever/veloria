@@ -14,7 +14,7 @@ const Logo = () => {
           transition={{ duration: 0.5 }}
         >
           <motion.h1
-            className="text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
+            className="text-2xl font-bold text-transparent bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text"
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}

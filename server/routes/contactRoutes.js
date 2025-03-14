@@ -12,7 +12,7 @@ const { protect, admin } = require("../middleware/authMiddleware");
 router.post("/", submitContact);
 
 // Admin routes - make sure these functions exist and are exported correctly
-router.get("/admin", protect, admin, getContacts); // <-- Error is likely here
+router.get("/admin", protect, admin, getContacts);
 router.patch("/admin/:id", protect, admin, updateContact);
 
 module.exports = router;
