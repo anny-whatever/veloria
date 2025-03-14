@@ -10,11 +10,11 @@ import {
   Check,
   ChevronLeft,
   Trash2,
-  Send,
   AlertTriangle,
   Edit,
   Save,
   Archive,
+  FileText,
 } from "lucide-react";
 import { format } from "date-fns";
 import API from "../../api";
@@ -27,9 +27,14 @@ const ContactDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [replyMode, setReplyMode] = useState(false);
-  const [replyText, setReplyText] = useState("");
+  const [notesMode, setNotesMode] = useState(false);
+  const [notesText, setNotesText] = useState("");
   const [statusUpdating, setStatusUpdating] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editedData, setEditedData] = useState({
+    status: "",
+    notes: "",
+  });
 
   useEffect(() => {
     const fetchContact = async () => {
@@ -37,6 +42,11 @@ const ContactDetails = () => {
         setLoading(true);
         const response = await API.get(`/contact/admin/${id}`);
         setContact(response.data);
+        setNotesText(response.data.notes || "");
+        setEditedData({
+          status: response.data.status || "new",
+          notes: response.data.notes || "",
+        });
 
         // If this is the first time viewing and status is "new", update to "read"
         if (response.data.status === "new") {
@@ -83,28 +93,28 @@ const ContactDetails = () => {
     }
   };
 
-  const handleSendReply = async () => {
-    if (!replyText.trim()) {
-      alert("Please enter a reply message");
-      return;
-    }
-
+  const handleSaveNotes = async () => {
     try {
-      // This would typically call an API endpoint to send an email
-      // For now, we'll just update the status to "replied"
       const response = await API.patch(`/contact/admin/${id}`, {
-        status: "replied",
+        notes: notesText,
       });
 
       setContact(response.data.data);
-      setReplyMode(false);
-      setReplyText("");
-
-      // Show success message (in a real implementation, you might use a toast notification)
-      alert("Reply sent successfully!");
+      setNotesMode(false);
     } catch (err) {
-      console.error("Error sending reply:", err);
-      alert("Failed to send reply. Please try again.");
+      console.error("Error saving notes:", err);
+      alert("Failed to save notes. Please try again.");
+    }
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      const response = await API.patch(`/contact/admin/${id}`, editedData);
+      setContact(response.data.data);
+      setEditMode(false);
+    } catch (err) {
+      console.error("Error updating contact:", err);
+      alert("Failed to update contact. Please try again.");
     }
   };
 
@@ -180,37 +190,41 @@ const ContactDetails = () => {
           <h1 className="text-2xl font-bold">Contact Message</h1>
         </div>
 
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center">
-            <span className="mr-2 text-sm text-gray-500">Status:</span>
-            <span
-              className={`px-2 py-1 rounded-full text-xs font-medium
-              ${contact.status === "new" ? "bg-blue-100 text-blue-800" : ""} 
-              ${
-                contact.status === "read" ? "bg-purple-100 text-purple-800" : ""
-              } 
-              ${
-                contact.status === "replied"
-                  ? "bg-green-100 text-green-800"
-                  : ""
-              } 
-              ${
-                contact.status === "archived" ? "bg-gray-100 text-gray-800" : ""
-              }`}
-            >
-              {contact.status
-                ? contact.status.charAt(0).toUpperCase() +
-                  contact.status.slice(1)
-                : "New"}
-            </span>
-          </div>
-          <button
-            onClick={() => setDeleteModalOpen(true)}
-            className="flex items-center px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700"
-          >
-            <Trash2 size={18} className="mr-2" />
-            Delete
-          </button>
+        <div className="flex space-x-3">
+          {editMode ? (
+            <>
+              <button
+                onClick={() => setEditMode(false)}
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveChanges}
+                className="flex items-center px-4 py-2 text-white rounded-md bg-secondary hover:bg-secondary/90"
+              >
+                <Save size={18} className="mr-2" />
+                Save Changes
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => setEditMode(true)}
+                className="flex items-center px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                <Edit size={18} className="mr-2" />
+                Edit Contact
+              </button>
+              <button
+                onClick={() => setDeleteModalOpen(true)}
+                className="flex items-center px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700"
+              >
+                <Trash2 size={18} className="mr-2" />
+                Delete
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -230,10 +244,26 @@ const ContactDetails = () => {
               </div>
             </div>
             <div className="p-6">
-              <div className="mb-6">
-                <h3 className="mb-2 font-medium text-gray-700">Subject</h3>
-                <p className="text-lg">{contact.subject || "No Subject"}</p>
-              </div>
+              {editMode ? (
+                <div className="mb-6">
+                  <label className="block mb-2 font-medium text-gray-700">
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    value={editedData.subject}
+                    onChange={(e) =>
+                      setEditedData({ ...editedData, subject: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary/50"
+                  />
+                </div>
+              ) : (
+                <div className="mb-6">
+                  <h3 className="mb-2 font-medium text-gray-700">Subject</h3>
+                  <p className="text-lg">{contact.subject || "No Subject"}</p>
+                </div>
+              )}
 
               <div>
                 <h3 className="mb-2 font-medium text-gray-700">Message</h3>
@@ -244,78 +274,81 @@ const ContactDetails = () => {
             </div>
           </div>
 
-          {/* Reply Section */}
+          {/* Notes Section (formerly Reply Section) */}
           <div className="overflow-hidden bg-white rounded-lg shadow-sm">
             <div className="px-6 py-4 border-b">
-              <h2 className="text-lg font-medium">Reply to Message</h2>
+              <h2 className="text-lg font-medium">Notes</h2>
             </div>
             <div className="p-6">
-              {replyMode ? (
+              {editMode || notesMode ? (
                 <div className="space-y-4">
                   <div>
                     <label className="block mb-2 font-medium text-gray-700">
-                      Compose Reply
+                      Add Notes About This Contact
                     </label>
                     <textarea
-                      value={replyText}
-                      onChange={(e) => setReplyText(e.target.value)}
+                      value={editMode ? editedData.notes : notesText}
+                      onChange={(e) =>
+                        editMode
+                          ? setEditedData({
+                              ...editedData,
+                              notes: e.target.value,
+                            })
+                          : setNotesText(e.target.value)
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary/50"
                       rows="6"
-                      placeholder="Type your reply here..."
+                      placeholder="Add your notes about this contact..."
                     ></textarea>
                   </div>
-                  <div className="flex justify-end space-x-3">
-                    <button
-                      onClick={() => setReplyMode(false)}
-                      className="px-4 py-2 border border-gray-300 rounded-md"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={handleSendReply}
-                      className="px-4 py-2 text-white rounded-md bg-secondary hover:bg-secondary/90"
-                    >
-                      <Send size={18} className="inline-block mr-2" />
-                      Send Reply
-                    </button>
-                  </div>
+                  {!editMode && (
+                    <div className="flex justify-end space-x-3">
+                      <button
+                        onClick={() => setNotesMode(false)}
+                        className="px-4 py-2 border border-gray-300 rounded-md"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleSaveNotes}
+                        className="px-4 py-2 text-white rounded-md bg-secondary hover:bg-secondary/90"
+                      >
+                        <Save size={18} className="inline-block mr-2" />
+                        Save Notes
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="py-8 text-center">
-                  {contact.status === "replied" ? (
-                    <div className="flex flex-col items-center">
-                      <div className="flex items-center justify-center w-12 h-12 mb-4 text-green-600 bg-green-100 rounded-full">
-                        <Check size={24} />
+                  {contact.notes ? (
+                    <div className="flex flex-col items-start text-left">
+                      <div className="mb-4 text-gray-600 whitespace-pre-wrap">
+                        {contact.notes}
                       </div>
-                      <h3 className="mb-1 text-lg font-medium text-gray-900">
-                        Reply Sent
-                      </h3>
-                      <p className="mb-4 text-gray-500">
-                        You have already replied to this message
-                      </p>
                       <button
-                        onClick={() => setReplyMode(true)}
+                        onClick={() => setNotesMode(true)}
                         className="text-secondary hover:underline"
                       >
-                        Send another reply
+                        Edit Notes
                       </button>
                     </div>
                   ) : (
                     <div className="flex flex-col items-center">
                       <div className="flex items-center justify-center w-12 h-12 mb-4 text-gray-500 bg-gray-100 rounded-full">
-                        <Send size={24} />
+                        <FileText size={24} />
                       </div>
                       <h3 className="mb-1 text-lg font-medium text-gray-900">
-                        Send a Reply
+                        No Notes Yet
                       </h3>
                       <p className="mb-4 text-gray-500">
-                        Compose a response to this message
+                        Add notes about this contact message for your reference
                       </p>
                       <button
-                        onClick={() => setReplyMode(true)}
+                        onClick={() => setNotesMode(true)}
                         className="px-4 py-2 text-white rounded-md bg-secondary hover:bg-secondary/90"
                       >
-                        Compose Reply
+                        Add Notes
                       </button>
                     </div>
                   )}
@@ -389,6 +422,108 @@ const ContactDetails = () => {
             </div>
           </div>
 
+          {/* Status */}
+          <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+            <div className="px-6 py-4 border-b">
+              <h2 className="text-lg font-medium">Status</h2>
+            </div>
+            <div className="p-6">
+              {editMode ? (
+                <div className="mb-4">
+                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                    Update Status
+                  </label>
+                  <select
+                    value={editedData.status}
+                    onChange={(e) =>
+                      setEditedData({ ...editedData, status: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary/50"
+                  >
+                    <option value="new">New</option>
+                    <option value="read">Read</option>
+                    <option value="replied">Replied</option>
+                    <option value="archived">Archived</option>
+                  </select>
+                </div>
+              ) : (
+                <div className="flex items-center mb-4">
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium mr-2
+                      ${
+                        contact.status === "new"
+                          ? "bg-blue-100 text-blue-800"
+                          : ""
+                      }
+                      ${
+                        contact.status === "read"
+                          ? "bg-purple-100 text-purple-800"
+                          : ""
+                      }
+                      ${
+                        contact.status === "replied"
+                          ? "bg-green-100 text-green-800"
+                          : ""
+                      }
+                      ${
+                        contact.status === "archived"
+                          ? "bg-gray-100 text-gray-800"
+                          : ""
+                      }`}
+                  >
+                    {contact.status
+                      ? contact.status.charAt(0).toUpperCase() +
+                        contact.status.slice(1)
+                      : "New"}
+                  </span>
+                  <span className="text-gray-500">
+                    {contact.status === "new" && "Unread message"}
+                    {contact.status === "read" && "Message has been read"}
+                    {contact.status === "replied" &&
+                      "Message has been replied to"}
+                    {contact.status === "archived" &&
+                      "Message has been archived"}
+                  </span>
+                </div>
+              )}
+
+              {!editMode && (
+                <div className="pt-3 border-t border-gray-200">
+                  <p className="mb-2 text-sm text-gray-500">
+                    Quick Status Update:
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      disabled={contact.status === "read" || statusUpdating}
+                      onClick={() => handleStatusChange("read")}
+                      className={`py-2 px-3 rounded-md text-sm flex items-center justify-center ${
+                        contact.status === "read"
+                          ? "bg-purple-100 text-purple-800"
+                          : "bg-gray-100 hover:bg-purple-50 text-gray-700 hover:text-purple-700"
+                      }`}
+                    >
+                      <Check size={16} className="mr-1" />
+                      Mark as Read
+                    </button>
+
+                    <button
+                      disabled={contact.status === "archived" || statusUpdating}
+                      onClick={() => handleStatusChange("archived")}
+                      className={`py-2 px-3 rounded-md text-sm flex items-center justify-center ${
+                        contact.status === "archived"
+                          ? "bg-gray-200 text-gray-800"
+                          : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                      }`}
+                    >
+                      <Archive size={16} className="mr-1" />
+                      Archive
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Actions */}
           <div className="overflow-hidden bg-white rounded-lg shadow-sm">
             <div className="px-6 py-4 border-b">
@@ -412,37 +547,6 @@ const ContactDetails = () => {
                   Call Sender
                 </button>
               )}
-
-              <div className="pt-3 border-t border-gray-200">
-                <p className="mb-2 text-sm text-gray-500">Update Status:</p>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    disabled={contact.status === "read" || statusUpdating}
-                    onClick={() => handleStatusChange("read")}
-                    className={`py-2 px-3 rounded-md text-sm flex items-center justify-center ${
-                      contact.status === "read"
-                        ? "bg-purple-100 text-purple-800"
-                        : "bg-gray-100 hover:bg-purple-50 text-gray-700 hover:text-purple-700"
-                    }`}
-                  >
-                    <Check size={16} className="mr-1" />
-                    Mark as Read
-                  </button>
-
-                  <button
-                    disabled={contact.status === "archived" || statusUpdating}
-                    onClick={() => handleStatusChange("archived")}
-                    className={`py-2 px-3 rounded-md text-sm flex items-center justify-center ${
-                      contact.status === "archived"
-                        ? "bg-gray-200 text-gray-800"
-                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                    }`}
-                  >
-                    <Archive size={16} className="mr-1" />
-                    Archive
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>

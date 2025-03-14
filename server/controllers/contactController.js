@@ -71,12 +71,12 @@ const getContactById = asyncHandler(async (req, res) => {
   res.status(200).json(contact);
 });
 
-// @desc    Update contact status
+// @desc    Update contact
 // @route   PATCH /api/contact/admin/:id
 // @access  Private/Admin
 const updateContact = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
+  const { status, notes, subject } = req.body;
 
   const contact = await Contact.findById(id);
 
@@ -85,12 +85,16 @@ const updateContact = asyncHandler(async (req, res) => {
     throw new Error("Contact not found");
   }
 
-  contact.status = status;
-  await contact.save();
+  // Only update fields that are provided
+  if (status !== undefined) contact.status = status;
+  if (notes !== undefined) contact.notes = notes;
+  if (subject !== undefined) contact.subject = subject;
+
+  const updatedContact = await contact.save();
 
   res.status(200).json({
     success: true,
-    data: contact,
+    data: updatedContact,
   });
 });
 
@@ -113,7 +117,6 @@ const deleteContact = asyncHandler(async (req, res) => {
   });
 });
 
-// Make sure all functions are properly exported
 module.exports = {
   submitContact,
   getContacts,

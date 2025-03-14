@@ -28,6 +28,10 @@ const ContactSchema = new mongoose.Schema({
     required: [true, "Message is required"],
     trim: true,
   },
+  notes: {
+    type: String,
+    trim: true,
+  },
   status: {
     type: String,
     enum: ["new", "read", "replied", "archived"],
