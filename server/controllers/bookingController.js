@@ -151,6 +151,25 @@ const updateBooking = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Delete booking
+// @route   DELETE /api/bookings/admin/:id
+// @access  Private/Admin
+const deleteBooking = asyncHandler(async (req, res) => {
+  const booking = await Booking.findById(req.params.id);
+
+  if (!booking) {
+    res.status(404);
+    throw new Error("Booking not found");
+  }
+
+  await booking.deleteOne();
+
+  res.status(200).json({
+    success: true,
+    message: "Booking deleted successfully",
+  });
+});
+
 // @desc    Cancel a booking
 // @route   PATCH /api/bookings/cancel/:id
 // @access  Public (with token)
@@ -211,5 +230,6 @@ module.exports = {
   getBookings,
   getBookingById,
   updateBooking,
+  deleteBooking,
   cancelBooking,
 };

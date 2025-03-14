@@ -6,6 +6,7 @@ const {
   getProjects,
   getProjectById,
   updateProject,
+  deleteProject,
 } = require("../controllers/projectController");
 const { protect, admin } = require("../middleware/authMiddleware");
 
@@ -16,5 +17,6 @@ router.post("/", submitProject);
 router.get("/admin", protect, admin, getProjects);
 router.get("/admin/:id", protect, admin, getProjectById);
 router.patch("/admin/:id", protect, admin, updateProject);
+router.delete("/admin/:id", protect, admin, deleteProject);
 
 module.exports = router;

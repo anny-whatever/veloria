@@ -139,9 +139,29 @@ const updateProject = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Delete project
+// @route   DELETE /api/projects/admin/:id
+// @access  Private/Admin
+const deleteProject = asyncHandler(async (req, res) => {
+  const project = await Project.findById(req.params.id);
+
+  if (!project) {
+    res.status(404);
+    throw new Error("Project not found");
+  }
+
+  await project.deleteOne();
+
+  res.status(200).json({
+    success: true,
+    message: "Project deleted successfully",
+  });
+});
+
 module.exports = {
   submitProject,
   getProjects,
   getProjectById,
   updateProject,
+  deleteProject,
 };

@@ -2,6 +2,7 @@
 const Contact = require("../models/Contact");
 const asyncHandler = require("express-async-handler");
 const { sendNotification, sendConfirmation } = require("../utils/emailService");
+
 // @desc    Submit contact form
 // @route   POST /api/contact
 // @access  Public
@@ -56,6 +57,20 @@ const getContacts = asyncHandler(async (req, res) => {
   res.status(200).json(contacts);
 });
 
+// @desc    Get contact by ID
+// @route   GET /api/contact/admin/:id
+// @access  Private/Admin
+const getContactById = asyncHandler(async (req, res) => {
+  const contact = await Contact.findById(req.params.id);
+
+  if (!contact) {
+    res.status(404);
+    throw new Error("Contact not found");
+  }
+
+  res.status(200).json(contact);
+});
+
 // @desc    Update contact status
 // @route   PATCH /api/contact/admin/:id
 // @access  Private/Admin
@@ -79,9 +94,30 @@ const updateContact = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Delete contact
+// @route   DELETE /api/contact/admin/:id
+// @access  Private/Admin
+const deleteContact = asyncHandler(async (req, res) => {
+  const contact = await Contact.findById(req.params.id);
+
+  if (!contact) {
+    res.status(404);
+    throw new Error("Contact not found");
+  }
+
+  await contact.deleteOne();
+
+  res.status(200).json({
+    success: true,
+    message: "Contact deleted successfully",
+  });
+});
+
 // Make sure all functions are properly exported
 module.exports = {
   submitContact,
   getContacts,
+  getContactById,
   updateContact,
+  deleteContact,
 };
