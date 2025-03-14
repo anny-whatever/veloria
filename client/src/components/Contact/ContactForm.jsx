@@ -14,6 +14,7 @@ const ContactForm = ({ onSubmit }) => {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', or null
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,16 +58,33 @@ const ContactForm = ({ onSubmit }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitStatus(null);
 
     if (validateForm()) {
       setIsSubmitting(true);
 
-      // Simulate API call delay
-      setTimeout(() => {
-        onSubmit(formData);
-        setIsSubmitting(false);
+      try {
+        // API call to backend
+        const response = await fetch("http://localhost:5000/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Something went wrong");
+        }
+
+        // Call the parent component's onSubmit handler if provided
+        if (onSubmit) {
+          onSubmit(formData);
+        }
 
         // Reset form
         setFormData({
@@ -76,7 +94,14 @@ const ContactForm = ({ onSubmit }) => {
           subject: "",
           message: "",
         });
-      }, 1000);
+
+        setSubmitStatus("success");
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        setSubmitStatus("error");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -87,7 +112,21 @@ const ContactForm = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {submitStatus === "success" && (
+        <div className="p-4 text-green-700 border border-green-200 rounded-lg bg-green-50">
+          Thank you! Your message has been received. We'll get back to you
+          shortly.
+        </div>
+      )}
+
+      {submitStatus === "error" && (
+        <div className="p-4 text-red-700 border border-red-200 rounded-lg bg-red-50">
+          There was a problem sending your message. Please try again or contact
+          us directly.
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
           <label htmlFor="name" className={labelClasses}>
             Name
@@ -123,7 +162,7 @@ const ContactForm = ({ onSubmit }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
           <label htmlFor="phone" className={labelClasses}>
             Phone (Optional)
@@ -178,7 +217,7 @@ const ContactForm = ({ onSubmit }) => {
 
       <motion.button
         type="submit"
-        className="w-full py-3 rounded-lg bg-gradient-to-r from-primary to-secondary text-white font-medium flex items-center justify-center disabled:opacity-70"
+        className="flex items-center justify-center w-full py-3 font-medium text-white rounded-lg bg-gradient-to-r from-primary to-secondary disabled:opacity-70"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         disabled={isSubmitting}
@@ -186,7 +225,7 @@ const ContactForm = ({ onSubmit }) => {
         {isSubmitting ? (
           <>
             <svg
-              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+              className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
