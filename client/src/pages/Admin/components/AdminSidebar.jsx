@@ -1,4 +1,4 @@
-// client/src/pages/Admin/components/AdminSidebar.jsx
+// client/src/pages/Admin/components/AdminSidebar.jsx - Updated with new navigation items
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +10,11 @@ import {
   LogOut,
   ChevronRight,
   X,
+  ClipboardList,
+  PieChart,
+  DollarSign,
+  User,
+  Settings,
 } from "lucide-react";
 import useAuth from "../../../hooks/useAuth";
 
@@ -17,22 +22,61 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   const location = useLocation();
   const { logout, auth } = useAuth();
 
-  const navItems = [
-    { path: "/admin", label: "Dashboard", icon: <Home size={20} /> },
+  // Define nav items with sections
+  const navSections = [
     {
-      path: "/admin/bookings",
-      label: "Bookings",
-      icon: <Calendar size={20} />,
+      title: "Dashboard",
+      items: [{ path: "/admin", label: "Overview", icon: <Home size={20} /> }],
     },
     {
-      path: "/admin/contacts",
-      label: "Contacts",
-      icon: <MessageCircle size={20} />,
+      title: "Projects",
+      items: [
+        {
+          path: "/admin/projects",
+          label: "Project Pipeline",
+          icon: <ClipboardList size={20} />,
+        },
+        {
+          path: "/admin/projects/calendar",
+          label: "Project Calendar",
+          icon: <Calendar size={20} />,
+        },
+      ],
     },
     {
-      path: "/admin/projects",
-      label: "Projects",
-      icon: <FileText size={20} />,
+      title: "Discovery Calls",
+      items: [
+        {
+          path: "/admin/bookings",
+          label: "Bookings List",
+          icon: <FileText size={20} />,
+        },
+        {
+          path: "/admin/bookings/calendar",
+          label: "Booking Calendar",
+          icon: <Calendar size={20} />,
+        },
+      ],
+    },
+    {
+      title: "Communication",
+      items: [
+        {
+          path: "/admin/contacts",
+          label: "Contact Messages",
+          icon: <MessageCircle size={20} />,
+        },
+      ],
+    },
+    {
+      title: "Finance",
+      items: [
+        {
+          path: "/admin/finance",
+          label: "Revenue Tracking",
+          icon: <DollarSign size={20} />,
+        },
+      ],
     },
   ];
 
@@ -64,7 +108,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         {/* Close button for mobile */}
         <button
           className="absolute text-gray-500 top-4 right-4 md:hidden"
-          onClick={() => toggleSidebar()} // Ensure this is calling the function correctly
+          onClick={() => toggleSidebar()}
         >
           <X size={20} />
         </button>
@@ -83,38 +127,47 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         </div>
 
         {/* Nav Items */}
-        <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
-          {navItems.map((item) => {
-            const isActive =
-              location.pathname === item.path ||
-              (item.path !== "/admin" &&
-                location.pathname.startsWith(item.path));
+        <nav className="flex-1 px-2 py-4 space-y-6 overflow-y-auto">
+          {navSections.map((section, sectionIndex) => (
+            <div key={sectionIndex}>
+              <h3 className="px-4 mb-2 text-xs font-semibold tracking-wider text-gray-500 uppercase">
+                {section.title}
+              </h3>
+              <div className="space-y-1">
+                {section.items.map((item) => {
+                  const isActive =
+                    location.pathname === item.path ||
+                    (item.path !== "/admin" &&
+                      location.pathname.startsWith(item.path));
 
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
-                  isActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-gray-700 hover:bg-gray-100"
-                }`}
-                onClick={() => isOpen && toggleSidebar()}
-              >
-                <span className="mr-3">{item.icon}</span>
-                <span>{item.label}</span>
-                {isActive && (
-                  <motion.div
-                    className="ml-auto text-primary"
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                  >
-                    <ChevronRight size={16} />
-                  </motion.div>
-                )}
-              </Link>
-            );
-          })}
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                        isActive
+                          ? "bg-primary/10 text-primary"
+                          : "text-gray-700 hover:bg-gray-100"
+                      }`}
+                      onClick={() => isOpen && toggleSidebar()}
+                    >
+                      <span className="mr-3">{item.icon}</span>
+                      <span>{item.label}</span>
+                      {isActive && (
+                        <motion.div
+                          className="ml-auto text-primary"
+                          initial={{ scale: 0.5, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                        >
+                          <ChevronRight size={16} />
+                        </motion.div>
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
         {/* User Profile */}
@@ -125,13 +178,23 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
               <p className="text-xs text-gray-500">{auth.user?.email}</p>
             </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center w-full px-4 py-2 mt-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100"
-          >
-            <LogOut size={18} className="mr-2" />
-            <span>Logout</span>
-          </button>
+          <div className="flex space-x-2">
+            <Link
+              to="/admin/settings"
+              className="flex items-center justify-center flex-1 px-2 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+              onClick={() => isOpen && toggleSidebar()}
+            >
+              <Settings size={18} className="mr-1" />
+              <span>Settings</span>
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="flex items-center justify-center flex-1 px-2 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+            >
+              <LogOut size={18} className="mr-1" />
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
       </motion.div>
     </>
