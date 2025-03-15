@@ -1,0 +1,11 @@
+NODE_ENV=development
+PORT=5000
+MONGO_URI=mongodb://dbuser:pass@195.35.7.111:27017/veloria?authSource=veloria
+JWT_SECRET=secret
+JWT_EXPIRE=30d
+EMAIL_HOST=smtp.zoho.in
+EMAIL_PORT=465
+EMAIL_USER=info@veloria.in
+EMAIL_PASS=email pass
+EMAIL_FROM=Veloria Studio <info@veloria.in>
+ADMIN_EMAIL=info@veloria.in
