@@ -116,65 +116,69 @@ const ProjectDetailsForm = () => {
   });
 
   // Fetch project data if editing
+  // Modify your useEffect in ProjectDetailsForm.jsx
   useEffect(() => {
     if (!isNewProject) {
       const fetchProject = async () => {
         try {
           setLoading(true);
-          const response = await API.get(`/projects/admin/${id}`);
+          // Check if id is defined before making the API call
+          if (id) {
+            const response = await API.get(`/projects/admin/${id}`);
 
-          // Format dates for form inputs
-          const projectData = response.data;
-          if (projectData.startDate) {
-            projectData.startDate = format(
-              new Date(projectData.startDate),
-              "yyyy-MM-dd"
-            );
-          }
-          if (projectData.deadline) {
-            projectData.deadline = format(
-              new Date(projectData.deadline),
-              "yyyy-MM-dd"
-            );
-          }
+            // Format dates for form inputs
+            const projectData = response.data;
+            if (projectData.startDate) {
+              projectData.startDate = format(
+                new Date(projectData.startDate),
+                "yyyy-MM-dd"
+              );
+            }
+            if (projectData.deadline) {
+              projectData.deadline = format(
+                new Date(projectData.deadline),
+                "yyyy-MM-dd"
+              );
+            }
 
-          // Format dates for nested objects
-          if (projectData.hosting && projectData.hosting.renewalDate) {
-            projectData.hosting.renewalDate = format(
-              new Date(projectData.hosting.renewalDate),
-              "yyyy-MM-dd"
-            );
-          }
-          if (projectData.domain && projectData.domain.renewalDate) {
-            projectData.domain.renewalDate = format(
-              new Date(projectData.domain.renewalDate),
-              "yyyy-MM-dd"
-            );
-          }
+            // Format dates for nested objects
+            if (projectData.hosting && projectData.hosting.renewalDate) {
+              projectData.hosting.renewalDate = format(
+                new Date(projectData.hosting.renewalDate),
+                "yyyy-MM-dd"
+              );
+            }
+            if (projectData.domain && projectData.domain.renewalDate) {
+              projectData.domain.renewalDate = format(
+                new Date(projectData.domain.renewalDate),
+                "yyyy-MM-dd"
+              );
+            }
 
-          // Make sure arrays are initialized
-          if (!projectData.paymentSchedule) projectData.paymentSchedule = [];
-          if (!projectData.milestones) projectData.milestones = [];
-          if (!projectData.projectGoals) projectData.projectGoals = [""];
+            // Make sure arrays are initialized
+            if (!projectData.paymentSchedule) projectData.paymentSchedule = [];
+            if (!projectData.milestones) projectData.milestones = [];
+            if (!projectData.projectGoals) projectData.projectGoals = [""];
 
-          // Initialize other objects if not present
-          if (!projectData.designChoices) {
-            projectData.designChoices = {
-              colorPalette: [],
-              fonts: [],
-              designNotes: "",
-              approvalStatus: "pending",
-            };
-          }
-          if (!projectData.contentStatus) {
-            projectData.contentStatus = {
-              images: "not_started",
-              text: "not_started",
-              notes: "",
-            };
-          }
+            // Initialize other objects if not present
+            if (!projectData.designChoices) {
+              projectData.designChoices = {
+                colorPalette: [],
+                fonts: [],
+                designNotes: "",
+                approvalStatus: "pending",
+              };
+            }
+            if (!projectData.contentStatus) {
+              projectData.contentStatus = {
+                images: "not_started",
+                text: "not_started",
+                notes: "",
+              };
+            }
 
-          setProject(projectData);
+            setProject(projectData);
+          }
           setLoading(false);
         } catch (err) {
           console.error("Error fetching project:", err);
