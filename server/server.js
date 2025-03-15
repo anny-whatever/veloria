@@ -24,6 +24,7 @@ app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/projects", require("./routes/projectRoutes"));
 app.use("/api/bookings", require("./routes/bookingRoutes"));
+app.use("/api/finance", require("./routes/financeRoutes")); // Add the finance routes
 
 // Default route
 app.get("/", (req, res) => {

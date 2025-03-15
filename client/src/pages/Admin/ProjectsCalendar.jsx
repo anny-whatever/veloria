@@ -1,4 +1,4 @@
-// client/src/pages/Admin/ProjectsCalendar.jsx
+// client/src/pages/Admin/ProjectsCalendar.jsx - Fixed component
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -26,12 +26,21 @@ const ProjectsCalendar = () => {
   const fetchEvents = useCallback(async (start, end) => {
     try {
       setLoading(true);
+
+      // Format dates as YYYY-MM-DD
+      const startDate = format(new Date(start), "yyyy-MM-dd");
+      const endDate = format(new Date(end), "yyyy-MM-dd");
+
+      console.log(`Fetching calendar events from ${startDate} to ${endDate}`);
+
       const response = await API.get("/projects/admin/calendar", {
         params: {
-          start: format(new Date(start), "yyyy-MM-dd"),
-          end: format(new Date(end), "yyyy-MM-dd"),
+          start: startDate,
+          end: endDate,
         },
       });
+
+      console.log("Calendar events received:", response.data);
       setEvents(response.data);
       setLoading(false);
     } catch (err) {
@@ -60,8 +69,8 @@ const ProjectsCalendar = () => {
 
   // Function to handle event click
   const handleEventClick = (eventInfo) => {
-    const eventType = eventInfo.event.extendedProps.type;
-    const projectId = eventInfo.event.extendedProps.projectId;
+    const eventType = eventInfo.event.extendedProps?.type;
+    const projectId = eventInfo.event.extendedProps?.projectId;
 
     if (projectId) {
       window.location.href = `/admin/projects/${projectId}`;
@@ -70,11 +79,11 @@ const ProjectsCalendar = () => {
 
   // Custom rendering for events
   const renderEventContent = (eventInfo) => {
-    const { type } = eventInfo.event.extendedProps;
+    const eventType = eventInfo.event.extendedProps?.type || "default";
 
     // Choose icon based on event type
     let icon;
-    switch (type) {
+    switch (eventType) {
       case "project":
         icon = "🏁";
         break;

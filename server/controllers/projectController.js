@@ -553,74 +553,104 @@ const getProjectStats = asyncHandler(async (req, res) => {
 // @route   GET /api/projects/admin/calendar
 // @access  Private/Admin
 const getCalendarEvents = asyncHandler(async (req, res) => {
-  const { start, end } = req.query;
+  try {
+    const { start, end } = req.query;
 
-  let dateFilter = {};
-  if (start && end) {
-    dateFilter = {
-      $gte: new Date(start),
-      $lte: new Date(end),
-    };
-  }
-
-  // Find projects with relevant dates
-  const projects = await Project.find({
-    $or: [
-      { deadline: dateFilter },
-      { "milestones.dueDate": dateFilter },
-      { "paymentSchedule.dueDate": dateFilter },
-    ],
-  }).select("projectName deadline milestones paymentSchedule");
-
-  // Format as calendar events
-  const events = [];
-
-  projects.forEach((project) => {
-    // Project deadline
-    if (project.deadline) {
-      events.push({
-        id: `project_${project._id}`,
-        title: `Deadline: ${project.projectName}`,
-        start: project.deadline,
-        end: project.deadline,
-        allDay: true,
-        type: "project",
-        color: "#e74c3c", // Red
-      });
+    let dateFilter = {};
+    if (start && end) {
+      dateFilter = {
+        $gte: new Date(start),
+        $lte: new Date(end),
+      };
     }
 
-    // Milestone deadlines
-    project.milestones.forEach((milestone) => {
-      if (milestone.dueDate) {
+    // Find projects with relevant dates
+    const projects = await Project.find({
+      $or: [
+        { deadline: dateFilter },
+        { "milestones.dueDate": dateFilter },
+        { "paymentSchedule.dueDate": dateFilter },
+      ],
+    }).select("projectName deadline milestones paymentSchedule");
+
+    // Format as calendar events
+    const events = [];
+
+    projects.forEach((project) => {
+      // Project deadline
+      if (project.deadline) {
         events.push({
-          id: `milestone_${milestone._id}`,
-          title: `${project.projectName}: ${milestone.name}`,
-          start: milestone.dueDate,
-          end: milestone.dueDate,
+          id: `project_${project._id}`,
+          title: `Deadline: ${project.projectName}`,
+          start: project.deadline,
+          end: project.deadline,
           allDay: true,
-          type: "milestone",
-          color: "#f39c12", // Orange
+          type: "project",
+          color: "#e74c3c", // Red
+          projectId: project._id,
+          extendedProps: {
+            type: "project",
+            projectId: project._id,
+          },
+        });
+      }
+
+      // Milestone deadlines
+      if (project.milestones && project.milestones.length > 0) {
+        project.milestones.forEach((milestone) => {
+          if (milestone.dueDate) {
+            events.push({
+              id: `milestone_${milestone._id}`,
+              title: `${project.projectName}: ${milestone.name}`,
+              start: milestone.dueDate,
+              end: milestone.dueDate,
+              allDay: true,
+              type: "milestone",
+              color: "#f39c12", // Orange
+              projectId: project._id,
+              extendedProps: {
+                type: "milestone",
+                projectId: project._id,
+                milestoneId: milestone._id,
+              },
+            });
+          }
+        });
+      }
+
+      // Payment deadlines
+      if (project.paymentSchedule && project.paymentSchedule.length > 0) {
+        project.paymentSchedule.forEach((payment) => {
+          if (payment.dueDate) {
+            events.push({
+              id: `payment_${payment._id}`,
+              title: `${project.projectName}: ${payment.name} ($${payment.amount})`,
+              start: payment.dueDate,
+              end: payment.dueDate,
+              allDay: true,
+              type: "payment",
+              color: "#2ecc71", // Green
+              projectId: project._id,
+              extendedProps: {
+                type: "payment",
+                projectId: project._id,
+                paymentId: payment._id,
+              },
+            });
+          }
         });
       }
     });
 
-    // Payment deadlines
-    project.paymentSchedule.forEach((payment) => {
-      if (payment.dueDate) {
-        events.push({
-          id: `payment_${payment._id}`,
-          title: `${project.projectName}: ${payment.name} ($${payment.amount})`,
-          start: payment.dueDate,
-          end: payment.dueDate,
-          allDay: true,
-          type: "payment",
-          color: "#2ecc71", // Green
-        });
-      }
+    res.status(200).json(events);
+  } catch (error) {
+    console.error("Error fetching calendar events:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch calendar events",
+      error: error.message,
     });
-  });
-
-  res.status(200).json(events);
+  }
 });
 
 module.exports = {

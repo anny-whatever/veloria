@@ -27,80 +27,14 @@ const Finance = () => {
       try {
         setLoading(true);
 
-        // In a real implementation, you would fetch this data from the API
-        // const response = await API.get("/finance/admin/overview");
+        // Fetch real data from API
+        const response = await API.get("/finance/admin/overview");
 
-        // For now, we'll use mock data
-        const mockData = {
-          financials: {
-            totalRevenue: 250000,
-            receivedPayments: 150000,
-            pendingPayments: 100000,
-            revenueByMonth: [
-              { month: "Jan", revenue: 20000 },
-              { month: "Feb", revenue: 25000 },
-              { month: "Mar", revenue: 30000 },
-              { month: "Apr", revenue: 35000 },
-              { month: "May", revenue: 40000 },
-            ],
-          },
-          recentPayments: [
-            {
-              id: 1,
-              projectName: "E-commerce Website",
-              clientName: "GlobalTech Solutions",
-              amount: 25000,
-              date: "2023-10-15",
-              status: "paid",
-            },
-            {
-              id: 2,
-              projectName: "Portfolio Website",
-              clientName: "Jane Designer",
-              amount: 15000,
-              date: "2023-10-10",
-              status: "paid",
-            },
-            {
-              id: 3,
-              projectName: "Blog Website",
-              clientName: "Content Creators Inc",
-              amount: 20000,
-              date: "2023-10-05",
-              status: "paid",
-            },
-          ],
-          upcomingPayments: [
-            {
-              id: 4,
-              projectName: "E-commerce Website",
-              clientName: "GlobalTech Solutions",
-              amount: 25000,
-              dueDate: "2023-11-15",
-              status: "pending",
-            },
-            {
-              id: 5,
-              projectName: "Custom Website",
-              clientName: "Innovative Startups",
-              amount: 35000,
-              dueDate: "2023-11-20",
-              status: "pending",
-            },
-            {
-              id: 6,
-              projectName: "Landing Page",
-              clientName: "Marketing Agency",
-              amount: 10000,
-              dueDate: "2023-11-25",
-              status: "pending",
-            },
-          ],
-        };
+        // Update state with real data
+        setFinancials(response.data.financials);
+        setRecentPayments(response.data.recentPayments);
+        setUpcomingPayments(response.data.upcomingPayments);
 
-        setFinancials(mockData.financials);
-        setRecentPayments(mockData.recentPayments);
-        setUpcomingPayments(mockData.upcomingPayments);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching financial data:", err);
@@ -124,6 +58,25 @@ const Finance = () => {
     const options = { year: "numeric", month: "short", day: "numeric" };
     return new Date(dateString).toLocaleDateString("en-US", options);
   };
+
+  // Calculate growth percentage (compared to previous month)
+  const calculateGrowth = () => {
+    if (financials.revenueByMonth && financials.revenueByMonth.length >= 2) {
+      const currentMonth =
+        financials.revenueByMonth[financials.revenueByMonth.length - 1].revenue;
+      const previousMonth =
+        financials.revenueByMonth[financials.revenueByMonth.length - 2].revenue;
+
+      if (previousMonth > 0) {
+        return Math.round(
+          ((currentMonth - previousMonth) / previousMonth) * 100
+        );
+      }
+    }
+    return 0;
+  };
+
+  const growthPercentage = calculateGrowth();
 
   if (loading) {
     return (
@@ -176,7 +129,9 @@ const Finance = () => {
           </div>
           <div className="flex items-center text-sm">
             <ArrowUpRight className="mr-1 text-green-500" size={16} />
-            <span className="font-medium text-green-500">+12%</span>
+            <span className="font-medium text-green-500">
+              +{growthPercentage}%
+            </span>
             <span className="ml-1 text-gray-500">from last month</span>
           </div>
         </div>
@@ -197,9 +152,12 @@ const Finance = () => {
           </div>
           <div className="flex items-center text-sm">
             <span className="font-medium text-gray-700">
-              {Math.round(
-                (financials.receivedPayments / financials.totalRevenue) * 100
-              )}
+              {financials.totalRevenue > 0
+                ? Math.round(
+                    (financials.receivedPayments / financials.totalRevenue) *
+                      100
+                  )
+                : 0}
               %
             </span>
             <span className="ml-1 text-gray-500">of total revenue</span>
@@ -223,9 +181,11 @@ const Finance = () => {
           <div className="flex items-center text-sm">
             <ArrowDownRight className="mr-1 text-amber-500" size={16} />
             <span className="font-medium text-amber-500">
-              {Math.round(
-                (financials.pendingPayments / financials.totalRevenue) * 100
-              )}
+              {financials.totalRevenue > 0
+                ? Math.round(
+                    (financials.pendingPayments / financials.totalRevenue) * 100
+                  )
+                : 0}
               %
             </span>
             <span className="ml-1 text-gray-500">pending collection</span>
@@ -241,50 +201,59 @@ const Finance = () => {
             <h2 className="text-lg font-medium">Recent Payments</h2>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                    Project
-                  </th>
-                  <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                    Client
-                  </th>
-                  <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                    Amount
-                  </th>
-                  <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                    Date
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {recentPayments.map((payment) => (
-                  <tr key={payment.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-primary">
-                        {payment.projectName}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
-                        {payment.clientName}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-green-600">
-                        {formatCurrency(payment.amount)}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">
-                        {formatDate(payment.date)}
-                      </div>
-                    </td>
+            {recentPayments.length === 0 ? (
+              <div className="p-6 text-center text-gray-500">
+                No recent payments found
+              </div>
+            ) : (
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                      Project
+                    </th>
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                      Client
+                    </th>
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                      Amount
+                    </th>
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                      Date
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {recentPayments.map((payment) => (
+                    <tr key={payment._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-primary">
+                          {payment.projectName}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {payment.paymentName}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {payment.clientName}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-green-600">
+                          {formatCurrency(payment.amount)}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">
+                          {formatDate(payment.date)}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
 
@@ -294,50 +263,59 @@ const Finance = () => {
             <h2 className="text-lg font-medium">Upcoming Payments</h2>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                    Project
-                  </th>
-                  <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                    Client
-                  </th>
-                  <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                    Amount
-                  </th>
-                  <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                    Due Date
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {upcomingPayments.map((payment) => (
-                  <tr key={payment.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-primary">
-                        {payment.projectName}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
-                        {payment.clientName}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-amber-600">
-                        {formatCurrency(payment.amount)}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">
-                        {formatDate(payment.dueDate)}
-                      </div>
-                    </td>
+            {upcomingPayments.length === 0 ? (
+              <div className="p-6 text-center text-gray-500">
+                No upcoming payments found
+              </div>
+            ) : (
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                      Project
+                    </th>
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                      Client
+                    </th>
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                      Amount
+                    </th>
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                      Due Date
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {upcomingPayments.map((payment) => (
+                    <tr key={payment._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-primary">
+                          {payment.projectName}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {payment.paymentName}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {payment.clientName}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-amber-600">
+                          {formatCurrency(payment.amount)}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">
+                          {formatDate(payment.dueDate)}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>

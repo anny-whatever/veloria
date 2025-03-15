@@ -1,4 +1,4 @@
-// client/src/pages/Admin/BookingsCalendar.jsx
+// client/src/pages/Admin/BookingsCalendar.jsx - Enhanced error handling
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -23,25 +23,49 @@ const BookingsCalendar = () => {
   const [error, setError] = useState(null);
   const [currentView, setCurrentView] = useState("timeGridWeek");
   const [todaysBookings, setTodaysBookings] = useState([]);
+  const [retryCount, setRetryCount] = useState(0);
 
   // Function to fetch booking events for the calendar
-  const fetchEvents = useCallback(async (start, end) => {
-    try {
-      setLoading(true);
-      const response = await API.get("/bookings/admin/calendar", {
-        params: {
-          start: format(new Date(start), "yyyy-MM-dd"),
-          end: format(new Date(end), "yyyy-MM-dd"),
-        },
-      });
-      setEvents(response.data);
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching booking events:", err);
-      setError("Failed to fetch booking events. Please try again.");
-      setLoading(false);
-    }
-  }, []);
+  const fetchEvents = useCallback(
+    async (start, end) => {
+      try {
+        setLoading(true);
+
+        // Format dates as YYYY-MM-DD
+        const startDate = format(new Date(start), "yyyy-MM-dd");
+        const endDate = format(new Date(end), "yyyy-MM-dd");
+
+        console.log(`Fetching booking events from ${startDate} to ${endDate}`);
+
+        const response = await API.get("/bookings/admin/calendar", {
+          params: {
+            start: startDate,
+            end: endDate,
+          },
+        });
+
+        console.log("Booking events received:", response.data);
+        setEvents(response.data);
+        setLoading(false);
+        setError(null); // Clear any existing errors on success
+      } catch (err) {
+        console.error("Error fetching booking events:", err);
+        setError("Failed to fetch booking events. Please try again.");
+        setLoading(false);
+
+        // If we've retried less than 3 times, try again
+        if (retryCount < 3) {
+          console.log(`Retrying fetch (attempt ${retryCount + 1} of 3)...`);
+          setRetryCount((prev) => prev + 1);
+          // Try again after a short delay
+          setTimeout(() => {
+            fetchEvents(start, end);
+          }, 2000);
+        }
+      }
+    },
+    [retryCount]
+  );
 
   // Function to fetch today's bookings
   const fetchTodaysBookings = useCallback(async () => {
@@ -50,6 +74,7 @@ const BookingsCalendar = () => {
       setTodaysBookings(response.data);
     } catch (err) {
       console.error("Error fetching today's bookings:", err);
+      // Don't set an error here - we can still show the calendar without today's bookings
     }
   }, []);
 
@@ -67,6 +92,8 @@ const BookingsCalendar = () => {
 
   // Function to handle date range change in calendar
   const handleDatesSet = (dateInfo) => {
+    // Reset retry count on new date range
+    setRetryCount(0);
     fetchEvents(dateInfo.start, dateInfo.end);
   };
 
@@ -81,7 +108,7 @@ const BookingsCalendar = () => {
   // Custom rendering for events
   const renderEventContent = (eventInfo) => {
     // Choose icon based on call type
-    const callType = eventInfo.event.extendedProps.callType;
+    const callType = eventInfo.event.extendedProps?.callType || "unknown";
     const icon = callType === "video" ? "📹" : "📞";
 
     return (
@@ -94,7 +121,7 @@ const BookingsCalendar = () => {
     );
   };
 
-  if (error) {
+  if (error && retryCount >= 3) {
     return (
       <div className="p-6 text-red-700 border border-red-200 rounded-lg bg-red-50">
         <div className="flex items-center mb-3">
@@ -102,8 +129,15 @@ const BookingsCalendar = () => {
           <h3 className="text-lg font-semibold">Error</h3>
         </div>
         <p>{error}</p>
+        <p className="mt-2 text-sm text-red-600">
+          The server returned an error when trying to load calendar events. This
+          may be due to a server-side issue or misconfiguration.
+        </p>
         <button
-          onClick={() => window.location.reload()}
+          onClick={() => {
+            setRetryCount(0);
+            window.location.reload();
+          }}
           className="px-4 py-2 mt-4 text-red-700 transition-colors bg-red-100 rounded-md hover:bg-red-200"
         >
           Retry
@@ -159,6 +193,15 @@ const BookingsCalendar = () => {
                 </div>
               </div>
             </div>
+
+            {error && retryCount < 3 && (
+              <div className="p-4 m-4 border rounded-lg text-amber-700 border-amber-200 bg-amber-50">
+                <div className="flex items-center">
+                  <AlertTriangle size={18} className="mr-2" />
+                  <p>Having trouble loading calendar events. Retrying...</p>
+                </div>
+              </div>
+            )}
 
             <div className={loading ? "opacity-50" : ""}>
               <FullCalendar
@@ -264,8 +307,8 @@ const BookingsCalendar = () => {
                               : "bg-gray-100 text-gray-800"
                           }`}
                         >
-                          {booking.status.charAt(0).toUpperCase() +
-                            booking.status.slice(1)}
+                          {booking.status?.charAt(0).toUpperCase() +
+                            booking.status?.slice(1) || "Unknown"}
                         </span>
                       </div>
                     </Link>

@@ -1,4 +1,3 @@
-// server/routes/bookingRoutes.js - Updated routes with correct order
 const express = require("express");
 const router = express.Router();
 const {
@@ -21,7 +20,7 @@ router.patch("/cancel/:id", cancelBooking);
 router.get("/admin/calendar", protect, admin, getBookingsCalendar);
 router.get("/admin/today", protect, admin, getTodaysBookings);
 
-// Admin routes with :id parameter - these must come after the specific routes
+// Admin routes with ID parameters - these come after specific routes
 router.get("/admin", protect, admin, getBookings);
 router.get("/admin/:id", protect, admin, getBookingById);
 router.patch("/admin/:id", protect, admin, updateBooking);

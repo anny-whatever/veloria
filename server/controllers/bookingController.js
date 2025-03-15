@@ -229,72 +229,108 @@ const cancelBooking = asyncHandler(async (req, res) => {
 // @route   GET /api/bookings/admin/calendar
 // @access  Private/Admin
 const getBookingsCalendar = asyncHandler(async (req, res) => {
-  const { start, end } = req.query;
+  try {
+    const { start, end } = req.query;
 
-  let dateFilter = {};
-  if (start && end) {
-    dateFilter = {
-      $gte: new Date(start),
-      $lte: new Date(end),
-    };
-  }
-
-  // Find bookings within date range
-  const bookings = await Booking.find({
-    date: dateFilter,
-  });
-
-  // Format for calendar
-  const events = bookings.map((booking) => {
-    // Calculate end time (adding 1 hour to start time as default)
-    const startDate = new Date(booking.date);
-    const [hours, minutes] = booking.time.split(":").map(Number);
-    startDate.setHours(hours, minutes, 0);
-
-    const endDate = new Date(startDate);
-    endDate.setHours(endDate.getHours() + 1);
-
-    // Determine color based on status
-    let color;
-    switch (booking.status) {
-      case "scheduled":
-        color = "#3498db"; // Blue
-        break;
-      case "completed":
-        color = "#2ecc71"; // Green
-        break;
-      case "cancelled":
-        color = "#e74c3c"; // Red
-        break;
-      case "rescheduled":
-        color = "#f39c12"; // Orange
-        break;
-      default:
-        color = "#95a5a6"; // Gray
+    // Validate date parameters
+    if (!start || !end) {
+      return res.status(400).json({
+        success: false,
+        message: "Start and end dates are required",
+      });
     }
 
-    return {
-      id: booking._id,
-      title: `${booking.callType === "video" ? "📹" : "📞"} ${booking.name}: ${
-        booking.projectType
-      }`,
-      start: startDate.toISOString(),
-      end: endDate.toISOString(),
-      allDay: false,
-      type: "booking",
-      color,
-      extendedProps: {
-        email: booking.email,
-        phone: booking.phone,
-        company: booking.company,
-        projectType: booking.projectType,
-        callType: booking.callType,
-        status: booking.status,
-      },
-    };
-  });
+    // Create date filter
+    let dateFilter = {};
+    try {
+      dateFilter = {
+        $gte: new Date(start),
+        $lte: new Date(end),
+      };
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid date format. Use YYYY-MM-DD format.",
+      });
+    }
 
-  res.status(200).json(events);
+    // Find bookings within date range
+    const bookings = await Booking.find({
+      date: dateFilter,
+    });
+
+    // Format for calendar
+    const events = bookings.map((booking) => {
+      // Calculate end time (adding 1 hour to start time as default)
+      const startDate = new Date(booking.date);
+
+      // Safely parse time
+      let hours = 12,
+        minutes = 0;
+      if (
+        booking.time &&
+        typeof booking.time === "string" &&
+        booking.time.includes(":")
+      ) {
+        const [hoursStr, minutesStr] = booking.time.split(":").map(Number);
+        hours = !isNaN(hoursStr) ? hoursStr : 12;
+        minutes = !isNaN(minutesStr) ? minutesStr : 0;
+      }
+
+      startDate.setHours(hours, minutes, 0);
+
+      const endDate = new Date(startDate);
+      endDate.setHours(endDate.getHours() + 1);
+
+      // Determine color based on status
+      let color;
+      switch (booking.status) {
+        case "scheduled":
+          color = "#3498db"; // Blue
+          break;
+        case "completed":
+          color = "#2ecc71"; // Green
+          break;
+        case "cancelled":
+          color = "#e74c3c"; // Red
+          break;
+        case "rescheduled":
+          color = "#f39c12"; // Orange
+          break;
+        default:
+          color = "#95a5a6"; // Gray
+      }
+
+      return {
+        id: booking._id,
+        title: `${booking.callType === "video" ? "📹" : "📞"} ${
+          booking.name
+        }: ${booking.projectType || "Discovery Call"}`,
+        start: startDate.toISOString(),
+        end: endDate.toISOString(),
+        allDay: false,
+        type: "booking",
+        color,
+        extendedProps: {
+          email: booking.email,
+          phone: booking.phone,
+          company: booking.company,
+          projectType: booking.projectType,
+          callType: booking.callType,
+          status: booking.status,
+        },
+      };
+    });
+
+    res.status(200).json(events);
+  } catch (error) {
+    console.error("Error in getBookingsCalendar:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error when fetching booking calendar data",
+      error: error.message,
+    });
+  }
 });
 
 // @desc    Get today's bookings

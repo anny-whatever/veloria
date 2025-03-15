@@ -1,4 +1,4 @@
-// server/routes/projectRoutes.js - Enhanced routes
+// server/routes/projectRoutes.js - Fixed route order
 const express = require("express");
 const router = express.Router();
 const {
@@ -21,6 +21,11 @@ const { protect, admin } = require("../middleware/authMiddleware");
 
 // Public routes
 router.post("/", submitProject);
+
+// Admin routes - analytics and dashboards (these must come BEFORE :id routes)
+router.get("/admin/stats", protect, admin, getProjectStats);
+router.get("/admin/calendar", protect, admin, getCalendarEvents);
+router.get("/admin/deadlines", protect, admin, getUpcomingDeadlines);
 
 // Admin routes - standard CRUD
 router.get("/admin", protect, admin, getProjects);
@@ -51,10 +56,5 @@ router.patch(
 
 // Admin routes - referral management
 router.patch("/admin/:id/referral", protect, admin, addReferralInfo);
-
-// Admin routes - analytics and dashboards
-router.get("/admin/deadlines", protect, admin, getUpcomingDeadlines);
-router.get("/admin/stats", protect, admin, getProjectStats);
-router.get("/admin/calendar", protect, admin, getCalendarEvents);
 
 module.exports = router;
