@@ -1,4 +1,4 @@
-// src/index.jsx - Updated router configuration
+// src/main.jsx - Updated router configuration
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -12,8 +12,10 @@ import ContactsList from "./pages/Admin/ContactsList";
 import ContactDetails from "./pages/Admin/ContactDetails";
 import ProjectPipeline from "./pages/Admin/ProjectPipeline";
 import ProjectDetailsForm from "./pages/Admin/ProjectDetailsForm";
+import ProjectDetails from "./pages/Admin/ProjectDetails";
 import ProjectsCalendar from "./pages/Admin/ProjectsCalendar";
 import BookingsCalendar from "./pages/Admin/BookingsCalendar";
+import Finance from "./pages/Admin/Finance";
 import { AuthProvider } from "./contexts/AuthContext";
 import "./index.css";
 
@@ -64,11 +66,15 @@ const router = createBrowserRouter([
       },
       {
         path: "projects/:id",
-        element: <ProjectDetailsForm />,
+        element: <ProjectDetails />,
       },
       {
         path: "projects/calendar",
         element: <ProjectsCalendar />,
+      },
+      {
+        path: "finance",
+        element: <Finance />,
       },
     ],
   },

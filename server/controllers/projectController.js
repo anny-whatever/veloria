@@ -448,85 +448,105 @@ const getUpcomingDeadlines = asyncHandler(async (req, res) => {
 // @route   GET /api/projects/admin/stats
 // @access  Private/Admin
 const getProjectStats = asyncHandler(async (req, res) => {
-  // Get counts by status
-  const statusCounts = await Project.aggregate([
-    {
-      $group: {
-        _id: "$status",
-        count: { $sum: 1 },
+  try {
+    // Get counts by status
+    const statusCounts = await Project.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
       },
-    },
-  ]);
+    ]);
 
-  // Get counts by stage for active projects
-  const stageCounts = await Project.aggregate([
-    {
-      $match: {
-        status: "accepted",
+    // Get counts by stage for active projects
+    const stageCounts = await Project.aggregate([
+      {
+        $match: {
+          status: "accepted",
+        },
       },
-    },
-    {
-      $group: {
-        _id: "$workflowStage",
-        count: { $sum: 1 },
+      {
+        $group: {
+          _id: "$workflowStage",
+          count: { $sum: 1 },
+        },
       },
-    },
-  ]);
+    ]);
 
-  // Calculate financial metrics
-  const financialMetrics = await Project.aggregate([
-    {
-      $match: {
-        status: { $nin: ["declined"] },
+    // Calculate financial metrics
+    const financialMetrics = await Project.aggregate([
+      {
+        $match: {
+          status: { $nin: ["declined"] },
+        },
       },
-    },
-    {
-      $group: {
-        _id: null,
-        totalProjectValue: { $sum: "$projectValue" },
-        totalReceivedPayments: { $sum: "$receivedPayments" },
-        projectCount: { $sum: 1 },
+      {
+        $group: {
+          _id: null,
+          totalProjectValue: { $sum: { $ifNull: ["$projectValue", 0] } },
+          totalReceivedPayments: {
+            $sum: { $ifNull: ["$receivedPayments", 0] },
+          },
+          projectCount: { $sum: 1 },
+        },
       },
-    },
-  ]);
+    ]);
 
-  // Format status counts as object
-  const formattedStatusCounts = {};
-  statusCounts.forEach((item) => {
-    formattedStatusCounts[item._id] = item.count;
-  });
+    // Format status counts as object
+    const formattedStatusCounts = {};
+    statusCounts.forEach((item) => {
+      if (item._id) {
+        // Check if _id exists
+        formattedStatusCounts[item._id] = item.count;
+      }
+    });
 
-  // Format stage counts as object
-  const formattedStageCounts = {};
-  stageCounts.forEach((item) => {
-    formattedStageCounts[item._id] = item.count;
-  });
+    // Format stage counts as object
+    const formattedStageCounts = {};
+    stageCounts.forEach((item) => {
+      if (item._id) {
+        // Check if _id exists
+        formattedStageCounts[item._id] = item.count;
+      }
+    });
 
-  // Calculate financial summaries
-  const finance =
-    financialMetrics.length > 0
-      ? {
-          totalProjectValue: financialMetrics[0].totalProjectValue,
-          totalReceivedPayments: financialMetrics[0].totalReceivedPayments,
-          outstandingPayments:
-            financialMetrics[0].totalProjectValue -
-            financialMetrics[0].totalReceivedPayments,
-          avgProjectValue:
-            financialMetrics[0].totalProjectValue /
-            financialMetrics[0].projectCount,
-        }
-      : {
-          totalProjectValue: 0,
-          totalReceivedPayments: 0,
-          outstandingPayments: 0,
-          avgProjectValue: 0,
-        };
+    // Calculate financial summaries
+    const finance =
+      financialMetrics.length > 0
+        ? {
+            totalProjectValue: financialMetrics[0].totalProjectValue || 0,
+            totalReceivedPayments:
+              financialMetrics[0].totalReceivedPayments || 0,
+            outstandingPayments:
+              (financialMetrics[0].totalProjectValue || 0) -
+              (financialMetrics[0].totalReceivedPayments || 0),
+            avgProjectValue:
+              financialMetrics[0].projectCount > 0
+                ? (financialMetrics[0].totalProjectValue || 0) /
+                  financialMetrics[0].projectCount
+                : 0,
+          }
+        : {
+            totalProjectValue: 0,
+            totalReceivedPayments: 0,
+            outstandingPayments: 0,
+            avgProjectValue: 0,
+          };
 
-  res.status(200).json({
-    byStatus: formattedStatusCounts,
-    byStage: formattedStageCounts,
-    finance,
-  });
+    res.status(200).json({
+      byStatus: formattedStatusCounts,
+      byStage: formattedStageCounts,
+      finance,
+    });
+  } catch (error) {
+    console.error("Error generating project stats:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to generate project statistics",
+      error: error.message,
+    });
+  }
 });
 
 // @desc    Get calendar events

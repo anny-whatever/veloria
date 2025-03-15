@@ -1,5 +1,5 @@
 // client/src/pages/Admin/ProjectPipeline.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   ClipboardList,
@@ -13,6 +13,7 @@ import {
   X,
   Clock,
   Tag,
+  AlertTriangle, // Add this import
 } from "lucide-react";
 import { format } from "date-fns";
 import API from "../../api";
@@ -78,9 +79,61 @@ const ProjectPipeline = () => {
         setProjects(sortedProjects);
         setFilteredProjects(sortedProjects);
 
-        // Fetch stats
-        const statsResponse = await API.get("/projects/admin/stats");
-        setStats(statsResponse.data);
+        // Calculate basic stats from the loaded projects if the API stats endpoint fails
+        let basicStats = {
+          byStatus: {},
+          byStage: {},
+          finance: {
+            totalProjectValue: 0,
+            totalReceivedPayments: 0,
+            outstandingPayments: 0,
+            avgProjectValue: 0,
+          },
+        };
+
+        // Generate status counts
+        sortedProjects.forEach((project) => {
+          if (!basicStats.byStatus[project.status]) {
+            basicStats.byStatus[project.status] = 0;
+          }
+          basicStats.byStatus[project.status]++;
+
+          // Count stages for accepted projects
+          if (project.status === "accepted" && project.workflowStage) {
+            if (!basicStats.byStage[project.workflowStage]) {
+              basicStats.byStage[project.workflowStage] = 0;
+            }
+            basicStats.byStage[project.workflowStage]++;
+          }
+
+          // Sum financial data
+          if (project.projectValue) {
+            basicStats.finance.totalProjectValue += project.projectValue;
+          }
+          if (project.receivedPayments) {
+            basicStats.finance.totalReceivedPayments +=
+              project.receivedPayments;
+          }
+        });
+
+        // Calculate remaining financial stats
+        basicStats.finance.outstandingPayments =
+          basicStats.finance.totalProjectValue -
+          basicStats.finance.totalReceivedPayments;
+
+        basicStats.finance.avgProjectValue =
+          sortedProjects.length > 0
+            ? basicStats.finance.totalProjectValue / sortedProjects.length
+            : 0;
+
+        // Try to fetch stats from API, use calculated stats as fallback
+        try {
+          const statsResponse = await API.get("/projects/admin/stats");
+          setStats(statsResponse.data);
+        } catch (statsError) {
+          console.warn("Using calculated stats due to API error:", statsError);
+          setStats(basicStats);
+        }
 
         setLoading(false);
       } catch (err) {
@@ -92,6 +145,8 @@ const ProjectPipeline = () => {
 
     fetchProjects();
   }, []);
+
+  // Rest of the component remains the same...
 
   // Filter projects whenever search term or status filter changes
   useEffect(() => {
@@ -305,7 +360,7 @@ const ProjectPipeline = () => {
             {Object.values(stats.byStatus).reduce(
               (sum, count) => sum + count,
               0
-            )}
+            ) || filteredProjects.length}
           </p>
           <div className="flex items-center mt-2 text-xs">
             <span className="px-2 py-1 mr-2 rounded-full bg-accent/10 text-accent">
@@ -325,10 +380,10 @@ const ProjectPipeline = () => {
             <DollarSign size={18} className="text-green-600" />
           </div>
           <p className="text-2xl font-bold">
-            ${stats.finance.totalProjectValue.toLocaleString()}
+            ₹{stats.finance.totalProjectValue.toLocaleString()}
           </p>
           <div className="mt-2 text-xs text-gray-500">
-            ${stats.finance.avgProjectValue.toLocaleString()} avg. per project
+            ₹{stats.finance.avgProjectValue.toLocaleString()} avg. per project
           </div>
         </div>
 
@@ -340,10 +395,10 @@ const ProjectPipeline = () => {
             <DollarSign size={18} className="text-accent" />
           </div>
           <p className="text-2xl font-bold">
-            ${stats.finance.totalReceivedPayments.toLocaleString()}
+            ₹{stats.finance.totalReceivedPayments.toLocaleString()}
           </p>
           <div className="mt-2 text-xs text-gray-500">
-            ${stats.finance.outstandingPayments.toLocaleString()} outstanding
+            ₹{stats.finance.outstandingPayments.toLocaleString()} outstanding
           </div>
         </div>
 
@@ -435,10 +490,11 @@ const ProjectPipeline = () => {
                               <div className="flex mt-2 text-xs text-gray-500">
                                 <div className="flex items-center mr-4">
                                   <Calendar size={14} className="mr-1" />
-                                  {format(
-                                    new Date(project.createdAt),
-                                    "MMM d, yyyy"
-                                  )}
+                                  {project.createdAt &&
+                                    format(
+                                      new Date(project.createdAt),
+                                      "MMM d, yyyy"
+                                    )}
                                 </div>
 
                                 {project.workflowStage && (
@@ -456,7 +512,7 @@ const ProjectPipeline = () => {
                             <div>
                               {project.projectValue > 0 && (
                                 <div className="text-sm font-medium text-right text-green-600">
-                                  ${project.projectValue.toLocaleString()}
+                                  ₹{project.projectValue.toLocaleString()}
                                 </div>
                               )}
 

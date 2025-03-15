@@ -1,22 +1,9 @@
 // client/src/pages/Admin/AdminDashboard.jsx
 import { useState, useEffect } from "react";
-import {
-  Navigate,
-  Routes,
-  Route,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import AdminSidebar from "./components/AdminSidebar";
 import AdminHeader from "./components/AdminHeader";
 import AdminLogin from "./AdminLogin";
-import BookingsList from "./BookingsList";
-import ContactsList from "./ContactsList";
-import ProjectsList from "./ProjectsList";
-import BookingDetails from "./BookingDetails";
-import ContactDetails from "./ContactDetails";
-import ProjectDetails from "./ProjectDetails";
-import AdminHome from "./AdminHome";
 import useAuth from "../../hooks/useAuth";
 
 const AdminDashboard = () => {
@@ -61,16 +48,7 @@ const AdminDashboard = () => {
         <AdminHeader toggleSidebar={toggleSidebar} />
 
         <main className="flex-1 p-4 overflow-y-auto bg-gray-100 md:p-6">
-          <Routes>
-            <Route path="/" element={<AdminHome />} />
-            <Route path="/bookings" element={<BookingsList />} />
-            <Route path="/bookings/:id" element={<BookingDetails />} />
-            <Route path="/contacts" element={<ContactsList />} />
-            <Route path="/contacts/:id" element={<ContactDetails />} />
-            <Route path="/projects" element={<ProjectsList />} />
-            <Route path="/projects/:id" element={<ProjectDetails />} />
-            <Route path="*" element={<Navigate to="/admin" replace />} />
-          </Routes>
+          <Outlet />
         </main>
       </div>
     </div>
