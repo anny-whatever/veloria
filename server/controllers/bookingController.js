@@ -1,4 +1,4 @@
-// server/controllers/bookingController.js
+// server/controllers/bookingController.js - With admin booking creation
 const Booking = require("../models/Booking");
 const asyncHandler = require("express-async-handler");
 const { sendNotification, sendConfirmation } = require("../utils/emailService");
@@ -101,6 +101,90 @@ const createBooking = asyncHandler(async (req, res) => {
       callType,
       meetingDetails,
     },
+  });
+});
+
+// @desc    Create a booking manually (by admin)
+// @route   POST /api/bookings/admin
+// @access  Private/Admin
+const createBookingByAdmin = asyncHandler(async (req, res) => {
+  const {
+    name,
+    email,
+    phone,
+    company,
+    date,
+    time,
+    timezone,
+    callType,
+    projectType,
+    additionalInfo,
+    status,
+    notes,
+    meetingLink,
+  } = req.body;
+
+  // Validate required fields
+  if (!name || !email || !date || !time || !callType || !projectType) {
+    res.status(400);
+    throw new Error("Please provide all required fields");
+  }
+
+  // Create booking in database with admin-provided fields
+  const booking = await Booking.create({
+    name,
+    email,
+    phone,
+    company,
+    date: new Date(date),
+    time,
+    timezone: timezone || "GMT+0530 (India Standard Time)",
+    callType,
+    projectType,
+    additionalInfo,
+    status: status || "scheduled",
+    notes,
+    meetingLink,
+    createdAt: new Date(),
+  });
+
+  // Optionally send email notification to client
+  if (req.body.sendNotification) {
+    try {
+      // Generate meeting details
+      const meetingDetails = {
+        link:
+          meetingLink ||
+          (callType === "video" ? "https://zoom.us/j/example" : null),
+        phone: callType === "phone" ? phone : null,
+        datetime: `${new Date(date).toDateString()} at ${time}`,
+      };
+
+      // Send confirmation to user
+      await sendConfirmation({
+        type: "booking_confirmed",
+        recipient: email,
+        data: {
+          name,
+          date: new Date(date).toDateString(),
+          time,
+          timezone: timezone || "GMT+0530 (India Standard Time)",
+          callType,
+          meetingDetails,
+        },
+      });
+
+      console.log("Booking confirmation email sent to client");
+    } catch (error) {
+      console.error("Failed to send booking confirmation email:", error);
+      // Continue anyway
+    }
+  }
+
+  res.status(201).json({
+    success: true,
+    message: "Booking created successfully by admin",
+    _id: booking._id,
   });
 });
 
@@ -358,6 +442,7 @@ const getTodaysBookings = asyncHandler(async (req, res) => {
 
 module.exports = {
   createBooking,
+  createBookingByAdmin,
   getBookings,
   getBookingById,
   updateBooking,

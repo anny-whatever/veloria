@@ -1,13 +1,40 @@
-// client/src/api/index.js
+// client/src/api/index.js - Updated API configuration
 import axios from "axios";
 
 // Create axios instance with default config
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://api.veloria.in/api",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 15000, // 15 seconds timeout for all requests
 });
+
+// Add request interceptor for debugging
+API.interceptors.request.use(
+  (config) => {
+    console.log(`Making request to: ${config.baseURL}${config.url}`);
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor
+API.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    console.error("API Error:", error.message);
+    // Log additional details when available
+    if (error.response) {
+      console.error("Response data:", error.response.data);
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Project Form API
 export const submitProjectForm = async (formData) => {

@@ -1,4 +1,4 @@
-// client/src/hooks/useFetchData.js
+// client/src/hooks/useFetchData.js - With improved error handling
 import { useState, useEffect, useCallback } from "react";
 import API from "../api";
 
@@ -39,7 +39,18 @@ const useFetchData = ({
         setLoading(true);
         clearError();
 
-        const response = await API.get(`${endpoint}/${specificId}`);
+        // Make sure API.defaults.baseURL is properly set
+        console.log(`Making request to: ${endpoint}/${specificId}`);
+        const fullUrl = API.defaults.baseURL
+          ? `${API.defaults.baseURL}${endpoint}/${specificId}`
+          : `${endpoint}/${specificId}`;
+        console.log(`Full URL: ${fullUrl}`);
+
+        // Add a timeout to prevent hanging requests
+        const response = await API.get(`${endpoint}/${specificId}`, {
+          timeout: 10000, // 10 seconds timeout
+        });
+
         const transformedData = dataTransformer(response.data);
         setData(transformedData);
         return transformedData;
@@ -74,7 +85,7 @@ const useFetchData = ({
             default:
               setError(
                 `Error: ${err.response.status} - ${
-                  err.response.data.message || "Unknown error"
+                  err.response?.data?.message || "Unknown error"
                 }`
               );
           }
@@ -84,9 +95,13 @@ const useFetchData = ({
             setError(
               "You appear to be offline. Please check your internet connection."
             );
+          } else if (err.code === "ECONNABORTED") {
+            setError(
+              "Request timed out. The server is taking too long to respond."
+            );
           } else {
             setError(
-              "No response received from server. Please try again later."
+              "No response received from server. Please check your API configuration."
             );
           }
         } else {

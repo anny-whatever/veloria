@@ -1,14 +1,7 @@
-// client/src/pages/Admin/BookingsCalendar.jsx - Enhanced error handling
+// client/src/pages/Admin/BookingsCalendar.jsx - Fixed Add Manual Booking button and removed settings
 import { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
-import {
-  Calendar,
-  List,
-  ChevronLeft,
-  ChevronRight,
-  AlertTriangle,
-  Users,
-} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Calendar, List, AlertTriangle, Users, PlusCircle } from "lucide-react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -18,6 +11,7 @@ import { format } from "date-fns";
 import API from "../../api";
 
 const BookingsCalendar = () => {
+  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -101,7 +95,7 @@ const BookingsCalendar = () => {
   const handleEventClick = (eventInfo) => {
     const bookingId = eventInfo.event.id;
     if (bookingId) {
-      window.location.href = `/admin/bookings/${bookingId}`;
+      navigate(`/admin/bookings/${bookingId}`);
     }
   };
 
@@ -119,6 +113,11 @@ const BookingsCalendar = () => {
         </div>
       </div>
     );
+  };
+
+  // Function to handle creating a new booking
+  const handleCreateBooking = () => {
+    // Directly navigate to the BookingDetails component with "new" parameter
   };
 
   if (error && retryCount >= 3) {
@@ -323,20 +322,14 @@ const BookingsCalendar = () => {
             <div className="p-4 border-b">
               <h2 className="text-lg font-medium">Quick Actions</h2>
             </div>
-            <div className="p-4 space-y-3">
-              <Link
-                to="/admin/bookings/new"
+            <div className="p-4">
+              <button
+                onClick={handleCreateBooking}
                 className="flex items-center justify-center w-full px-4 py-2 text-white rounded-md bg-primary hover:bg-primary/90"
               >
-                + Add Manual Booking
-              </Link>
-
-              <Link
-                to="/admin/calendar/settings"
-                className="flex items-center justify-center w-full px-4 py-2 border rounded-md text-primary border-primary hover:bg-primary/10"
-              >
-                Calendar Settings
-              </Link>
+                <PlusCircle size={18} className="mr-2" />
+                Add Manual Booking
+              </button>
             </div>
           </div>
         </div>

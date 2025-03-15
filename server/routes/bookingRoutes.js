@@ -1,7 +1,9 @@
+// server/routes/bookingRoutes.js - With admin booking creation endpoint
 const express = require("express");
 const router = express.Router();
 const {
   createBooking,
+  createBookingByAdmin,
   getBookings,
   getBookingById,
   updateBooking,
@@ -22,6 +24,7 @@ router.get("/admin/today", protect, admin, getTodaysBookings);
 
 // Admin routes with ID parameters - these come after specific routes
 router.get("/admin", protect, admin, getBookings);
+router.post("/admin", protect, admin, createBookingByAdmin); // New route for admin booking creation
 router.get("/admin/:id", protect, admin, getBookingById);
 router.patch("/admin/:id", protect, admin, updateBooking);
 router.delete("/admin/:id", protect, admin, deleteBooking);

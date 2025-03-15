@@ -1,4 +1,4 @@
-// src/main.jsx - Updated router configuration
+// src/main.jsx - Fixed router configuration
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -18,6 +18,26 @@ import BookingsCalendar from "./pages/Admin/BookingsCalendar";
 import Finance from "./pages/Admin/Finance";
 import { AuthProvider } from "./contexts/AuthContext";
 import "./index.css";
+
+// Import placeholder components for the settings
+const AdminSettings = () => (
+  <div className="p-6">
+    <h1 className="mb-4 text-2xl font-bold">Admin Settings</h1>
+    <p>
+      This page is under construction. Admin settings will be available soon.
+    </p>
+  </div>
+);
+
+const AdminProfile = () => (
+  <div className="p-6">
+    <h1 className="mb-4 text-2xl font-bold">Admin Profile</h1>
+    <p>
+      This page is under construction. Admin profile settings will be available
+      soon.
+    </p>
+  </div>
+);
 
 const router = createBrowserRouter([
   {
@@ -39,6 +59,11 @@ const router = createBrowserRouter([
       {
         path: "bookings",
         element: <BookingsList />,
+      },
+      // Important: Place "new" route BEFORE the :id route to avoid matching issues
+      {
+        path: "bookings/new",
+        element: <BookingDetails />,
       },
       {
         path: "bookings/:id",
@@ -75,6 +100,14 @@ const router = createBrowserRouter([
       {
         path: "finance",
         element: <Finance />,
+      },
+      {
+        path: "settings",
+        element: <AdminSettings />,
+      },
+      {
+        path: "profile",
+        element: <AdminProfile />,
       },
     ],
   },

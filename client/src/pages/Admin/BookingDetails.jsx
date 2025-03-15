@@ -1,4 +1,4 @@
-// client/src/pages/Admin/BookingDetails.jsx
+// client/src/pages/Admin/BookingDetails.jsx - With improved error handling
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
@@ -37,10 +37,50 @@ const BookingDetails = () => {
     meetingLink: "",
   });
 
+  // Check if this is a new booking form or if id is undefined/invalid
+  const isNewBooking = id === "new";
+  const isValidId = id && id !== "undefined" && id !== "null";
+
   useEffect(() => {
     const fetchBooking = async () => {
+      // If we don't have a valid ID and it's not explicitly a new booking,
+      // navigate to the bookings list
+      if (!isValidId && !isNewBooking) {
+        console.log("Invalid booking ID detected:", id);
+        navigate("/admin/bookings");
+        return;
+      }
+
+      // If it's a new booking, initialize with default values instead of fetching
+      if (isNewBooking) {
+        const defaultBooking = {
+          name: "",
+          email: "",
+          phone: "",
+          company: "",
+          date: new Date().toISOString().split("T")[0], // Today's date in YYYY-MM-DD
+          time: "10:00",
+          timezone: "GMT+0530 (India Standard Time)",
+          callType: "video",
+          projectType: "Website",
+          additionalInfo: "",
+          status: "scheduled",
+          notes: "",
+        };
+        setBooking(defaultBooking);
+        setEditedData({
+          status: defaultBooking.status,
+          notes: defaultBooking.notes,
+          meetingLink: "",
+        });
+        setEditMode(true); // Automatically enter edit mode for new bookings
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
+        console.log("Fetching booking with ID:", id);
         const response = await API.get(`/bookings/admin/${id}`);
         setBooking(response.data);
         setEditedData({
@@ -57,7 +97,7 @@ const BookingDetails = () => {
     };
 
     fetchBooking();
-  }, [id]);
+  }, [id, isNewBooking, navigate, isValidId]);
 
   const handleStatusChange = (e) => {
     setEditedData({
@@ -66,8 +106,26 @@ const BookingDetails = () => {
     });
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setBooking({
+      ...booking,
+      [name]: value,
+    });
+  };
+
   const handleSaveChanges = async () => {
     try {
+      // For new bookings, create a new record
+      if (isNewBooking) {
+        // Create new booking
+        const response = await API.post("/bookings/admin", booking);
+        // Redirect to the newly created booking
+        navigate(`/admin/bookings/${response.data._id}`);
+        return;
+      }
+
+      // For existing bookings, update
       const response = await API.patch(`/bookings/admin/${id}`, editedData);
       setBooking(response.data.data);
       setEditMode(false);
@@ -114,7 +172,7 @@ const BookingDetails = () => {
     );
   }
 
-  if (!booking) {
+  if (!booking && !isNewBooking) {
     return (
       <div className="p-6 border rounded-lg bg-amber-50 border-amber-200 text-amber-700">
         <div className="flex items-center mb-3">
@@ -150,14 +208,20 @@ const BookingDetails = () => {
           >
             <ChevronLeft size={20} />
           </Link>
-          <h1 className="text-2xl font-bold">Booking Details</h1>
+          <h1 className="text-2xl font-bold">
+            {isNewBooking ? "New Booking" : "Booking Details"}
+          </h1>
         </div>
 
         <div className="flex space-x-3">
           {editMode ? (
             <>
               <button
-                onClick={() => setEditMode(false)}
+                onClick={() =>
+                  isNewBooking
+                    ? navigate("/admin/bookings")
+                    : setEditMode(false)
+                }
                 className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Cancel
@@ -167,7 +231,7 @@ const BookingDetails = () => {
                 className="flex items-center px-4 py-2 text-white rounded-md bg-primary hover:bg-primary/90"
               >
                 <Save size={18} className="mr-2" />
-                Save Changes
+                {isNewBooking ? "Create Booking" : "Save Changes"}
               </button>
             </>
           ) : (
@@ -209,7 +273,17 @@ const BookingDetails = () => {
                   />
                   <div>
                     <h3 className="font-medium text-gray-700">Date</h3>
-                    <p>{formattedDate}</p>
+                    {editMode ? (
+                      <input
+                        type="date"
+                        name="date"
+                        value={booking.date}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p>{formattedDate}</p>
+                    )}
                   </div>
                 </div>
 
@@ -220,9 +294,19 @@ const BookingDetails = () => {
                   />
                   <div>
                     <h3 className="font-medium text-gray-700">Time</h3>
-                    <p>
-                      {booking.time} ({booking.timezone})
-                    </p>
+                    {editMode ? (
+                      <input
+                        type="time"
+                        name="time"
+                        value={booking.time}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p>
+                        {booking.time} ({booking.timezone})
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -233,11 +317,23 @@ const BookingDetails = () => {
                   />
                   <div>
                     <h3 className="font-medium text-gray-700">Call Type</h3>
-                    <p>
-                      {booking.callType === "video"
-                        ? "Video Call"
-                        : "Phone Call"}
-                    </p>
+                    {editMode ? (
+                      <select
+                        name="callType"
+                        value={booking.callType}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      >
+                        <option value="video">Video Call</option>
+                        <option value="phone">Phone Call</option>
+                      </select>
+                    ) : (
+                      <p>
+                        {booking.callType === "video"
+                          ? "Video Call"
+                          : "Phone Call"}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -248,19 +344,42 @@ const BookingDetails = () => {
                   />
                   <div>
                     <h3 className="font-medium text-gray-700">Project Type</h3>
-                    <p>{booking.projectType}</p>
+                    {editMode ? (
+                      <input
+                        type="text"
+                        name="projectType"
+                        value={booking.projectType}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p>{booking.projectType}</p>
+                    )}
                   </div>
                 </div>
               </div>
 
-              {booking.additionalInfo && (
+              {editMode ? (
+                <div className="pt-6 mt-6 border-t">
+                  <h3 className="mb-2 font-medium text-gray-700">
+                    Additional Information
+                  </h3>
+                  <textarea
+                    name="additionalInfo"
+                    value={booking.additionalInfo || ""}
+                    onChange={handleInputChange}
+                    rows="3"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  ></textarea>
+                </div>
+              ) : booking.additionalInfo ? (
                 <div className="pt-6 mt-6 border-t">
                   <h3 className="mb-2 font-medium text-gray-700">
                     Additional Information
                   </h3>
                   <p className="text-gray-600">{booking.additionalInfo}</p>
                 </div>
-              )}
+              ) : null}
             </div>
           </div>
 
@@ -278,7 +397,17 @@ const BookingDetails = () => {
                   />
                   <div>
                     <h3 className="font-medium text-gray-700">Name</h3>
-                    <p>{booking.name}</p>
+                    {editMode ? (
+                      <input
+                        type="text"
+                        name="name"
+                        value={booking.name}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p>{booking.name}</p>
+                    )}
                   </div>
                 </div>
 
@@ -289,7 +418,17 @@ const BookingDetails = () => {
                   />
                   <div>
                     <h3 className="font-medium text-gray-700">Email</h3>
-                    <p className="max-w-xs truncate">{booking.email}</p>
+                    {editMode ? (
+                      <input
+                        type="email"
+                        name="email"
+                        value={booking.email}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p className="max-w-xs truncate">{booking.email}</p>
+                    )}
                   </div>
                 </div>
 
@@ -300,7 +439,17 @@ const BookingDetails = () => {
                   />
                   <div>
                     <h3 className="font-medium text-gray-700">Phone</h3>
-                    <p>{booking.phone || "Not provided"}</p>
+                    {editMode ? (
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={booking.phone || ""}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p>{booking.phone || "Not provided"}</p>
+                    )}
                   </div>
                 </div>
 
@@ -311,7 +460,17 @@ const BookingDetails = () => {
                   />
                   <div>
                     <h3 className="font-medium text-gray-700">Company</h3>
-                    <p>{booking.company || "Not provided"}</p>
+                    {editMode ? (
+                      <input
+                        type="text"
+                        name="company"
+                        value={booking.company || ""}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p>{booking.company || "Not provided"}</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -386,17 +545,19 @@ const BookingDetails = () => {
                 </div>
               )}
 
-              <div className="mb-4">
-                <h3 className="mb-2 font-medium text-gray-700">Created</h3>
-                <p className="text-gray-600">
-                  {booking.createdAt
-                    ? format(
-                        new Date(booking.createdAt),
-                        "MMMM d, yyyy 'at' h:mm a"
-                      )
-                    : "Unknown"}
-                </p>
-              </div>
+              {!isNewBooking && (
+                <div className="mb-4">
+                  <h3 className="mb-2 font-medium text-gray-700">Created</h3>
+                  <p className="text-gray-600">
+                    {booking.createdAt
+                      ? format(
+                          new Date(booking.createdAt),
+                          "MMMM d, yyyy 'at' h:mm a"
+                        )
+                      : "Unknown"}
+                  </p>
+                </div>
+              )}
 
               {editMode ? (
                 <div className="mb-4">
@@ -405,7 +566,7 @@ const BookingDetails = () => {
                   </label>
                   <input
                     type="text"
-                    value={editedData.meetingLink}
+                    value={editedData.meetingLink || ""}
                     onChange={(e) =>
                       setEditedData({
                         ...editedData,
@@ -445,7 +606,7 @@ const BookingDetails = () => {
             <div className="p-6">
               {editMode ? (
                 <textarea
-                  value={editedData.notes}
+                  value={editedData.notes || ""}
                   onChange={(e) =>
                     setEditedData({ ...editedData, notes: e.target.value })
                   }
@@ -462,30 +623,36 @@ const BookingDetails = () => {
           </div>
 
           {/* Actions */}
-          <div className="overflow-hidden bg-white rounded-lg shadow-sm">
-            <div className="px-6 py-4 border-b">
-              <h2 className="text-lg font-medium">Quick Actions</h2>
-            </div>
-            <div className="p-6 space-y-3">
-              <button
-                className="flex items-center justify-center w-full px-4 py-2 text-white rounded-md bg-primary hover:bg-primary/90"
-                onClick={() => window.open(`mailto:${booking.email}`, "_blank")}
-              >
-                <Mail size={18} className="mr-2" />
-                Email Client
-              </button>
-
-              {booking.phone && (
+          {!isNewBooking && (
+            <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+              <div className="px-6 py-4 border-b">
+                <h2 className="text-lg font-medium">Quick Actions</h2>
+              </div>
+              <div className="p-6 space-y-3">
                 <button
-                  className="flex items-center justify-center w-full px-4 py-2 border rounded-md border-primary text-primary hover:bg-primary/10"
-                  onClick={() => window.open(`tel:${booking.phone}`, "_blank")}
+                  className="flex items-center justify-center w-full px-4 py-2 text-white rounded-md bg-primary hover:bg-primary/90"
+                  onClick={() =>
+                    window.open(`mailto:${booking.email}`, "_blank")
+                  }
                 >
-                  <Phone size={18} className="mr-2" />
-                  Call Client
+                  <Mail size={18} className="mr-2" />
+                  Email Client
                 </button>
-              )}
+
+                {booking.phone && (
+                  <button
+                    className="flex items-center justify-center w-full px-4 py-2 border rounded-md border-primary text-primary hover:bg-primary/10"
+                    onClick={() =>
+                      window.open(`tel:${booking.phone}`, "_blank")
+                    }
+                  >
+                    <Phone size={18} className="mr-2" />
+                    Call Client
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
