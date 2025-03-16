@@ -13,7 +13,7 @@ import {
   X,
   Clock,
   Tag,
-  AlertTriangle, // Add this import
+  AlertTriangle,
 } from "lucide-react";
 import { format } from "date-fns";
 import API from "../../api";
@@ -146,8 +146,6 @@ const ProjectPipeline = () => {
     fetchProjects();
   }, []);
 
-  // Rest of the component remains the same...
-
   // Filter projects whenever search term or status filter changes
   useEffect(() => {
     let result = [...projects];
@@ -162,9 +160,9 @@ const ProjectPipeline = () => {
       const lowerSearchTerm = searchTerm.toLowerCase();
       result = result.filter(
         (project) =>
-          project.projectName.toLowerCase().includes(lowerSearchTerm) ||
-          project.companyName.toLowerCase().includes(lowerSearchTerm) ||
-          project.name.toLowerCase().includes(lowerSearchTerm)
+          project.projectName?.toLowerCase().includes(lowerSearchTerm) ||
+          project.companyName?.toLowerCase().includes(lowerSearchTerm) ||
+          project.name?.toLowerCase().includes(lowerSearchTerm)
       );
     }
 

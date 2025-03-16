@@ -1,4 +1,4 @@
-// client/src/pages/Admin/BookingsCalendar.jsx - Fixed Add Manual Booking button and removed settings
+// client/src/pages/Admin/BookingsCalendar.jsx
 import { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Calendar, List, AlertTriangle, Users, PlusCircle } from "lucide-react";
@@ -117,7 +117,8 @@ const BookingsCalendar = () => {
 
   // Function to handle creating a new booking
   const handleCreateBooking = () => {
-    // Directly navigate to the BookingDetails component with "new" parameter
+    // Navigate to the booking creation page
+    navigate("/admin/bookings/new");
   };
 
   if (error && retryCount >= 3) {

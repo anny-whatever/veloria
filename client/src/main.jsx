@@ -1,4 +1,4 @@
-// src/main.jsx - Fixed router configuration
+// client/src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -85,17 +85,22 @@ const router = createBrowserRouter([
         path: "projects",
         element: <ProjectPipeline />,
       },
+      // Important route order: specific paths before parameter routes
       {
         path: "projects/new",
         element: <ProjectDetailsForm />,
       },
       {
-        path: "projects/:id",
-        element: <ProjectDetails />,
-      },
-      {
         path: "projects/calendar",
         element: <ProjectsCalendar />,
+      },
+      {
+        path: "projects/:id/edit",
+        element: <ProjectDetailsForm />,
+      },
+      {
+        path: "projects/:id",
+        element: <ProjectDetails />,
       },
       {
         path: "finance",

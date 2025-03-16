@@ -205,6 +205,13 @@ const ProjectDetails = () => {
                 <Edit size={18} className="mr-2" />
                 Edit Project
               </button>
+              <Link
+                to={`/admin/projects/${id}/edit`}
+                className="flex items-center px-4 py-2 text-white rounded-md bg-accent hover:bg-accent/90"
+              >
+                <FileText size={18} className="mr-2" />
+                Advanced Edit
+              </Link>
               <button
                 onClick={() => setDeleteModalOpen(true)}
                 className="flex items-center px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700"
