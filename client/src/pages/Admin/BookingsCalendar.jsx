@@ -1,4 +1,4 @@
-// client/src/pages/Admin/BookingsCalendar.jsx
+// client/src/pages/Admin/BookingsCalendar.jsx - Fixed manual booking functionality
 import { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Calendar, List, AlertTriangle, Users, PlusCircle } from "lucide-react";
