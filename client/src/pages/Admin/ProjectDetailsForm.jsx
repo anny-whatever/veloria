@@ -1148,7 +1148,7 @@ const ProjectDetailsForm = () => {
                             <input
                               type="text"
                               name="name"
-                              value={newPayment.name}
+                              value={newPayment?.name}
                               onChange={handlePaymentChange}
                               placeholder="e.g. Initial Deposit, Final Payment"
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
@@ -1163,7 +1163,7 @@ const ProjectDetailsForm = () => {
                             <input
                               type="number"
                               name="amount"
-                              value={newPayment.amount}
+                              value={newPayment?.amount}
                               onChange={handlePaymentChange}
                               placeholder="0.00"
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
@@ -1178,7 +1178,7 @@ const ProjectDetailsForm = () => {
                             <input
                               type="date"
                               name="dueDate"
-                              value={newPayment.dueDate}
+                              value={newPayment?.dueDate}
                               onChange={handlePaymentChange}
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
                               required
@@ -1191,7 +1191,7 @@ const ProjectDetailsForm = () => {
                             </label>
                             <select
                               name="status"
-                              value={newPayment.status}
+                              value={newPayment?.status}
                               onChange={handlePaymentChange}
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
                             >
@@ -1207,7 +1207,7 @@ const ProjectDetailsForm = () => {
                             </label>
                             <textarea
                               name="notes"
-                              value={newPayment.notes}
+                              value={newPayment?.notes}
                               onChange={handlePaymentChange}
                               rows="2"
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
@@ -1265,11 +1265,11 @@ const ProjectDetailsForm = () => {
                               <tr key={payment._id || index}>
                                 <td className="px-4 py-3 whitespace-nowrap">
                                   <div className="text-sm font-medium text-gray-900">
-                                    {payment.name}
+                                    {payment?.name}
                                   </div>
                                   {payment.notes && (
                                     <div className="text-xs text-gray-500">
-                                      {payment.notes}
+                                      {payment?.notes}
                                     </div>
                                   )}
                                 </td>
@@ -1362,7 +1362,7 @@ const ProjectDetailsForm = () => {
                         </label>
                         <input
                           type="text"
-                          value={project.referredBy.name}
+                          value={project.referredBy?.name}
                           onChange={(e) =>
                             handleNestedChange(
                               "referredBy",
@@ -1811,7 +1811,7 @@ const ProjectDetailsForm = () => {
                         </label>
                         <input
                           type="text"
-                          value={project.hosting.provider}
+                          value={project?.hosting?.provider}
                           onChange={(e) =>
                             handleNestedChange(
                               "hosting",
@@ -1830,7 +1830,7 @@ const ProjectDetailsForm = () => {
                         </label>
                         <input
                           type="text"
-                          value={project.hosting.account}
+                          value={project?.hosting?.account}
                           onChange={(e) =>
                             handleNestedChange(
                               "hosting",
@@ -1849,7 +1849,7 @@ const ProjectDetailsForm = () => {
                         </label>
                         <input
                           type="date"
-                          value={project.hosting.renewalDate}
+                          value={project?.hosting?.renewalDate}
                           onChange={(e) =>
                             handleNestedChange(
                               "hosting",
@@ -1867,7 +1867,7 @@ const ProjectDetailsForm = () => {
                         </label>
                         <input
                           type="number"
-                          value={project.hosting.cost}
+                          value={project?.hosting?.cost}
                           onChange={(e) =>
                             handleNestedChange(
                               "hosting",
@@ -1886,7 +1886,7 @@ const ProjectDetailsForm = () => {
                         </label>
                         <input
                           type="text"
-                          value={project.hosting.loginInfo}
+                          value={project?.hosting?.loginInfo}
                           onChange={(e) =>
                             handleNestedChange(
                               "hosting",
@@ -1904,7 +1904,7 @@ const ProjectDetailsForm = () => {
                           Notes
                         </label>
                         <textarea
-                          value={project.hosting.notes}
+                          value={project?.hosting?.notes}
                           onChange={(e) =>
                             handleNestedChange(
                               "hosting",
@@ -1932,7 +1932,7 @@ const ProjectDetailsForm = () => {
                         </label>
                         <input
                           type="text"
-                          value={project.domain.name}
+                          value={project?.domain?.name}
                           onChange={(e) =>
                             handleNestedChange("domain", "name", e.target.value)
                           }
@@ -1947,7 +1947,7 @@ const ProjectDetailsForm = () => {
                         </label>
                         <input
                           type="text"
-                          value={project.domain.registrar}
+                          value={project?.domain?.registrar}
                           onChange={(e) =>
                             handleNestedChange(
                               "domain",
@@ -1966,7 +1966,7 @@ const ProjectDetailsForm = () => {
                         </label>
                         <input
                           type="date"
-                          value={project.domain.renewalDate}
+                          value={project?.domain?.renewalDate}
                           onChange={(e) =>
                             handleNestedChange(
                               "domain",
@@ -1984,7 +1984,7 @@ const ProjectDetailsForm = () => {
                         </label>
                         <input
                           type="number"
-                          value={project.domain.cost}
+                          value={project?.domain?.cost}
                           onChange={(e) =>
                             handleNestedChange("domain", "cost", e.target.value)
                           }
@@ -1999,7 +1999,7 @@ const ProjectDetailsForm = () => {
                         </label>
                         <input
                           type="text"
-                          value={project.domain.loginInfo}
+                          value={project?.domain?.loginInfo}
                           onChange={(e) =>
                             handleNestedChange(
                               "domain",
@@ -2017,7 +2017,7 @@ const ProjectDetailsForm = () => {
                           Notes
                         </label>
                         <textarea
-                          value={project.domain.notes}
+                          value={project?.domain?.notes}
                           onChange={(e) =>
                             handleNestedChange(
                               "domain",
