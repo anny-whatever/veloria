@@ -15,7 +15,7 @@ const BookingsCalendar = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentView, setCurrentView] = useState("timeGridWeek");
+  const [currentView, setCurrentView] = useState("dayGridMonth");
   const [todaysBookings, setTodaysBookings] = useState([]);
   const [retryCount, setRetryCount] = useState(0);
 
