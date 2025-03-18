@@ -1,6 +1,7 @@
 // client/src/pages/Admin/ProjectDetailsForm.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import InputModal from "./components/InputModal";
 import {
   FileText,
   ChevronLeft,
@@ -115,6 +116,12 @@ const ProjectDetailsForm = () => {
     status: "pending",
   });
 
+  // New state for color modal
+  const [showColorModal, setShowColorModal] = useState(false);
+  const [colorInput, setColorInput] = useState("");
+  const [colorError, setColorError] = useState("");
+  const initialFocusRef = useRef(null);
+
   // Fetch project data if editing
   // Modify your useEffect in ProjectDetailsForm.jsx
   useEffect(() => {
@@ -206,6 +213,37 @@ const ProjectDetailsForm = () => {
         [field]: value,
       },
     }));
+  };
+
+  const validateHexColor = (color) => {
+    const regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+    return regex.test(color);
+  };
+
+  const handleColorSubmit = (e) => {
+    e.preventDefault();
+
+    if (!colorInput) {
+      setColorError("Please enter a color hex code");
+      return;
+    }
+
+    // Validate hex color format
+    if (!validateHexColor(colorInput)) {
+      setColorError("Please enter a valid hex color (e.g. #FF5733)");
+      return;
+    }
+
+    // Add color to palette
+    handleNestedChange("designChoices", "colorPalette", [
+      ...(project.designChoices.colorPalette || []),
+      colorInput,
+    ]);
+
+    // Reset and close modal
+    setColorInput("");
+    setColorError("");
+    setShowColorModal(false);
   };
 
   // Handle project goals (array of strings)
@@ -894,28 +932,61 @@ const ProjectDetailsForm = () => {
 
                           <button
                             type="button"
-                            onClick={() => {
-                              const color = prompt(
-                                "Enter color hex code (e.g. #FF5733):"
-                              );
-                              if (color) {
-                                handleNestedChange(
-                                  "designChoices",
-                                  "colorPalette",
-                                  [
-                                    ...(project.designChoices.colorPalette ||
-                                      []),
-                                    color,
-                                  ]
-                                );
-                              }
-                            }}
+                            onClick={() => setShowColorModal(true)}
                             className="flex items-center justify-center w-8 h-8 text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
                           >
                             <PlusCircle size={16} />
                           </button>
                         </div>
                       </div>
+
+                      {/* Color Input Modal */}
+                      <InputModal
+                        isOpen={showColorModal}
+                        onClose={() => {
+                          setShowColorModal(false);
+                          setColorError("");
+                          setColorInput("");
+                        }}
+                        onSubmit={handleColorSubmit}
+                        title="Add Color to Palette"
+                        submitText="Add Color"
+                        icon={<Palette size={20} className="text-accent" />}
+                      >
+                        <div>
+                          <label
+                            htmlFor="colorHex"
+                            className="block mb-2 text-sm font-medium text-gray-700"
+                          >
+                            Color Hex Code
+                          </label>
+                          <div className="flex space-x-2">
+                            <input
+                              id="colorHex"
+                              ref={initialFocusRef}
+                              type="text"
+                              placeholder="#FF5733"
+                              value={colorInput}
+                              onChange={(e) => setColorInput(e.target.value)}
+                              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                            />
+                            {colorInput && validateHexColor(colorInput) && (
+                              <div
+                                className="w-10 h-10 border border-gray-300 rounded-md"
+                                style={{ backgroundColor: colorInput }}
+                              ></div>
+                            )}
+                          </div>
+                          {colorError && (
+                            <p className="mt-1 text-sm text-red-600">
+                              {colorError}
+                            </p>
+                          )}
+                          <p className="mt-2 text-xs text-gray-500">
+                            Enter a valid hex color code (e.g. #FF5733)
+                          </p>
+                        </div>
+                      </InputModal>
 
                       {/* Fonts */}
                       <div>
