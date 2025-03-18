@@ -11,9 +11,11 @@ import BookingDetails from "./pages/Admin/BookingDetails";
 import ContactsList from "./pages/Admin/ContactsList";
 import ContactDetails from "./pages/Admin/ContactDetails";
 import ProjectPipeline from "./pages/Admin/ProjectPipeline";
-import ProjectDetailsForm from "./pages/Admin/ProjectDetailsForm";
+import CreateProjectForm from "./pages/Admin/CreateProjectForm";
+import EditProjectForm from "./pages/Admin/EditProjectForm";
 import ProjectDetails from "./pages/Admin/ProjectDetails";
 import ProjectsCalendar from "./pages/Admin/ProjectsCalendar";
+import ProjectsList from "./pages/Admin/ProjectsList"; // Make sure this is imported
 import BookingsCalendar from "./pages/Admin/BookingsCalendar";
 import Finance from "./pages/Admin/Finance";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -85,10 +87,14 @@ const router = createBrowserRouter([
         path: "projects",
         element: <ProjectPipeline />,
       },
-      // Important route order: specific paths before parameter routes
+      // Project routes - important to have the right order
+      {
+        path: "projects/list",
+        element: <ProjectsList />,
+      },
       {
         path: "projects/new",
-        element: <ProjectDetailsForm />,
+        element: <CreateProjectForm />, // Use the dedicated create form component
       },
       {
         path: "projects/calendar",
@@ -96,7 +102,7 @@ const router = createBrowserRouter([
       },
       {
         path: "projects/:id/edit",
-        element: <ProjectDetailsForm />,
+        element: <EditProjectForm />, // Use the dedicated edit form component
       },
       {
         path: "projects/:id",
