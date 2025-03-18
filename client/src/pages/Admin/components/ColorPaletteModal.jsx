@@ -1,23 +1,34 @@
 // client/src/pages/Admin/components/ColorPaletteModal.jsx
 import { useState, useRef, useEffect } from "react";
-import { X, PlusCircle, Palette, Check, Edit, Trash2 } from "lucide-react";
+import {
+  X,
+  PlusCircle,
+  Palette,
+  Check,
+  Edit,
+  Trash2,
+  Save,
+} from "lucide-react";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import InputModal from "./InputModal";
 
 /**
  * Enhanced component for managing project color palette with a modal for adding colors
- * Includes advanced color picker and categorization
+ * Includes advanced color picker, categorization, and editing capabilities
  *
  * @param {Object} project - The project object
  * @param {Function} handleNestedChange - Function to update nested project properties
  */
 const ColorPaletteModal = ({ project, handleNestedChange }) => {
   const [showColorModal, setShowColorModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [colorInput, setColorInput] = useState("#000000");
   const [colorCategory, setColorCategory] = useState("primary");
   const [colorName, setColorName] = useState("");
   const [colorError, setColorError] = useState("");
   const [activeTab, setActiveTab] = useState("picker");
+  const [editingColor, setEditingColor] = useState(null);
+  const [editingIndex, setEditingIndex] = useState(null);
   const initialFocusRef = useRef(null);
 
   // Make sure colorPalette structure exists with categories
@@ -87,6 +98,45 @@ const ColorPaletteModal = ({ project, handleNestedChange }) => {
     setColorCategory("primary");
     setColorError("");
     setShowColorModal(false);
+  };
+
+  /**
+   * Open edit modal for a color
+   */
+  const handleEditColor = (color, index) => {
+    setEditingColor({
+      color: color.color,
+      category: color.category,
+      name: color.name,
+    });
+    setEditingIndex(index);
+    setShowEditModal(true);
+  };
+
+  /**
+   * Save edited color
+   */
+  const handleSaveEdit = (e) => {
+    e.preventDefault();
+
+    if (!editingColor.color) {
+      return;
+    }
+
+    // Validate hex color format
+    if (!validateHexColor(editingColor.color)) {
+      return;
+    }
+
+    // Update the color at the specific index
+    const updatedColors = [...project.designChoices.colorPalette];
+    updatedColors[editingIndex] = {
+      ...editingColor,
+      name: editingColor.name || generateColorName(editingColor.color),
+    };
+
+    handleNestedChange("designChoices", "colorPalette", updatedColors);
+    setShowEditModal(false);
   };
 
   /**
@@ -186,37 +236,49 @@ const ColorPaletteModal = ({ project, handleNestedChange }) => {
   // Common color presets organized by category
   const colorPresets = {
     vibrant: [
-      { color: "#FF3B30", name: "Red" },
-      { color: "#FF9500", name: "Orange" },
-      { color: "#FFCC00", name: "Yellow" },
-      { color: "#34C759", name: "Green" },
-      { color: "#007AFF", name: "Blue" },
-      { color: "#5856D6", name: "Purple" },
+      { color: "#FF3B30", name: "Red", category: "primary" },
+      { color: "#FF9500", name: "Orange", category: "secondary" },
+      { color: "#FFCC00", name: "Yellow", category: "accent" },
+      { color: "#34C759", name: "Green", category: "primary" },
+      { color: "#007AFF", name: "Blue", category: "secondary" },
+      { color: "#5856D6", name: "Purple", category: "accent" },
     ],
     pastel: [
-      { color: "#FFB3B3", name: "Pastel Red" },
-      { color: "#FFDAB3", name: "Pastel Orange" },
-      { color: "#FFFFB3", name: "Pastel Yellow" },
-      { color: "#B3FFB3", name: "Pastel Green" },
-      { color: "#B3D9FF", name: "Pastel Blue" },
-      { color: "#D9B3FF", name: "Pastel Purple" },
+      { color: "#FFB3B3", name: "Pastel Red", category: "primary" },
+      { color: "#FFDAB3", name: "Pastel Orange", category: "secondary" },
+      { color: "#FFFFB3", name: "Pastel Yellow", category: "accent" },
+      { color: "#B3FFB3", name: "Pastel Green", category: "primary" },
+      { color: "#B3D9FF", name: "Pastel Blue", category: "secondary" },
+      { color: "#D9B3FF", name: "Pastel Purple", category: "accent" },
     ],
     neutral: [
-      { color: "#F2F2F7", name: "Light Gray" },
-      { color: "#E5E5EA", name: "Light Gray 2" },
-      { color: "#C7C7CC", name: "Mid Gray" },
-      { color: "#8E8E93", name: "Gray" },
-      { color: "#636366", name: "Dark Gray" },
-      { color: "#1C1C1E", name: "Almost Black" },
+      { color: "#F2F2F7", name: "Light Gray", category: "neutral" },
+      { color: "#E5E5EA", name: "Light Gray 2", category: "neutral" },
+      { color: "#C7C7CC", name: "Mid Gray", category: "neutral" },
+      { color: "#8E8E93", name: "Gray", category: "neutral" },
+      { color: "#636366", name: "Dark Gray", category: "neutral" },
+      { color: "#1C1C1E", name: "Almost Black", category: "neutral" },
     ],
     monochrome: [
-      { color: "#000000", name: "Black" },
-      { color: "#333333", name: "Dark Gray" },
-      { color: "#666666", name: "Medium Gray" },
-      { color: "#999999", name: "Light Gray" },
-      { color: "#CCCCCC", name: "Very Light Gray" },
-      { color: "#FFFFFF", name: "White" },
+      { color: "#000000", name: "Black", category: "neutral" },
+      { color: "#333333", name: "Dark Gray", category: "neutral" },
+      { color: "#666666", name: "Medium Gray", category: "neutral" },
+      { color: "#999999", name: "Light Gray", category: "neutral" },
+      { color: "#CCCCCC", name: "Very Light Gray", category: "neutral" },
+      { color: "#FFFFFF", name: "White", category: "neutral" },
     ],
+  };
+
+  // Add preset color to palette with its category
+  const addPresetColor = (preset) => {
+    handleNestedChange("designChoices", "colorPalette", [
+      ...(project.designChoices.colorPalette || []),
+      {
+        color: preset.color,
+        category: preset.category || colorCategory,
+        name: preset.name,
+      },
+    ]);
   };
 
   // Color schemes (complementary, analogous, etc.)
@@ -393,13 +455,29 @@ const ColorPaletteModal = ({ project, handleNestedChange }) => {
                         </span>
                       )}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteColor(index)}
-                      className="p-1 ml-2 text-red-600 transition-opacity rounded-md opacity-0 group-hover:opacity-100 hover:bg-red-50"
-                    >
-                      <X size={14} />
-                    </button>
+                    <div className="flex ml-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleEditColor(
+                            typeof color === "string"
+                              ? { color, name: "", category }
+                              : { color: color.color || color, name, category },
+                            index
+                          )
+                        }
+                        className="p-1 mr-1 text-blue-600 transition-opacity rounded-md opacity-0 group-hover:opacity-100 hover:bg-blue-50"
+                      >
+                        <Edit size={14} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteColor(index)}
+                        className="p-1 text-red-600 transition-opacity rounded-md opacity-0 group-hover:opacity-100 hover:bg-red-50"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -422,7 +500,6 @@ const ColorPaletteModal = ({ project, handleNestedChange }) => {
       <InputModal
         isOpen={showColorModal}
         onClose={() => {
-          setShowColorModal(false);
           setColorError("");
           setColorInput("#000000");
           setColorName("");
@@ -553,9 +630,14 @@ const ColorPaletteModal = ({ project, handleNestedChange }) => {
                         key={preset.color}
                         type="button"
                         onClick={() => {
+                          // Option 1: Select the color for editing in the picker
                           setColorInput(preset.color);
                           setColorName(preset.name);
+                          setColorCategory(preset.category || "primary");
                           setActiveTab("picker");
+
+                          // Option 2: Add directly to palette (comment this out if using option 1)
+                          // addPresetColor(preset);
                         }}
                         className="flex flex-col items-center p-2 border border-gray-200 rounded-md hover:border-accent"
                       >
@@ -647,6 +729,94 @@ const ColorPaletteModal = ({ project, handleNestedChange }) => {
             <p className="mt-1 text-sm text-red-600">{colorError}</p>
           )}
         </div>
+      </InputModal>
+
+      {/* Edit Color Modal */}
+      <InputModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        onSubmit={handleSaveEdit}
+        title="Edit Color"
+        submitText="Save Changes"
+        icon={<Edit size={20} className="text-accent" />}
+      >
+        {editingColor && (
+          <div className="space-y-4">
+            <div className="flex flex-col items-center mb-4">
+              <HexColorPicker
+                color={editingColor.color}
+                onChange={(color) =>
+                  setEditingColor({ ...editingColor, color })
+                }
+                className="mb-4"
+              />
+
+              <div className="flex items-center w-full space-x-2">
+                <div
+                  className="w-12 h-12 border border-gray-300 rounded-md"
+                  style={{ backgroundColor: editingColor.color }}
+                />
+                <div className="flex-1">
+                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                    Hex Color
+                  </label>
+                  <div className="flex">
+                    <span className="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">
+                      #
+                    </span>
+                    <HexColorInput
+                      color={editingColor.color}
+                      onChange={(color) =>
+                        setEditingColor({ ...editingColor, color })
+                      }
+                      className="flex-1 block w-full border-gray-300 rounded-none rounded-r-md focus:ring-accent focus:border-accent sm:text-sm"
+                      prefixed={false}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Color Name (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={editingColor.name}
+                  onChange={(e) =>
+                    setEditingColor({ ...editingColor, name: e.target.value })
+                  }
+                  placeholder={generateColorName(editingColor.color)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                />
+              </div>
+
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Category
+                </label>
+                <select
+                  value={editingColor.category}
+                  onChange={(e) =>
+                    setEditingColor({
+                      ...editingColor,
+                      category: e.target.value,
+                    })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                >
+                  <option value="primary">Primary</option>
+                  <option value="secondary">Secondary</option>
+                  <option value="accent">Accent</option>
+                  <option value="neutral">Neutral</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        )}
       </InputModal>
     </div>
   );
