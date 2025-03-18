@@ -1,7 +1,6 @@
-// client/src/pages/Admin/ProjectDetailsForm.jsx
+// client/src/pages/Admin/ProjectDetailsForm.jsx - Enhanced with modals
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import InputModal from "./components/InputModal";
 import {
   FileText,
   ChevronLeft,
@@ -28,6 +27,12 @@ import {
 import { format, parseISO, addDays } from "date-fns";
 import API from "../../api";
 import ConfirmDeleteModal from "./components/ConfirmDeleteModal";
+import ColorPaletteModal from "./components/ColorPaletteModal";
+import FontSelectionModal from "./components/FontSelectionModal";
+import MilestoneModal from "./components/MilestoneModal";
+import PaymentScheduleModal from "./components/PaymentScheduleModal";
+import AdditionalServicesModal from "./components/AdditionalServicesModal";
+import InputModal from "./components/InputModal";
 
 const ProjectDetailsForm = () => {
   const { id } = useParams();
@@ -96,6 +101,7 @@ const ProjectDetailsForm = () => {
       commissionPercentage: 0,
       notes: "",
     },
+    additionalServices: [],
   });
 
   // UI state
@@ -116,14 +122,22 @@ const ProjectDetailsForm = () => {
     status: "pending",
   });
 
-  // New state for color modal
-  const [showColorModal, setShowColorModal] = useState(false);
-  const [colorInput, setColorInput] = useState("");
-  const [colorError, setColorError] = useState("");
-  const initialFocusRef = useRef(null);
+  // Modals state
+  const [showFontModal, setShowFontModal] = useState(false);
+  const [fontInput, setFontInput] = useState("");
+  const [fontError, setFontError] = useState("");
+
+  // New state for referral modal
+  const [showReferralModal, setShowReferralModal] = useState(false);
+  const [referralInput, setReferralInput] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    commissionPercentage: 0,
+    notes: "",
+  });
 
   // Fetch project data if editing
-  // Modify your useEffect in ProjectDetailsForm.jsx
   useEffect(() => {
     if (!isNewProject) {
       const fetchProject = async () => {
@@ -166,6 +180,8 @@ const ProjectDetailsForm = () => {
             if (!projectData.paymentSchedule) projectData.paymentSchedule = [];
             if (!projectData.milestones) projectData.milestones = [];
             if (!projectData.projectGoals) projectData.projectGoals = [""];
+            if (!projectData.additionalServices)
+              projectData.additionalServices = [];
 
             // Initialize other objects if not present
             if (!projectData.designChoices) {
@@ -215,35 +231,47 @@ const ProjectDetailsForm = () => {
     }));
   };
 
-  const validateHexColor = (color) => {
-    const regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
-    return regex.test(color);
-  };
-
-  const handleColorSubmit = (e) => {
+  // Handle font modal submissions
+  const handleFontSubmit = (e) => {
     e.preventDefault();
 
-    if (!colorInput) {
-      setColorError("Please enter a color hex code");
+    if (!fontInput || fontInput.trim() === "") {
+      setFontError("Please enter a font name");
       return;
     }
 
-    // Validate hex color format
-    if (!validateHexColor(colorInput)) {
-      setColorError("Please enter a valid hex color (e.g. #FF5733)");
-      return;
-    }
-
-    // Add color to palette
-    handleNestedChange("designChoices", "colorPalette", [
-      ...(project.designChoices.colorPalette || []),
-      colorInput,
+    // Add font to list
+    handleNestedChange("designChoices", "fonts", [
+      ...(project.designChoices.fonts || []),
+      fontInput.trim(),
     ]);
 
     // Reset and close modal
-    setColorInput("");
-    setColorError("");
-    setShowColorModal(false);
+    setFontInput("");
+    setFontError("");
+    setShowFontModal(false);
+  };
+
+  // Handle referral modal submissions
+  const handleReferralSubmit = (e) => {
+    e.preventDefault();
+
+    if (!referralInput.name || referralInput.name.trim() === "") {
+      return; // We should show an error but we'll keep it simple
+    }
+
+    // Update referral information in project state
+    setProject((prev) => ({
+      ...prev,
+      referredBy: {
+        ...referralInput,
+        commissionPercentage:
+          parseFloat(referralInput.commissionPercentage) || 0,
+      },
+    }));
+
+    // Close modal
+    setShowReferralModal(false);
   };
 
   // Handle project goals (array of strings)
@@ -264,101 +292,6 @@ const ProjectDetailsForm = () => {
     const updatedGoals = [...project.projectGoals];
     updatedGoals.splice(index, 1);
     setProject((prev) => ({ ...prev, projectGoals: updatedGoals }));
-  };
-
-  // Payment handlers
-  const handlePaymentChange = (e) => {
-    const { name, value } = e.target;
-    setNewPayment((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const addPayment = async () => {
-    if (!newPayment.name || !newPayment.amount || !newPayment.dueDate) {
-      alert("Please fill in all required payment fields");
-      return;
-    }
-
-    if (isNewProject) {
-      // If this is a new project, just add to local state
-      const payment = {
-        ...newPayment,
-        _id: Date.now().toString(), // Temporary ID
-      };
-      setProject((prev) => ({
-        ...prev,
-        paymentSchedule: [...prev.paymentSchedule, payment],
-      }));
-    } else {
-      // If editing existing project, call API
-      try {
-        const response = await API.post(
-          `/projects/admin/${id}/payments`,
-          newPayment
-        );
-        setProject(response.data.data);
-      } catch (err) {
-        console.error("Error adding payment:", err);
-        alert("Failed to add payment. Please try again.");
-        return;
-      }
-    }
-
-    // Reset form
-    setNewPayment({
-      name: "",
-      amount: "",
-      dueDate: "",
-      status: "pending",
-      notes: "",
-    });
-    setShowPaymentForm(false);
-  };
-
-  // Milestone handlers
-  const handleMilestoneChange = (e) => {
-    const { name, value } = e.target;
-    setNewMilestone((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const addMilestone = async () => {
-    if (!newMilestone.name || !newMilestone.dueDate) {
-      alert("Please fill in all required milestone fields");
-      return;
-    }
-
-    if (isNewProject) {
-      // If this is a new project, just add to local state
-      const milestone = {
-        ...newMilestone,
-        _id: Date.now().toString(), // Temporary ID
-      };
-      setProject((prev) => ({
-        ...prev,
-        milestones: [...prev.milestones, milestone],
-      }));
-    } else {
-      // If editing existing project, call API
-      try {
-        const response = await API.post(
-          `/projects/admin/${id}/milestones`,
-          newMilestone
-        );
-        setProject(response.data.data);
-      } catch (err) {
-        console.error("Error adding milestone:", err);
-        alert("Failed to add milestone. Please try again.");
-        return;
-      }
-    }
-
-    // Reset form
-    setNewMilestone({
-      name: "",
-      description: "",
-      dueDate: "",
-      status: "pending",
-    });
-    setShowMilestoneForm(false);
   };
 
   // Update status of payment or milestone
@@ -891,154 +824,20 @@ const ProjectDetailsForm = () => {
                     </h3>
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      {/* Color Palette */}
+                      {/* Color Palette - Using ColorPaletteModal */}
                       <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-700">
-                          Color Palette
-                        </label>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          {project.designChoices.colorPalette &&
-                            project.designChoices.colorPalette.map(
-                              (color, index) => (
-                                <div
-                                  key={index}
-                                  className="flex items-center p-1 bg-white border border-gray-300 rounded-md"
-                                >
-                                  <div
-                                    className="w-6 h-6 mr-2 rounded-md"
-                                    style={{ backgroundColor: color }}
-                                  ></div>
-                                  <span className="text-xs">{color}</span>
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      const updatedColors = [
-                                        ...project.designChoices.colorPalette,
-                                      ];
-                                      updatedColors.splice(index, 1);
-                                      handleNestedChange(
-                                        "designChoices",
-                                        "colorPalette",
-                                        updatedColors
-                                      );
-                                    }}
-                                    className="p-1 ml-1 text-red-600 rounded-md hover:bg-red-50"
-                                  >
-                                    <X size={14} />
-                                  </button>
-                                </div>
-                              )
-                            )}
-
-                          <button
-                            type="button"
-                            onClick={() => setShowColorModal(true)}
-                            className="flex items-center justify-center w-8 h-8 text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                          >
-                            <PlusCircle size={16} />
-                          </button>
-                        </div>
+                        <ColorPaletteModal
+                          project={project}
+                          handleNestedChange={handleNestedChange}
+                        />
                       </div>
 
-                      {/* Color Input Modal */}
-                      <InputModal
-                        isOpen={showColorModal}
-                        onClose={() => {
-                          setShowColorModal(false);
-                          setColorError("");
-                          setColorInput("");
-                        }}
-                        onSubmit={handleColorSubmit}
-                        title="Add Color to Palette"
-                        submitText="Add Color"
-                        icon={<Palette size={20} className="text-accent" />}
-                      >
-                        <div>
-                          <label
-                            htmlFor="colorHex"
-                            className="block mb-2 text-sm font-medium text-gray-700"
-                          >
-                            Color Hex Code
-                          </label>
-                          <div className="flex space-x-2">
-                            <input
-                              id="colorHex"
-                              ref={initialFocusRef}
-                              type="text"
-                              placeholder="#FF5733"
-                              value={colorInput}
-                              onChange={(e) => setColorInput(e.target.value)}
-                              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-                            />
-                            {colorInput && validateHexColor(colorInput) && (
-                              <div
-                                className="w-10 h-10 border border-gray-300 rounded-md"
-                                style={{ backgroundColor: colorInput }}
-                              ></div>
-                            )}
-                          </div>
-                          {colorError && (
-                            <p className="mt-1 text-sm text-red-600">
-                              {colorError}
-                            </p>
-                          )}
-                          <p className="mt-2 text-xs text-gray-500">
-                            Enter a valid hex color code (e.g. #FF5733)
-                          </p>
-                        </div>
-                      </InputModal>
-
-                      {/* Fonts */}
+                      {/* Fonts - Using FontSelectionModal */}
                       <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-700">
-                          Fonts
-                        </label>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          {project.designChoices.fonts &&
-                            project.designChoices.fonts.map((font, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center p-1 bg-white border border-gray-300 rounded-md"
-                              >
-                                <span className="text-xs font-medium">
-                                  {font}
-                                </span>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    const updatedFonts = [
-                                      ...project.designChoices.fonts,
-                                    ];
-                                    updatedFonts.splice(index, 1);
-                                    handleNestedChange(
-                                      "designChoices",
-                                      "fonts",
-                                      updatedFonts
-                                    );
-                                  }}
-                                  className="p-1 ml-1 text-red-600 rounded-md hover:bg-red-50"
-                                >
-                                  <X size={14} />
-                                </button>
-                              </div>
-                            ))}
-
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const font = prompt("Enter font name:");
-                              if (font) {
-                                handleNestedChange("designChoices", "fonts", [
-                                  ...(project.designChoices.fonts || []),
-                                  font,
-                                ]);
-                              }
-                            }}
-                            className="flex items-center justify-center w-8 h-8 text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                          >
-                            <PlusCircle size={16} />
-                          </button>
-                        </div>
+                        <FontSelectionModal
+                          project={project}
+                          handleNestedChange={handleNestedChange}
+                        />
                       </div>
 
                       {/* Design Notes */}
