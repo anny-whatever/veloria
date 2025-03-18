@@ -100,8 +100,14 @@ const ProjectSchema = new mongoose.Schema({
 
   // Design decisions
   designChoices: {
-    colorPalette: [String],
-    fonts: [String],
+    colorPalette: {
+      type: [mongoose.Schema.Types.Mixed], // This allows any structure for color objects
+      default: [],
+    },
+    fonts: {
+      type: [mongoose.Schema.Types.Mixed], // This allows any structure for font objects
+      default: [],
+    },
     designNotes: String,
     approvalStatus: {
       type: String,

@@ -106,26 +106,6 @@ const ProjectDetailsForm = () => {
 
   // UI state
   const [activeTab, setActiveTab] = useState("overview");
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [showMilestoneForm, setShowMilestoneForm] = useState(false);
-  const [newPayment, setNewPayment] = useState({
-    name: "",
-    amount: "",
-    dueDate: "",
-    status: "pending",
-    notes: "",
-  });
-  const [newMilestone, setNewMilestone] = useState({
-    name: "",
-    description: "",
-    dueDate: "",
-    status: "pending",
-  });
-
-  // Modals state
-  const [showFontModal, setShowFontModal] = useState(false);
-  const [fontInput, setFontInput] = useState("");
-  const [fontError, setFontError] = useState("");
 
   // New state for referral modal
   const [showReferralModal, setShowReferralModal] = useState(false);
@@ -231,27 +211,6 @@ const ProjectDetailsForm = () => {
     }));
   };
 
-  // Handle font modal submissions
-  const handleFontSubmit = (e) => {
-    e.preventDefault();
-
-    if (!fontInput || fontInput.trim() === "") {
-      setFontError("Please enter a font name");
-      return;
-    }
-
-    // Add font to list
-    handleNestedChange("designChoices", "fonts", [
-      ...(project.designChoices.fonts || []),
-      fontInput.trim(),
-    ]);
-
-    // Reset and close modal
-    setFontInput("");
-    setFontError("");
-    setShowFontModal(false);
-  };
-
   // Handle referral modal submissions
   const handleReferralSubmit = (e) => {
     e.preventDefault();
@@ -324,8 +283,11 @@ const ProjectDetailsForm = () => {
   };
 
   // Save the project
+  // Updated saveProject function for ProjectDetailsForm.jsx
+
   const saveProject = async (e) => {
     e.preventDefault();
+    console.log("saveProject called, isNewProject:", isNewProject);
 
     // Validate required fields
     if (
@@ -358,13 +320,33 @@ const ProjectDetailsForm = () => {
     try {
       setSaving(true);
 
+      // Log the exact API call we're about to make
+      if (isNewProject) {
+        console.log("About to create new project with POST to /projects");
+      } else {
+        console.log(
+          `About to update project with PATCH to /projects/admin/${id}`
+        );
+      }
+
       let response;
       if (isNewProject) {
+        // For new projects - use POST to /projects (public endpoint)
         response = await API.post("/projects", projectData);
-        // Navigate to the new project after creation
-        navigate(`/admin/projects/${response.data.id}`);
+        console.log("Create project response:", response.data);
+
+        // Navigate to the new project details page
+        const newId = response.data.id || response.data._id;
+        if (newId) {
+          navigate(`/admin/projects/${newId}`);
+        } else {
+          console.warn("No project ID in response:", response.data);
+          navigate("/admin/projects");
+        }
       } else {
+        // For existing projects - use PATCH to /projects/admin/:id
         response = await API.patch(`/projects/admin/${id}`, projectData);
+        console.log("Update project response:", response.data);
         setProject(response.data.data);
       }
 
@@ -378,6 +360,10 @@ const ProjectDetailsForm = () => {
       console.error("Error saving project:", err);
       setError("Failed to save project. Please try again.");
       setSaving(false);
+
+      if (err.response?.data?.message) {
+        alert(`Error: ${err.response.data.message}`);
+      }
     }
   };
 
@@ -991,233 +977,13 @@ const ProjectDetailsForm = () => {
                     </div>
                   </div>
 
-                  {/* Payment Schedule */}
-                  <div className="mb-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-medium">Payment Schedule</h3>
-                      <button
-                        type="button"
-                        onClick={() => setShowPaymentForm(!showPaymentForm)}
-                        className="flex items-center px-3 py-1 text-sm bg-white border rounded-md text-accent border-accent hover:bg-accent/10"
-                      >
-                        <PlusCircle size={16} className="mr-1" />
-                        Add Payment
-                      </button>
-                    </div>
-
-                    {showPaymentForm && (
-                      <div className="p-4 mb-4 rounded-lg bg-gray-50">
-                        <h4 className="mb-4 text-sm font-medium">
-                          New Payment
-                        </h4>
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                          <div>
-                            <label className="block mb-1 text-sm font-medium text-gray-700">
-                              Payment Name *
-                            </label>
-                            <input
-                              type="text"
-                              name="name"
-                              value={newPayment?.name}
-                              onChange={handlePaymentChange}
-                              placeholder="e.g. Initial Deposit, Final Payment"
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-                              required
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block mb-1 text-sm font-medium text-gray-700">
-                              Amount ($) *
-                            </label>
-                            <input
-                              type="number"
-                              name="amount"
-                              value={newPayment?.amount}
-                              onChange={handlePaymentChange}
-                              placeholder="0.00"
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-                              required
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block mb-1 text-sm font-medium text-gray-700">
-                              Due Date *
-                            </label>
-                            <input
-                              type="date"
-                              name="dueDate"
-                              value={newPayment?.dueDate}
-                              onChange={handlePaymentChange}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-                              required
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block mb-1 text-sm font-medium text-gray-700">
-                              Status
-                            </label>
-                            <select
-                              name="status"
-                              value={newPayment?.status}
-                              onChange={handlePaymentChange}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-                            >
-                              <option value="pending">Pending</option>
-                              <option value="paid">Paid</option>
-                              <option value="overdue">Overdue</option>
-                            </select>
-                          </div>
-
-                          <div className="md:col-span-2">
-                            <label className="block mb-1 text-sm font-medium text-gray-700">
-                              Notes
-                            </label>
-                            <textarea
-                              name="notes"
-                              value={newPayment?.notes}
-                              onChange={handlePaymentChange}
-                              rows="2"
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-                            ></textarea>
-                          </div>
-                        </div>
-
-                        <div className="flex justify-end mt-4 space-x-2">
-                          <button
-                            type="button"
-                            onClick={() => setShowPaymentForm(false)}
-                            className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            type="button"
-                            onClick={addPayment}
-                            className="px-4 py-2 text-white rounded-md bg-accent hover:bg-accent/90"
-                          >
-                            Add Payment
-                          </button>
-                        </div>
-                      </div>
-                    )}
-
-                    {project.paymentSchedule.length === 0 ? (
-                      <div className="p-4 text-center text-gray-500 rounded-lg bg-gray-50">
-                        No payments scheduled yet
-                      </div>
-                    ) : (
-                      <div className="overflow-hidden bg-white border border-gray-200 rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-200">
-                          <thead className="bg-gray-50">
-                            <tr>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                Payment
-                              </th>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                Amount
-                              </th>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                Due Date
-                              </th>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                Status
-                              </th>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase">
-                                Actions
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-gray-200">
-                            {project.paymentSchedule.map((payment, index) => (
-                              <tr key={payment._id || index}>
-                                <td className="px-4 py-3 whitespace-nowrap">
-                                  <div className="text-sm font-medium text-gray-900">
-                                    {payment?.name}
-                                  </div>
-                                  {payment.notes && (
-                                    <div className="text-xs text-gray-500">
-                                      {payment?.notes}
-                                    </div>
-                                  )}
-                                </td>
-                                <td className="px-4 py-3 whitespace-nowrap">
-                                  <div className="text-sm font-medium text-green-600">
-                                    $
-                                    {parseFloat(
-                                      payment.amount
-                                    ).toLocaleString()}
-                                  </div>
-                                </td>
-                                <td className="px-4 py-3 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {format(
-                                      new Date(payment.dueDate),
-                                      "MMM d, yyyy"
-                                    )}
-                                  </div>
-                                </td>
-                                <td className="px-4 py-3 whitespace-nowrap">
-                                  <span
-                                    className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                      payment.status === "pending"
-                                        ? "bg-blue-100 text-blue-800"
-                                        : payment.status === "paid"
-                                        ? "bg-green-100 text-green-800"
-                                        : "bg-red-100 text-red-800"
-                                    }`}
-                                  >
-                                    {payment.status.charAt(0).toUpperCase() +
-                                      payment.status.slice(1)}
-                                  </span>
-                                </td>
-                                <td className="px-4 py-3 text-sm text-right whitespace-nowrap">
-                                  {!isNewProject && (
-                                    <div className="flex justify-end space-x-1">
-                                      {payment.status !== "paid" && (
-                                        <button
-                                          type="button"
-                                          onClick={() =>
-                                            updateItemStatus(
-                                              "payment",
-                                              payment._id,
-                                              "paid"
-                                            )
-                                          }
-                                          className="p-1 text-green-600 rounded-md hover:bg-green-50"
-                                          title="Mark as Paid"
-                                        >
-                                          <Check size={16} />
-                                        </button>
-                                      )}
-                                      {payment.status === "paid" && (
-                                        <button
-                                          type="button"
-                                          onClick={() =>
-                                            updateItemStatus(
-                                              "payment",
-                                              payment._id,
-                                              "pending"
-                                            )
-                                          }
-                                          className="p-1 text-blue-600 rounded-md hover:bg-blue-50"
-                                          title="Mark as Pending"
-                                        >
-                                          <Clock size={16} />
-                                        </button>
-                                      )}
-                                    </div>
-                                  )}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
+                  {/* Payment Schedule - Using PaymentScheduleModal component */}
+                  <PaymentScheduleModal
+                    project={project}
+                    setProject={setProject}
+                    updateItemStatus={updateItemStatus}
+                    isNewProject={isNewProject}
+                  />
 
                   {/* Referral Information */}
                   <div className="mt-8">
@@ -1413,200 +1179,13 @@ const ProjectDetailsForm = () => {
                     </div>
                   </div>
 
-                  {/* Milestones */}
-                  <div className="mb-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-medium">
-                        Project Milestones
-                      </h3>
-                      <button
-                        type="button"
-                        onClick={() => setShowMilestoneForm(!showMilestoneForm)}
-                        className="flex items-center px-3 py-1 text-sm bg-white border rounded-md text-accent border-accent hover:bg-accent/10"
-                      >
-                        <PlusCircle size={16} className="mr-1" />
-                        Add Milestone
-                      </button>
-                    </div>
-
-                    {showMilestoneForm && (
-                      <div className="p-4 mb-4 rounded-lg bg-gray-50">
-                        <h4 className="mb-4 text-sm font-medium">
-                          New Milestone
-                        </h4>
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                          <div>
-                            <label className="block mb-1 text-sm font-medium text-gray-700">
-                              Milestone Name *
-                            </label>
-                            <input
-                              type="text"
-                              name="name"
-                              value={newMilestone.name}
-                              onChange={handleMilestoneChange}
-                              placeholder="e.g. Design Approval, Launch"
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-                              required
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block mb-1 text-sm font-medium text-gray-700">
-                              Due Date *
-                            </label>
-                            <input
-                              type="date"
-                              name="dueDate"
-                              value={newMilestone.dueDate}
-                              onChange={handleMilestoneChange}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-                              required
-                            />
-                          </div>
-
-                          <div className="md:col-span-2">
-                            <label className="block mb-1 text-sm font-medium text-gray-700">
-                              Description
-                            </label>
-                            <textarea
-                              name="description"
-                              value={newMilestone.description}
-                              onChange={handleMilestoneChange}
-                              rows="2"
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-                            ></textarea>
-                          </div>
-                        </div>
-
-                        <div className="flex justify-end mt-4 space-x-2">
-                          <button
-                            type="button"
-                            onClick={() => setShowMilestoneForm(false)}
-                            className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            type="button"
-                            onClick={addMilestone}
-                            className="px-4 py-2 text-white rounded-md bg-accent hover:bg-accent/90"
-                          >
-                            Add Milestone
-                          </button>
-                        </div>
-                      </div>
-                    )}
-
-                    {project.milestones.length === 0 ? (
-                      <div className="p-4 text-center text-gray-500 rounded-lg bg-gray-50">
-                        No milestones added yet
-                      </div>
-                    ) : (
-                      <div className="overflow-hidden bg-white border border-gray-200 rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-200">
-                          <thead className="bg-gray-50">
-                            <tr>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                Milestone
-                              </th>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                Due Date
-                              </th>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                Status
-                              </th>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase">
-                                Actions
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-gray-200">
-                            {project.milestones.map((milestone, index) => (
-                              <tr key={milestone._id || index}>
-                                <td className="px-4 py-3">
-                                  <div className="text-sm font-medium text-gray-900">
-                                    {milestone.name}
-                                  </div>
-                                  {milestone.description && (
-                                    <div className="text-xs text-gray-500">
-                                      {milestone.description}
-                                    </div>
-                                  )}
-                                </td>
-                                <td className="px-4 py-3 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {format(
-                                      new Date(milestone.dueDate),
-                                      "MMM d, yyyy"
-                                    )}
-                                  </div>
-                                </td>
-                                <td className="px-4 py-3 whitespace-nowrap">
-                                  <span
-                                    className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                      milestone.status === "pending"
-                                        ? "bg-blue-100 text-blue-800"
-                                        : milestone.status === "in_progress"
-                                        ? "bg-yellow-100 text-yellow-800"
-                                        : milestone.status === "completed"
-                                        ? "bg-green-100 text-green-800"
-                                        : "bg-red-100 text-red-800"
-                                    }`}
-                                  >
-                                    {milestone.status === "in_progress"
-                                      ? "In Progress"
-                                      : milestone.status
-                                          .charAt(0)
-                                          .toUpperCase() +
-                                        milestone.status.slice(1)}
-                                  </span>
-                                </td>
-                                <td className="px-4 py-3 text-sm text-right whitespace-nowrap">
-                                  {!isNewProject && (
-                                    <div className="flex justify-end space-x-1">
-                                      {milestone.status !== "completed" && (
-                                        <button
-                                          type="button"
-                                          onClick={() =>
-                                            updateItemStatus(
-                                              "milestone",
-                                              milestone._id,
-                                              "completed"
-                                            )
-                                          }
-                                          className="p-1 text-green-600 rounded-md hover:bg-green-50"
-                                          title="Mark as Completed"
-                                        >
-                                          <Check size={16} />
-                                        </button>
-                                      )}
-                                      {milestone.status !== "in_progress" &&
-                                        milestone.status !== "completed" && (
-                                          <button
-                                            type="button"
-                                            onClick={() =>
-                                              updateItemStatus(
-                                                "milestone",
-                                                milestone._id,
-                                                "in_progress"
-                                              )
-                                            }
-                                            className="p-1 text-yellow-600 rounded-md hover:bg-yellow-50"
-                                            title="Mark as In Progress"
-                                          >
-                                            <Clock size={16} />
-                                          </button>
-                                        )}
-                                    </div>
-                                  )}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
+                  {/* Milestones - Using MilestoneModal component */}
+                  <MilestoneModal
+                    project={project}
+                    setProject={setProject}
+                    updateItemStatus={updateItemStatus}
+                    isNewProject={isNewProject}
+                  />
                 </div>
               )}
 
@@ -1902,6 +1481,14 @@ const ProjectDetailsForm = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* Additional Services */}
+                  <div className="mt-6">
+                    <AdditionalServicesModal
+                      project={project}
+                      setProject={setProject}
+                    />
+                  </div>
                 </div>
               )}
             </div>
@@ -2003,6 +1590,63 @@ const ProjectDetailsForm = () => {
         title="Delete Project"
         message={`Are you sure you want to delete this project? This action cannot be undone.`}
       />
+
+      {/* Referral Modal - if needed */}
+      <InputModal
+        isOpen={showReferralModal}
+        onClose={() => setShowReferralModal(false)}
+        onSubmit={handleReferralSubmit}
+        title="Add Referral Information"
+        submitText="Save Referral"
+        icon={<User size={20} className="text-accent" />}
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Referrer Name
+            </label>
+            <input
+              type="text"
+              value={referralInput.name}
+              onChange={(e) =>
+                setReferralInput({ ...referralInput, name: e.target.value })
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              value={referralInput.email}
+              onChange={(e) =>
+                setReferralInput({ ...referralInput, email: e.target.value })
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Commission (%)
+            </label>
+            <input
+              type="number"
+              value={referralInput.commissionPercentage}
+              onChange={(e) =>
+                setReferralInput({
+                  ...referralInput,
+                  commissionPercentage: e.target.value,
+                })
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+            />
+          </div>
+        </div>
+      </InputModal>
     </div>
   );
 };

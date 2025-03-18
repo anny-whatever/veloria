@@ -21,6 +21,17 @@ const submitProject = asyncHandler(async (req, res) => {
     name,
     email,
     phone,
+    designChoices,
+    contentStatus,
+    workflowStage,
+    projectValue,
+    paymentSchedule,
+    milestones,
+    additionalServices,
+    notes,
+    hosting,
+    domain,
+    referredBy,
   } = req.body;
 
   // Validate required fields
@@ -42,6 +53,7 @@ const submitProject = asyncHandler(async (req, res) => {
   }
 
   // Create project in database
+  // IMPORTANT: Don't try to find by ID when creating a new project
   const project = await Project.create({
     serviceType,
     projectName,
@@ -56,6 +68,27 @@ const submitProject = asyncHandler(async (req, res) => {
     name,
     email,
     phone,
+    status: "new", // Set initial status
+    workflowStage: workflowStage || "discussion",
+    projectValue: projectValue || 0,
+    designChoices: designChoices || {
+      colorPalette: [],
+      fonts: [],
+      designNotes: "",
+      approvalStatus: "pending",
+    },
+    contentStatus: contentStatus || {
+      images: "not_started",
+      text: "not_started",
+      notes: "",
+    },
+    paymentSchedule: paymentSchedule || [],
+    milestones: milestones || [],
+    additionalServices: additionalServices || [],
+    notes: notes || "",
+    hosting: hosting || {},
+    domain: domain || {},
+    referredBy: referredBy || {},
   });
 
   // Send email notifications
@@ -86,10 +119,12 @@ const submitProject = asyncHandler(async (req, res) => {
     // Continue with the response even if email sending fails
   }
 
+  // Return success with the ID of the created project
   res.status(201).json({
     success: true,
     message:
       "Your project request has been received. We'll contact you shortly.",
+    id: project._id,
   });
 });
 
@@ -105,6 +140,12 @@ const getProjects = asyncHandler(async (req, res) => {
 // @route   GET /api/projects/admin/:id
 // @access  Private/Admin
 const getProjectById = asyncHandler(async (req, res) => {
+  // Validate ID parameter
+  if (!req.params.id || req.params.id === "undefined") {
+    res.status(400);
+    throw new Error("Invalid project ID provided");
+  }
+
   const project = await Project.findById(req.params.id);
 
   if (!project) {
@@ -115,10 +156,16 @@ const getProjectById = asyncHandler(async (req, res) => {
   res.status(200).json(project);
 });
 
-// @desc    Update project status
+// @desc    Update project
 // @route   PATCH /api/projects/admin/:id
 // @access  Private/Admin
 const updateProject = asyncHandler(async (req, res) => {
+  // Validate ID parameter
+  if (!req.params.id || req.params.id === "undefined") {
+    res.status(400);
+    throw new Error("Invalid project ID provided");
+  }
+
   const project = await Project.findById(req.params.id);
 
   if (!project) {
@@ -143,6 +190,12 @@ const updateProject = asyncHandler(async (req, res) => {
 // @route   DELETE /api/projects/admin/:id
 // @access  Private/Admin
 const deleteProject = asyncHandler(async (req, res) => {
+  // Validate ID parameter
+  if (!req.params.id || req.params.id === "undefined") {
+    res.status(400);
+    throw new Error("Invalid project ID provided");
+  }
+
   const project = await Project.findById(req.params.id);
 
   if (!project) {
@@ -167,6 +220,12 @@ const updateWorkflowStage = asyncHandler(async (req, res) => {
   if (!workflowStage) {
     res.status(400);
     throw new Error("Workflow stage is required");
+  }
+
+  // Validate ID parameter
+  if (!req.params.id || req.params.id === "undefined") {
+    res.status(400);
+    throw new Error("Invalid project ID provided");
   }
 
   const project = await Project.findById(req.params.id);
@@ -194,6 +253,12 @@ const addPayment = asyncHandler(async (req, res) => {
   if (!name || !amount || !dueDate) {
     res.status(400);
     throw new Error("Payment name, amount, and due date are required");
+  }
+
+  // Validate ID parameter
+  if (!req.params.id || req.params.id === "undefined") {
+    res.status(400);
+    throw new Error("Invalid project ID provided");
   }
 
   const project = await Project.findById(req.params.id);
@@ -224,6 +289,17 @@ const addPayment = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const updatePaymentStatus = asyncHandler(async (req, res) => {
   const { status, paidDate } = req.body;
+
+  // Validate ID parameters
+  if (!req.params.id || req.params.id === "undefined") {
+    res.status(400);
+    throw new Error("Invalid project ID provided");
+  }
+
+  if (!req.params.paymentId) {
+    res.status(400);
+    throw new Error("Payment ID is required");
+  }
 
   const project = await Project.findById(req.params.id);
 
@@ -270,6 +346,12 @@ const addMilestone = asyncHandler(async (req, res) => {
     throw new Error("Milestone name and due date are required");
   }
 
+  // Validate ID parameter
+  if (!req.params.id || req.params.id === "undefined") {
+    res.status(400);
+    throw new Error("Invalid project ID provided");
+  }
+
   const project = await Project.findById(req.params.id);
 
   if (!project) {
@@ -297,6 +379,17 @@ const addMilestone = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const updateMilestoneStatus = asyncHandler(async (req, res) => {
   const { status, completedDate } = req.body;
+
+  // Validate ID parameters
+  if (!req.params.id || req.params.id === "undefined") {
+    res.status(400);
+    throw new Error("Invalid project ID provided");
+  }
+
+  if (!req.params.milestoneId) {
+    res.status(400);
+    throw new Error("Milestone ID is required");
+  }
 
   const project = await Project.findById(req.params.id);
 
@@ -334,6 +427,12 @@ const addReferralInfo = asyncHandler(async (req, res) => {
   if (!name || !commissionPercentage) {
     res.status(400);
     throw new Error("Referrer name and commission percentage are required");
+  }
+
+  // Validate ID parameter
+  if (!req.params.id || req.params.id === "undefined") {
+    res.status(400);
+    throw new Error("Invalid project ID provided");
   }
 
   const project = await Project.findById(req.params.id);

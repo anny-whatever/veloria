@@ -222,17 +222,17 @@ const PaymentScheduleModal = ({
     ];
 
     // For e-commerce projects, add a monthly maintenance option
-    if (project.serviceType === "ecommerce") {
-      templates.push([
-        {
-          name: "Monthly Maintenance",
-          amount: "500",
-          dueDate: format(addMonths(today, 1), "yyyy-MM-dd"),
-          status: "pending",
-          notes: "Monthly fee for maintenance and updates",
-        },
-      ]);
-    }
+    // if (project.serviceType === "ecommerce") {
+    //   templates.push([
+    //     {
+    //       name: "Monthly Maintenance",
+    //       amount: "500",
+    //       dueDate: format(addMonths(today, 1), "yyyy-MM-dd"),
+    //       status: "pending",
+    //       notes: "Monthly fee for maintenance and updates",
+    //     },
+    //   ]);
+    // }
 
     return templates;
   };
