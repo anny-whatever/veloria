@@ -22,7 +22,7 @@ const createAdminUser = async () => {
     const admin = await User.create({
       name: "Veloria Admin",
       email: "info@veloria.in",
-      password: "Lisa160302-mycutie", // Change this!
+      password: process.env.EMAIL_PASS, // Change this!
       role: "admin",
     });
 
