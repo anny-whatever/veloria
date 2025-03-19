@@ -1,8 +1,7 @@
-// client/src/pages/Admin/components/PaymentScheduleModal.jsx
 import { useState, useRef } from "react";
 import {
   PlusCircle,
-  DollarSign,
+  IndianRupee,
   Calendar,
   Check,
   X,
@@ -40,7 +39,11 @@ const PaymentScheduleModal = ({
    * Handle form submission for adding a new payment
    */
   const handlePaymentSubmit = (e) => {
-    e.preventDefault();
+    // Prevent default submission behavior and stop propagation
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
     if (!paymentInput.name || paymentInput.name.trim() === "") {
       setPaymentError("Please enter a payment name");
@@ -221,19 +224,6 @@ const PaymentScheduleModal = ({
       ],
     ];
 
-    // For e-commerce projects, add a monthly maintenance option
-    // if (project.serviceType === "ecommerce") {
-    //   templates.push([
-    //     {
-    //       name: "Monthly Maintenance",
-    //       amount: "500",
-    //       dueDate: format(addMonths(today, 1), "yyyy-MM-dd"),
-    //       status: "pending",
-    //       notes: "Monthly fee for maintenance and updates",
-    //     },
-    //   ]);
-    // }
-
     return templates;
   };
 
@@ -242,7 +232,7 @@ const PaymentScheduleModal = ({
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-medium text-gray-700">Payment Schedule</h3>
         <button
-          type="button"
+          type="button" // Explicitly set to button
           onClick={() => setShowPaymentModal(true)}
           className="flex items-center px-3 py-1 text-sm bg-white border rounded-md text-accent border-accent hover:bg-accent/10"
         >
@@ -258,7 +248,7 @@ const PaymentScheduleModal = ({
             Total Project Value:
           </span>
           <span className="text-xl font-bold">
-            $
+            ₹
             {project.projectValue?.toLocaleString() ||
               calculateTotalRevenue().toLocaleString()}
           </span>
@@ -312,7 +302,7 @@ const PaymentScheduleModal = ({
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="text-sm font-medium text-green-600">
-                      ${parseFloat(payment.amount).toLocaleString()}
+                      ₹{parseFloat(payment.amount).toLocaleString()}
                     </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
@@ -423,13 +413,14 @@ const PaymentScheduleModal = ({
         onSubmit={handlePaymentSubmit}
         title="Add Payment"
         submitText="Add Payment"
-        icon={<DollarSign size={20} className="text-green-600" />}
+        icon={<IndianRupee size={20} className="text-green-600" />}
+        className="max-h-screen"
       >
-        <div className="space-y-4">
+        <div className="space-y-3 max-h-[calc(90vh-200px)] overflow-y-auto pr-1">
           <div>
             <label
               htmlFor="paymentName"
-              className="block mb-2 text-sm font-medium text-gray-700"
+              className="block mb-1 text-sm font-medium text-gray-700"
             >
               Payment Name*
             </label>
@@ -448,103 +439,107 @@ const PaymentScheduleModal = ({
             )}
           </div>
 
-          <div>
-            <label
-              htmlFor="paymentAmount"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Amount ($)*
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <DollarSign size={16} className="text-gray-400" />
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <label
+                htmlFor="paymentAmount"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
+                Amount (₹)*
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <IndianRupee size={16} className="text-gray-400" />
+                </div>
+                <input
+                  id="paymentAmount"
+                  name="amount"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={paymentInput.amount}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                />
               </div>
-              <input
-                id="paymentAmount"
-                name="amount"
-                type="number"
-                min="0"
-                step="0.01"
-                placeholder="0.00"
-                value={paymentInput.amount}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="paymentDueDate"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
+                Due Date*
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Calendar size={16} className="text-gray-400" />
+                </div>
+                <input
+                  id="paymentDueDate"
+                  name="dueDate"
+                  type="date"
+                  value={paymentInput.dueDate}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                />
+              </div>
             </div>
           </div>
 
-          <div>
-            <label
-              htmlFor="paymentDueDate"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Due Date*
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <Calendar size={16} className="text-gray-400" />
-              </div>
-              <input
-                id="paymentDueDate"
-                name="dueDate"
-                type="date"
-                value={paymentInput.dueDate}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <label
+                htmlFor="paymentStatus"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
+                Status
+              </label>
+              <select
+                id="paymentStatus"
+                name="status"
+                value={paymentInput.status}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-              />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+              >
+                <option value="pending">Pending</option>
+                <option value="paid">Paid</option>
+                <option value="overdue">Overdue</option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                htmlFor="paymentNotes"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
+                Notes
+              </label>
+              <textarea
+                id="paymentNotes"
+                name="notes"
+                rows="1"
+                placeholder="Additional notes about this payment..."
+                value={paymentInput.notes}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+              ></textarea>
             </div>
           </div>
 
-          <div>
-            <label
-              htmlFor="paymentStatus"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Status
-            </label>
-            <select
-              id="paymentStatus"
-              name="status"
-              value={paymentInput.status}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-            >
-              <option value="pending">Pending</option>
-              <option value="paid">Paid</option>
-              <option value="overdue">Overdue</option>
-            </select>
-          </div>
-
-          <div>
-            <label
-              htmlFor="paymentNotes"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Notes
-            </label>
-            <textarea
-              id="paymentNotes"
-              name="notes"
-              rows="2"
-              placeholder="Additional notes about this payment..."
-              value={paymentInput.notes}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-            ></textarea>
-          </div>
-
-          {/* Payment templates */}
-          <div className="pt-4 mt-2 border-t border-gray-200">
+          {/* Payment templates - made more compact */}
+          <div className="pt-2 mt-2 border-t border-gray-200">
             <p className="mb-2 text-sm font-medium text-gray-700">
               Payment Templates:
             </p>
-            <div className="space-y-2">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               {getPaymentTemplates().map((template, templateIndex) => (
                 <div
                   key={templateIndex}
                   className="p-2 border border-gray-200 rounded-md"
                 >
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-1">
                     <span className="text-xs font-medium text-gray-700">
                       {template.length}-Part Payment
                     </span>
@@ -566,12 +561,17 @@ const PaymentScheduleModal = ({
                       Select
                     </button>
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-0.5">
                     {template.map((payment, index) => (
                       <div key={index} className="flex justify-between text-xs">
-                        <span>{payment.name}</span>
+                        <span
+                          className="truncate max-w-[60%]"
+                          title={payment.name}
+                        >
+                          {payment.name}
+                        </span>
                         <span className="font-medium">
-                          ${parseFloat(payment.amount).toLocaleString()}
+                          ₹{parseFloat(payment.amount).toLocaleString()}
                         </span>
                       </div>
                     ))}

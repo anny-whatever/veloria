@@ -62,7 +62,11 @@ const InputModal = ({
   }, [isOpen, onClose]);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    // This is critical - prevent default form submission AND stop propagation
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     onSubmit(e);
   };
 
@@ -107,8 +111,8 @@ const InputModal = ({
                 </button>
               </div>
 
-              {/* Form */}
-              <form onSubmit={handleSubmit}>
+              {/* Use a div instead of a form to avoid nesting issues */}
+              <div>
                 {/* Content */}
                 <div className="px-6 py-4">{children}</div>
 
@@ -122,13 +126,14 @@ const InputModal = ({
                     {cancelText}
                   </button>
                   <button
-                    type="submit"
+                    type="button" // Changed from "submit" to "button"
+                    onClick={handleSubmit}
                     className="px-4 py-2 text-white transition-colors rounded-md bg-accent hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent/50"
                   >
                     {submitText}
                   </button>
                 </div>
-              </form>
+              </div>
             </motion.div>
           </motion.div>
         </>

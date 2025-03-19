@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   ClipboardList,
-  DollarSign,
+  IndianRupee,
   Calendar,
   Filter,
   PlusCircle,
@@ -375,7 +375,7 @@ const ProjectPipeline = () => {
             <h3 className="text-sm font-medium text-gray-500">
               Pipeline Value
             </h3>
-            <DollarSign size={18} className="text-green-600" />
+            <IndianRupee size={18} className="text-green-600" />
           </div>
           <p className="text-2xl font-bold">
             ₹{stats.finance.totalProjectValue.toLocaleString()}
@@ -390,7 +390,7 @@ const ProjectPipeline = () => {
             <h3 className="text-sm font-medium text-gray-500">
               Received Payments
             </h3>
-            <DollarSign size={18} className="text-accent" />
+            <IndianRupee size={18} className="text-accent" />
           </div>
           <p className="text-2xl font-bold">
             ₹{stats.finance.totalReceivedPayments.toLocaleString()}

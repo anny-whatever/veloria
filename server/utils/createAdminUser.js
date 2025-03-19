@@ -14,15 +14,16 @@ const createAdminUser = async () => {
     // Check if admin already exists
     const adminExists = await User.findOne({ email: "info@veloria.in" });
 
-    if (adminExists) {
-      console.log("Admin user already exists");
-      process.exit();
-    }
+    // if (adminExists) {
+    //   console.log("Admin user already exists");
+    //   process.exit();
+    // }
 
     const admin = await User.create({
-      name: "Veloria Admin",
-      email: "info@veloria.in",
-      password: process.env.EMAIL_PASS, // Change this!
+      name: "Sabia khan",
+      email: "khansabia.1990@gmail.com",
+      password: "sabiakhan_1990", // Change this!
+      // password: process.env.EMAIL_PASS, // Change this!
       role: "admin",
     });
 

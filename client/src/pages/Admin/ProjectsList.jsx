@@ -14,7 +14,7 @@ import {
   ExternalLink,
   Calendar,
   Clock,
-  DollarSign,
+  IndianRupee,
   Tag,
   Building,
   Target,
@@ -701,7 +701,7 @@ const ProjectDetails = () => {
                   <div>
                     <h3 className="font-medium text-gray-700">Budget</h3>
                     <p className="flex items-center mt-1">
-                      <DollarSign size={16} className="mr-2 text-green-600" />
+                      <IndianRupee size={16} className="mr-2 text-green-600" />
                       {project.budget}
                     </p>
                   </div>
@@ -1219,7 +1219,7 @@ const ProjectDetails = () => {
                     </div>
                   ) : (
                     <div className="p-6 mt-2 text-center border border-gray-300 border-dashed rounded-md">
-                      <DollarSign
+                      <IndianRupee
                         size={24}
                         className="mx-auto mb-2 text-gray-400"
                       />

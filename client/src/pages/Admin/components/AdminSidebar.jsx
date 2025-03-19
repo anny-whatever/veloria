@@ -12,7 +12,7 @@ import {
   X,
   ClipboardList,
   PieChart,
-  DollarSign,
+  IndianRupee,
   User,
   Settings,
 } from "lucide-react";
@@ -74,7 +74,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         {
           path: "/admin/finance",
           label: "Revenue Tracking",
-          icon: <DollarSign size={20} />,
+          icon: <IndianRupee size={20} />,
         },
       ],
     },

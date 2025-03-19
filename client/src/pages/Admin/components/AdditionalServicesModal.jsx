@@ -24,7 +24,11 @@ const AdditionalServicesModal = ({ project, setProject }) => {
    * Handle form submission for adding a new service
    */
   const handleServiceSubmit = (e) => {
-    e.preventDefault();
+    // Prevent form submission and event propagation
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
     if (!serviceInput.name || serviceInput.name.trim() === "") {
       setServiceError("Please enter a service name");
@@ -96,7 +100,7 @@ const AdditionalServicesModal = ({ project, setProject }) => {
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-medium text-gray-700">Additional Services</h3>
         <button
-          type="button"
+          type="button" // Explicitly set type to prevent form submission
           onClick={() => setShowServiceModal(true)}
           className="flex items-center px-3 py-1 text-sm bg-white border rounded-md text-accent border-accent hover:bg-accent/10"
         >

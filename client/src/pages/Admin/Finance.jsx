@@ -1,7 +1,7 @@
 // client/src/pages/Admin/Finance.jsx
 import { useState, useEffect } from "react";
 import {
-  DollarSign,
+  IndianRupee,
   TrendingUp,
   ArrowUpRight,
   ArrowDownRight,
@@ -124,7 +124,7 @@ const Finance = () => {
               </h3>
             </div>
             <div className="p-3 bg-green-100 rounded-full">
-              <DollarSign className="text-green-600" size={24} />
+              <IndianRupee className="text-green-600" size={24} />
             </div>
           </div>
           <div className="flex items-center text-sm">

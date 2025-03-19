@@ -6,7 +6,7 @@ import {
   ChevronLeft,
   Save,
   Calendar,
-  DollarSign,
+  IndianRupee,
   Clock,
   Users,
   Briefcase,

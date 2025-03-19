@@ -32,7 +32,12 @@ const MilestoneModal = ({
    * Handle form submission for adding a new milestone
    */
   const handleMilestoneSubmit = (e) => {
-    e.preventDefault();
+    // Prevent default submission behavior if e exists
+    if (e) {
+      e.preventDefault();
+      // Add this to stop event propagation to parent forms
+      e.stopPropagation();
+    }
 
     if (!milestoneInput.name || milestoneInput.name.trim() === "") {
       setMilestoneError("Please enter a milestone name");
@@ -162,7 +167,7 @@ const MilestoneModal = ({
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-medium text-gray-700">Project Milestones</h3>
         <button
-          type="button"
+          type="button" // Explicitly set to button
           onClick={() => setShowMilestoneModal(true)}
           className="flex items-center px-3 py-1 text-sm bg-white border rounded-md text-accent border-accent hover:bg-accent/10"
         >

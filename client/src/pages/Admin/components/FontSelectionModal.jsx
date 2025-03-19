@@ -1,4 +1,3 @@
-// client/src/pages/Admin/components/FontSelectionModal.jsx
 import { useState, useRef, useEffect } from "react";
 import {
   X,
@@ -7,7 +6,6 @@ import {
   Search,
   Check,
   RefreshCw,
-  Upload,
   Link,
   AlertTriangle,
 } from "lucide-react";
@@ -15,7 +13,7 @@ import InputModal from "./InputModal";
 
 /**
  * Enhanced component for managing project fonts with a modal for adding fonts
- * Includes Google Fonts integration, font previews, and direct font uploads
+ * Includes Google Fonts integration, font previews, and external font support via names or URLs
  *
  * @param {Object} project - The project object
  * @param {Function} handleNestedChange - Function to update nested project properties
@@ -33,14 +31,11 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
   const [activeCategory, setActiveCategory] = useState("popular");
   const [activeTab, setActiveTab] = useState("search");
 
-  // New states for enhanced font handling
-  const [selectedFontFile, setSelectedFontFile] = useState(null);
-  const [showCustomOptions, setShowCustomOptions] = useState(false);
+  // States for custom font support
   const [fontUrl, setFontUrl] = useState("");
   const [fontFamily, setFontFamily] = useState("");
 
   const initialFocusRef = useRef(null);
-  const fileInputRef = useRef(null);
 
   // Google Fonts API Key - Consider moving this to environment variables
   const GOOGLE_FONTS_API_KEY = import.meta.env.VITE_FONT_API_KEY;
@@ -169,55 +164,11 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
   };
 
   /**
-   * Handle file input change for font upload
-   */
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Check if it's a valid font file
-      const validTypes = [
-        "font/ttf",
-        "font/otf",
-        "font/woff",
-        "font/woff2",
-        "application/x-font-ttf",
-        "application/x-font-otf",
-        "application/font-woff",
-        "application/font-woff2",
-        "application/vnd.ms-fontobject", // .eot files
-      ];
-
-      // Allow any font files even if MIME type is not recognized
-      if (
-        !validTypes.includes(file.type) &&
-        !file.name.match(/\.(ttf|otf|woff|woff2|eot)$/i)
-      ) {
-        setFontError(
-          "Please upload a valid font file (.ttf, .otf, .woff, .woff2, .eot)"
-        );
-        setSelectedFontFile(null);
-        return;
-      }
-
-      setSelectedFontFile(file);
-      setFontError("");
-
-      // Try to extract a sensible font family name from the filename
-      const fileName = file.name.replace(/\.(ttf|otf|woff|woff2|eot)$/i, "");
-      const formattedName = fileName
-        .replace(/[-_]/g, " ")
-        .replace(/(\b\w)/g, (char) => char.toUpperCase());
-
-      setFontFamily(formattedName);
-      setFontInput(formattedName);
-    }
-  };
-
-  /**
    * Handle form submission for adding a new font
    */
   const handleFontSubmit = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     setFontError("");
 
     if (activeTab === "search") {
@@ -253,14 +204,9 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
         ...(project.designChoices.fonts || []),
         newFont,
       ]);
-    } else if (activeTab === "upload") {
-      // Font file upload
-      if (!selectedFontFile && !showCustomOptions) {
-        setFontError("Please upload a font file or provide font details");
-        return;
-      }
-
-      if (showCustomOptions && !fontInput && !fontUrl) {
+    } else if (activeTab === "custom") {
+      // Custom font entry
+      if (!fontFamily && !fontUrl) {
         setFontError("Please provide a font name or URL");
         return;
       }
@@ -272,21 +218,9 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
         source: "custom",
       };
 
-      // If a file was uploaded, store file information
-      if (selectedFontFile) {
-        newFont.fileName = selectedFontFile.name;
-        newFont.fileSize = selectedFontFile.size;
-        newFont.fileType = selectedFontFile.type;
-        // In a real implementation, you would upload this file to a server
-        // and store the URL to the uploaded file
-        newFont.uploadedFile = true;
-      }
-
-      // If custom font options are provided
-      if (showCustomOptions) {
-        if (fontUrl) {
-          newFont.url = fontUrl.trim();
-        }
+      // If custom font URL is provided
+      if (fontUrl) {
+        newFont.url = fontUrl.trim();
       }
 
       // Add font to list
@@ -308,8 +242,6 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
     setFontInput("");
     setFontError("");
     setSelectedFont(null);
-    setSelectedFontFile(null);
-    setShowCustomOptions(false);
     setFontUrl("");
     setFontFamily("");
     setSearchTerm("");
@@ -389,23 +321,14 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
     if (typeof font === "string") return "";
 
     if (font.source === "google") return "(Google Font)";
-    if (font.source === "custom" && font.uploadedFile) return "(Uploaded)";
     if (font.source === "custom" && font.url) return "(External)";
+    if (font.source === "custom") return "(Custom)";
     return "";
-  };
-
-  /**
-   * Trigger file input click
-   */
-  const triggerFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
   };
 
   return (
     <div>
-      <label className="block mb-2 text-sm font-medium text-gray-700">
+      <label className="block mb-2 text-sm font-medium text-gray-700 ">
         Fonts
       </label>
 
@@ -477,10 +400,12 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
         title="Add Font"
         submitText="Add Font"
         icon={<FileType size={20} className="text-accent" />}
+        className="max-h-screen" // Add max-height for the entire modal
       >
-        <div className="space-y-4">
+        {/* Set a max-height on the content container with scrolling */}
+        <div className="space-y-3 max-h-[calc(90vh-200px)] overflow-y-auto pr-1">
           {/* Tabs for different font addition methods */}
-          <div className="flex border-b border-gray-200">
+          <div className="sticky top-0 z-10 flex bg-white border-b border-gray-200">
             <button
               type="button"
               onClick={() => setActiveTab("search")}
@@ -494,14 +419,14 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
             </button>
             <button
               type="button"
-              onClick={() => setActiveTab("upload")}
+              onClick={() => setActiveTab("custom")}
               className={`px-4 py-2 text-sm font-medium ${
-                activeTab === "upload"
+                activeTab === "custom"
                   ? "border-b-2 border-accent text-accent"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
-              Upload Font
+              Custom Font
             </button>
           </div>
 
@@ -523,8 +448,8 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
                 />
               </div>
 
-              {/* Category Tabs */}
-              <div className="flex pb-2 space-x-2 overflow-x-auto">
+              {/* Category Tabs - Make horizontally scrollable */}
+              <div className="flex pb-2 space-x-2 overflow-x-auto no-scrollbar">
                 {[
                   "popular",
                   "all",
@@ -554,16 +479,16 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
               </div>
 
               {loading ? (
-                <div className="flex items-center justify-center py-12">
+                <div className="flex items-center justify-center py-6">
                   <RefreshCw size={24} className="text-accent animate-spin" />
                   <span className="ml-2 text-gray-600">Loading fonts...</span>
                 </div>
               ) : (
                 <>
-                  {/* Font Grid with Preview */}
-                  <div className="grid grid-cols-1 gap-2 p-2 overflow-y-auto border border-gray-200 rounded-md sm:grid-cols-2 max-h-60">
+                  {/* Font Grid with smaller max height */}
+                  <div className="grid grid-cols-1 gap-2 p-2 overflow-y-auto border border-gray-200 rounded-md sm:grid-cols-2 max-h-40">
                     {filteredFonts.length === 0 ? (
-                      <div className="flex items-center justify-center col-span-2 py-8 text-gray-500">
+                      <div className="flex items-center justify-center col-span-2 py-4 text-gray-500">
                         No fonts found. Try a different search term.
                       </div>
                     ) : (
@@ -579,64 +504,53 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
                           }`}
                         >
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-600">
+                            <span className="text-xs text-gray-600">
                               {font.category}
                             </span>
                             {selectedFont?.family === font.family && (
-                              <Check size={16} className="text-accent" />
+                              <Check size={14} className="text-accent" />
                             )}
                           </div>
                           <p
-                            className="mt-1 text-base font-medium"
+                            className="mt-0.5 text-sm font-medium"
                             style={{ fontFamily: font.family }}
                           >
                             {font.family}
                           </p>
                           <p
-                            className="mt-1 text-sm"
+                            className="mt-0.5 text-xs"
                             style={{ fontFamily: font.family }}
                           >
-                            The quick brown fox jumps over the lazy dog
+                            The quick brown fox jumps
                           </p>
                         </button>
                       ))
                     )}
                   </div>
 
-                  {/* Selected Font Preview */}
-                  {selectedFont && (
-                    <div className="p-4 border border-gray-200 rounded-md">
-                      <h3 className="mb-2 text-sm font-medium text-gray-700">
-                        Selected Font Preview
-                      </h3>
-                      <div className="space-y-2">
+                  {/* Condensed Preview and Details */}
+                  <div className="grid grid-cols-1 gap-3 mt-3">
+                    {/* Selected Font Preview - only show if selected */}
+                    {selectedFont && (
+                      <div className="p-3 border border-gray-200 rounded-md">
                         <p
-                          className="text-2xl"
+                          className="mb-1 text-xl"
                           style={{ fontFamily: selectedFont.family }}
                         >
-                          {selectedFont.family} - Heading
-                        </p>
-                        <p
-                          className="text-base"
-                          style={{ fontFamily: selectedFont.family }}
-                        >
-                          This is how your body text will look like with{" "}
-                          {selectedFont.family}. The quick brown fox jumps over
-                          the lazy dog.
+                          {selectedFont.family}
                         </p>
                         <p
                           className="text-sm"
                           style={{ fontFamily: selectedFont.family }}
                         >
-                          Small text example with numbers: 1234567890
+                          The quick brown fox jumps over the lazy dog.
+                          1234567890
                         </p>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* Font Details */}
-                  <div>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    {/* Font Details */}
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
                         <label className="block mb-1 text-sm font-medium text-gray-700">
                           Font Name
@@ -676,17 +590,15 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
                       </div>
                     </div>
 
-                    {/* Font variants info - for future use */}
+                    {/* Font variants info - only if selected */}
                     {selectedFont &&
                       selectedFont.variants &&
                       selectedFont.variants.length > 0 && (
-                        <div className="mt-4">
-                          <label className="block mb-1 text-sm font-medium text-gray-700">
-                            Available Variants
-                          </label>
-                          <div className="text-sm text-gray-600">
-                            {selectedFont.variants.join(", ")}
-                          </div>
+                        <div className="text-xs text-gray-600">
+                          <span className="font-medium">
+                            Available Variants:
+                          </span>{" "}
+                          {selectedFont.variants.join(", ")}
                         </div>
                       )}
                   </div>
@@ -695,132 +607,75 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
             </>
           )}
 
-          {/* Upload Font Tab */}
-          {activeTab === "upload" && (
+          {/* Custom Font Tab */}
+          {activeTab === "custom" && (
             <>
-              {/* Font File Upload */}
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">
-                  Upload Font File (.ttf, .otf, .woff, .woff2)
-                </label>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  accept=".ttf,.otf,.woff,.woff2,.eot"
-                  className="hidden"
-                />
-                <div className="flex flex-col items-center p-4 border-2 border-gray-300 border-dashed rounded-md hover:border-accent">
-                  <button
-                    type="button"
-                    onClick={triggerFileInput}
-                    className="flex items-center justify-center p-3 mb-2 rounded-full text-accent bg-accent/10"
-                  >
-                    <Upload size={24} />
-                  </button>
-                  <p className="mb-1 text-sm text-gray-700">
-                    {selectedFontFile
-                      ? `Selected: ${selectedFontFile.name}`
-                      : "Click to select or drag a font file here"}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Supported formats: TTF, OTF, WOFF, WOFF2
+              <div className="p-3 border border-gray-200 rounded-md">
+                <div className="mb-3">
+                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                    Font Name
+                  </label>
+                  <input
+                    type="text"
+                    value={fontFamily}
+                    onChange={(e) => setFontFamily(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                    placeholder="e.g. My Custom Font"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Enter the exact name of the font you want to use
                   </p>
                 </div>
-              </div>
 
-              {/* Custom Font Options Checkbox */}
-              <div className="flex items-center mt-4">
-                <input
-                  type="checkbox"
-                  id="customFontOptions"
-                  checked={showCustomOptions}
-                  onChange={(e) => setShowCustomOptions(e.target.checked)}
-                  className="w-4 h-4 border-gray-300 rounded text-accent focus:ring-accent"
-                />
-                <label
-                  htmlFor="customFontOptions"
-                  className="ml-2 text-sm text-gray-700"
-                >
-                  Font not available for upload? Provide details below
-                </label>
-              </div>
-
-              {/* Custom Font Options (conditionally shown) */}
-              {showCustomOptions && (
-                <div className="p-4 mt-2 border border-gray-200 rounded-md bg-gray-50">
-                  <div className="mb-4">
-                    <label className="block mb-1 text-sm font-medium text-gray-700">
-                      Font Name
-                    </label>
+                <div className="mb-3">
+                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                    Font URL (optional)
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <Link size={16} className="text-gray-400" />
+                    </div>
                     <input
-                      type="text"
-                      value={selectedFontFile ? fontFamily : fontInput}
-                      onChange={(e) =>
-                        selectedFontFile
-                          ? setFontFamily(e.target.value)
-                          : setFontInput(e.target.value)
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-                      placeholder="e.g. My Custom Font"
+                      type="url"
+                      value={fontUrl}
+                      onChange={(e) => setFontUrl(e.target.value)}
+                      className="w-full py-2 pl-10 pr-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                      placeholder="https://example.com/fonts/my-font.css"
                     />
                   </div>
-
-                  <div>
-                    <label className="block mb-1 text-sm font-medium text-gray-700">
-                      Font URL (optional)
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <Link size={16} className="text-gray-400" />
-                      </div>
-                      <input
-                        type="url"
-                        value={fontUrl}
-                        onChange={(e) => setFontUrl(e.target.value)}
-                        className="w-full py-2 pl-10 pr-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-                        placeholder="https://example.com/fonts/my-font.ttf"
-                      />
-                    </div>
-                    <p className="mt-1 text-xs text-gray-500">
-                      Link to the font file or a CDN URL (e.g., Google Fonts
-                      URL)
-                    </p>
-                  </div>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Link to the font stylesheet or a CDN URL
+                  </p>
                 </div>
-              )}
 
-              {/* Font Category */}
-              <div className="mt-4">
-                <label className="block mb-1 text-sm font-medium text-gray-700">
-                  Usage Category
-                </label>
-                <select
-                  value={fontCategory}
-                  onChange={(e) => setFontCategory(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-                >
-                  <option value="heading">Heading</option>
-                  <option value="body">Body Text</option>
-                  <option value="accent">Accent</option>
-                  <option value="other">Other</option>
-                </select>
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                    Usage Category
+                  </label>
+                  <select
+                    value={fontCategory}
+                    onChange={(e) => setFontCategory(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                  >
+                    <option value="heading">Heading</option>
+                    <option value="body">Body Text</option>
+                    <option value="accent">Accent</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
               </div>
 
-              {/* Preview notice */}
-              <div className="p-3 mt-4 border border-yellow-200 rounded-md bg-yellow-50">
+              {/* Preview notice - condensed */}
+              <div className="p-2 mt-2 border border-yellow-200 rounded-md bg-yellow-50">
                 <div className="flex items-start">
                   <AlertTriangle
-                    size={18}
-                    className="mr-2 text-yellow-500 mt-0.5"
+                    size={16}
+                    className="mr-2 text-yellow-500 mt-0.5 flex-shrink-0"
                   />
-                  <div>
-                    <p className="text-sm text-yellow-700">
-                      <strong>Note:</strong> Font preview is not available for
-                      uploaded or custom fonts. The font will be available after
-                      saving the project.
-                    </p>
-                  </div>
+                  <p className="text-xs text-yellow-700">
+                    <strong>Note:</strong> Font preview is not available for
+                    custom fonts. The font will be available after saving.
+                  </p>
                 </div>
               </div>
             </>
@@ -830,12 +685,11 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
             <p className="mt-1 text-sm text-red-600">{fontError}</p>
           )}
 
-          <div className="p-3 mt-4 rounded-md bg-gray-50">
+          {/* Tip section - condensed */}
+          <div className="p-2 mt-2 rounded-md bg-gray-50">
             <p className="text-xs text-gray-500">
               <strong>Tip:</strong> For best results, choose web-safe fonts or
-              popular Google Fonts that are likely to be available on most
-              devices. For custom fonts, make sure you have proper licensing to
-              use them.
+              popular Google Fonts that are widely available.
             </p>
           </div>
         </div>

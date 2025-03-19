@@ -14,7 +14,7 @@ import {
   ExternalLink,
   Calendar,
   Clock,
-  DollarSign,
+  IndianRupee,
   Tag,
   Building,
   Target,
@@ -698,7 +698,7 @@ const ProjectDetails = () => {
                   <div>
                     <h3 className="font-medium text-gray-700">Budget</h3>
                     <p className="flex items-center mt-1">
-                      <DollarSign size={16} className="mr-2 text-green-600" />
+                      <IndianRupee size={16} className="mr-2 text-green-600" />
                       {project.budget}
                     </p>
                   </div>
@@ -1216,7 +1216,7 @@ const ProjectDetails = () => {
                     </div>
                   ) : (
                     <div className="p-6 mt-2 text-center border border-gray-300 border-dashed rounded-md">
-                      <DollarSign
+                      <IndianRupee
                         size={24}
                         className="mx-auto mb-2 text-gray-400"
                       />
@@ -1329,9 +1329,23 @@ const ProjectDetails = () => {
                                 >
                                   <div
                                     className="w-6 h-6 mr-2 rounded-md"
-                                    style={{ backgroundColor: color }}
+                                    style={{
+                                      backgroundColor:
+                                        typeof color === "string"
+                                          ? color
+                                          : color.color ||
+                                            color.value ||
+                                            "#cccccc",
+                                    }}
                                   ></div>
-                                  <span className="text-xs">{color}</span>
+                                  <span className="text-xs">
+                                    {typeof color === "string"
+                                      ? color
+                                      : color.color ||
+                                        color.value ||
+                                        color.value ||
+                                        "Color"}
+                                  </span>
                                 </div>
                               )
                             )
@@ -1354,7 +1368,16 @@ const ProjectDetails = () => {
                                 key={index}
                                 className="flex items-center p-1 px-2 bg-white border border-gray-300 rounded-md"
                               >
-                                <span className="text-sm">{font}</span>
+                                <span className="text-sm">
+                                  {typeof font === "string"
+                                    ? font
+                                    : font.family || font.name || "Font"}
+                                </span>
+                                {typeof font !== "string" && font.category && (
+                                  <span className="ml-2 text-xs text-gray-500">
+                                    ({font.category})
+                                  </span>
+                                )}
                               </div>
                             ))
                           ) : (

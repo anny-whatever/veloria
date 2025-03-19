@@ -66,7 +66,11 @@ const ColorPaletteModal = ({ project, handleNestedChange }) => {
    * Handle form submission for adding a new color
    */
   const handleColorSubmit = (e) => {
-    e.preventDefault();
+    // Prevent form submission and event propagation
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
     if (!colorInput) {
       setColorError("Please select a color");
@@ -117,7 +121,11 @@ const ColorPaletteModal = ({ project, handleNestedChange }) => {
    * Save edited color
    */
   const handleSaveEdit = (e) => {
-    e.preventDefault();
+    // Prevent form submission and event propagation
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
     if (!editingColor.color) {
       return;
@@ -488,7 +496,7 @@ const ColorPaletteModal = ({ project, handleNestedChange }) => {
 
       {/* Add Color Button */}
       <button
-        type="button"
+        type="button" // Explicitly set button type
         onClick={() => setShowColorModal(true)}
         className="flex items-center justify-center px-4 py-2 text-sm bg-white border rounded-md text-accent border-accent hover:bg-accent/10"
       >
@@ -499,11 +507,18 @@ const ColorPaletteModal = ({ project, handleNestedChange }) => {
       {/* Color Input Modal */}
       <InputModal
         isOpen={showColorModal}
-        onClose={() => {
+        onClose={(e) => {
+          // Explicitly prevent any default behavior
+          if (e) e.preventDefault();
+
+          // Reset states
           setColorError("");
           setColorInput("#000000");
           setColorName("");
           setActiveTab("picker");
+
+          // Close the modal
+          setShowColorModal(false);
         }}
         onSubmit={handleColorSubmit}
         title="Add Color to Palette"

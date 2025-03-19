@@ -7,7 +7,7 @@ import {
   Save,
   Trash2,
   Calendar,
-  DollarSign,
+  IndianRupee,
   Clock,
   Users,
   Briefcase,
