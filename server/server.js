@@ -14,17 +14,30 @@ connectDB();
 // Initialize app
 const app = express();
 
+// Configure CORS
+const corsOptions = {
+  origin: [
+    "https://veloria.in",
+    "http://localhost:3000",
+    "http://localhost:5173",
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
 // Middleware
 app.use(express.static("public"));
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Routes
 app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/projects", require("./routes/projectRoutes"));
 app.use("/api/bookings", require("./routes/bookingRoutes"));
-app.use("/api/finance", require("./routes/financeRoutes")); // Add the finance routes
+app.use("/api/finance", require("./routes/financeRoutes"));
 
 // Default route
 app.get("/", (req, res) => {
