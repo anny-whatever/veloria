@@ -15,7 +15,7 @@ const portfolioProjects = [
     ],
     clientName: "Phuler Floral Boutique",
     duration: "6 weeks",
-    completedDate: "March 2023",
+    completedDate: "Ongoing",
     liveUrl: "https://phuler.com",
     tags: [
       "E-commerce",

@@ -1248,6 +1248,29 @@ const ProjectDetails = () => {
                   <h3 className="mb-3 font-medium text-gray-700">
                     Current Stage
                   </h3>
+                  <div className="p-4 mb-4 border rounded-md border-accent/20 bg-accent/5">
+                    <div className="flex items-center">
+                      <span
+                        className={`p-2 rounded-full mr-3 ${currentStage.color}`}
+                      >
+                        {currentStage.icon}
+                      </span>
+                      <div>
+                        <h4 className="text-lg font-medium">
+                          {currentStage.label}
+                        </h4>
+                        <p className="text-sm text-gray-500">
+                          {project.startDate
+                            ? `Day ${metrics.daysFromStart} of project`
+                            : "Project not started yet"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h3 className="mt-6 mb-3 font-medium text-gray-700">
+                    Workflow Stages
+                  </h3>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                     {[
                       {
@@ -1291,18 +1314,17 @@ const ProjectDetails = () => {
                         icon: <CheckCircle size={16} />,
                       },
                     ].map((stage) => (
-                      <button
+                      <div
                         key={stage.value}
-                        onClick={() => handleUpdateWorkflowStage(stage.value)}
-                        className={`flex items-center justify-center p-3 border rounded-md hover:bg-gray-50 ${
+                        className={`flex items-center p-3 border rounded-md ${
                           project.workflowStage === stage.value
                             ? "border-accent bg-accent/10 text-accent"
-                            : "border-gray-300 text-gray-700"
+                            : "border-gray-300 text-gray-500"
                         }`}
                       >
                         <span className="mr-2">{stage.icon}</span>
                         {stage.label}
-                      </button>
+                      </div>
                     ))}
                   </div>
                 </div>
