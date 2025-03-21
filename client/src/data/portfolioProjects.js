@@ -4,6 +4,98 @@
 const portfolioProjects = [
   {
     id: 1,
+    title: "MedifyLab",
+    subtitle: "Pharmacy E-commerce Platform",
+    category: "ecommerce",
+    thumbnail: "/projects/medifylab/thumb.png",
+    images: [
+      "/projects/medifylab/image_1.png",
+      "/projects/medifylab/image_2.png",
+      "/projects/medifylab/image_3.png",
+    ],
+    clientName: "John & Azhar Pharmacy Solutions",
+    duration: "5 weeks",
+    completedDate: "January 2024",
+    liveUrl: "https://medifylab.com",
+    tags: [
+      "E-commerce",
+      "Healthcare",
+      "ReactJS",
+      "NodeJS",
+      "Firebase",
+      "Framer Motion",
+    ],
+    description:
+      "A comprehensive pharmacy e-commerce platform offering prescription fulfillment, over-the-counter medications, and healthcare products with a focus on user experience and security.",
+    challenge:
+      "John and Azhar were running a traditional pharmacy but needed to expand their reach through a digital platform. They required a secure, user-friendly e-commerce solution that could handle prescription uploads, verification processes, and provide a seamless shopping experience for healthcare products.",
+    solution:
+      "We developed a custom e-commerce platform using ReactJS, NodeJS, and Firebase that combines robust security for handling sensitive medical information with a smooth, animated user interface powered by Framer Motion. The platform features a secure prescription upload system, medication interaction checker, and an easy-to-navigate product catalog with detailed medication information.",
+    features: [
+      "Secure prescription upload and verification system",
+      "Medication interaction checker",
+      "Personalized medicine reminders",
+      "Automatic refill scheduling",
+      "Healthcare product categorization with detailed filtering",
+      "Responsive design with smooth animations",
+      "Integrated telehealth consultation booking",
+    ],
+    results:
+      "Since launch, MedifyLab has processed over 1,200 prescription orders and achieved a 32% increase in online sales of over-the-counter products. The platform has a 4.8/5 customer satisfaction rating, and has expanded the pharmacy's customer base beyond their local area to cover the entire region. The prescription verification system has reduced processing time by 65%.",
+    testimonial: {
+      text: "The MedifyLab platform has revolutionized our pharmacy business. The secure prescription system and beautiful user interface have helped us reach new customers while providing better service to our existing ones. The team understood exactly what we needed in the healthcare space.",
+      author: "John & Azhar",
+      position: "Founders, MedifyLab",
+    },
+  },
+
+  {
+    id: 2,
+    title: "The Terminal",
+    subtitle: "Stock Trading Platform",
+    category: "custom",
+    thumbnail: "/projects/theterminal/thumb.png",
+    images: [
+      "/projects/theterminal/image_1.png",
+      "/projects/theterminal/image_2.png",
+    ],
+    clientName: "Mitesh Patel Trading Solutions",
+    duration: "12 weeks",
+    completedDate: "September 2023",
+    liveUrl: "https://devstatz.com",
+    tags: [
+      "Trading Platform",
+      "Custom Development",
+      "Data Visualization",
+      "Real-time Updates",
+      "User Authentication",
+    ],
+    description:
+      "A full-fledged stock market trading terminal with advanced charting, real-time data, and portfolio management capabilities.",
+    challenge:
+      "Mitesh Patel needed a sophisticated yet intuitive trading platform for his investment company that could handle real-time market data, provide advanced technical analysis tools, and securely manage client portfolios across multiple asset classes.",
+    solution:
+      "We developed a custom trading terminal that combines robust data handling with an intuitive interface. The platform offers real-time market data integration, customizable trading dashboards, advanced charting tools, and secure multi-user authentication with role-based access controls.",
+    features: [
+      "Real-time market data integration",
+      "Advanced technical analysis tools",
+      "Customizable dashboard layouts",
+      "Portfolio performance tracking",
+      "Automated trade alerts",
+      "Multi-device synchronization",
+      "Institutional-grade security protocols",
+    ],
+    results:
+      "After implementing The Terminal, Mitesh's trading firm reported a 42% increase in trade execution speed, 65% improvement in data analysis capabilities, and a 28% reduction in operational errors. Client satisfaction metrics improved by 47% due to the enhanced reporting and visualization tools.",
+    testimonial: {
+      text: "This platform has revolutionized how we analyze markets and execute trades. The team built exactly what we needed - fast, reliable, and powerful. Our analysts can't imagine working without it now!",
+      author: "Mitesh Patel",
+      position: "CEO, Mitesh Patel Trading Solutions",
+    },
+  },
+
+  {
+    id: 3,
     title: "Phuler",
     subtitle: "E-commerce Website",
     category: "ecommerce",
@@ -16,7 +108,7 @@ const portfolioProjects = [
     clientName: "Phuler Floral Boutique",
     duration: "6 weeks",
     completedDate: "Ongoing",
-    liveUrl: "https://phuler.com",
+    liveUrl: "https://phuler.vercel.app/",
     tags: [
       "E-commerce",
       "Custom Development",
@@ -49,7 +141,7 @@ const portfolioProjects = [
   },
 
   {
-    id: 2,
+    id: 4,
     title: "Gracioza",
     subtitle: "Food & Fitness Blog",
     category: "blog",
@@ -89,7 +181,7 @@ const portfolioProjects = [
   },
 
   {
-    id: 3,
+    id: 5,
     title: "Kinder Dot",
     subtitle: "Children's Educational Platform",
     category: "custom",
@@ -134,52 +226,7 @@ const portfolioProjects = [
   },
 
   {
-    id: 4,
-    title: "The Terminal",
-    subtitle: "Stock Trading Platform",
-    category: "custom",
-    thumbnail: "/projects/theterminal/thumb.png",
-    images: [
-      "/projects/theterminal/image_1.png",
-      "/projects/theterminal/image_2.png",
-    ],
-    clientName: "Mitesh Patel Trading Solutions",
-    duration: "12 weeks",
-    completedDate: "September 2023",
-    liveUrl: "https://theterminal.finance",
-    tags: [
-      "Trading Platform",
-      "Custom Development",
-      "Data Visualization",
-      "Real-time Updates",
-      "User Authentication",
-    ],
-    description:
-      "A full-fledged stock market trading terminal with advanced charting, real-time data, and portfolio management capabilities.",
-    challenge:
-      "Mitesh Patel needed a sophisticated yet intuitive trading platform for his investment company that could handle real-time market data, provide advanced technical analysis tools, and securely manage client portfolios across multiple asset classes.",
-    solution:
-      "We developed a custom trading terminal that combines robust data handling with an intuitive interface. The platform offers real-time market data integration, customizable trading dashboards, advanced charting tools, and secure multi-user authentication with role-based access controls.",
-    features: [
-      "Real-time market data integration",
-      "Advanced technical analysis tools",
-      "Customizable dashboard layouts",
-      "Portfolio performance tracking",
-      "Automated trade alerts",
-      "Multi-device synchronization",
-      "Institutional-grade security protocols",
-    ],
-    results:
-      "After implementing The Terminal, Mitesh's trading firm reported a 42% increase in trade execution speed, 65% improvement in data analysis capabilities, and a 28% reduction in operational errors. Client satisfaction metrics improved by 47% due to the enhanced reporting and visualization tools.",
-    testimonial: {
-      text: "This platform has revolutionized how we analyze markets and execute trades. The team built exactly what we needed - fast, reliable, and powerful. Our analysts can't imagine working without it now!",
-      author: "Mitesh Patel",
-      position: "CEO, Mitesh Patel Trading Solutions",
-    },
-  },
-
-  {
-    id: 5,
+    id: 6,
     title: "Blair Owens",
     subtitle: "Real Estate Website",
     category: "landing",
@@ -224,7 +271,7 @@ const portfolioProjects = [
   },
 
   {
-    id: 6,
+    id: 7,
     title: "Panaderia",
     subtitle: "French Bakery Website",
     category: "branding",
