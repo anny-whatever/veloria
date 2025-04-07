@@ -79,7 +79,7 @@ const ProjectForm = () => {
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
   return (
-    <form className="relative max-w-4xl mx-auto p-6 bg-white dark:bg-dark-200 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
+    <form className="relative max-w-4xl mx-auto p-6 bg-white dark:bg-dark-200 rounded-xldark:border-gray-700">
       <div className="mb-10">
         <div className="flex justify-between items-center relative">
           {[1, 2, 3].map((stepNumber) => (

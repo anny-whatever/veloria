@@ -56,7 +56,7 @@ const ImageModal = ({ image, alt, onClose }) => {
     >
       <motion.div
         ref={modalRef}
-        className="relative max-w-5xl max-h-[90vh] overflow-hidden rounded-lg bg-white"
+        className="relative max-w-5xl max-h-[90vh] overflow-hidden rounded-lg bg-white dark:bg-dark-100"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
@@ -65,7 +65,7 @@ const ImageModal = ({ image, alt, onClose }) => {
         <div className="relative">
           <button
             onClick={onClose}
-            className="absolute z-20 p-2 text-gray-900 transition-colors rounded-full shadow-md top-2 right-2 bg-white/80 hover:bg-white"
+            className="absolute z-20 p-2 text-gray-900 dark:text-gray-100 transition-colors rounded-full shadow-md top-2 right-2 bg-white/80 dark:bg-dark-100/80 hover:bg-white dark:hover:bg-dark-100"
             aria-label="Close image"
           >
             <X size={20} />
@@ -75,12 +75,12 @@ const ImageModal = ({ image, alt, onClose }) => {
             <img
               src={image}
               alt={alt}
-              className="max-w-full max-h-[80vh] object-contain mix-blend-multiply"
+              className="max-w-full max-h-[80vh] object-contain mix-blend-multiply dark:mix-blend-normal"
             />
           </div>
 
-          <div className="p-4 bg-white">
-            <p className="text-sm text-gray-600">{alt}</p>
+          <div className="p-4 bg-white dark:bg-dark-100">
+            <p className="text-sm text-gray-600 dark:text-gray-300">{alt}</p>
           </div>
         </div>
       </motion.div>
@@ -134,7 +134,7 @@ const PortfolioDetail = ({ project, onClose }) => {
       >
         <motion.div
           ref={modalRef}
-          className="bg-white rounded-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto"
+          className="bg-white dark:bg-dark-100 rounded-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
@@ -143,16 +143,16 @@ const PortfolioDetail = ({ project, onClose }) => {
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute z-10 p-2 transition-colors rounded-full shadow-md top-4 right-4 bg-white/80 backdrop-blur-sm hover:bg-gray-100"
+            className="absolute z-10 p-2 transition-colors rounded-full shadow-md top-4 right-4 bg-white/80 dark:bg-dark-100/80 backdrop-blur-sm hover:bg-gray-100 dark:hover:bg-dark-200"
             aria-label="Close case study"
           >
-            <X size={20} />
+            <X size={20} className="text-gray-900 dark:text-gray-100" />
           </button>
 
           <div className="relative">
             {/* Hero image */}
             <div
-              className="h-[30vh] md:h-[40vh] relative bg-transparent dark:bg-dark-200/50 overflow-hidden cursor-pointer"
+              className="h-[30vh] md:h-[40vh] relative bg-transparent dark:bg-dark-200 overflow-hidden cursor-pointer"
               onClick={() =>
                 project.images &&
                 project.images[0] &&
@@ -165,7 +165,7 @@ const PortfolioDetail = ({ project, onClose }) => {
               {project.images && project.images[0] && (
                 <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/40 to-transparent">
                   {/* Zoom icon overlay */}
-                  <div className="absolute p-2 transition-opacity rounded-full top-4 right-4 bg-white/30 backdrop-blur-sm opacity-70 hover:opacity-100">
+                  <div className="absolute p-2 transition-opacity rounded-full top-4 right-4 bg-white/30 dark:bg-dark-100/30 backdrop-blur-sm opacity-70 hover:opacity-100">
                     <ZoomIn size={20} className="text-white" />
                   </div>
                 </div>
@@ -174,7 +174,7 @@ const PortfolioDetail = ({ project, onClose }) => {
                 <img
                   src={project.images[0]}
                   alt={project.title}
-                  className="object-cover w-full h-full mix-blend-multiply"
+                  className="object-cover w-full h-full mix-blend-multiply dark:mix-blend-normal"
                 />
               ) : (
                 <div className="flex items-center justify-center w-full h-full bg-primary/10 dark:bg-primary-900/10">
@@ -184,7 +184,7 @@ const PortfolioDetail = ({ project, onClose }) => {
                 </div>
               )}
               <div className="absolute bottom-0 left-0 right-0 z-20 p-6">
-                <div className="inline-block px-3 py-1 mb-3 text-xs font-medium rounded-full bg-white/90 backdrop-blur-sm text-primary">
+                <div className="inline-block px-3 py-1 mb-3 text-xs font-medium rounded-full bg-white/90 dark:bg-dark-100/90 backdrop-blur-sm text-primary dark:text-primary-400">
                   {project.category.charAt(0).toUpperCase() +
                     project.category.slice(1)}
                 </div>
@@ -196,13 +196,13 @@ const PortfolioDetail = ({ project, onClose }) => {
             </div>
 
             {/* Content */}
-            <div className="p-6 md:p-8">
+            <div className="p-6 md:p-8 dark:bg-dark-100">
               <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
                 {/* Main content */}
                 <div className="md:col-span-2">
                   {/* Overview */}
                   <section className="mb-8">
-                    <h2 className="mb-4 text-2xl font-bold dark:text-gray-100">
+                    <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-100">
                       Project Overview
                     </h2>
                     <p className="mb-6 text-gray-700 dark:text-gray-300">
@@ -244,7 +244,7 @@ const PortfolioDetail = ({ project, onClose }) => {
 
                   {/* Key Features */}
                   <section className="mb-8">
-                    <h2 className="mb-4 text-2xl font-bold dark:text-gray-100">
+                    <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-100">
                       Key Features
                     </h2>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -264,14 +264,14 @@ const PortfolioDetail = ({ project, onClose }) => {
                   {/* Project Gallery */}
                   {project.images && project.images.length > 1 && (
                     <section className="mb-8">
-                      <h2 className="mb-4 text-2xl font-bold dark:text-gray-100">
+                      <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-100">
                         Project Gallery
                       </h2>
                       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         {project.images.slice(1).map((image, index) => (
                           <div
                             key={index}
-                            className="relative h-48 overflow-hidden bg-transparent dark:bg-dark-200/50 rounded-lg cursor-pointer group"
+                            className="relative h-48 overflow-hidden bg-transparent dark:bg-dark-200 rounded-lg cursor-pointer group"
                             onClick={() =>
                               openImageModal(
                                 image,
@@ -285,7 +285,7 @@ const PortfolioDetail = ({ project, onClose }) => {
                             <img
                               src={image}
                               alt={`${project.title} ${index + 2}`}
-                              className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105 mix-blend-multiply"
+                              className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105 mix-blend-multiply dark:mix-blend-normal"
                             />
                           </div>
                         ))}
@@ -307,7 +307,7 @@ const PortfolioDetail = ({ project, onClose }) => {
                           "{project.testimonial.text}"
                         </blockquote>
                         <div>
-                          <p className="font-medium dark:text-gray-200">
+                          <p className="font-medium text-gray-900 dark:text-gray-200">
                             {project.testimonial.author}
                           </p>
                           <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -322,62 +322,74 @@ const PortfolioDetail = ({ project, onClose }) => {
                 {/* Sidebar */}
                 <div>
                   <div className="sticky p-6 border border-gray-200 dark:border-dark-300 bg-gray-50 dark:bg-dark-200 rounded-xl top-8">
-                    <h2 className="mb-4 text-xl font-bold dark:text-gray-100">
+                    <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-gray-100">
                       Project Details
                     </h2>
                     <ul className="space-y-4">
                       <li className="flex items-start">
                         <Calendar
                           size={18}
-                          className="flex-shrink-0 mt-1 mr-3 text-primary"
+                          className="flex-shrink-0 mt-1 mr-3 text-primary dark:text-primary-400"
                         />
                         <div>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
                             Completed Date
                           </p>
-                          <p className="font-medium">{project.completedDate}</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-200">
+                            {project.completedDate}
+                          </p>
                         </div>
                       </li>
                       <li className="flex items-start">
                         <Clock
                           size={18}
-                          className="flex-shrink-0 mt-1 mr-3 text-primary"
+                          className="flex-shrink-0 mt-1 mr-3 text-primary dark:text-primary-400"
                         />
                         <div>
-                          <p className="text-sm text-gray-500">Duration</p>
-                          <p className="font-medium">{project.duration}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Duration
+                          </p>
+                          <p className="font-medium text-gray-900 dark:text-gray-200">
+                            {project.duration}
+                          </p>
                         </div>
                       </li>
                       <li className="flex items-start">
                         <Globe
                           size={18}
-                          className="flex-shrink-0 mt-1 mr-3 text-primary"
+                          className="flex-shrink-0 mt-1 mr-3 text-primary dark:text-primary-400"
                         />
                         <div>
-                          <p className="text-sm text-gray-500">Client</p>
-                          <p className="font-medium">{project.clientName}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Client
+                          </p>
+                          <p className="font-medium text-gray-900 dark:text-gray-200">
+                            {project.clientName}
+                          </p>
                         </div>
                       </li>
                       <li className="flex items-start">
                         <ExternalLink
                           size={18}
-                          className="flex-shrink-0 mt-1 mr-3 text-primary"
+                          className="flex-shrink-0 mt-1 mr-3 text-primary dark:text-primary-400"
                         />
                         <div>
-                          <p className="text-sm text-gray-500">Website</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Website
+                          </p>
                           <p className="font-medium">
                             {project.liveUrl ? (
                               <a
                                 href={project.liveUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center text-primary hover:underline"
+                                className="flex items-center text-primary dark:text-primary-400 hover:underline"
                               >
                                 {project.liveUrl}
                                 <ExternalLink size={12} className="ml-1" />
                               </a>
                             ) : (
-                              <span className="text-gray-400">
+                              <span className="text-gray-400 dark:text-gray-500">
                                 Not provided
                               </span>
                             )}
@@ -388,16 +400,21 @@ const PortfolioDetail = ({ project, onClose }) => {
 
                     {/* Tags */}
                     {project.tags && project.tags.length > 0 && (
-                      <div className="pt-6 mt-6 border-t border-gray-200">
+                      <div className="pt-6 mt-6 border-t border-gray-200 dark:border-dark-300">
                         <div className="flex items-center mb-3">
-                          <Tag size={18} className="mr-2 text-primary" />
-                          <h3 className="font-medium">Technologies & Skills</h3>
+                          <Tag
+                            size={18}
+                            className="mr-2 text-primary dark:text-primary-400"
+                          />
+                          <h3 className="font-medium text-gray-900 dark:text-gray-200">
+                            Technologies & Skills
+                          </h3>
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {project.tags.map((tag, index) => (
                             <span
                               key={index}
-                              className="inline-block px-3 py-1 text-sm text-gray-700 bg-gray-100 dark:bg-dark-300 dark:text-gray-300 rounded-full"
+                              className="inline-block px-3 py-1 text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-dark-300 rounded-full"
                             >
                               {tag}
                             </span>
@@ -408,7 +425,7 @@ const PortfolioDetail = ({ project, onClose }) => {
 
                     {/* CTA */}
                     <div className="pt-6 mt-6 border-t border-gray-200 dark:border-dark-300">
-                      <h3 className="mb-3 font-medium dark:text-gray-200">
+                      <h3 className="mb-3 font-medium text-gray-900 dark:text-gray-200">
                         Interested in similar results?
                       </h3>
                       <button className="flex items-center justify-center w-full px-4 py-3 text-white rounded-lg bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-500 dark:to-secondary-500 hover:shadow-md dark:hover:shadow-primary-800/20">

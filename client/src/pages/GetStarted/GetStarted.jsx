@@ -10,6 +10,7 @@ import ProcessTimeline from "./ProcessTimeline";
 import PricingCards from "./PricingCards";
 import FaqSection from "./FaqSection";
 import CalendarBooking from "./CalendarBooking";
+import ContactForm from "../../components/Contact/ContactForm";
 import {
   ArrowLeft,
   ChevronRight,
@@ -23,7 +24,7 @@ const GetStarted = () => {
     triggerOnce: true,
   });
 
-  const [activeSection, setActiveSection] = useState("form");
+  const [activeSection, setActiveSection] = useState("contact");
   const tabsContainerRef = useRef(null);
   const [hasOverflow, setHasOverflow] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -51,6 +52,7 @@ const GetStarted = () => {
 
   // Tab data for navigation
   const tabs = [
+    { id: "contact", label: "Contact Us" },
     { id: "form", label: "Project Form" },
     { id: "pricing", label: "Pricing" },
     { id: "process", label: "Our Process" },
@@ -103,6 +105,12 @@ const GetStarted = () => {
         behavior: "smooth",
       });
     }
+  };
+
+  // Handle contact form submission
+  const handleContactFormSubmit = (formData) => {
+    console.log("Contact form submitted:", formData);
+    // You can add additional handling here if needed
   };
 
   return (
@@ -247,6 +255,20 @@ const GetStarted = () => {
             )}
 
             <div className="pt-4 ">
+              {activeSection === "contact" && (
+                <div className="max-w-3xl mx-auto">
+                  <div className="mb-6 text-center">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                      Get In Touch
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Have questions or ready to start? Send us a message and
+                      we'll get back to you promptly.
+                    </p>
+                  </div>
+                  <ContactForm onSubmit={handleContactFormSubmit} />
+                </div>
+              )}
               {activeSection === "form" && (
                 <ProjectForm setActiveSection={setActiveSection} />
               )}
