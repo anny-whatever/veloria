@@ -17,10 +17,22 @@ export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     // Check for saved preference or system preference
     const savedMode = localStorage.getItem("darkMode");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    return savedMode === "true" || (savedMode === null && prefersDark);
+
+    // If there's a saved preference, use that
+    if (savedMode !== null) {
+      return savedMode === "true";
+    }
+
+    // Check if browser preference can be detected
+    try {
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      return prefersDark;
+    } catch (error) {
+      // If we can't determine browser preference, default to dark
+      return true;
+    }
   });
 
   // Toggle dark mode function
@@ -31,6 +43,39 @@ export const ThemeProvider = ({ children }) => {
       return newMode;
     });
   };
+
+  // Listen for changes in system color scheme preference
+  useEffect(() => {
+    try {
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+      const handleChange = (e) => {
+        // Only update if user hasn't explicitly set a preference
+        if (localStorage.getItem("darkMode") === null) {
+          setIsDarkMode(e.matches);
+        }
+      };
+
+      // Add event listener using the appropriate method
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener("change", handleChange);
+      } else {
+        // Fallback for older browsers
+        mediaQuery.addListener(handleChange);
+      }
+
+      // Clean up
+      return () => {
+        if (mediaQuery.removeEventListener) {
+          mediaQuery.removeEventListener("change", handleChange);
+        } else {
+          mediaQuery.removeListener(handleChange);
+        }
+      };
+    } catch (error) {
+      console.error("Error setting up media query listener:", error);
+    }
+  }, []);
 
   // Apply dark mode class to document
   useEffect(() => {

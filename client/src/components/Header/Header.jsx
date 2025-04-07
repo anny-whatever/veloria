@@ -108,7 +108,7 @@ const Header = () => {
                 weight="medium"
                 align={window.innerWidth < 768 ? "center" : "left"}
               >
-                Web Design Studio
+                Digital Solutions Provider
               </Text>
             </motion.div>
 
@@ -118,9 +118,9 @@ const Header = () => {
                 align={window.innerWidth < 768 ? "center" : "left"}
                 className="leading-tight tracking-tight"
               >
-                Beautiful Websites
+                Comprehensive Systems
                 <span className="block bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-secondary-400 dark:to-accent-400">
-                  That Drive Results
+                  For Modern Businesses
                 </span>
               </Heading>
             </motion.div>
@@ -132,15 +132,16 @@ const Header = () => {
                 align={window.innerWidth < 768 ? "center" : "left"}
                 className="mb-8 max-w-lg"
               >
-                Crafting delightful digital experiences that resonate with your
-                audience and bring your vision to life with a focus on clean,
-                minimalist design and intuitive user experience.
+                Specialized in management systems, web applications, and
+                powerful E-commerce solutions that streamline operations,
+                enhance user experiences, and drive business growth across
+                multiple industries.
               </Text>
             </motion.div>
 
             {/* Two-row button layout */}
             <div className="flex flex-col gap-3 w-full">
-              {/* First row: Get Started and View Portfolio */}
+              {/* First row: Get Started and Our Services */}
               <motion.div
                 className="flex flex-wrap gap-3 justify-center md:justify-start w-full"
                 variants={itemVariants}
@@ -157,23 +158,19 @@ const Header = () => {
                     whileTap={{ scale: 0.98 }}
                   >
                     <span>Get Started</span>
-                    <ArrowRight
-                      size={16}
-                      className="transition-transform group-hover:translate-x-1"
-                    />
                   </motion.button>
                 </Link>
 
                 <div className="flex-1 min-w-[120px] max-w-[200px]">
                   <motion.button
-                    onClick={() => scrollToSection("portfolio")}
+                    onClick={() => scrollToSection("services")}
                     className="btn flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-medium
                     bg-white dark:bg-dark-100 text-primary-700 dark:text-primary-400 border-2 border-primary-400 dark:border-primary-500
                     shadow-sm hover:bg-primary-50 dark:hover:bg-dark-200 hover:shadow-md transition-all duration-300 w-full"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <span>View Portfolio</span>
+                    <span>Our Services</span>
                   </motion.button>
                 </div>
               </motion.div>
