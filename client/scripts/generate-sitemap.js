@@ -3,8 +3,13 @@
  * Run this script during the build process to update the sitemap
  */
 
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Base URL of the website
 const BASE_URL = "https://veloria.in";
@@ -25,17 +30,17 @@ const routes = [
     priority: "0.9",
   },
   {
-    url: "/portfolio",
+    url: "/#portfolio",
     changefreq: "monthly",
     priority: "0.8",
   },
   {
-    url: "/about",
+    url: "/#about",
     changefreq: "monthly",
     priority: "0.7",
   },
   {
-    url: "/contact",
+    url: "/#contact",
     changefreq: "monthly",
     priority: "0.8",
   },
@@ -167,6 +172,4 @@ fs.writeFileSync(outputPath, sitemap);
 console.log(`✅ Sitemap generated at ${outputPath}`);
 
 // Export for potential programmatic use
-module.exports = {
-  generateSitemapXml,
-};
+export { generateSitemapXml };
