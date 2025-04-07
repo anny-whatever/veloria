@@ -156,7 +156,7 @@ const PortfolioItem = ({ item, index, onClick }) => {
 
   return (
     <motion.div
-      className="group relative overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 hover:shadow-lg"
+      className="group relative overflow-hidden rounded-xl bg-white dark:bg-dark-100 shadow-md transition-all duration-300 hover:shadow-lg dark:hover:shadow-dark-50/10"
       variants={itemVariants}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -164,10 +164,10 @@ const PortfolioItem = ({ item, index, onClick }) => {
       onClick={onClick}
     >
       {/* Image Container with Overlay */}
-      <div className="relative overflow-hidden h-64 cursor-pointer bg-white">
+      <div className="relative overflow-hidden h-64 cursor-pointer bg-transparent">
         {/* Project Thumbnail */}
         {item.thumbnail ? (
-          <div className="w-full h-full flex items-center justify-center">
+          <div className="w-full h-full flex items-center justify-center bg-transparent">
             {/* Loading indicator */}
             {!imageLoaded && (
               <motion.div
@@ -182,14 +182,14 @@ const PortfolioItem = ({ item, index, onClick }) => {
             <img
               src={item.thumbnail}
               alt={item.title}
-              className={`w-auto h-auto max-w-[90%] max-h-[90%] object-contain transition-transform duration-500 group-hover:scale-105 ${
+              className={`w-auto h-auto max-w-[90%] max-h-[90%] object-contain transition-transform duration-500 group-hover:scale-105 mix-blend-multiply ${
                 imageLoaded ? "opacity-100" : "opacity-0"
               }`}
               onLoad={handleImageLoad}
             />
           </div>
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
+          <div className="w-full h-full flex items-center justify-center bg-transparent">
             <div className="p-4 text-center">
               <motion.div
                 className={`w-16 h-16 mx-auto mb-3 rounded-full ${bgLightClass} ${textClass} flex items-center justify-center`}
@@ -198,7 +198,9 @@ const PortfolioItem = ({ item, index, onClick }) => {
               >
                 {getCategoryIcon(item.category)}
               </motion.div>
-              <p className="text-gray-600">Placeholder for {item.title}</p>
+              <p className="text-gray-600 dark:text-gray-300">
+                Placeholder for {item.title}
+              </p>
             </div>
           </div>
         )}
@@ -231,13 +233,15 @@ const PortfolioItem = ({ item, index, onClick }) => {
       {/* Info Bar */}
       <div className="p-5 flex items-center justify-between">
         <div>
-          <h3 className="font-bold">{item.title}</h3>
-          <p className="text-gray-500 text-sm">{item.subtitle}</p>
+          <h3 className="font-bold dark:text-gray-100">{item.title}</h3>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
+            {item.subtitle}
+          </p>
         </div>
       </div>
 
       {/* View case study button that appears on hover */}
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-white to-transparent py-6 px-5 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-white dark:from-dark-100 to-transparent py-6 px-5 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
         <button
           className={`w-full py-2 px-4 ${bgClass} text-white rounded-lg flex items-center justify-center`}
           onClick={onClick}

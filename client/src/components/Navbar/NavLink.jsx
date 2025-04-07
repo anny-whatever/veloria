@@ -24,6 +24,8 @@ const NavLink = ({ href, text, mobile = false, onClick }) => {
       };
 
       window.addEventListener("scroll", handleScroll);
+      // Initial check
+      handleScroll();
       return () => window.removeEventListener("scroll", handleScroll);
     }
   }, [href]);
@@ -35,8 +37,14 @@ const NavLink = ({ href, text, mobile = false, onClick }) => {
         href={href}
         onClick={onClick}
         className={`relative transition-all duration-300 ${
-          mobile ? "text-gray-800 text-xl" : "text-gray-700"
-        } hover:text-primary ${isActive ? "text-primary font-medium" : ""}`}
+          mobile
+            ? "text-xl font-medium text-gray-800 dark:text-gray-100"
+            : "text-sm font-medium text-gray-800 dark:text-gray-100"
+        } ${
+          isActive
+            ? "text-primary-600 dark:text-primary-400"
+            : "text-gray-700 dark:text-gray-200 hover:text-primary-500 dark:hover:text-primary-400"
+        }`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -44,9 +52,9 @@ const NavLink = ({ href, text, mobile = false, onClick }) => {
         {text}
         {isActive && !mobile && (
           <motion.span
-            className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"
-            initial={{ width: 0 }}
-            animate={{ width: "100%" }}
+            className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-primary rounded-full"
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: "100%", opacity: 1 }}
             transition={{ duration: 0.3 }}
           ></motion.span>
         )}
@@ -59,8 +67,14 @@ const NavLink = ({ href, text, mobile = false, onClick }) => {
     <Link to={href} onClick={onClick}>
       <motion.span
         className={`relative transition-all duration-300 ${
-          mobile ? "text-gray-800 text-xl" : "text-gray-700"
-        } hover:text-primary ${isActive ? "text-primary font-medium" : ""}`}
+          mobile
+            ? "text-xl font-medium text-gray-800 dark:text-gray-100"
+            : "text-sm font-medium text-gray-800 dark:text-gray-100"
+        } ${
+          isActive
+            ? "text-primary-600 dark:text-primary-400"
+            : "text-gray-700 dark:text-gray-200 hover:text-primary-500 dark:hover:text-primary-400"
+        }`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -68,9 +82,9 @@ const NavLink = ({ href, text, mobile = false, onClick }) => {
         {text}
         {isActive && !mobile && (
           <motion.span
-            className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"
-            initial={{ width: 0 }}
-            animate={{ width: "100%" }}
+            className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-primary rounded-full"
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: "100%", opacity: 1 }}
             transition={{ duration: 0.3 }}
           ></motion.span>
         )}

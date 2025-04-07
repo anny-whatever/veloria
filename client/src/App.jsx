@@ -1,6 +1,7 @@
 // src/App.jsx
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUp } from "lucide-react";
 import Navbar from "./components/Navbar/Navbar";
 import Header from "./components/Header/Header";
 import Portfolio from "./components/Portfolio/Portfolio";
@@ -8,7 +9,8 @@ import Services from "./components/Services/Services";
 import About from "./components/About/About";
 import Contact from "./components/Contact/Contact";
 import Footer from "./components/Footer/Footer";
-import { ArrowUp } from "lucide-react";
+import Text from "./components/Text";
+import ThemeToggle from "./components/ThemeToggle";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -53,12 +55,12 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-surface-50 dark:bg-dark-200 text-gray-900 dark:text-gray-100">
       <AnimatePresence mode="wait">
         {loading ? (
           <motion.div
             key="loader"
-            className="fixed inset-0 flex items-center justify-center bg-white z-50"
+            className="fixed inset-0 flex items-center justify-center bg-surface-50 dark:bg-dark-100 z-50"
             variants={loadingVariants}
             initial="initial"
             animate="animate"
@@ -66,44 +68,19 @@ function App() {
           >
             <div className="text-center">
               <motion.h1
-                className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent mb-6"
+                className="text-4xl font-bold bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-secondary-400 dark:to-accent-400 mb-6"
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
                 Veloria
               </motion.h1>
-              <div className="flex space-x-2 justify-center">
-                {[
-                  "primary",
-                  "secondary",
-                  "accent",
-                  "primary",
-                  "secondary",
-                  "primary",
-                  "secondary",
-                ].map((color, index) => (
-                  <motion.div
-                    key={`${color}-${index}`}
-                    className={`w-3 h-3 rounded-full bg-${color}`}
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{
-                      y: [0, -15, 0],
-                      opacity: 1,
-                    }}
-                    transition={{
-                      y: {
-                        repeat: Infinity,
-                        duration: 1,
-                        ease: "easeInOut",
-                        delay: index * 0.1,
-                        repeatDelay: 0.2,
-                      },
-                      opacity: { duration: 0.3, delay: index * 0.1 },
-                    }}
-                  />
-                ))}
-              </div>
+              <motion.div
+                className="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              ></motion.div>
             </div>
           </motion.div>
         ) : (
@@ -123,11 +100,15 @@ function App() {
 
             <motion.button
               onClick={scrollToTop}
-              className="fixed bottom-3 right-0 z-50 mr-3 -mt-6 w-12 h-12 rounded-full bg-gradient-to-r from-primary to-secondary text-white shadow-lg flex items-center justify-center hover:scale-110 transition-all duration-300"
-              whileHover={{ y: -5 }}
-              whileTap={{ scale: 0.9 }}
+              className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-primary-500 dark:bg-primary-600 text-white shadow-lg flex items-center justify-center hover:shadow-glow-primary transition-all duration-300"
+              whileHover={{ y: -5, scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 }}
+              aria-label="Scroll to top"
             >
-              <ArrowUp size={22} />
+              <ArrowUp size={20} />
             </motion.button>
           </motion.div>
         )}

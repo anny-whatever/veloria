@@ -111,155 +111,131 @@ const ProcessTimeline = ({ setActiveSection }) => {
     },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.4 },
-    },
-  };
-
-  const detailsVariants = {
-    hidden: { opacity: 0, height: 0 },
-    visible: {
-      opacity: 1,
-      height: "auto",
-      transition: { duration: 0.3 },
-    },
-  };
-
   return (
     <div>
-      <div className="mb-8 text-center">
-        <h3 className="mb-2 text-2xl font-bold">Our Development Process</h3>
-        <p className="text-gray-600">
-          We follow a structured approach to ensure your project is delivered on
-          time and exceeds expectations.
+      <div className="text-center mb-8">
+        <h3 className="text-2xl font-bold mb-2 dark:text-white">Our Process</h3>
+        <p className="text-gray-600 dark:text-gray-300">
+          We follow a structured approach to deliver quality websites on time.
         </p>
       </div>
 
-      <div className="mb-12">
-        <div className="relative">
-          {/* Center line */}
-          <div
-            className="absolute left-8 top-8 bottom-0 w-0.5 bg-gray-200 hidden md:block"
-            style={{ transform: "translateX(-50%)" }}
-          ></div>
+      <div className="relative mb-10">
+        {/* Timeline line */}
+        <div className="absolute h-full w-1 bg-gray-300 dark:bg-gray-700 left-6 top-0"></div>
 
+        {/* Timeline steps */}
+        {steps.map((step, index) => (
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="space-y-8"
+            key={step.id}
+            className="mb-6 relative z-10"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.1 }}
           >
-            {steps.map((step, index) => (
-              <motion.div
-                key={step.id}
-                variants={itemVariants}
-                className={`${
-                  activeStep === step.id ? "bg-gray-50" : "bg-white"
-                } rounded-xl p-6 border border-gray-200 transition-all duration-300 md:ml-16 relative`}
+            <div className="flex">
+              {/* Step indicator */}
+              <div
+                className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                  step.color === "primary"
+                    ? "bg-primary-600 dark:bg-primary-500"
+                    : step.color === "secondary"
+                    ? "bg-secondary-600 dark:bg-secondary-500"
+                    : "bg-accent-600 dark:bg-accent-500"
+                } text-white z-10 flex-shrink-0 shadow-lg`}
+                onClick={() =>
+                  setActiveStep(activeStep === step.id ? null : step.id)
+                }
               >
-                {/* Timeline dot */}
-                <div
-                  className={`absolute left-0 top-8 w-16 h-16 bg-${step.color}/20 rounded-full  items-center justify-center hidden md:flex`}
-                  style={{ transform: "translateX(-50%)" }}
-                >
-                  <div
-                    className={`w-10 h-10 rounded-full bg-${step.color} text-white flex items-center justify-center`}
-                  >
-                    {step.id}
-                  </div>
-                </div>
+                {step.icon}
+              </div>
 
-                <div className="flex flex-col items-start md:flex-row">
-                  <div
-                    className={`w-12 h-12 rounded-full bg-${step.color}/20 text-${step.color} flex items-center justify-center mb-4 md:hidden`}
-                  >
-                    {step.icon}
-                  </div>
-
-                  <div className="flex-grow">
-                    <div
-                      className="flex items-start justify-between cursor-pointer"
-                      onClick={() =>
-                        setActiveStep(activeStep === step.id ? null : step.id)
-                      }
+              {/* Step content */}
+              <div
+                className={`ml-6 bg-white dark:bg-dark-200 rounded-lg border-2 ${
+                  activeStep === step.id
+                    ? step.color === "primary"
+                      ? "border-primary-600 dark:border-primary-500"
+                      : step.color === "secondary"
+                      ? "border-secondary-600 dark:border-secondary-500"
+                      : "border-accent-600 dark:border-accent-500"
+                    : "border-gray-300 dark:border-gray-700"
+                } flex-grow hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer`}
+                onClick={() =>
+                  setActiveStep(activeStep === step.id ? null : step.id)
+                }
+              >
+                <div className="p-5">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-lg font-bold text-gray-800 dark:text-white">
+                      {index + 1}. {step.title}
+                    </h4>
+                    <span
+                      className={`${
+                        step.color === "primary"
+                          ? "text-primary-600 dark:text-primary-400"
+                          : step.color === "secondary"
+                          ? "text-secondary-600 dark:text-secondary-400"
+                          : "text-accent-600 dark:text-accent-400"
+                      } text-sm font-medium`}
                     >
-                      <div>
-                        <div className="items-center md:flex">
-                          <div
-                            className={`hidden md:flex w-10 h-10 rounded-full bg-${step.color}/20 text-${step.color} items-center justify-center mr-4`}
-                          >
-                            {step.icon}
-                          </div>
-                          <h4 className="text-lg font-bold">{step.title}</h4>
-                        </div>
-                        <p className="mt-2 text-gray-600">{step.description}</p>
-                      </div>
-
-                      <button
-                        className={`ml-4 w-8 h-8 rounded-full flex items-center justify-center ${
-                          activeStep === step.id ? "bg-gray-200" : "bg-gray-100"
-                        }`}
-                      >
-                        {activeStep === step.id ? (
-                          <span className="text-gray-500">-</span>
-                        ) : (
-                          <span className="text-gray-500">+</span>
-                        )}
-                      </button>
-                    </div>
-
-                    {activeStep === step.id && (
-                      <motion.div
-                        variants={detailsVariants}
-                        initial="hidden"
-                        animate="visible"
-                        className="pl-0 mt-4 md:pl-14"
-                      >
-                        <div className="pt-4 border-t border-gray-200">
-                          <h5 className="mb-3 font-semibold text-gray-800">
-                            What happens in this stage:
-                          </h5>
-                          <ul className="space-y-2">
-                            {step.details.map((detail, i) => (
-                              <li key={i} className="flex items-start">
-                                <div className="h-5 w-5 rounded-full bg-gray-200 flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">
-                                  {i + 1}
-                                </div>
-                                <span>{detail}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </motion.div>
-                    )}
+                      {activeStep === step.id
+                        ? "Click to collapse"
+                        : "Click to see details"}
+                    </span>
                   </div>
+                  <p className="text-gray-700 dark:text-gray-300 mt-1">
+                    {step.description}
+                  </p>
+
+                  {/* Expanded details */}
+                  {activeStep === step.id && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className={`mt-4 pt-4 border-t border-gray-300 dark:border-gray-700`}
+                    >
+                      <ul className="space-y-2">
+                        {step.details.map((detail, idx) => (
+                          <li key={idx} className="flex items-start">
+                            <CheckCircle
+                              size={18}
+                              className={`${
+                                step.color === "primary"
+                                  ? "text-primary-600 dark:text-primary-400"
+                                  : step.color === "secondary"
+                                  ? "text-secondary-600 dark:text-secondary-400"
+                                  : "text-accent-600 dark:text-accent-400"
+                              } mt-0.5 mr-3 flex-shrink-0`}
+                            />
+                            <span className="text-gray-700 dark:text-gray-300">
+                              {detail}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  )}
                 </div>
-              </motion.div>
-            ))}
+              </div>
+            </div>
           </motion.div>
-        </div>
+        ))}
       </div>
 
-      <div className="p-6 border border-gray-200 bg-gray-50 rounded-xl">
+      <div className="p-6 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-dark-300 rounded-xl">
         <div className="flex items-start">
-          <Layers size={24} className="flex-shrink-0 mt-1 mr-4 text-primary" />
+          <Layers
+            size={24}
+            className="flex-shrink-0 mt-1 mr-4 text-primary dark:text-primary-400"
+          />
           <div>
-            <h4 className="mb-2 text-lg font-bold">Our Client Portal</h4>
-            <p className="mb-4 text-gray-600">
+            <h4 className="mb-2 text-lg font-bold dark:text-white">
+              Our Client Portal
+            </h4>
+            <p className="mb-4 text-gray-600 dark:text-gray-300">
               Once your project begins, you'll get access to our client portal
               where you can:
             </p>
@@ -274,9 +250,9 @@ const ProcessTimeline = ({ setActiveSection }) => {
                 <li key={index} className="flex items-start">
                   <CheckCircle
                     size={18}
-                    className="text-green-500 mt-0.5 mr-3 flex-shrink-0"
+                    className="text-green-500 dark:text-green-400 mt-0.5 mr-3 flex-shrink-0"
                   />
-                  <span>{feature}</span>
+                  <span className="dark:text-gray-300">{feature}</span>
                 </li>
               ))}
             </ul>
@@ -288,7 +264,7 @@ const ProcessTimeline = ({ setActiveSection }) => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="px-8 py-3 text-white rounded-lg shadow-md bg-gradient-to-r from-primary to-secondary"
+          className="px-8 py-3 text-white rounded-lg shadow-md bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400"
           onClick={() => setActiveSection("form")}
         >
           <div className="flex items-center">

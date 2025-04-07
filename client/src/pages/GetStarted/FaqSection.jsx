@@ -82,8 +82,10 @@ const FaqSection = ({ setActiveSection }) => {
   return (
     <div>
       <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold mb-2">Frequently Asked Questions</h3>
-        <p className="text-gray-600">
+        <h3 className="text-2xl font-bold mb-2 dark:text-white">
+          Frequently Asked Questions
+        </h3>
+        <p className="text-gray-600 dark:text-gray-300">
           Find answers to common questions about our services and process.
         </p>
       </div>
@@ -100,22 +102,26 @@ const FaqSection = ({ setActiveSection }) => {
             variants={itemVariants}
             className={`border ${
               activeIndex === index
-                ? "border-primary/50 bg-primary/5"
-                : "border-gray-200"
-            } rounded-lg overflow-hidden transition-colors duration-300`}
+                ? "border-primary/50 dark:border-primary-400/50 bg-primary/5 dark:bg-primary-900/10"
+                : "border-gray-200 dark:border-gray-700"
+            } rounded-lg overflow-hidden transition-colors duration-300 dark:bg-dark-200`}
           >
             <div
               className={`p-5 flex justify-between items-center cursor-pointer ${
-                activeIndex === index ? "border-b border-primary/50" : ""
+                activeIndex === index
+                  ? "border-b border-primary/50 dark:border-primary-400/50"
+                  : ""
               }`}
               onClick={() => toggleFaq(index)}
             >
-              <h4 className="font-medium text-lg pr-8">{faq.question}</h4>
+              <h4 className="font-medium text-lg pr-8 dark:text-white">
+                {faq.question}
+              </h4>
               <div
                 className={`flex items-center justify-center w-7 h-7 rounded-full ${
                   activeIndex === index
-                    ? "bg-primary text-white"
-                    : "bg-gray-100"
+                    ? "bg-primary-600 dark:bg-primary-400 text-white"
+                    : "bg-gray-200 dark:bg-dark-300 text-gray-600 dark:text-gray-300"
                 }`}
               >
                 {activeIndex === index ? (
@@ -134,7 +140,9 @@ const FaqSection = ({ setActiveSection }) => {
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="p-5 text-gray-600">{faq.answer}</div>
+                  <div className="p-5 text-gray-600 dark:text-gray-300">
+                    {faq.answer}
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -142,9 +150,11 @@ const FaqSection = ({ setActiveSection }) => {
         ))}
       </motion.div>
 
-      <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 text-center">
-        <h4 className="text-lg font-bold mb-3">Still have questions?</h4>
-        <p className="text-gray-600 mb-6">
+      <div className="bg-gray-50 dark:bg-dark-300 rounded-xl p-6 border border-gray-200 dark:border-gray-700 text-center">
+        <h4 className="text-lg font-bold mb-3 dark:text-white">
+          Still have questions?
+        </h4>
+        <p className="text-gray-600 dark:text-gray-300 mb-6">
           We're here to help! Contact us directly or schedule a discovery call.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -152,7 +162,7 @@ const FaqSection = ({ setActiveSection }) => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg shadow-md w-full sm:w-auto"
+              className="px-6 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400 text-white rounded-lg shadow-md w-full sm:w-auto"
             >
               <div className="flex items-center justify-center">
                 <MessageSquare size={18} className="mr-2" />
@@ -163,7 +173,7 @@ const FaqSection = ({ setActiveSection }) => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-6 py-3 border border-primary text-primary rounded-lg w-full sm:w-auto"
+            className="px-6 py-3 border border-primary-600 dark:border-primary-400 text-primary-600 dark:text-primary-300 rounded-lg w-full sm:w-auto hover:bg-primary/5 dark:hover:bg-primary-900/10 transition-colors"
             onClick={() => setActiveSection("booking")}
           >
             Schedule a Call

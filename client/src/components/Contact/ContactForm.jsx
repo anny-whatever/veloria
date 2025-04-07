@@ -45,8 +45,10 @@ const ContactForm = ({ onSubmit }) => {
     // Email validation
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
+    ) {
+      newErrors.email = "Invalid email address";
     }
 
     // Message validation
@@ -102,27 +104,27 @@ const ContactForm = ({ onSubmit }) => {
   };
 
   const inputClasses =
-    "w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300";
-  const labelClasses = "text-gray-700 font-medium mb-1 block";
-  const errorClasses = "text-red-500 text-sm mt-1";
+    "w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-400 transition-colors duration-200";
+  const labelClasses =
+    "block text-gray-700 dark:text-gray-300 mb-2 font-medium";
+  const errorClasses = "text-red-500 dark:text-red-400 text-sm mt-1";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {submitStatus === "success" && (
-        <div className="p-4 text-green-700 border border-green-200 rounded-lg bg-green-50">
-          Thank you! Your message has been received. We'll get back to you
-          shortly.
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-600 dark:text-green-400 rounded-lg p-3">
+          Thank you for your message! We'll get back to you soon.
         </div>
       )}
 
       {submitStatus === "error" && (
-        <div className="p-4 text-red-700 border border-red-200 rounded-lg bg-red-50">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg p-3">
           {apiError ||
             "There was a problem sending your message. Please try again or contact us directly."}
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="name" className={labelClasses}>
             Name
@@ -131,10 +133,10 @@ const ContactForm = ({ onSubmit }) => {
             type="text"
             id="name"
             name="name"
-            className={`${inputClasses} ${errors.name ? "border-red-500" : ""}`}
-            placeholder="Your name"
             value={formData.name}
             onChange={handleChange}
+            placeholder="Your name"
+            className={inputClasses}
           />
           {errors.name && <p className={errorClasses}>{errors.name}</p>}
         </div>
@@ -147,30 +149,28 @@ const ContactForm = ({ onSubmit }) => {
             type="email"
             id="email"
             name="email"
-            className={`${inputClasses} ${
-              errors.email ? "border-red-500" : ""
-            }`}
-            placeholder="your.email@example.com"
             value={formData.email}
             onChange={handleChange}
+            placeholder="your.email@example.com"
+            className={inputClasses}
           />
           {errors.email && <p className={errorClasses}>{errors.email}</p>}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="phone" className={labelClasses}>
-            Phone (Optional)
+            Phone (optional)
           </label>
           <input
             type="tel"
             id="phone"
             name="phone"
-            className={inputClasses}
-            placeholder="Your phone number"
             value={formData.phone}
             onChange={handleChange}
+            placeholder="Your phone number"
+            className={inputClasses}
           />
         </div>
 
@@ -182,14 +182,11 @@ const ContactForm = ({ onSubmit }) => {
             type="text"
             id="subject"
             name="subject"
-            className={`${inputClasses} ${
-              errors.subject ? "border-red-500" : ""
-            }`}
-            placeholder="How can we help?"
             value={formData.subject}
             onChange={handleChange}
+            placeholder="What's this about?"
+            className={inputClasses}
           />
-          {errors.subject && <p className={errorClasses}>{errors.subject}</p>}
         </div>
       </div>
 
@@ -200,52 +197,28 @@ const ContactForm = ({ onSubmit }) => {
         <textarea
           id="message"
           name="message"
-          rows="5"
-          className={`${inputClasses} resize-none ${
-            errors.message ? "border-red-500" : ""
-          }`}
-          placeholder="Tell us about your project..."
           value={formData.message}
           onChange={handleChange}
+          rows="5"
+          placeholder="Tell us about your project..."
+          className={inputClasses}
         ></textarea>
         {errors.message && <p className={errorClasses}>{errors.message}</p>}
       </div>
 
       <motion.button
         type="submit"
-        className="flex items-center justify-center w-full py-3 font-medium text-white rounded-lg bg-gradient-to-r from-primary to-secondary disabled:opacity-70"
+        disabled={isSubmitting}
+        className="btn-primary px-8 py-3 rounded-full text-white dark:text-white font-medium inline-flex items-center justify-center gap-2 w-full md:w-auto"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        disabled={isSubmitting}
       >
         {isSubmitting ? (
-          <>
-            <svg
-              className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-            Sending Message...
-          </>
+          <span>Sending...</span>
         ) : (
           <>
-            <Send size={18} className="mr-2" />
-            Send Message
+            <span>Send Message</span>
+            <Send size={16} />
           </>
         )}
       </motion.button>

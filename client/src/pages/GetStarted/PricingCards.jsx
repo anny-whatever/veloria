@@ -118,8 +118,10 @@ const PricingCards = () => {
   return (
     <div>
       <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold mb-2">Transparent Pricing</h3>
-        <p className="text-gray-600">
+        <h3 className="text-2xl font-bold mb-2 dark:text-white">
+          Transparent Pricing
+        </h3>
+        <p className="text-gray-600 dark:text-gray-300">
           Choose a package that fits your needs, or contact us for a custom
           quote.
         </p>
@@ -137,25 +139,31 @@ const PricingCards = () => {
             variants={cardVariants}
             className={`border-2 ${
               option.popular
-                ? "border-primary shadow-lg relative"
-                : "border-gray-200"
-            } rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-300`}
+                ? "border-primary-600 dark:border-primary-400 shadow-lg relative"
+                : "border-gray-200 dark:border-gray-700"
+            } rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white dark:bg-dark-200`}
           >
             {option.popular && (
               <div className="absolute top-0 right-0">
-                <div className="bg-primary text-white text-xs font-semibold px-3 py-1 rounded-bl-lg">
+                <div className="bg-primary-600 dark:bg-primary-400 text-white text-xs font-semibold px-3 py-1 rounded-bl-lg">
                   POPULAR
                 </div>
               </div>
             )}
 
             <div className="p-6">
-              <h4 className="text-xl font-bold mb-1">{option.title}</h4>
-              <p className="text-gray-600 text-sm mb-4">{option.description}</p>
+              <h4 className="text-xl font-bold mb-1 dark:text-white">
+                {option.title}
+              </h4>
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                {option.description}
+              </p>
               <div className="mb-6">
-                <span className="text-3xl font-bold">{option.price}</span>
+                <span className="text-3xl font-bold dark:text-white">
+                  {option.price}
+                </span>
                 {option.id !== "custom" && (
-                  <span className="text-gray-600 text-sm ml-1">
+                  <span className="text-gray-600 dark:text-gray-400 text-sm ml-1">
                     / starting from
                   </span>
                 )}
@@ -177,7 +185,9 @@ const PricingCards = () => {
                     )}
                     <span
                       className={
-                        feature.included ? "text-gray-800" : "text-gray-500"
+                        feature.included
+                          ? "text-gray-800 dark:text-gray-200"
+                          : "text-gray-500 dark:text-gray-400"
                       }
                     >
                       {feature.title}
@@ -191,9 +201,9 @@ const PricingCards = () => {
                 whileTap={{ scale: 0.98 }}
                 className={`w-full py-3 rounded-lg font-medium ${
                   option.popular
-                    ? "bg-gradient-to-r from-primary to-secondary text-white"
-                    : "border-2 border-primary text-primary hover:bg-primary/5"
-                } transition-colors duration-300 bottom-0 `}
+                    ? "bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400 text-white"
+                    : "border-2 border-primary-600 dark:border-primary-400 text-primary-600 dark:text-primary-300 hover:bg-primary/5 dark:hover:bg-primary-900/10"
+                } transition-colors duration-300 bottom-0`}
               >
                 {option.id === "custom" ? "Request Quote" : "Get Started"}
               </motion.button>
@@ -202,20 +212,22 @@ const PricingCards = () => {
         ))}
       </motion.div>
 
-      <div className="mt-12 bg-gray-50 rounded-xl p-6 border border-gray-200">
+      <div className="mt-12 bg-gray-50 dark:bg-dark-300 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
         <div className="flex items-start">
           <HelpCircle
             size={24}
-            className="text-primary mt-1 mr-4 flex-shrink-0"
+            className="text-primary-600 dark:text-primary-400 mt-1 mr-4 flex-shrink-0"
           />
           <div>
-            <h4 className="text-lg font-bold mb-2">Need a custom solution?</h4>
-            <p className="text-gray-600 mb-4">
+            <h4 className="text-lg font-bold mb-2 dark:text-white">
+              Need a custom solution?
+            </h4>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
               If you don't see a package that fits your needs, we're happy to
               create a custom solution for you. Our prices are tailored to your
               specific requirements and project complexity.
             </p>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               All packages include one-on-one consultation, responsive design,
               and initial SEO setup. Maintenance plans are available separately
               after the first year.

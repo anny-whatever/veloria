@@ -5,13 +5,139 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #ecb761;
-  --color-secondary: #deb0bd;
-  --color-accent: #8b86be;
-  --color-light: #86abba;
-  --color-neutral: #cbd690;
+  /* HSL Color variables for easy theming */
+  --color-primary-hue: 37;
+  --color-primary-saturation: 80%;
+  --color-primary-lightness: 60%;
+
+  --color-secondary-hue: 340;
+  --color-secondary-saturation: 45%;
+  --color-secondary-lightness: 65%;
+
+  --color-accent-hue: 245;
+  --color-accent-saturation: 35%;
+  --color-accent-lightness: 62%;
+
+  --color-light-hue: 200;
+  --color-light-saturation: 30%;
+  --color-light-lightness: 63%;
+
+  --color-neutral-hue: 74;
+  --color-neutral-saturation: 55%;
+  --color-neutral-lightness: 60%;
+
+  /* Core color variables */
+  --color-primary: hsl(
+    var(--color-primary-hue),
+    var(--color-primary-saturation),
+    var(--color-primary-lightness)
+  );
+  --color-secondary: hsl(
+    var(--color-secondary-hue),
+    var(--color-secondary-saturation),
+    var(--color-secondary-lightness)
+  );
+  --color-accent: hsl(
+    var(--color-accent-hue),
+    var(--color-accent-saturation),
+    var(--color-accent-lightness)
+  );
+  --color-light: hsl(
+    var(--color-light-hue),
+    var(--color-light-saturation),
+    var(--color-light-lightness)
+  );
+  --color-neutral: hsl(
+    var(--color-neutral-hue),
+    var(--color-neutral-saturation),
+    var(--color-neutral-lightness)
+  );
+
+  /* Text and background colors */
+  --color-text: hsl(220, 10%, 20%);
+  --color-text-light: hsl(220, 10%, 40%);
+  --color-text-lighter: hsl(220, 10%, 60%);
+  --color-bg: hsl(0, 0%, 100%);
+  --color-bg-offset: hsl(210, 20%, 98%);
+  --color-bg-secondary: hsl(210, 30%, 96%);
+
+  /* Border and shadow */
+  --color-border: hsl(220, 13%, 91%);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  /* Spacing system */
+  --space-unit: 0.25rem;
+  --space-2xs: calc(2 * var(--space-unit));
+  --space-xs: calc(4 * var(--space-unit));
+  --space-sm: calc(6 * var(--space-unit));
+  --space-md: calc(8 * var(--space-unit));
+  --space-lg: calc(12 * var(--space-unit));
+  --space-xl: calc(16 * var(--space-unit));
+  --space-2xl: calc(24 * var(--space-unit));
+
+  /* Typography */
+  --font-family: "Poppins", sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+
+  /* Line heights */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
 }
 
+/* Dark mode theme variables */
+.dark {
+  /* Invert lightness for dark mode */
+  --color-primary-lightness: 50%;
+  --color-secondary-lightness: 55%;
+  --color-accent-lightness: 52%;
+  --color-light-lightness: 53%;
+  --color-neutral-lightness: 50%;
+
+  /* Text and background colors for dark mode */
+  --color-text: hsl(220, 10%, 90%);
+  --color-text-light: hsl(220, 10%, 70%);
+  --color-text-lighter: hsl(220, 10%, 50%);
+  --color-bg: hsl(220, 20%, 10%);
+  --color-bg-offset: hsl(220, 20%, 12%);
+  --color-bg-secondary: hsl(220, 20%, 14%);
+
+  /* Border and shadow for dark mode */
+  --color-border: hsl(220, 13%, 26%);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4),
+    0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4),
+    0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* Base styles */
 * {
   margin: 0;
   padding: 0;
@@ -20,13 +146,56 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* Accounts for fixed navigation */
+  font-size: 16px; /* Base font size */
+  -webkit-tap-highlight-color: transparent; /* Better mobile tapping */
 }
 
 body {
-  font-family: "Poppins", sans-serif;
-  background-color: #ffffff;
-  color: #333333;
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   overflow-x: hidden;
+  line-height: var(--line-height-normal);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: all var(--transition-normal);
+}
+
+a:hover {
+  color: hsl(
+    var(--color-primary-hue),
+    var(--color-primary-saturation),
+    calc(var(--color-primary-lightness) - 10%)
+  );
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 ::selection {
@@ -40,7 +209,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--color-bg-offset);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -49,7 +218,7 @@ body {
     var(--color-primary),
     var(--color-secondary)
   );
-  border-radius: 5px;
+  border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -101,8 +270,6 @@ body {
   animation: textGradientAnimation 6s linear infinite;
 }
 
-/* src/styles/scrollbar-hide.css */
-
 /* Hide scrollbars for the tab navigation but keep scrolling functionality */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -113,5 +280,72 @@ body {
   scrollbar-width: none; /* Firefox */
 }
 
-/* These classes are defined directly in TailwindCSS, so we don't need to redefine them */
-/* Just add them as normal classes in your jsx files */
+/* Container class with proper responsive padding */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
+  }
+}
+
+/* Typography utility classes */
+.heading-1 {
+  font-size: var(--font-size-4xl);
+  line-height: 1.2;
+  font-weight: 700;
+  margin-bottom: var(--space-lg);
+}
+
+.heading-2 {
+  font-size: var(--font-size-3xl);
+  line-height: 1.3;
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+}
+
+.heading-3 {
+  font-size: var(--font-size-2xl);
+  line-height: 1.4;
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
+
+.text-lg {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+}
+
+.text-sm {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+/* Section spacing */
+.section {
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-2xl);
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-xl);
+  }
+}
+
+/* Visual dividers */
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-border);
+  margin: var(--space-lg) 0;
+}

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import NavLink from "./NavLink";
+import ThemeToggle from "../ThemeToggle";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -85,13 +86,15 @@ const Navbar = () => {
     <motion.nav
       ref={navRef}
       className={`fixed w-full z-50 transition-all duration-500 ${
-        scrolled ? "bg-white shadow-md py-3" : "bg-transparent py-5"
+        scrolled
+          ? "py-3 bg-surface-50/90 backdrop-blur-md dark:bg-dark-200/90 shadow-sm"
+          : "py-5 bg-transparent"
       }`}
       initial="initial"
       animate="animate"
       variants={navbarVariants}
     >
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="container mx-auto">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <motion.div
@@ -102,15 +105,44 @@ const Navbar = () => {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <NavLink href="#home" text="Home" />
-            <NavLink href="#services" text="Services" />
-            <NavLink href="#portfolio" text="Portfolio" />
-            <NavLink href="#about" text="About" />
-            <NavLink href="#contact" text="Contact" />
+          <div className="hidden md:flex items-center space-x-6">
+            <Link
+              to="/"
+              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300`}
+            >
+              Home
+            </Link>
+            <a
+              href="/#services"
+              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300`}
+            >
+              Services
+            </a>
+            <a
+              href="/#portfolio"
+              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300`}
+            >
+              Portfolio
+            </a>
+            <a
+              href="/#about"
+              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300`}
+            >
+              About
+            </a>
+            <a
+              href="/#contact"
+              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300`}
+            >
+              Contact
+            </a>
+
+            {/* Dark mode toggle */}
+            <ThemeToggle />
+
             <Link to="/get-started">
               <motion.button
-                className="px-6 py-2 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-medium transition-all duration-300 hover:shadow-glow-primary"
+                className="btn-primary px-6 py-2 text-white"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -120,11 +152,14 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          {/* Mobile Menu Button and Dark Mode Toggle */}
+          <div className="md:hidden flex items-center space-x-2">
+            {/* Dark mode toggle */}
+            <ThemeToggle size="small" />
+
             <motion.button
               onClick={() => setIsOpen(!isOpen)}
-              className="focus:outline-none relative z-50"
+              className="focus:outline-none relative z-50 p-2 rounded-full bg-surface-200 dark:bg-dark-100"
               whileTap={{ scale: 0.9 }}
             >
               <AnimatePresence mode="wait">
@@ -136,7 +171,7 @@ const Navbar = () => {
                     exit={{ opacity: 0, rotate: 90 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <X size={24} className="text-accent" />
+                    <X size={20} className="text-accent-500" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -146,7 +181,7 @@ const Navbar = () => {
                     exit={{ opacity: 0, rotate: -90 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Menu size={24} className="text-accent" />
+                    <Menu size={20} className="text-accent-500" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -158,7 +193,7 @@ const Navbar = () => {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              className="md:hidden fixed inset-0 bg-white/95 z-40 pt-20"
+              className="md:hidden fixed inset-0 bg-surface-50/95 dark:bg-dark-100/95 backdrop-blur-md z-40 pt-20"
               initial="closed"
               animate="open"
               exit="closed"
@@ -166,49 +201,54 @@ const Navbar = () => {
             >
               <div className="flex flex-col items-center space-y-6 py-10">
                 <motion.div variants={linkVariants}>
-                  <NavLink
-                    href="#home"
-                    text="Home"
-                    mobile
+                  <Link
+                    to="/"
+                    className="text-xl font-medium text-gray-800 dark:text-white hover:text-primary dark:hover:text-primary-400"
                     onClick={() => setIsOpen(false)}
-                  />
+                  >
+                    Home
+                  </Link>
                 </motion.div>
                 <motion.div variants={linkVariants}>
-                  <NavLink
-                    href="#services"
-                    text="Services"
-                    mobile
+                  <a
+                    href="/#services"
+                    className="text-xl font-medium text-gray-800 dark:text-white hover:text-primary dark:hover:text-primary-400"
                     onClick={() => setIsOpen(false)}
-                  />
+                  >
+                    Services
+                  </a>
                 </motion.div>
                 <motion.div variants={linkVariants}>
-                  <NavLink
-                    href="#portfolio"
-                    text="Portfolio"
-                    mobile
+                  <a
+                    href="/#portfolio"
+                    className="text-xl font-medium text-gray-800 dark:text-white hover:text-primary dark:hover:text-primary-400"
                     onClick={() => setIsOpen(false)}
-                  />
+                  >
+                    Portfolio
+                  </a>
                 </motion.div>
                 <motion.div variants={linkVariants}>
-                  <NavLink
-                    href="#about"
-                    text="About"
-                    mobile
+                  <a
+                    href="/#about"
+                    className="text-xl font-medium text-gray-800 dark:text-white hover:text-primary dark:hover:text-primary-400"
                     onClick={() => setIsOpen(false)}
-                  />
+                  >
+                    About
+                  </a>
                 </motion.div>
                 <motion.div variants={linkVariants}>
-                  <NavLink
-                    href="#contact"
-                    text="Contact"
-                    mobile
+                  <a
+                    href="/#contact"
+                    className="text-xl font-medium text-gray-800 dark:text-white hover:text-primary dark:hover:text-primary-400"
                     onClick={() => setIsOpen(false)}
-                  />
+                  >
+                    Contact
+                  </a>
                 </motion.div>
                 <motion.div variants={linkVariants}>
                   <Link to="/get-started" onClick={() => setIsOpen(false)}>
                     <motion.button
-                      className="mt-4 px-8 py-3 rounded-full w-full bg-gradient-to-r from-primary to-secondary text-white font-medium transition-all duration-300 hover:shadow-glow-primary"
+                      className="mt-4 btn-primary px-8 py-3 w-full text-white"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >

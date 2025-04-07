@@ -78,174 +78,171 @@ const Contact = () => {
     <section
       id="contact"
       ref={ref}
-      className="py-20 md:py-28 bg-gray-50 relative overflow-hidden"
+      className="py-16 md:py-24 bg-gray-50 dark:bg-dark-300 relative"
     >
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-0 left-0 w-[600px] h-[600px] bg-gradient-radial from-primary/10 to-transparent rounded-full opacity-60 -translate-y-1/4 -translate-x-1/4"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={
-            inView ? { opacity: 0.6, scale: 1 } : { opacity: 0, scale: 0.8 }
-          }
-          transition={{ duration: 1.2, delay: 0.2 }}
-        ></motion.div>
-
-        <motion.div
-          className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-gradient-radial from-secondary/10 to-transparent rounded-full opacity-60 translate-y-1/4 translate-x-1/4"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={
-            inView ? { opacity: 0.6, scale: 1 } : { opacity: 0, scale: 0.8 }
-          }
-          transition={{ duration: 1.2, delay: 0.4 }}
-        ></motion.div>
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-24 right-0 w-64 h-64 bg-gradient-radial from-primary-200/20 to-transparent rounded-full opacity-60 dark:from-primary-900/20"></div>
+        <div className="absolute -bottom-16 left-0 w-80 h-80 bg-gradient-radial from-accent-200/10 to-transparent rounded-full opacity-60 dark:from-accent-900/10"></div>
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
+      <div className="container mx-auto px-4 md:px-8 z-10 relative">
+        {/* Section header */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
+          className="max-w-3xl mx-auto text-center mb-12 md:mb-20"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6 }}
         >
-          {/* Section Header */}
-          <motion.div
-            className="text-center max-w-3xl mx-auto mb-16"
-            variants={itemVariants}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Get In Touch
-            </h2>
-            <p className="text-gray-600 text-lg">
-              Have a project in mind? We'd love to hear about it. Drop us a line
-              and we'll get back to you as soon as possible.
-            </p>
-          </motion.div>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+            Get In Touch
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 text-lg">
+            Have a project in mind? We'd love to hear from you. Reach out to us
+            and we'll get back to you as soon as possible.
+          </p>
+        </motion.div>
 
-          {/* Contact Cards */}
+        {/* Contact Cards */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+          variants={itemVariants}
+        >
+          {contactInfo.map((info, index) => (
+            <motion.div
+              key={index}
+              className="bg-white dark:bg-dark-100 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div
+                className={`w-12 h-12 rounded-full bg-${info.color}/20 flex items-center justify-center text-${info.color}-600 dark:text-${info.color}-400 mb-4`}
+              >
+                {info.icon}
+              </div>
+              <h4 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">
+                {info.title}
+              </h4>
+              <p
+                className={`text-${info.color}-600 dark:text-${info.color}-400 font-medium mb-1`}
+              >
+                {info.details}
+              </p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                {info.description}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Contact Form and Map Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          {/* Contact Form */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+            className="bg-white dark:bg-dark-100 rounded-xl p-6 md:p-8 shadow-lg"
             variants={itemVariants}
           >
-            {contactInfo.map((info, index) => (
+            <h3 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
+              Send us a message
+            </h3>
+
+            {formSubmitted ? (
               <motion.div
-                key={index}
-                className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
-                whileHover={{ y: -5 }}
+                className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-6 text-center"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <div
-                  className={`w-12 h-12 rounded-full bg-${info.color}/20 flex items-center justify-center text-${info.color} mb-4`}
-                >
-                  {info.icon}
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 dark:bg-green-800/30 flex items-center justify-center text-green-500 dark:text-green-400">
+                  <CheckCircle size={32} />
                 </div>
-                <h4 className="text-xl font-bold mb-2">{info.title}</h4>
-                <p className={`text-${info.color} font-medium mb-1`}>
-                  {info.details}
+                <h4 className="text-xl font-bold text-green-800 dark:text-green-400 mb-2">
+                  Message Sent!
+                </h4>
+                <p className="text-green-700 dark:text-green-300">
+                  Thank you for reaching out. We'll get back to you as soon as
+                  possible.
                 </p>
-                <p className="text-gray-500 text-sm">{info.description}</p>
               </motion.div>
-            ))}
+            ) : (
+              <ContactForm onSubmit={handleFormSubmit} />
+            )}
           </motion.div>
 
-          {/* Contact Form and Map Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Contact Form */}
-            <motion.div
-              className="bg-white rounded-xl p-6 md:p-8 shadow-lg"
-              variants={itemVariants}
-            >
-              <h3 className="text-2xl font-bold mb-6">Send us a message</h3>
-
-              {formSubmitted ? (
-                <motion.div
-                  className="bg-green-50 border border-green-200 rounded-lg p-6 text-center"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center text-green-500">
-                    <CheckCircle size={32} />
-                  </div>
-                  <h4 className="text-xl font-bold text-green-800 mb-2">
-                    Message Sent!
-                  </h4>
-                  <p className="text-green-700">
-                    Thank you for reaching out. We'll get back to you as soon as
-                    possible.
-                  </p>
-                </motion.div>
-              ) : (
-                <ContactForm onSubmit={handleFormSubmit} />
-              )}
-            </motion.div>
-
-            {/* Map / Location Info */}
-            <motion.div
-              className="bg-white rounded-xl overflow-hidden shadow-lg h-full"
-              variants={itemVariants}
-            >
-              {/* Replace with actual map if available */}
-              <div className="bg-gray-200 h-64 w-full relative overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-full h-full">
-                    <iframe
-                      className="gmap_iframe w-full h-full"
-                      frameBorder="0"
-                      scrolling="no"
-                      marginHeight="0"
-                      marginWidth="0"
-                      src="https://maps.google.com/maps?q=1603+Palava+City+Downtown+Palava+phase+2,+Mumbai&ie=UTF8&t=&z=16&iwloc=&output=embed"
-                      style={{ border: 0 }}
-                      allowFullScreen=""
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                    ></iframe>
-                  </div>
+          {/* Map / Location Info */}
+          <motion.div
+            className="bg-white dark:bg-dark-100 rounded-xl overflow-hidden shadow-lg h-full"
+            variants={itemVariants}
+          >
+            {/* Replace with actual map if available */}
+            <div className="bg-gray-200 dark:bg-gray-700 h-64 w-full relative overflow-hidden">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-full h-full">
+                  <iframe
+                    className="gmap_iframe w-full h-full"
+                    frameBorder="0"
+                    scrolling="no"
+                    marginHeight="0"
+                    marginWidth="0"
+                    src="https://maps.google.com/maps?q=1603+Palava+City+Downtown+Palava+phase+2,+Mumbai&ie=UTF8&t=&z=16&iwloc=&output=embed"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
                 </div>
               </div>
+            </div>
 
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-4">Veloria Studio</h3>
-                <p className="text-gray-600 mb-4">
-                  Our creative space is located in the heart of the design
-                  district, where inspiration meets innovation.
-                </p>
+            <div className="p-6">
+              <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                Veloria Studio
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                Our creative space is located in the heart of the design
+                district, where inspiration meets innovation.
+              </p>
 
-                <div className="space-y-3">
-                  <div className="flex items-start">
-                    <MapPin size={18} className="text-primary mt-1 mr-3" />
-                    <div>
-                      <p className="text-gray-800 font-medium">
-                        1603, Palava City
-                      </p>
-                      <p className="text-gray-600">
-                        Downtown Palava phase 2, Mumbai
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center">
-                    <Clock size={18} className="text-primary mr-3" />
-                    <p className="text-gray-600">
-                      Open Monday to Saturday, 10:00 AM - 7:00 PM
+              <div className="space-y-3">
+                <div className="flex items-start">
+                  <MapPin
+                    size={18}
+                    className="text-primary-600 dark:text-primary-400 mt-1 mr-3"
+                  />
+                  <div>
+                    <p className="text-gray-800 dark:text-gray-200 font-medium">
+                      1603, Palava City
+                    </p>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Downtown Palava phase 2, Mumbai
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-6">
-                  <motion.button
-                    className="w-full py-3 rounded-lg bg-gradient-to-r from-primary to-secondary text-white font-medium flex items-center justify-center"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <MapPin size={18} className="mr-2" />
-                    Get Directions
-                  </motion.button>
+                <div className="flex items-center">
+                  <Clock
+                    size={18}
+                    className="text-primary-600 dark:text-primary-400 mr-3"
+                  />
+                  <p className="text-gray-600 dark:text-gray-300">
+                    Open Monday to Saturday, 10:00 AM - 7:00 PM
+                  </p>
                 </div>
               </div>
-            </motion.div>
-          </div>
-        </motion.div>
+
+              <div className="mt-6">
+                <motion.button
+                  className="w-full py-3 rounded-lg bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 text-white font-medium flex items-center justify-center"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <MapPin size={18} className="mr-2" />
+                  Get Directions
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

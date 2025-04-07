@@ -3,14 +3,19 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
-import NavbarGetStarted from "./NavbarGetStarted";
+import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import ProjectForm from "./ProjectForm";
 import ProcessTimeline from "./ProcessTimeline";
 import PricingCards from "./PricingCards";
 import FaqSection from "./FaqSection";
 import CalendarBooking from "./CalendarBooking";
-import { ArrowLeft, ChevronRight, ChevronLeft } from "lucide-react";
+import {
+  ArrowLeft,
+  ChevronRight,
+  ChevronLeft,
+  MessageSquare,
+} from "lucide-react";
 
 const GetStarted = () => {
   const [ref, inView] = useInView({
@@ -101,8 +106,8 @@ const GetStarted = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-gray-50">
-      <NavbarGetStarted />
+    <div className="min-h-screen bg-gradient-to-br from-white to-gray-50 dark:from-dark-200 dark:to-dark-300">
+      <Navbar />
 
       <div className="container mx-auto px-4 md:px-6 pt-32 pb-20">
         <motion.div
@@ -112,8 +117,8 @@ const GetStarted = () => {
           transition={{ duration: 0.5 }}
         >
           <Link
-            to="/"
-            className="flex items-center text-gray-600 hover:text-primary transition-colors duration-300"
+            to="/#contact"
+            className="flex items-center text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300"
           >
             <ArrowLeft size={20} className="mr-2" />
             Back to Home
@@ -128,10 +133,10 @@ const GetStarted = () => {
           className="max-w-5xl mx-auto"
         >
           <motion.div variants={itemVariants} className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-300">
               Let's Start Your Project
             </h1>
-            <p className="text-gray-600 text-lg max-w-3xl mx-auto">
+            <p className="text-gray-700 dark:text-gray-300 text-lg max-w-3xl mx-auto">
               Tell us about your project needs and let's create something
               amazing together. We're here to bring your vision to life.
             </p>
@@ -139,27 +144,29 @@ const GetStarted = () => {
 
           <motion.div
             variants={itemVariants}
-            className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-16"
+            className="bg-white dark:bg-dark-200 rounded-2xl shadow-xl dark:shadow-dark-900/30 p-6 md:p-8 mb-16"
           >
             {/* Mobile-friendly tab navigation */}
-            <div className="relative mb-2">
+            <div className="relative mb-8 overflow-hidden">
               {/* Scroll left button */}
               {hasOverflow && scrollPosition > 0.05 && (
                 <button
                   onClick={() => scrollTabs("left")}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-full shadow-md p-1"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 dark:bg-dark-300/80 rounded-full shadow-md p-1"
                   aria-label="Scroll tabs left"
                 >
-                  <ChevronLeft size={20} className="text-gray-700" />
+                  <ChevronLeft
+                    size={20}
+                    className="text-gray-700 dark:text-gray-300"
+                  />
                 </button>
               )}
 
-              {/* Tabs Container with horizontal scrolling */}
+              {/* Scrollable tabs container */}
               <div
                 ref={tabsContainerRef}
-                className="flex relative mb-2 border-b overflow-x-auto scrollbar-hide pb-px"
+                className="flex overflow-x-auto scrollbar-hide py-2"
                 onScroll={handleScroll}
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               >
                 <div className="flex space-x-4 md:space-x-6 w-max px-2">
                   {tabs.map((tab) => (
@@ -172,14 +179,14 @@ const GetStarted = () => {
                       }}
                       className={`py-4 px-3 whitespace-nowrap flex-shrink-0 relative ${
                         activeSection === tab.id
-                          ? "text-primary font-semibold"
-                          : "text-gray-600 hover:text-gray-900"
+                          ? "text-primary dark:text-primary-400 font-semibold"
+                          : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
                       }`}
                     >
                       {tab.label}
                       {activeSection === tab.id && (
                         <motion.div
-                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary dark:bg-primary-400"
                           layoutId="activeTab"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
@@ -195,25 +202,28 @@ const GetStarted = () => {
               {hasOverflow && scrollPosition < 0.95 && (
                 <button
                   onClick={() => scrollTabs("right")}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-full shadow-md p-1"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 dark:bg-dark-300/80 rounded-full shadow-md p-1"
                   aria-label="Scroll tabs right"
                 >
-                  <ChevronRight size={20} className="text-gray-700" />
+                  <ChevronRight
+                    size={20}
+                    className="text-gray-700 dark:text-gray-300"
+                  />
                 </button>
               )}
 
               {/* Gradient overlays to indicate scrollable content */}
               {hasOverflow && scrollPosition > 0.05 && (
-                <div className="absolute top-0 bottom-0 left-0 w-8 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
+                <div className="absolute top-0 bottom-0 left-0 w-8 bg-gradient-to-r from-white dark:from-dark-100 to-transparent pointer-events-none"></div>
               )}
               {hasOverflow && scrollPosition < 0.95 && (
-                <div className="absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
+                <div className="absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-white dark:from-dark-100 to-transparent pointer-events-none"></div>
               )}
             </div>
 
             {/* Dots indicator for scrolling */}
             {hasOverflow && (
-              <div className="flex justify-center space-x-1 mb-6">
+              <div className="flex justify-center space-x-1 mb-8">
                 {[...Array(tabs.length)].map((_, i) => {
                   const tabPosition = i / (tabs.length - 1);
                   const isActive =
@@ -226,7 +236,9 @@ const GetStarted = () => {
                     <div
                       key={i}
                       className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                        isActive ? "bg-primary scale-125" : "bg-gray-300"
+                        isActive
+                          ? "bg-primary dark:bg-primary-400 scale-125"
+                          : "bg-gray-300 dark:bg-gray-600"
                       }`}
                     ></div>
                   );
@@ -234,7 +246,7 @@ const GetStarted = () => {
               </div>
             )}
 
-            <div className="min-h-[600px]">
+            <div className="pt-4 ">
               {activeSection === "form" && (
                 <ProjectForm setActiveSection={setActiveSection} />
               )}
@@ -248,6 +260,22 @@ const GetStarted = () => {
               )}
             </div>
           </motion.div>
+
+          <Link to="/#contact">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400 text-white rounded-lg shadow-md w-full sm:w-auto"
+              onClick={() => {
+                window.location.href = "/#contact";
+              }}
+            >
+              <div className="flex items-center justify-center">
+                <MessageSquare size={18} className="mr-2" />
+                <span>Contact Us</span>
+              </div>
+            </motion.button>
+          </Link>
         </motion.div>
       </div>
 

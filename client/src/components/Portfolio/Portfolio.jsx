@@ -67,12 +67,12 @@ const Portfolio = () => {
     <section
       id="portfolio"
       ref={ref}
-      className="py-20 md:py-28 bg-gray-50 relative overflow-hidden"
+      className="py-20 md:py-28 bg-gray-50 dark:bg-dark-200 relative overflow-hidden"
     >
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-radial from-primary/5 to-transparent rounded-full opacity-60 -translate-y-1/4 translate-x-1/4"
+          className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-radial from-primary/5 to-transparent rounded-full opacity-60 -translate-y-1/4 translate-x-1/4 dark:from-primary/10"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={
             inView ? { opacity: 0.6, scale: 1 } : { opacity: 0, scale: 0.8 }
@@ -81,7 +81,7 @@ const Portfolio = () => {
         ></motion.div>
 
         <motion.div
-          className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-radial from-accent/5 to-transparent rounded-full opacity-60 translate-y-1/4 -translate-x-1/4"
+          className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-radial from-accent/5 to-transparent rounded-full opacity-60 translate-y-1/4 -translate-x-1/4 dark:from-accent/10"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={
             inView ? { opacity: 0.6, scale: 1 } : { opacity: 0, scale: 0.8 }
@@ -98,8 +98,10 @@ const Portfolio = () => {
           animate={inView ? "visible" : "hidden"}
           variants={headerVariants}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Portfolio</h2>
-          <p className="text-gray-600 text-lg">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+            Our Portfolio
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 text-lg">
             Explore our recent projects and see how we've helped brands achieve
             their digital goals. Click on any project for a detailed case study.
           </p>
@@ -117,8 +119,8 @@ const Portfolio = () => {
               key={filter.id}
               className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                 activeFilter === filter.id
-                  ? "bg-gradient-to-r from-primary to-secondary text-white shadow-md"
-                  : "bg-white text-gray-600 hover:bg-gray-100"
+                  ? "bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 text-white shadow-md"
+                  : "bg-white dark:bg-dark-100 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-300"
               }`}
               onClick={() => setActiveFilter(filter.id)}
               whileHover={{ scale: 1.05 }}
@@ -154,7 +156,7 @@ const Portfolio = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <motion.button
-            className="px-8 py-3 bg-white border-2 border-primary text-primary font-medium rounded-full hover:bg-primary hover:text-white transition-all duration-300"
+            className="px-8 py-3 bg-white dark:bg-dark-100 border-2 border-primary-500 dark:border-primary-400 text-primary-600 dark:text-primary-400 font-medium rounded-full hover:bg-primary-500 hover:text-white dark:hover:bg-primary-600 transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

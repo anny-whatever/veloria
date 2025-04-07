@@ -333,7 +333,7 @@ const CalendarBooking = () => {
         </div>
         <button
           onClick={() => (window.location.href = "/")}
-          className="px-6 py-3 text-white rounded-lg bg-gradient-to-r from-primary to-secondary"
+          className="px-6 py-3 text-white rounded-lg bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400"
         >
           Return to Home
         </button>
@@ -360,14 +360,16 @@ const CalendarBooking = () => {
       {/* Progress indicator */}
       <div className="mb-8">
         <div className="flex justify-between mb-2">
-          <span className="text-sm text-gray-600">Step {currentStep} of 2</span>
-          <span className="text-sm font-medium">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Step {currentStep} of 2
+          </span>
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
             {currentStep === 1 ? "50%" : "100%"} Complete
           </span>
         </div>
-        <div className="w-full h-2 overflow-hidden bg-gray-200 rounded-full">
+        <div className="w-full h-3 overflow-hidden bg-gray-200 dark:bg-gray-700 rounded-full">
           <motion.div
-            className="h-full bg-gradient-to-r from-primary to-secondary"
+            className="h-full bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary to-secondary"
             initial={{ width: "0%" }}
             animate={{ width: currentStep === 1 ? "50%" : "100%" }}
             transition={{ duration: 0.3 }}
@@ -387,69 +389,69 @@ const CalendarBooking = () => {
 
             {/* Calendar */}
             <div className="mb-8">
-              <div className="overflow-hidden bg-white border border-gray-200 rounded-lg">
-                <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                  <button
-                    onClick={handlePrevMonth}
-                    className="p-2 transition-colors rounded-full hover:bg-gray-100"
-                  >
-                    <ChevronLeft size={20} />
-                  </button>
-                  <h5 className="font-medium">
-                    {currentDate.toLocaleDateString("en-US", {
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </h5>
-                  <button
-                    onClick={handleNextMonth}
-                    className="p-2 transition-colors rounded-full hover:bg-gray-100"
-                  >
-                    <ChevronRight size={20} />
-                  </button>
+              <div className="bg-white dark:bg-dark-200 rounded-xl shadow-md p-4">
+                <div className="flex justify-between items-center mb-4">
+                  <h4 className="text-lg font-medium dark:text-white">
+                    {currentDate.toLocaleString("default", { month: "long" })}{" "}
+                    {currentDate.getFullYear()}
+                  </h4>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={handlePrevMonth}
+                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-dark-300"
+                    >
+                      <ChevronLeft
+                        size={18}
+                        className="text-gray-600 dark:text-gray-300"
+                      />
+                    </button>
+                    <button
+                      onClick={handleNextMonth}
+                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-dark-300"
+                    >
+                      <ChevronRight
+                        size={18}
+                        className="text-gray-600 dark:text-gray-300"
+                      />
+                    </button>
+                  </div>
                 </div>
 
-                <div className="p-4">
-                  <div className="grid grid-cols-7 gap-1">
-                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
-                      (day) => (
-                        <div
-                          key={day}
-                          className="py-2 text-sm font-medium text-center text-gray-600"
-                        >
-                          {day}
-                        </div>
-                      )
-                    )}
+                {/* Calendar days */}
+                <div className="grid grid-cols-7 gap-1">
+                  {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+                    <div
+                      key={day}
+                      className="h-8 flex items-center justify-center text-sm font-medium text-gray-500 dark:text-gray-400"
+                    >
+                      {day}
+                    </div>
+                  ))}
 
-                    {calendarDays.map((day, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-center h-12"
-                      >
-                        {day.day && (
-                          <button
-                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                              day.isDisabled
-                                ? "text-gray-300 cursor-not-allowed"
-                                : selectedDate &&
-                                  selectedDate.getTime() === day.date.getTime()
-                                ? "bg-primary text-white"
-                                : day.isToday
-                                ? "bg-primary/10 text-primary"
-                                : "hover:bg-gray-100"
-                            }`}
-                            disabled={day.isDisabled}
-                            onClick={() =>
-                              !day.isDisabled && handleDateSelect(day.date)
-                            }
-                          >
-                            {day.day}
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                  {calendarDays.map((day, i) => (
+                    <div
+                      key={i}
+                      className={`h-10 flex items-center justify-center rounded-full text-sm cursor-pointer transition-colors ${
+                        day.isDisabled
+                          ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
+                          : day.isToday
+                          ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold"
+                          : selectedDate &&
+                            day.date &&
+                            day.date.toDateString() ===
+                              selectedDate.toDateString()
+                          ? "bg-primary-600 dark:bg-primary-600 text-white font-medium"
+                          : "hover:bg-gray-100 dark:hover:bg-dark-300 text-gray-800 dark:text-gray-300"
+                      }`}
+                      onClick={() => {
+                        if (!day.isDisabled && day.date) {
+                          handleDateSelect(day.date);
+                        }
+                      }}
+                    >
+                      {day.day}
+                    </div>
+                  ))}
                 </div>
               </div>
               {errors.date && (
@@ -459,22 +461,22 @@ const CalendarBooking = () => {
 
             {/* Time slots */}
             <div className="mb-8">
-              <label className="block mb-2 font-medium text-gray-700">
+              <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
                 Select a Time
               </label>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {timeSlots.map((time) => (
-                  <button
+                  <div
                     key={time}
-                    className={`py-2 px-4 rounded-lg border transition-colors ${
+                    className={`p-3 text-center rounded-lg cursor-pointer border ${
                       selectedTime === time
-                        ? "bg-primary/10 border-primary text-primary"
-                        : "border-gray-200 hover:border-gray-300"
+                        ? "bg-primary-600 dark:bg-primary-600 border-primary-600 dark:border-primary-600 text-white"
+                        : "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-dark-300 text-gray-800 dark:text-gray-300"
                     }`}
                     onClick={() => handleTimeSelect(time)}
                   >
                     {time}
-                  </button>
+                  </div>
                 ))}
               </div>
               {errors.time && (
@@ -485,7 +487,7 @@ const CalendarBooking = () => {
             {/* Timezone */}
             <div className="mb-8">
               <label
-                className="block mb-2 font-medium text-gray-700"
+                className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
                 htmlFor="timezone"
               >
                 Your Timezone
@@ -495,7 +497,7 @@ const CalendarBooking = () => {
                 name="timezone"
                 value={formData.timezone}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
               >
                 {timezones.map((tz) => (
                   <option key={tz.value} value={tz.value}>
@@ -517,11 +519,11 @@ const CalendarBooking = () => {
                 {callTypes.map((type) => (
                   <div
                     key={type.id}
-                    className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                    className={`p-4 rounded-lg cursor-pointer border ${
                       formData.callType === type.id
-                        ? "border-primary bg-primary/5"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
+                        ? "border-primary-600 dark:border-primary-400 bg-primary/5 dark:bg-primary-900/20"
+                        : "border-gray-200 dark:border-gray-700"
+                    } hover:shadow-md transition-shadow duration-300`}
                     onClick={() =>
                       handleChange({
                         target: { name: "callType", value: type.id },
@@ -530,15 +532,17 @@ const CalendarBooking = () => {
                   >
                     <div className="flex items-center">
                       <div
-                        className={`w-8 h-8 rounded-full ${
+                        className={`w-10 h-10 rounded-full flex items-center justify-center ${
                           formData.callType === type.id
-                            ? "bg-primary/20 text-primary"
-                            : "bg-gray-100 text-gray-500"
-                        } flex items-center justify-center mr-3`}
+                            ? "bg-primary-600 dark:bg-primary-600 text-white"
+                            : "bg-gray-200 dark:bg-dark-300 text-gray-700 dark:text-gray-400"
+                        }`}
                       >
                         {type.icon}
                       </div>
-                      <span className="font-medium">{type.label}</span>
+                      <span className="ml-3 font-medium text-gray-800 dark:text-white">
+                        {type.label}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -556,7 +560,7 @@ const CalendarBooking = () => {
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
                   <label
-                    className="block mb-2 font-medium text-gray-700"
+                    className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
                     htmlFor="name"
                   >
                     Your Name
@@ -567,7 +571,7 @@ const CalendarBooking = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
                     placeholder="Your full name"
                   />
                   {errors.name && (
@@ -577,7 +581,7 @@ const CalendarBooking = () => {
 
                 <div>
                   <label
-                    className="block mb-2 font-medium text-gray-700"
+                    className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
                     htmlFor="email"
                   >
                     Email Address
@@ -588,7 +592,7 @@ const CalendarBooking = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
                     placeholder="your.email@example.com"
                   />
                   {errors.email && (
@@ -600,7 +604,7 @@ const CalendarBooking = () => {
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
                   <label
-                    className="block mb-2 font-medium text-gray-700"
+                    className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
                     htmlFor="phone"
                   >
                     Phone Number (Optional)
@@ -611,14 +615,14 @@ const CalendarBooking = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
                     placeholder="Your contact number"
                   />
                 </div>
 
                 <div>
                   <label
-                    className="block mb-2 font-medium text-gray-700"
+                    className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
                     htmlFor="company"
                   >
                     Company/Brand (Optional)
@@ -629,7 +633,7 @@ const CalendarBooking = () => {
                     name="company"
                     value={formData.company}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
                     placeholder="Your company or brand name"
                   />
                 </div>
@@ -637,7 +641,7 @@ const CalendarBooking = () => {
 
               <div>
                 <label
-                  className="block mb-2 font-medium text-gray-700"
+                  className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
                   htmlFor="projectType"
                 >
                   What type of project are you interested in?
@@ -647,7 +651,7 @@ const CalendarBooking = () => {
                   name="projectType"
                   value={formData.projectType}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
                 >
                   <option value="">Select project type</option>
                   {projectTypes.map((type) => (
@@ -663,7 +667,7 @@ const CalendarBooking = () => {
 
               <div>
                 <label
-                  className="block mb-2 font-medium text-gray-700"
+                  className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
                   htmlFor="additionalInfo"
                 >
                   Anything specific you'd like to discuss? (Optional)
@@ -674,7 +678,7 @@ const CalendarBooking = () => {
                   value={formData.additionalInfo}
                   onChange={handleChange}
                   rows="4"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
                   placeholder="Share any specific topics or questions you'd like to discuss during the call..."
                 ></textarea>
               </div>
@@ -712,61 +716,40 @@ const CalendarBooking = () => {
       </motion.div>
 
       {/* Navigation buttons */}
-      <div className="flex justify-between mt-10">
-        {currentStep > 1 ? (
+      <div className="flex justify-between mt-8">
+        {currentStep > 1 && (
           <button
             onClick={handlePrevious}
-            className="flex items-center px-6 py-3 transition-colors bg-gray-100 rounded-lg hover:bg-gray-200"
+            className="px-6 py-3 flex items-center text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-dark-300 rounded-lg hover:bg-gray-200 dark:hover:bg-dark-400 transition-colors"
           >
-            <ChevronLeft size={20} className="mr-2" />
+            <ChevronLeft size={18} className="mr-2" />
             Back
           </button>
-        ) : (
-          <div></div>
         )}
 
         {currentStep < 2 ? (
           <button
             onClick={handleNext}
-            className="flex items-center px-6 py-3 text-white transition-opacity rounded-lg bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+            className="px-6 py-3 flex items-center text-white rounded-lg bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400 hover:opacity-90 transition-opacity ml-auto"
           >
             Continue
-            <ChevronRight size={20} className="ml-2" />
+            <ChevronRight size={18} className="ml-2" />
           </button>
         ) : (
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="flex items-center px-6 py-3 text-white transition-opacity rounded-lg bg-gradient-to-r from-primary to-secondary hover:opacity-90 disabled:opacity-70"
+            className="px-6 py-3 flex items-center text-white rounded-lg bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400 hover:opacity-90 transition-opacity ml-auto disabled:opacity-70"
           >
             {isSubmitting ? (
               <>
-                <svg
-                  className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
                 Scheduling...
               </>
             ) : (
               <>
                 Schedule Call
-                <Calendar size={20} className="ml-2" />
+                <ChevronRight size={18} className="ml-2" />
               </>
             )}
           </button>

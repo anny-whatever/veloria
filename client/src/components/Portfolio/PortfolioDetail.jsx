@@ -71,11 +71,11 @@ const ImageModal = ({ image, alt, onClose }) => {
             <X size={20} />
           </button>
 
-          <div className="flex items-center justify-center bg-gray-100">
+          <div className="flex items-center justify-center bg-gray-100 dark:bg-dark-200">
             <img
               src={image}
               alt={alt}
-              className="max-w-full max-h-[80vh] object-contain"
+              className="max-w-full max-h-[80vh] object-contain mix-blend-multiply"
             />
           </div>
 
@@ -152,7 +152,7 @@ const PortfolioDetail = ({ project, onClose }) => {
           <div className="relative">
             {/* Hero image */}
             <div
-              className="h-[30vh] md:h-[40vh] relative bg-gray-100 overflow-hidden cursor-pointer"
+              className="h-[30vh] md:h-[40vh] relative bg-transparent dark:bg-dark-200/50 overflow-hidden cursor-pointer"
               onClick={() =>
                 project.images &&
                 project.images[0] &&
@@ -174,11 +174,13 @@ const PortfolioDetail = ({ project, onClose }) => {
                 <img
                   src={project.images[0]}
                   alt={project.title}
-                  className="object-cover w-full h-full"
+                  className="object-cover w-full h-full mix-blend-multiply"
                 />
               ) : (
-                <div className="flex items-center justify-center w-full h-full bg-primary/10">
-                  <p className="text-primary">Project image</p>
+                <div className="flex items-center justify-center w-full h-full bg-primary/10 dark:bg-primary-900/10">
+                  <p className="text-primary dark:text-primary-400">
+                    Project image
+                  </p>
                 </div>
               )}
               <div className="absolute bottom-0 left-0 right-0 z-20 p-6">
@@ -200,48 +202,60 @@ const PortfolioDetail = ({ project, onClose }) => {
                 <div className="md:col-span-2">
                   {/* Overview */}
                   <section className="mb-8">
-                    <h2 className="mb-4 text-2xl font-bold">
+                    <h2 className="mb-4 text-2xl font-bold dark:text-gray-100">
                       Project Overview
                     </h2>
-                    <p className="mb-6 text-gray-700">{project.description}</p>
+                    <p className="mb-6 text-gray-700 dark:text-gray-300">
+                      {project.description}
+                    </p>
 
                     <div className="space-y-6">
                       {/* Challenge */}
                       <div>
-                        <h3 className="mb-2 text-lg font-semibold text-primary">
+                        <h3 className="mb-2 text-lg font-semibold text-primary dark:text-primary-400">
                           The Challenge
                         </h3>
-                        <p className="text-gray-700">{project.challenge}</p>
+                        <p className="text-gray-700 dark:text-gray-300">
+                          {project.challenge}
+                        </p>
                       </div>
 
                       {/* Solution */}
                       <div>
-                        <h3 className="mb-2 text-lg font-semibold text-primary">
+                        <h3 className="mb-2 text-lg font-semibold text-primary dark:text-primary-400">
                           Our Solution
                         </h3>
-                        <p className="text-gray-700">{project.solution}</p>
+                        <p className="text-gray-700 dark:text-gray-300">
+                          {project.solution}
+                        </p>
                       </div>
 
                       {/* Results */}
                       <div>
-                        <h3 className="mb-2 text-lg font-semibold text-primary">
+                        <h3 className="mb-2 text-lg font-semibold text-primary dark:text-primary-400">
                           The Results
                         </h3>
-                        <p className="text-gray-700">{project.results}</p>
+                        <p className="text-gray-700 dark:text-gray-300">
+                          {project.results}
+                        </p>
                       </div>
                     </div>
                   </section>
 
                   {/* Key Features */}
                   <section className="mb-8">
-                    <h2 className="mb-4 text-2xl font-bold">Key Features</h2>
+                    <h2 className="mb-4 text-2xl font-bold dark:text-gray-100">
+                      Key Features
+                    </h2>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       {project.features.map((feature, index) => (
                         <div key={index} className="flex items-start">
-                          <div className="mt-1 mr-3 text-primary">
+                          <div className="mt-1 mr-3 text-primary dark:text-primary-400">
                             <CheckCircle size={18} />
                           </div>
-                          <p className="text-gray-700">{feature}</p>
+                          <p className="text-gray-700 dark:text-gray-300">
+                            {feature}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -250,14 +264,14 @@ const PortfolioDetail = ({ project, onClose }) => {
                   {/* Project Gallery */}
                   {project.images && project.images.length > 1 && (
                     <section className="mb-8">
-                      <h2 className="mb-4 text-2xl font-bold">
+                      <h2 className="mb-4 text-2xl font-bold dark:text-gray-100">
                         Project Gallery
                       </h2>
                       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         {project.images.slice(1).map((image, index) => (
                           <div
                             key={index}
-                            className="relative h-48 overflow-hidden bg-gray-100 rounded-lg cursor-pointer group"
+                            className="relative h-48 overflow-hidden bg-transparent dark:bg-dark-200/50 rounded-lg cursor-pointer group"
                             onClick={() =>
                               openImageModal(
                                 image,
@@ -271,7 +285,7 @@ const PortfolioDetail = ({ project, onClose }) => {
                             <img
                               src={image}
                               alt={`${project.title} ${index + 2}`}
-                              className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                              className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105 mix-blend-multiply"
                             />
                           </div>
                         ))}
@@ -281,19 +295,22 @@ const PortfolioDetail = ({ project, onClose }) => {
 
                   {/* Testimonial */}
                   {project.testimonial && (
-                    <section className="p-6 mb-8 border border-gray-200 bg-gray-50 rounded-xl">
+                    <section className="p-6 mb-8 border border-gray-200 dark:border-dark-300 bg-gray-50 dark:bg-dark-200 rounded-xl">
                       <div className="flex flex-col items-start">
                         <div className="mb-4">
-                          <Award size={28} className="text-primary" />
+                          <Award
+                            size={28}
+                            className="text-primary dark:text-primary-400"
+                          />
                         </div>
-                        <blockquote className="mb-4 italic text-gray-700">
+                        <blockquote className="mb-4 italic text-gray-700 dark:text-gray-300">
                           "{project.testimonial.text}"
                         </blockquote>
                         <div>
-                          <p className="font-medium">
+                          <p className="font-medium dark:text-gray-200">
                             {project.testimonial.author}
                           </p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
                             {project.testimonial.position}
                           </p>
                         </div>
@@ -304,8 +321,10 @@ const PortfolioDetail = ({ project, onClose }) => {
 
                 {/* Sidebar */}
                 <div>
-                  <div className="sticky p-6 border border-gray-200 bg-gray-50 rounded-xl top-8">
-                    <h2 className="mb-4 text-xl font-bold">Project Details</h2>
+                  <div className="sticky p-6 border border-gray-200 dark:border-dark-300 bg-gray-50 dark:bg-dark-200 rounded-xl top-8">
+                    <h2 className="mb-4 text-xl font-bold dark:text-gray-100">
+                      Project Details
+                    </h2>
                     <ul className="space-y-4">
                       <li className="flex items-start">
                         <Calendar
@@ -378,7 +397,7 @@ const PortfolioDetail = ({ project, onClose }) => {
                           {project.tags.map((tag, index) => (
                             <span
                               key={index}
-                              className="inline-block px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-full"
+                              className="inline-block px-3 py-1 text-sm text-gray-700 bg-gray-100 dark:bg-dark-300 dark:text-gray-300 rounded-full"
                             >
                               {tag}
                             </span>
@@ -388,11 +407,11 @@ const PortfolioDetail = ({ project, onClose }) => {
                     )}
 
                     {/* CTA */}
-                    <div className="pt-6 mt-6 border-t border-gray-200">
-                      <h3 className="mb-3 font-medium">
+                    <div className="pt-6 mt-6 border-t border-gray-200 dark:border-dark-300">
+                      <h3 className="mb-3 font-medium dark:text-gray-200">
                         Interested in similar results?
                       </h3>
-                      <button className="flex items-center justify-center w-full px-4 py-3 text-white rounded-lg bg-gradient-to-r from-primary to-secondary">
+                      <button className="flex items-center justify-center w-full px-4 py-3 text-white rounded-lg bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-500 dark:to-secondary-500 hover:shadow-md dark:hover:shadow-primary-800/20">
                         <span>Start Your Project</span>
                         <ChevronRight size={16} className="ml-1" />
                       </button>
