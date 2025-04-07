@@ -1,0 +1,15 @@
+# Veloria.in robots.txt file
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://veloria.in/sitemap.xml
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /wp-admin/
+Disallow: /login
+Disallow: /dashboard
+
+# Crawl-delay for all bots: 10 seconds between requests
+Crawl-delay: 10 

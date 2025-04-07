@@ -94,7 +94,7 @@ const Navbar = () => {
       animate="animate"
       variants={navbarVariants}
     >
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <motion.div
@@ -105,44 +105,44 @@ const Navbar = () => {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center md:space-x-3 lg:space-x-6 flex-wrap">
             <Link
               to="/"
-              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300`}
+              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300 text-sm lg:text-base py-2`}
             >
               Home
             </Link>
             <a
               href="/#services"
-              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300`}
+              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300 text-sm lg:text-base py-2`}
             >
               Services
             </a>
             <a
               href="/#portfolio"
-              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300`}
+              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300 text-sm lg:text-base py-2`}
             >
               Portfolio
             </a>
             <a
               href="/#about"
-              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300`}
+              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300 text-sm lg:text-base py-2`}
             >
               About
             </a>
             <a
               href="/#contact"
-              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300`}
+              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300 text-sm lg:text-base py-2`}
             >
               Contact
             </a>
 
             {/* Dark mode toggle */}
-            <ThemeToggle />
+            <ThemeToggle className="mx-1" />
 
             <Link to="/get-started">
               <motion.button
-                className="btn-primary px-6 py-2 text-white"
+                className="btn-primary px-4 lg:px-6 py-2 text-white text-sm lg:text-base ml-1"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}

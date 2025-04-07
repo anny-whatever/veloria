@@ -81,11 +81,10 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3">
               {[
-                { name: "Home", href: "#home" },
-                { name: "Services", href: "#services" },
-                { name: "Portfolio", href: "#portfolio" },
-                { name: "About Us", href: "#about" },
-                { name: "Contact", href: "#contact" },
+                { name: "Home", href: "/" },
+                { name: "Services", href: "/services" },
+                { name: "Get Started", href: "/get-started" },
+                { name: "Contact", href: "/contact" },
               ].map((link, index) => (
                 <motion.li
                   key={index}
@@ -111,11 +110,20 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3">
               {[
-                "Website Design",
-                "E-commerce Solutions",
-                "Brand Strategy",
-                "SEO Optimization",
-                "Content Management",
+                { name: "Web Development", href: "/services/web-development" },
+                {
+                  name: "Mobile App Development",
+                  href: "/services/mobile-app-development",
+                },
+                { name: "UI/UX Design", href: "/services/ui-ux-design" },
+                {
+                  name: "Hotel Management System",
+                  href: "/services/hotel-management-system",
+                },
+                {
+                  name: "E-commerce Solutions",
+                  href: "/services/ecommerce-management-system",
+                },
               ].map((service, index) => (
                 <motion.li
                   key={index}
@@ -123,10 +131,10 @@ const Footer = () => {
                   whileHover={{ x: 3 }}
                 >
                   <a
-                    href="#services"
+                    href={service.href}
                     className="text-gray-600 hover:text-secondary-500 dark:text-gray-400 dark:hover:text-secondary-400 transition-colors duration-300"
                   >
-                    {service}
+                    {service.name}
                   </a>
                 </motion.li>
               ))}
@@ -199,22 +207,16 @@ const Footer = () => {
 
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a
-              href="#"
+              href="/privacy-policy"
               className="hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-300"
             >
               Privacy Policy
             </a>
             <a
-              href="#"
+              href="/terms-of-service"
               className="hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-300"
             >
               Terms of Service
-            </a>
-            <a
-              href="#"
-              className="hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-300"
-            >
-              Cookie Policy
             </a>
           </div>
         </div>

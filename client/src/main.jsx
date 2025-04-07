@@ -2,8 +2,23 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import App from "./App";
 import GetStarted from "./pages/GetStarted/GetStarted";
+import ServicesPage from "./pages/Services/ServicesPage";
+import HotelManagementSystem from "./pages/Services/HotelManagementSystem";
+import SchoolManagementSystem from "./pages/Services/SchoolManagementSystem";
+import HospitalManagementSystem from "./pages/Services/HospitalManagementSystem";
+import EcommerceManagementSystem from "./pages/Services/EcommerceManagementSystem";
+import ERPSystem from "./pages/Services/ERPSystem";
+import UIUXDesign from "./pages/Services/UIUXDesign";
+import WebDevelopment from "./pages/Services/WebDevelopment";
+import MobileAppDevelopment from "./pages/Services/MobileAppDevelopment";
+import CustomSoftwareDevelopment from "./pages/Services/CustomSoftwareDevelopment";
+import DatabaseSolutions from "./pages/Services/DatabaseSolutions";
+import PayrollManagementSystem from "./pages/Services/PayrollManagementSystem";
+import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
+import TermsOfService from "./pages/Legal/TermsOfService";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AdminHome from "./pages/Admin/AdminHome";
 import BookingsList from "./pages/Admin/BookingsList";
@@ -19,6 +34,7 @@ import ProjectsList from "./pages/Admin/ProjectsList"; // Make sure this is impo
 import BookingsCalendar from "./pages/Admin/BookingsCalendar";
 import Finance from "./pages/Admin/Finance";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import "./index.css";
 
 // Import placeholder components for the settings
@@ -49,6 +65,62 @@ const router = createBrowserRouter([
   {
     path: "/get-started",
     element: <GetStarted />,
+  },
+  {
+    path: "/services",
+    element: <ServicesPage />,
+  },
+  {
+    path: "/services/hotel-management-system",
+    element: <HotelManagementSystem />,
+  },
+  {
+    path: "/services/school-management-system",
+    element: <SchoolManagementSystem />,
+  },
+  {
+    path: "/services/hospital-management-system",
+    element: <HospitalManagementSystem />,
+  },
+  {
+    path: "/services/ecommerce-management-system",
+    element: <EcommerceManagementSystem />,
+  },
+  {
+    path: "/services/erp-system",
+    element: <ERPSystem />,
+  },
+  {
+    path: "/services/ui-ux-design",
+    element: <UIUXDesign />,
+  },
+  {
+    path: "/services/web-development",
+    element: <WebDevelopment />,
+  },
+  {
+    path: "/services/mobile-app-development",
+    element: <MobileAppDevelopment />,
+  },
+  {
+    path: "/services/custom-software-development",
+    element: <CustomSoftwareDevelopment />,
+  },
+  {
+    path: "/services/database-solutions",
+    element: <DatabaseSolutions />,
+  },
+  {
+    path: "/services/payroll-management-system",
+    element: <PayrollManagementSystem />,
+  },
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicy />,
+  },
+  {
+    path: "/terms-of-service",
+    element: <TermsOfService />,
   },
   {
     path: "/admin",
@@ -127,7 +199,11 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <ThemeProvider>
+        <HelmetProvider>
+          <RouterProvider router={router} />
+        </HelmetProvider>
+      </ThemeProvider>
     </AuthProvider>
   </React.StrictMode>
 );

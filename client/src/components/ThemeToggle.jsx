@@ -1,34 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "../contexts/ThemeContext";
 
 const ThemeToggle = ({ className = "", size = "default" }) => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Check for saved preference or system preference
-    const savedMode = localStorage.getItem("darkMode");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    return savedMode === "true" || (savedMode === null && prefersDark);
-  });
-
-  // Toggle dark mode
-  const toggleDarkMode = () => {
-    setIsDarkMode((prev) => {
-      const newMode = !prev;
-      localStorage.setItem("darkMode", newMode);
-      return newMode;
-    });
-  };
-
-  // Apply dark mode class to document
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [isDarkMode]);
+  const { isDarkMode, toggleDarkMode } = useTheme();
 
   // Determine icon size based on the size prop
   const iconSize =

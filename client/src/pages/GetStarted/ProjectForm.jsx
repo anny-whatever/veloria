@@ -18,12 +18,17 @@ const ProjectForm = () => {
   });
 
   const serviceOptions = [
-    { id: "webdesign", label: "Web Design" },
-    { id: "development", label: "Development" },
-    { id: "ecommerce", label: "E-commerce" },
-    { id: "branding", label: "Branding" },
-    { id: "marketing", label: "Marketing" },
-    { id: "consulting", label: "Consulting" },
+    { id: "ui-ux-design", label: "UI/UX Design" },
+    { id: "web-development", label: "Web Development" },
+    { id: "mobile-app-development", label: "Mobile App Development" },
+    { id: "custom-software-development", label: "Custom Software Development" },
+    { id: "ecommerce-development", label: "E-commerce Development" },
+    { id: "database-solutions", label: "Database Solutions" },
+    { id: "hotel-management", label: "Hotel Management Systems" },
+    { id: "school-management", label: "School Management Systems" },
+    { id: "hospital-management", label: "Hospital Management Systems" },
+    { id: "payroll-management", label: "Payroll Management Systems" },
+    { id: "erp-system", label: "Enterprise Resource Planning (ERP)" },
   ];
 
   const budgetOptions = [
@@ -79,7 +84,11 @@ const ProjectForm = () => {
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
   return (
-    <form className="relative max-w-4xl mx-auto p-6 bg-white dark:bg-dark-200 rounded-xldark:border-gray-700">
+    <form
+      className="relative max-w-4xl mx-auto p-6 bg-white dark:bg-dark-200 rounded-xldark:border-gray-700"
+      itemScope
+      itemType="https://schema.org/ContactForm"
+    >
       <div className="mb-10">
         <div className="flex justify-between items-center relative">
           {[1, 2, 3].map((stepNumber) => (
@@ -133,7 +142,10 @@ const ProjectForm = () => {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div
+                itemProp="disambiguatingDescription"
+                content="Name field for project inquiry"
+              >
                 <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
                   Your Name
                 </label>
@@ -145,10 +157,14 @@ const ProjectForm = () => {
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
                   placeholder="Your full name"
                   required
+                  itemProp="name"
                 />
               </div>
 
-              <div>
+              <div
+                itemProp="disambiguatingDescription"
+                content="Email field for project inquiry"
+              >
                 <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
                   Email Address
                 </label>
@@ -160,12 +176,16 @@ const ProjectForm = () => {
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
                   placeholder="your@email.com"
                   required
+                  itemProp="email"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div
+                itemProp="disambiguatingDescription"
+                content="Phone field for project inquiry"
+              >
                 <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
                   Phone Number{" "}
                   <span className="text-gray-500 dark:text-gray-400 text-sm">
@@ -179,6 +199,7 @@ const ProjectForm = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
                   placeholder="Your phone number"
+                  itemProp="telephone"
                 />
               </div>
 
@@ -196,6 +217,7 @@ const ProjectForm = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
                   placeholder="Your company"
+                  itemProp="organization"
                 />
               </div>
             </div>
@@ -240,6 +262,7 @@ const ProjectForm = () => {
                         ? "bg-primary-50 dark:bg-primary-900/20 border-2 border-primary-500 dark:border-primary-400 text-primary-700 dark:text-primary-300"
                         : "bg-white dark:bg-dark-200 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-300"
                     }`}
+                    itemProp="serviceType"
                   >
                     <div
                       className={`w-5 h-5 rounded-md flex items-center justify-center border ${
@@ -268,6 +291,7 @@ const ProjectForm = () => {
                   value={formData.budget}
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
+                  itemProp="priceRange"
                 >
                   <option value="" disabled>
                     Select budget range
@@ -348,6 +372,7 @@ const ProjectForm = () => {
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200 min-h-[150px]"
                 placeholder="Tell us about your project, goals, and specific requirements..."
                 required
+                itemProp="description"
               ></textarea>
             </div>
 
@@ -381,6 +406,9 @@ const ProjectForm = () => {
                 type="button"
                 className="px-6 py-3 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 text-white font-medium flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-200"
                 onClick={handleSubmit}
+                itemProp="potentialAction"
+                itemScope
+                itemType="https://schema.org/SubmitAction"
               >
                 {isSubmitting ? (
                   <>
@@ -398,6 +426,21 @@ const ProjectForm = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Hidden schema.org metadata for better SEO */}
+      <div style={{ display: "none" }}>
+        <span
+          itemProp="provider"
+          itemScope
+          itemType="https://schema.org/Organization"
+        >
+          <meta itemProp="name" content="Veloria" />
+          <meta itemProp="url" content="https://veloria.in" />
+          <meta itemProp="email" content="info@veloria.in" />
+          <meta itemProp="telephone" content="+91 9315360595" />
+        </span>
+        <meta itemProp="availableLanguage" content="en" />
+      </div>
     </form>
   );
 };

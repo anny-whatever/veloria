@@ -6,8 +6,10 @@ import { ArrowRight } from "lucide-react";
 import Button from "../Button";
 import { Heading, default as Text } from "../Text";
 import { Link } from "react-router-dom";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const Header = () => {
+  const { isDarkMode } = useTheme();
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
@@ -89,15 +91,15 @@ const Header = () => {
         ></motion.div>
       </div>
 
-      <div className="container mx-auto z-10">
+      <div className="container mx-auto relative z-10">
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center"
+          className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center"
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          {/* Text Content */}
-          <div className="flex flex-col items-center md:items-start mt-12 md:mt-0 px-4 md:px-0">
+          {/* Text Content - takes more columns on larger screens */}
+          <div className="flex flex-col items-center md:items-start mt-12 md:mt-0 px-4 md:px-0 md:col-span-7 lg:col-span-6 relative z-10">
             <motion.div variants={itemVariants}>
               <Text
                 size="sm"
@@ -136,50 +138,92 @@ const Header = () => {
               </Text>
             </motion.div>
 
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start w-full md:w-auto"
-              variants={itemVariants}
-            >
-              <Link to="/get-started">
-                <motion.button
-                  className="btn flex items-center justify-center gap-2 rounded-full px-8 py-3 font-medium text-lg
-                  bg-gradient-to-r from-primary-600 to-secondary-600 text-white shadow-md 
-                  hover:shadow-glow-primary transition-all duration-300 w-full sm:w-auto"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Get Started
-                  <ArrowRight
-                    size={16}
-                    className="transition-transform group-hover:translate-x-1"
-                  />
-                </motion.button>
-              </Link>
-
-              <motion.button
-                onClick={() => scrollToSection("portfolio")}
-                className="btn flex items-center justify-center gap-2 rounded-full px-8 py-3 font-medium text-lg
-                bg-white dark:bg-dark-100 text-primary-700 dark:text-primary-400 border-2 border-primary-400 dark:border-primary-500
-                shadow-sm hover:bg-primary-50 dark:hover:bg-dark-200 hover:shadow-md transition-all duration-300 w-full sm:w-auto"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+            {/* Two-row button layout */}
+            <div className="flex flex-col gap-3 w-full">
+              {/* First row: Get Started and View Portfolio */}
+              <motion.div
+                className="flex flex-wrap gap-3 justify-center md:justify-start w-full"
+                variants={itemVariants}
               >
-                View Portfolio
-              </motion.button>
-            </motion.div>
+                <Link
+                  to="/get-started"
+                  className="flex-1 min-w-[120px] max-w-[200px]"
+                >
+                  <motion.button
+                    className="btn flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-medium
+                    bg-gradient-to-r from-primary-600 to-secondary-600 text-white shadow-md 
+                    hover:shadow-glow-primary transition-all duration-300 w-full"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span>Get Started</span>
+                    <ArrowRight
+                      size={16}
+                      className="transition-transform group-hover:translate-x-1"
+                    />
+                  </motion.button>
+                </Link>
+
+                <div className="flex-1 min-w-[120px] max-w-[200px]">
+                  <motion.button
+                    onClick={() => scrollToSection("portfolio")}
+                    className="btn flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-medium
+                    bg-white dark:bg-dark-100 text-primary-700 dark:text-primary-400 border-2 border-primary-400 dark:border-primary-500
+                    shadow-sm hover:bg-primary-50 dark:hover:bg-dark-200 hover:shadow-md transition-all duration-300 w-full"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span>View Portfolio</span>
+                  </motion.button>
+                </div>
+              </motion.div>
+
+              {/* Second row: WhatsApp button */}
+              <motion.div
+                className="flex justify-center md:justify-start w-full"
+                variants={itemVariants}
+              >
+                <div className="min-w-[120px] max-w-[200px]">
+                  <a
+                    href="https://wa.me/9315360595"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full"
+                  >
+                    <motion.button
+                      className="btn flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-medium
+                      bg-[#25D366] text-white shadow-sm hover:bg-[#22c55e] hover:shadow-md transition-all duration-300 w-full"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                      </svg>
+                      <span>WhatsApp</span>
+                    </motion.button>
+                  </a>
+                </div>
+              </motion.div>
+            </div>
           </div>
 
-          {/* Hero image/illustration area */}
-          <div className="relative flex justify-center mt-12 md:mt-0">
+          {/* Hero image/illustration area - fewer columns, positioned as decorative */}
+          <div className="relative md:col-span-5 lg:col-span-6 md:absolute md:right-0 md:top-0 md:h-full md:w-1/2 md:opacity-50 md:pointer-events-none">
             <motion.div
-              className="relative w-full max-w-lg aspect-ratio-1/1"
+              className="relative w-full h-full flex items-center justify-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
               {/* Replace these abstract shapes with an appropriate hero image or illustration */}
               <svg
-                className="w-full h-full"
+                className="w-full max-w-lg"
                 viewBox="0 0 600 600"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"

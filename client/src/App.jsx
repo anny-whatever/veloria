@@ -11,6 +11,7 @@ import Contact from "./components/Contact/Contact";
 import Footer from "./components/Footer/Footer";
 import Text from "./components/Text";
 import ThemeToggle from "./components/ThemeToggle";
+import { SeoHead, PAGE_SEO, getOrganizationSchema } from "./components/SEO";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -56,6 +57,14 @@ function App() {
 
   return (
     <div className="min-h-screen bg-surface-50 dark:bg-dark-200 text-gray-900 dark:text-gray-100">
+      <SeoHead
+        title={PAGE_SEO.home.title}
+        description={PAGE_SEO.home.description}
+        keywords={PAGE_SEO.home.keywords}
+        pathname="/"
+        structuredData={getOrganizationSchema()}
+      />
+
       <AnimatePresence mode="wait">
         {loading ? (
           <motion.div
