@@ -132,28 +132,11 @@ const ProjectForm = () => {
       setIsSubmitting(true);
       setSubmitError(null);
 
-      // Map the service type to one accepted by the backend
-      const serviceTypeMapping = {
-        "ui-ux-design": "custom",
-        "web-development": "custom",
-        "mobile-app-development": "custom",
-        "custom-software-development": "custom",
-        "ecommerce-development": "ecommerce",
-        "database-solutions": "custom",
-        "hotel-management": "custom",
-        "school-management": "custom",
-        "hospital-management": "custom",
-        "payroll-management": "custom",
-        "erp-system": "custom",
-      };
-
-      // Format data for the backend
+      // Format data for the backend - no mapping needed now that the server accepts all service types
       const formattedData = {
         ...formData,
-        // Map to a service type the backend accepts
-        serviceType: serviceTypeMapping[formData.serviceType] || "custom",
-        // Store the original service type in another field for reference
-        originalServiceType: formData.serviceType,
+        // Send the actual selected service type directly
+        serviceType: formData.serviceType,
       };
 
       // Use the environment variable for the API URL

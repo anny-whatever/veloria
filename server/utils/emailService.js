@@ -103,9 +103,9 @@ const createProjectNotificationTemplate = (data) => {
         
         <div style="margin-bottom: 15px;">
           <div style="font-weight: bold; color: #8b86be;">Service Type:</div>
-          <div style="margin-top: 5px;">${
-            data.serviceType.charAt(0).toUpperCase() + data.serviceType.slice(1)
-          }</div>
+          <div style="margin-top: 5px;">${formatServiceType(
+            data.serviceType
+          )}</div>
         </div>
         
         <div style="margin-bottom: 15px;">
@@ -510,6 +510,37 @@ const createBookingCancellationConfirmationTemplate = (data) => {
   </body>
   </html>
   `;
+};
+
+// Helper function to format service type
+const formatServiceType = (serviceType) => {
+  if (!serviceType) return "Unknown";
+
+  // Map service types to readable format
+  const serviceTypeMap = {
+    "ui-ux-design": "UI/UX Design",
+    "web-development": "Web Development",
+    "mobile-app-development": "Mobile App Development",
+    "custom-software-development": "Custom Software Development",
+    "ecommerce-development": "E-commerce Development",
+    "database-solutions": "Database Solutions",
+    "hotel-management": "Hotel Management Systems",
+    "school-management": "School Management Systems",
+    "hospital-management": "Hospital Management Systems",
+    "payroll-management": "Payroll Management Systems",
+    "erp-system": "Enterprise Resource Planning (ERP)",
+    ecommerce: "E-commerce Website",
+    blog: "Blog Website",
+    portfolio: "Portfolio Website",
+    landing: "Landing Page",
+    custom: "Custom Solution",
+  };
+
+  return (
+    serviceTypeMap[serviceType] ||
+    serviceType.charAt(0).toUpperCase() +
+      serviceType.slice(1).replace(/-/g, " ")
+  );
 };
 
 // Send notification to admin

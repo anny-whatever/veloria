@@ -6,7 +6,24 @@ const ProjectSchema = new mongoose.Schema({
   serviceType: {
     type: String,
     required: [true, "Service type is required"],
-    enum: ["ecommerce", "blog", "portfolio", "landing", "custom"],
+    enum: [
+      "ecommerce",
+      "blog",
+      "portfolio",
+      "landing",
+      "custom",
+      "ui-ux-design",
+      "web-development",
+      "mobile-app-development",
+      "custom-software-development",
+      "ecommerce-development",
+      "database-solutions",
+      "hotel-management",
+      "school-management",
+      "hospital-management",
+      "payroll-management",
+      "erp-system",
+    ],
   },
 
   // Project Details
