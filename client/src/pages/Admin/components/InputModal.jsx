@@ -91,21 +91,23 @@ const InputModal = ({
           >
             <motion.div
               ref={modalRef}
-              className="w-full max-w-md overflow-hidden bg-white rounded-lg shadow-xl"
+              className="w-full max-w-md overflow-hidden bg-white dark:bg-gray-800 rounded-lg shadow-xl"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 25 }}
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-6 py-4 bg-gray-50">
+              <div className="flex items-center justify-between px-6 py-4 bg-gray-50 dark:bg-gray-900/50">
                 <div className="flex items-center">
                   {icon && <span className="mr-2">{icon}</span>}
-                  <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                    {title}
+                  </h3>
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-1 text-gray-500 rounded-full hover:bg-gray-200"
+                  className="p-1 text-gray-500 dark:text-gray-400 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
                 >
                   <X size={20} />
                 </button>
@@ -117,11 +119,11 @@ const InputModal = ({
                 <div className="px-6 py-4">{children}</div>
 
                 {/* Actions */}
-                <div className="flex justify-end px-6 py-4 space-x-3 bg-gray-50">
+                <div className="flex justify-end px-6 py-4 space-x-3 bg-gray-50 dark:bg-gray-900/50">
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-4 py-2 text-gray-700 transition-colors bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    className="px-4 py-2 text-gray-700 dark:text-gray-200 transition-colors bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
                   >
                     {cancelText}
                   </button>

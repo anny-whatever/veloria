@@ -101,28 +101,36 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
 
       {/* Sidebar */}
       <motion.div
-        className={`fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform ${
+        className={`fixed inset-y-0 left-0 z-30 w-64 bg-white dark:bg-gray-800 shadow-lg transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out flex flex-col`}
       >
         {/* Close button for mobile */}
         <button
-          className="absolute text-gray-500 top-4 right-4 md:hidden"
+          className="absolute text-gray-500 dark:text-gray-400 top-4 right-4 md:hidden"
           onClick={() => toggleSidebar()}
         >
           <X size={20} />
         </button>
 
         {/* Logo */}
-        <div className="p-4 border-b">
+        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <Link
             to="/admin"
             className="flex items-center justify-center"
             onClick={() => isOpen && toggleSidebar()}
           >
-            <h2 className="text-2xl font-bold text-transparent bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text">
-              Veloria
-            </h2>
+            <div className="relative">
+              {/* Fallback text for any case where gradient doesn't render */}
+              <h2 className="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                Veloria
+              </h2>
+
+              {/* Gradient overlay on top */}
+              <h2 className="absolute top-0 left-0 text-2xl font-bold text-transparent bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text">
+                Veloria
+              </h2>
+            </div>
           </Link>
         </div>
 
@@ -130,7 +138,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         <nav className="flex-1 px-2 py-4 space-y-6 overflow-y-auto">
           {navSections.map((section, sectionIndex) => (
             <div key={sectionIndex}>
-              <h3 className="px-4 mb-2 text-xs font-semibold tracking-wider text-gray-500 uppercase">
+              <h3 className="px-4 mb-2 text-xs font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase">
                 {section.title}
               </h3>
               <div className="space-y-1">
@@ -146,8 +154,8 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                       to={item.path}
                       className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
                         isActive
-                          ? "bg-primary/10 text-primary"
-                          : "text-gray-700 hover:bg-gray-100"
+                          ? "bg-primary/10 text-primary dark:text-primary-400"
+                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                       }`}
                       onClick={() => isOpen && toggleSidebar()}
                     >
@@ -155,7 +163,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                       <span>{item.label}</span>
                       {isActive && (
                         <motion.div
-                          className="ml-auto text-primary"
+                          className="ml-auto text-primary dark:text-primary-400"
                           initial={{ scale: 0.5, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                         >
@@ -171,17 +179,21 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         </nav>
 
         {/* User Profile */}
-        <div className="p-4 border-t">
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <p className="font-medium text-gray-800">{auth.user?.name}</p>
-              <p className="text-xs text-gray-500">{auth.user?.email}</p>
+              <p className="font-medium text-gray-800 dark:text-gray-200">
+                {auth.user?.name}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {auth.user?.email}
+              </p>
             </div>
           </div>
           <div className="flex space-x-2">
             <Link
               to="/admin/settings"
-              className="flex items-center justify-center flex-1 px-2 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+              className="flex items-center justify-center flex-1 px-2 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
               onClick={() => isOpen && toggleSidebar()}
             >
               <Settings size={18} className="mr-1" />
@@ -189,7 +201,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
             </Link>
             <button
               onClick={handleLogout}
-              className="flex items-center justify-center flex-1 px-2 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+              className="flex items-center justify-center flex-1 px-2 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
             >
               <LogOut size={18} className="mr-1" />
               <span>Logout</span>

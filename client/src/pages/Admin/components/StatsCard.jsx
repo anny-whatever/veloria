@@ -13,7 +13,7 @@ const StatsCard = ({
 }) => {
   return (
     <motion.div
-      className="overflow-hidden bg-white rounded-lg shadow-sm"
+      className="overflow-hidden bg-white dark:bg-gray-800 rounded-lg shadow-sm"
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
     >
       <div className="p-5">
@@ -23,22 +23,28 @@ const StatsCard = ({
           >
             {icon}
           </div>
-          <span className="text-3xl font-bold">{count}</span>
+          <span className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            {count}
+          </span>
         </div>
 
-        <h3 className="font-medium text-gray-700">{title}</h3>
+        <h3 className="font-medium text-gray-700 dark:text-gray-300">
+          {title}
+        </h3>
 
         {unattendedCount > 0 && (
           <div className="flex items-center mt-2 text-sm">
             <AlertCircle size={16} className="mr-1 text-amber-500" />
-            <span className="text-amber-700">{unattendedCount} unattended</span>
+            <span className="text-amber-700 dark:text-amber-400">
+              {unattendedCount} unattended
+            </span>
           </div>
         )}
       </div>
 
       <Link
         to={linkTo}
-        className={`flex items-center justify-between p-3 bg-${color}/5 text-${color} text-sm border-t`}
+        className={`flex items-center justify-between p-3 bg-${color}/5 dark:bg-${color}/10 text-${color} dark:text-${color}-400 text-sm border-t border-gray-100 dark:border-gray-700`}
       >
         <span>View details</span>
         <ChevronRight size={16} />

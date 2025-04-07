@@ -1,0 +1,196 @@
+/* Admin Dark Mode Styles */
+.dark .admin-content {
+  /* Background colors */
+  --bg-primary: #1f2937; /* dark:bg-gray-800 */
+  --bg-secondary: #111827; /* dark:bg-gray-900 */
+  --bg-tertiary: #374151; /* dark:bg-gray-700 */
+  --bg-quaternary: #4b5563; /* dark:bg-gray-600 */
+
+  /* Text colors */
+  --text-primary: #f3f4f6; /* dark:text-gray-100 */
+  --text-secondary: #e5e7eb; /* dark:text-gray-200 */
+  --text-tertiary: #9ca3af; /* dark:text-gray-400 */
+  --text-quaternary: #6b7280; /* dark:text-gray-500 */
+
+  /* Border colors */
+  --border-primary: #374151; /* dark:border-gray-700 */
+  --border-secondary: #4b5563; /* dark:border-gray-600 */
+
+  /* Brand colors */
+  --primary: #f0b564; /* dark:text-primary-400 */
+  --secondary: #e5b6c3; /* dark:text-secondary-400 */
+  --accent: #9f99c9; /* dark:text-accent-400 */
+}
+
+/* Main backgrounds */
+.dark .admin-content .bg-white,
+.dark .admin-content tbody.bg-white {
+  background-color: var(--bg-primary) !important;
+}
+
+.dark .admin-content div[class*="bg-gray-50"],
+.dark .admin-content thead[class*="bg-gray-50"],
+.dark .admin-content thead.bg-gray-50 {
+  background-color: var(--bg-secondary) !important;
+}
+
+.dark .admin-content div[class*="bg-gray-100"] {
+  background-color: var(--bg-primary) !important;
+}
+
+.dark .admin-content div[class*="bg-gray-200"] {
+  background-color: var(--bg-tertiary) !important;
+}
+
+/* Text colors */
+.dark .admin-content .text-gray-900 {
+  color: var(--text-primary) !important;
+}
+
+.dark .admin-content .text-gray-800,
+.dark .admin-content .text-gray-700 {
+  color: var(--text-secondary) !important;
+}
+
+.dark .admin-content .text-gray-600,
+.dark .admin-content .text-gray-500 {
+  color: var(--text-tertiary) !important;
+}
+
+.dark .admin-content .text-gray-400,
+.dark .admin-content .text-gray-300 {
+  color: var(--text-quaternary) !important;
+}
+
+/* Borders */
+.dark .admin-content .border-gray-200,
+.dark .admin-content .divide-y.divide-gray-200,
+.dark .admin-content table.divide-y.divide-gray-200 {
+  border-color: var(--border-primary) !important;
+}
+
+.dark .admin-content .border-gray-300 {
+  border-color: var(--border-secondary) !important;
+}
+
+.dark .admin-content tbody.divide-y.divide-gray-200 > tr {
+  border-color: var(--border-primary) !important;
+}
+
+/* Hover states */
+.dark .admin-content .hover\:bg-gray-50:hover,
+.dark .admin-content tr.hover\:bg-gray-50:hover {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.dark .admin-content .hover\:bg-gray-100:hover {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.dark .admin-content .hover\:bg-gray-200:hover {
+  background-color: var(--bg-quaternary) !important;
+}
+
+/* Brand colors */
+.dark .admin-content .text-primary {
+  color: var(--primary) !important;
+}
+
+.dark .admin-content .text-secondary {
+  color: var(--secondary) !important;
+}
+
+.dark .admin-content .text-accent {
+  color: var(--accent) !important;
+}
+
+/* Status badges */
+.dark .admin-content .bg-blue-100 {
+  background-color: rgba(30, 64, 175, 0.3) !important;
+}
+
+.dark .admin-content .bg-green-100 {
+  background-color: rgba(20, 83, 45, 0.3) !important;
+}
+
+.dark .admin-content .bg-red-100 {
+  background-color: rgba(127, 29, 29, 0.3) !important;
+}
+
+.dark .admin-content .bg-amber-100 {
+  background-color: rgba(120, 53, 15, 0.3) !important;
+}
+
+.dark .admin-content .bg-purple-100 {
+  background-color: rgba(76, 29, 149, 0.3) !important;
+}
+
+.dark .admin-content .bg-cyan-100 {
+  background-color: rgba(22, 78, 99, 0.3) !important;
+}
+
+.dark .admin-content .text-blue-800 {
+  color: rgb(147, 197, 253) !important;
+}
+
+.dark .admin-content .text-green-800 {
+  color: rgb(134, 239, 172) !important;
+}
+
+.dark .admin-content .text-red-800 {
+  color: rgb(252, 165, 165) !important;
+}
+
+.dark .admin-content .text-amber-800 {
+  color: rgb(252, 211, 77) !important;
+}
+
+.dark .admin-content .text-purple-800 {
+  color: rgb(216, 180, 254) !important;
+}
+
+.dark .admin-content .text-cyan-800 {
+  color: rgb(165, 243, 252) !important;
+}
+
+/* Form elements */
+.dark .admin-content input[type="text"],
+.dark .admin-content input[type="email"],
+.dark .admin-content input[type="password"],
+.dark .admin-content input[type="number"],
+.dark .admin-content input[type="date"],
+.dark .admin-content input[type="time"],
+.dark .admin-content select,
+.dark .admin-content textarea {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-secondary) !important;
+}
+
+.dark .admin-content input::placeholder {
+  color: var(--text-quaternary) !important;
+}
+
+/* Table styles */
+.dark .admin-content table,
+.dark .admin-content th,
+.dark .admin-content td {
+  border-color: var(--border-primary) !important;
+}
+
+.dark .admin-content tbody {
+  background-color: var(--bg-primary) !important;
+}
+
+/* Avatar backgrounds */
+.dark .admin-content .bg-primary-100 {
+  background-color: rgba(140, 100, 30, 0.3) !important;
+}
+
+.dark .admin-content .bg-secondary-100 {
+  background-color: rgba(120, 40, 60, 0.3) !important;
+}
+
+.dark .admin-content .bg-accent-100 {
+  background-color: rgba(60, 50, 120, 0.3) !important;
+}

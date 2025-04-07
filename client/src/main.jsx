@@ -33,6 +33,7 @@ import ProjectsCalendar from "./pages/Admin/ProjectsCalendar";
 import ProjectsList from "./pages/Admin/ProjectsList"; // Make sure this is imported
 import BookingsCalendar from "./pages/Admin/BookingsCalendar";
 import Finance from "./pages/Admin/Finance";
+import AdminBookingForm from "./pages/Admin/AdminBookingForm";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import "./index.css";
@@ -137,7 +138,7 @@ const router = createBrowserRouter([
       // Important: Place "new" route BEFORE the :id route to avoid matching issues
       {
         path: "bookings/new",
-        element: <BookingDetails />,
+        element: <AdminBookingForm />,
       },
       {
         path: "bookings/:id",

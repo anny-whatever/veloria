@@ -5,6 +5,7 @@ import AdminSidebar from "./components/AdminSidebar";
 import AdminHeader from "./components/AdminHeader";
 import AdminLogin from "./AdminLogin";
 import useAuth from "../../hooks/useAuth";
+import DarkModeFixApplier from "./utils/DarkModeFixApplier";
 
 const AdminDashboard = () => {
   const { auth, loading } = useAuth();
@@ -27,8 +28,8 @@ const AdminDashboard = () => {
   // If loading, show a loading spinner
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="w-12 h-12 border-4 border-gray-300 rounded-full border-t-primary animate-spin"></div>
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-dark-100">
+        <div className="w-12 h-12 border-4 border-gray-300 dark:border-gray-600 rounded-full border-t-primary animate-spin"></div>
       </div>
     );
   }
@@ -39,7 +40,10 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+      {/* Apply global dark mode fixes */}
+      <DarkModeFixApplier />
+
       {/* Sidebar - no longer auto-open on desktop */}
       <AdminSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
@@ -47,7 +51,7 @@ const AdminDashboard = () => {
       <div className="flex flex-col flex-1 overflow-hidden">
         <AdminHeader toggleSidebar={toggleSidebar} />
 
-        <main className="flex-1 p-4 overflow-y-auto bg-gray-100 md:p-6">
+        <main className="flex-1 p-4 overflow-y-auto bg-gray-100 dark:bg-gray-900 md:p-6 admin-content">
           <Outlet />
         </main>
       </div>
