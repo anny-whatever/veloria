@@ -2,19 +2,28 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, ChevronRight, ChevronLeft, Info } from "lucide-react";
+import axios from "axios";
 
 const ProjectForm = () => {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
   const [formData, setFormData] = useState({
+    serviceType: "",
+    projectName: "",
+    projectDescription: "",
+    projectGoals: [],
+    budget: "",
+    timeline: "",
+    companyName: "",
+    companyWebsite: "",
+    industry: "",
+    targetAudience: "",
     name: "",
     email: "",
     phone: "",
-    company: "",
-    services: [],
-    budget: "",
-    timeline: "",
-    description: "",
+    goal: "", // Temporary field for handling project goals input
   });
 
   const serviceOptions = [
@@ -40,10 +49,23 @@ const ProjectForm = () => {
   ];
 
   const timelineOptions = [
-    { id: "asap", label: "ASAP" },
-    { id: "1month", label: "Within 1 month" },
-    { id: "3months", label: "1-3 months" },
-    { id: "flexible", label: "Flexible" },
+    { id: "urgent", label: "Urgent (ASAP)" },
+    { id: "standard", label: "Standard (1-3 months)" },
+    { id: "relaxed", label: "Relaxed (3+ months)" },
+    { id: "not-sure", label: "Not Sure" },
+  ];
+
+  const industryOptions = [
+    "Technology",
+    "Healthcare",
+    "Education",
+    "Finance",
+    "Retail",
+    "Food & Beverage",
+    "Entertainment",
+    "Real Estate",
+    "Travel",
+    "Other",
   ];
 
   const handleChange = (e) => {
@@ -55,39 +77,152 @@ const ProjectForm = () => {
   };
 
   const handleServiceToggle = (serviceId) => {
-    setFormData((prev) => {
-      if (prev.services.includes(serviceId)) {
-        return {
-          ...prev,
-          services: prev.services.filter((id) => id !== serviceId),
-        };
-      } else {
-        return {
-          ...prev,
-          services: [...prev.services, serviceId],
-        };
-      }
-    });
+    setFormData((prev) => ({
+      ...prev,
+      serviceType: serviceId,
+    }));
   };
 
-  const handleSubmit = () => {
-    setIsSubmitting(true);
-    // Here you would normally submit the form data to your backend
-    setTimeout(() => {
+  const handleAddGoal = () => {
+    if (formData.goal.trim()) {
+      setFormData((prev) => ({
+        ...prev,
+        projectGoals: [...prev.projectGoals, prev.goal.trim()],
+        goal: "",
+      }));
+    }
+  };
+
+  const handleRemoveGoal = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      projectGoals: prev.projectGoals.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleGoalKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddGoal();
+    }
+  };
+
+  const validateStep = (stepNumber) => {
+    switch (stepNumber) {
+      case 1:
+        return formData.name && formData.email;
+      case 2:
+        return formData.serviceType && formData.budget && formData.timeline;
+      case 3:
+        return (
+          formData.projectName &&
+          formData.projectDescription &&
+          formData.projectGoals.length > 0 &&
+          formData.companyName &&
+          formData.industry &&
+          formData.targetAudience
+        );
+      default:
+        return true;
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+      setSubmitError(null);
+
+      // Map the service type to one accepted by the backend
+      const serviceTypeMapping = {
+        "ui-ux-design": "custom",
+        "web-development": "custom",
+        "mobile-app-development": "custom",
+        "custom-software-development": "custom",
+        "ecommerce-development": "ecommerce",
+        "database-solutions": "custom",
+        "hotel-management": "custom",
+        "school-management": "custom",
+        "hospital-management": "custom",
+        "payroll-management": "custom",
+        "erp-system": "custom",
+      };
+
+      // Format data for the backend
+      const formattedData = {
+        ...formData,
+        // Map to a service type the backend accepts
+        serviceType: serviceTypeMapping[formData.serviceType] || "custom",
+        // Store the original service type in another field for reference
+        originalServiceType: formData.serviceType,
+      };
+
+      // Use the environment variable for the API URL
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${apiUrl}/projects`, formattedData);
+
+      setSubmitSuccess(true);
       setIsSubmitting(false);
-      alert("Form submitted successfully!");
-      // Reset form or redirect
-    }, 1500);
+    } catch (error) {
+      setIsSubmitting(false);
+      setSubmitError(
+        error.response?.data?.message ||
+          "Failed to submit your project. Please try again or contact us directly."
+      );
+      console.error("Form submission error:", error);
+    }
   };
 
-  const nextStep = () => setStep((prev) => Math.min(prev + 1, 3));
+  const nextStep = () => {
+    if (validateStep(step)) {
+      setStep((prev) => Math.min(prev + 1, 3));
+    } else {
+      alert("Please fill all required fields before proceeding.");
+    }
+  };
+
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
+
+  const getServiceLabel = (serviceId) => {
+    const service = serviceOptions.find((s) => s.id === serviceId);
+    return service ? service.label : "Custom Solution";
+  };
+
+  if (submitSuccess) {
+    return (
+      <div className="max-w-4xl mx-auto p-8 bg-white dark:bg-dark-200 rounded-xl shadow-lg dark:border-gray-700 text-center">
+        <div className="w-20 h-20 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <CheckCircle
+            size={40}
+            className="text-green-600 dark:text-green-400"
+          />
+        </div>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          Your Project Has Been Submitted!
+        </h2>
+        <p className="text-gray-700 dark:text-gray-300 mb-2">
+          Thank you for your {getServiceLabel(formData.serviceType)} project
+          request.
+        </p>
+        <p className="text-gray-700 dark:text-gray-300 mb-6">
+          Our team will review your details and get back to you within 24-48
+          hours.
+        </p>
+        <a
+          href="/"
+          className="px-6 py-3 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 text-white font-medium inline-block"
+        >
+          Return to Home
+        </a>
+      </div>
+    );
+  }
 
   return (
     <form
-      className="relative max-w-4xl mx-auto p-6 bg-white dark:bg-dark-200 rounded-xldark:border-gray-700"
+      className="relative max-w-4xl mx-auto p-6 bg-white dark:bg-dark-200 rounded-xl shadow-lg dark:border-gray-700"
       itemScope
       itemType="https://schema.org/ContactForm"
+      onSubmit={(e) => e.preventDefault()}
     >
       <div className="mb-10">
         <div className="flex justify-between items-center relative">
@@ -107,7 +242,7 @@ const ProjectForm = () => {
                   ? "Basic Info"
                   : stepNumber === 2
                   ? "Project Type"
-                  : "Details"}
+                  : "Project Details"}
               </div>
             </div>
           ))}
@@ -142,12 +277,9 @@ const ProjectForm = () => {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div
-                itemProp="disambiguatingDescription"
-                content="Name field for project inquiry"
-              >
+              <div>
                 <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
-                  Your Name
+                  Your Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -157,16 +289,12 @@ const ProjectForm = () => {
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
                   placeholder="Your full name"
                   required
-                  itemProp="name"
                 />
               </div>
 
-              <div
-                itemProp="disambiguatingDescription"
-                content="Email field for project inquiry"
-              >
+              <div>
                 <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
-                  Email Address
+                  Email Address <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
@@ -176,16 +304,12 @@ const ProjectForm = () => {
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
                   placeholder="your@email.com"
                   required
-                  itemProp="email"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div
-                itemProp="disambiguatingDescription"
-                content="Phone field for project inquiry"
-              >
+              <div>
                 <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
                   Phone Number{" "}
                   <span className="text-gray-500 dark:text-gray-400 text-sm">
@@ -199,25 +323,20 @@ const ProjectForm = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
                   placeholder="Your phone number"
-                  itemProp="telephone"
                 />
               </div>
 
               <div>
                 <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
-                  Company Name{" "}
-                  <span className="text-gray-500 dark:text-gray-400 text-sm">
-                    (Optional)
-                  </span>
+                  Company Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
-                  name="company"
-                  value={formData.company}
+                  name="companyName"
+                  value={formData.companyName}
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
-                  placeholder="Your company"
-                  itemProp="organization"
+                  placeholder="Your company or organization"
                 />
               </div>
             </div>
@@ -250,32 +369,32 @@ const ProjectForm = () => {
 
             <div className="mb-6">
               <label className="block text-gray-700 dark:text-gray-300 mb-3 font-medium">
-                What services are you interested in?
+                What type of service are you looking for?{" "}
+                <span className="text-red-500">*</span>
               </label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {serviceOptions.map((service) => (
                   <div
                     key={service.id}
                     onClick={() => handleServiceToggle(service.id)}
-                    className={`px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 flex items-center gap-2 ${
-                      formData.services.includes(service.id)
+                    className={`px-4 py-2.5 rounded-lg cursor-pointer transition-all duration-200 flex items-center gap-2 ${
+                      formData.serviceType === service.id
                         ? "bg-primary-50 dark:bg-primary-900/20 border-2 border-primary-500 dark:border-primary-400 text-primary-700 dark:text-primary-300"
                         : "bg-white dark:bg-dark-200 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-300"
                     }`}
-                    itemProp="serviceType"
                   >
                     <div
-                      className={`w-5 h-5 rounded-md flex items-center justify-center border ${
-                        formData.services.includes(service.id)
+                      className={`w-5 h-5 rounded-md flex-shrink-0 flex items-center justify-center border ${
+                        formData.serviceType === service.id
                           ? "bg-primary-500 dark:bg-primary-400 border-primary-500 dark:border-primary-400"
                           : "border-gray-300 dark:border-gray-500"
                       }`}
                     >
-                      {formData.services.includes(service.id) && (
+                      {formData.serviceType === service.id && (
                         <CheckCircle size={13} className="text-white" />
                       )}
                     </div>
-                    <span>{service.label}</span>
+                    <span className="text-sm">{service.label}</span>
                   </div>
                 ))}
               </div>
@@ -284,14 +403,13 @@ const ProjectForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
-                  Budget Range
+                  Budget Range <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="budget"
                   value={formData.budget}
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
-                  itemProp="priceRange"
                 >
                   <option value="" disabled>
                     Select budget range
@@ -306,7 +424,7 @@ const ProjectForm = () => {
 
               <div>
                 <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
-                  Timeline
+                  Timeline <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="timeline"
@@ -363,34 +481,137 @@ const ProjectForm = () => {
 
             <div>
               <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
-                Project Description
+                Project Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="projectName"
+                value={formData.projectName}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
+                placeholder="Give your project a name"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
+                Project Description <span className="text-red-500">*</span>
               </label>
               <textarea
-                name="description"
-                value={formData.description}
+                name="projectDescription"
+                value={formData.projectDescription}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200 min-h-[150px]"
-                placeholder="Tell us about your project, goals, and specific requirements..."
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200 min-h-[120px]"
+                placeholder="Describe your project in detail..."
                 required
-                itemProp="description"
               ></textarea>
             </div>
 
-            <div className="py-2">
-              <div className="rounded-lg p-4 bg-primary-50 dark:bg-primary-900/10 border border-primary-100 dark:border-primary-800 flex items-start gap-3">
-                <Info
-                  size={20}
-                  className="text-primary-500 dark:text-primary-400 mt-0.5 flex-shrink-0"
+            <div>
+              <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
+                Project Goals <span className="text-red-500">*</span>
+                <span className="ml-1 text-sm text-gray-500">
+                  (add at least one)
+                </span>
+              </label>
+              <div className="flex">
+                <input
+                  type="text"
+                  name="goal"
+                  value={formData.goal}
+                  onChange={handleChange}
+                  onKeyPress={handleGoalKeyPress}
+                  className="flex-grow px-4 py-3 rounded-l-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
+                  placeholder="Add a project goal"
                 />
-                <div className="text-sm text-primary-900 dark:text-primary-300">
-                  <p className="font-medium mb-1">Project Submission Tips</p>
-                  <p>
-                    The more details you provide, the better we can understand
-                    your needs and provide an accurate estimate.
-                  </p>
-                </div>
+                <button
+                  type="button"
+                  onClick={handleAddGoal}
+                  className="px-4 py-3 rounded-r-lg bg-primary-500 dark:bg-primary-600 text-white font-medium"
+                >
+                  Add
+                </button>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {formData.projectGoals.map((goal, index) => (
+                  <div
+                    key={index}
+                    className="bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 px-3 py-1.5 rounded-full text-sm flex items-center gap-2"
+                  >
+                    {goal}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveGoal(index)}
+                      className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 focus:outline-none"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
+                  Industry <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="industry"
+                  value={formData.industry}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="" disabled>
+                    Select industry
+                  </option>
+                  {industryOptions.map((industry, index) => (
+                    <option key={index} value={industry}>
+                      {industry}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
+                  Company Website{" "}
+                  <span className="text-gray-500 dark:text-gray-400 text-sm">
+                    (Optional)
+                  </span>
+                </label>
+                <input
+                  type="url"
+                  name="companyWebsite"
+                  value={formData.companyWebsite}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200"
+                  placeholder="https://your-company.com"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
+                Target Audience <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                name="targetAudience"
+                value={formData.targetAudience}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200 min-h-[80px]"
+                placeholder="Describe your target audience..."
+                required
+              ></textarea>
+            </div>
+
+            {submitError && (
+              <div className="p-4 bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm">
+                {submitError}
+              </div>
+            )}
 
             <div className="pt-6 flex justify-between">
               <button
@@ -406,9 +627,7 @@ const ProjectForm = () => {
                 type="button"
                 className="px-6 py-3 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 text-white font-medium flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-200"
                 onClick={handleSubmit}
-                itemProp="potentialAction"
-                itemScope
-                itemType="https://schema.org/SubmitAction"
+                disabled={isSubmitting}
               >
                 {isSubmitting ? (
                   <>
