@@ -15,14 +15,14 @@ export default defineConfig({
       },
       output: {
         manualChunks: (id) => {
-          // Don't include React in manual chunks as it's treated as external
           if (id.includes("node_modules")) {
+            // Let React and related packages be handled by Vite's default chunking
             if (
               id.includes("react") ||
               id.includes("react-dom") ||
               id.includes("react-router-dom")
             ) {
-              return "vendor-react";
+              return; // Don't manually chunk React packages
             }
 
             // Other vendor dependencies
