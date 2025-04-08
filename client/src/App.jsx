@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp } from "lucide-react";
+import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Header from "./components/Header/Header";
 import Portfolio from "./components/Portfolio/Portfolio";
@@ -9,12 +10,64 @@ import Services from "./components/Services/Services";
 import About from "./components/About/About";
 import Contact from "./components/Contact/Contact";
 import Footer from "./components/Footer/Footer";
-import Text from "./components/Text";
 import ThemeToggle from "./components/ThemeToggle";
 import { SeoHead, PAGE_SEO, getOrganizationSchema } from "./components/SEO";
+import GetStarted from "./pages/GetStarted/GetStarted";
+import ServicesPage from "./pages/Services/ServicesPage";
+import HotelManagementSystem from "./pages/Services/HotelManagementSystem";
+import SchoolManagementSystem from "./pages/Services/SchoolManagementSystem";
+import HospitalManagementSystem from "./pages/Services/HospitalManagementSystem";
+import EcommerceManagementSystem from "./pages/Services/EcommerceManagementSystem";
+import ERPSystem from "./pages/Services/ERPSystem";
+import UIUXDesign from "./pages/Services/UIUXDesign";
+import WebDevelopment from "./pages/Services/WebDevelopment";
+import MobileAppDevelopment from "./pages/Services/MobileAppDevelopment";
+import CustomSoftwareDevelopment from "./pages/Services/CustomSoftwareDevelopment";
+import DatabaseSolutions from "./pages/Services/DatabaseSolutions";
+import PayrollManagementSystem from "./pages/Services/PayrollManagementSystem";
+import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
+import TermsOfService from "./pages/Legal/TermsOfService";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import AdminHome from "./pages/Admin/AdminHome";
+import BookingsList from "./pages/Admin/BookingsList";
+import BookingDetails from "./pages/Admin/BookingDetails";
+import ContactsList from "./pages/Admin/ContactsList";
+import ContactDetails from "./pages/Admin/ContactDetails";
+import ProjectPipeline from "./pages/Admin/ProjectPipeline";
+import CreateProjectForm from "./pages/Admin/CreateProjectForm";
+import EditProjectForm from "./pages/Admin/EditProjectForm";
+import ProjectDetails from "./pages/Admin/ProjectDetails";
+import ProjectsCalendar from "./pages/Admin/ProjectsCalendar";
+import ProjectsList from "./pages/Admin/ProjectsList";
+import BookingsCalendar from "./pages/Admin/BookingsCalendar";
+import Finance from "./pages/Admin/Finance";
+import AdminBookingForm from "./pages/Admin/AdminBookingForm";
 
+// Import placeholder components for the settings
+const AdminSettings = () => (
+  <div className="p-6">
+    <h1 className="mb-4 text-2xl font-bold">Admin Settings</h1>
+    <p>
+      This page is under construction. Admin settings will be available soon.
+    </p>
+  </div>
+);
+
+const AdminProfile = () => (
+  <div className="p-6">
+    <h1 className="mb-4 text-2xl font-bold">Admin Profile</h1>
+    <p>
+      This page is under construction. Admin profile settings will be available
+      soon.
+    </p>
+  </div>
+);
+
+// Main App component with routing
 function App() {
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     // Preload animations and resources
@@ -103,8 +156,8 @@ function App() {
     },
   };
 
-  return (
-    <div className="min-h-screen bg-surface-50 dark:bg-dark-200 text-gray-900 dark:text-gray-100">
+  const HomePage = () => (
+    <>
       <SeoHead
         title={PAGE_SEO.home.title}
         description={PAGE_SEO.home.description}
@@ -112,9 +165,18 @@ function App() {
         pathname="/"
         structuredData={getOrganizationSchema()}
       />
+      <Header />
+      <Services />
+      <Portfolio />
+      <About />
+      <Contact />
+    </>
+  );
 
+  return (
+    <div className="min-h-screen bg-surface-50 dark:bg-dark-200 text-gray-900 dark:text-gray-100">
       <AnimatePresence mode="wait">
-        {loading ? (
+        {loading && isHomePage ? (
           <motion.div
             key="loader"
             className="fixed inset-0 flex flex-col items-center justify-center bg-surface-50 dark:bg-dark-100 z-50 p-6"
@@ -177,11 +239,77 @@ function App() {
             animate="visible"
           >
             <Navbar />
-            <Header />
-            <Services />
-            <Portfolio />
-            <About />
-            <Contact />
+
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/get-started" element={<GetStarted />} />
+              <Route path="/services" element={<ServicesPage />} />
+              <Route
+                path="/services/hotel-management-system"
+                element={<HotelManagementSystem />}
+              />
+              <Route
+                path="/services/school-management-system"
+                element={<SchoolManagementSystem />}
+              />
+              <Route
+                path="/services/hospital-management-system"
+                element={<HospitalManagementSystem />}
+              />
+              <Route
+                path="/services/ecommerce-management-system"
+                element={<EcommerceManagementSystem />}
+              />
+              <Route path="/services/erp-system" element={<ERPSystem />} />
+              <Route path="/services/ui-ux-design" element={<UIUXDesign />} />
+              <Route
+                path="/services/web-development"
+                element={<WebDevelopment />}
+              />
+              <Route
+                path="/services/mobile-app-development"
+                element={<MobileAppDevelopment />}
+              />
+              <Route
+                path="/services/custom-software-development"
+                element={<CustomSoftwareDevelopment />}
+              />
+              <Route
+                path="/services/database-solutions"
+                element={<DatabaseSolutions />}
+              />
+              <Route
+                path="/services/payroll-management-system"
+                element={<PayrollManagementSystem />}
+              />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/admin" element={<AdminDashboard />}>
+                <Route index element={<AdminHome />} />
+                <Route path="bookings" element={<BookingsList />} />
+                <Route path="bookings/new" element={<AdminBookingForm />} />
+                <Route path="bookings/:id" element={<BookingDetails />} />
+                <Route
+                  path="bookings/calendar"
+                  element={<BookingsCalendar />}
+                />
+                <Route path="contacts" element={<ContactsList />} />
+                <Route path="contacts/:id" element={<ContactDetails />} />
+                <Route path="projects" element={<ProjectPipeline />} />
+                <Route path="projects/list" element={<ProjectsList />} />
+                <Route path="projects/new" element={<CreateProjectForm />} />
+                <Route
+                  path="projects/calendar"
+                  element={<ProjectsCalendar />}
+                />
+                <Route path="projects/:id/edit" element={<EditProjectForm />} />
+                <Route path="projects/:id" element={<ProjectDetails />} />
+                <Route path="finance" element={<Finance />} />
+                <Route path="settings" element={<AdminSettings />} />
+                <Route path="profile" element={<AdminProfile />} />
+              </Route>
+            </Routes>
+
             <Footer />
 
             <motion.button

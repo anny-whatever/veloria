@@ -1,9 +1,22 @@
 // client/src/api/index.js - Updated API configuration
 import axios from "axios";
 
+// Check if code is running in browser environment
+const isBrowser = typeof window !== "undefined";
+
+// Determine base URL for API requests
+const getBaseUrl = () => {
+  // In browser, use the environment variable or default
+  if (isBrowser) {
+    return import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  }
+  // In server environment, use a known default
+  return process.env.VITE_API_URL || "http://localhost:5000/api";
+};
+
 // Create axios instance with default config
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL: getBaseUrl(),
   headers: {
     "Content-Type": "application/json",
   },
@@ -13,7 +26,9 @@ const API = axios.create({
 // Add request interceptor for debugging
 API.interceptors.request.use(
   (config) => {
-    console.log(`Making request to: ${config.baseURL}${config.url}`);
+    if (isBrowser) {
+      console.log(`Making request to: ${config.baseURL}${config.url}`);
+    }
     return config;
   },
   (error) => {
@@ -27,10 +42,12 @@ API.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error("API Error:", error.message);
-    // Log additional details when available
-    if (error.response) {
-      console.error("Response data:", error.response.data);
+    if (isBrowser) {
+      console.error("API Error:", error.message);
+      // Log additional details when available
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+      }
     }
     return Promise.reject(error);
   }

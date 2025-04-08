@@ -1,4 +1,3 @@
-// client/src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -8,16 +7,17 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import "./index.css";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.hydrateRoot(
+  document.getElementById("root"),
   <React.StrictMode>
-    <AuthProvider>
-      <ThemeProvider>
-        <HelmetProvider>
-          <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
+        <ThemeProvider>
+          <HelmetProvider>
             <App />
-          </BrowserRouter>
-        </HelmetProvider>
-      </ThemeProvider>
-    </AuthProvider>
+          </HelmetProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

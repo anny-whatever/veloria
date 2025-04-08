@@ -3,6 +3,9 @@ import { createContext, useState, useContext, useEffect } from "react";
 // Create theme context
 const ThemeContext = createContext();
 
+// Check if code is running in browser environment
+const isBrowser = typeof window !== "undefined";
+
 // Custom hook to use the theme context
 export const useTheme = () => {
   const context = useContext(ThemeContext);
@@ -15,6 +18,9 @@ export const useTheme = () => {
 // Theme provider component
 export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
+    // When running on the server, default to dark mode
+    if (!isBrowser) return true;
+
     // Check for saved preference or system preference
     const savedMode = localStorage.getItem("darkMode");
 
@@ -39,13 +45,17 @@ export const ThemeProvider = ({ children }) => {
   const toggleDarkMode = () => {
     setIsDarkMode((prev) => {
       const newMode = !prev;
-      localStorage.setItem("darkMode", newMode);
+      if (isBrowser) {
+        localStorage.setItem("darkMode", newMode);
+      }
       return newMode;
     });
   };
 
   // Listen for changes in system color scheme preference
   useEffect(() => {
+    if (!isBrowser) return; // Skip on server
+
     try {
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -79,6 +89,8 @@ export const ThemeProvider = ({ children }) => {
 
   // Apply dark mode class to document
   useEffect(() => {
+    if (!isBrowser) return; // Skip on server
+
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
     } else {

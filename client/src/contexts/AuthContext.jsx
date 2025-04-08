@@ -4,11 +4,20 @@ import API from "../api";
 
 const AuthContext = createContext({});
 
+// Check if code is running in browser environment
+const isBrowser = typeof window !== "undefined";
+
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Skip on server
+    if (!isBrowser) {
+      setLoading(false);
+      return;
+    }
+
     // Check if user is already logged in
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
@@ -28,12 +37,14 @@ export const AuthProvider = ({ children }) => {
 
   // Set auth with token and update API headers
   const setAuthWithToken = (tokenData, userData) => {
-    // Store in localStorage
-    localStorage.setItem("token", tokenData);
-    localStorage.setItem("user", JSON.stringify(userData));
+    if (isBrowser) {
+      // Store in localStorage
+      localStorage.setItem("token", tokenData);
+      localStorage.setItem("user", JSON.stringify(userData));
 
-    // Set auth token for API requests
-    API.defaults.headers.common["Authorization"] = `Bearer ${tokenData}`;
+      // Set auth token for API requests
+      API.defaults.headers.common["Authorization"] = `Bearer ${tokenData}`;
+    }
 
     // Update auth state
     setAuth({ token: tokenData, user: userData });
@@ -41,9 +52,11 @@ export const AuthProvider = ({ children }) => {
 
   // Logout function
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    delete API.defaults.headers.common["Authorization"];
+    if (isBrowser) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      delete API.defaults.headers.common["Authorization"];
+    }
     setAuth({});
   };
 
