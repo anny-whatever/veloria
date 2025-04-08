@@ -30,11 +30,34 @@
     <!-- Preload Critical Assets -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Page performance optimizations -->
+    <script>
+      // Optimize back/forward cache restoration
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker
+            .register("/service-worker.js")
+            .catch(function () {
+              // Silent fail if service worker registration fails
+            });
+        });
+      }
+      // Mark LCP candidates for faster identification
+      document.addEventListener("DOMContentLoaded", () => {
+        const imgs = document.querySelectorAll("img");
+        imgs.forEach((img) => {
+          if (img.offsetWidth * img.offsetHeight > 50000) {
+            img.setAttribute("fetchpriority", "high");
+          }
+        });
+      });
+    </script>
   </head>
   <body>
     <div id="root"><!--app-html--></div>
     <script type="module" src="/src/entry-client.jsx"></script>
-    <!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) - Cookieless Analytics -->
     <script
       async
       src="https://www.googletagmanager.com/gtag/js?id=G-ZSMW4GH4X7"
@@ -46,7 +69,18 @@
       }
       gtag("js", new Date());
 
-      gtag("config", "G-ZSMW4GH4X7");
+      // Configure for cookieless analytics mode
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        analytics_storage: "denied",
+      });
+
+      gtag("config", "G-ZSMW4GH4X7", {
+        client_storage: "none",
+        anonymize_ip: true,
+        cookie_flags: "SameSite=None;Secure",
+        cookie_expires: 0,
+      });
     </script>
   </body>
 </html>
