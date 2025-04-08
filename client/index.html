@@ -27,9 +27,75 @@
 
     <title>Veloria | Web Design & Development Agency India</title>
 
-    <!-- Preload Critical Assets -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Preconnect to origin -->
+    <link rel="preconnect" href="https://veloria.in" crossorigin />
+
+    <!-- DNS prefetch for Google Tag Manager -->
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link
+      rel="preconnect"
+      href="https://www.googletagmanager.com"
+      crossorigin
+    />
+
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/assets/index-*.css" as="style" />
+    <link rel="preload" href="/assets/vendor-*.js" as="script" />
+
+    <!-- Defer non-critical JavaScript -->
+    <script>
+      // Defer non-critical JavaScript loading
+      function loadDeferred(src) {
+        const script = document.createElement("script");
+        script.src = src;
+        script.defer = true;
+        document.head.appendChild(script);
+      }
+
+      // Add font loading optimization
+      if ("fonts" in document) {
+        document.fonts.addEventListener("loadingdone", function (event) {
+          document.documentElement.classList.add("fonts-loaded");
+        });
+      }
+    </script>
+
+    <!-- Inline critical CSS if available -->
+    <style id="critical-css">
+      /* Critical path CSS to be added during build */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+      /* Force page to have a light background immediately to avoid flash on dark mode OS */
+      body.light {
+        background-color: #ffffff;
+        color: #1a202c;
+      }
+      body.dark {
+        background-color: #1a202c;
+        color: #f7fafc;
+      }
+    </style>
+
+    <!-- LCP optimization - Add opacity to hide LCP elements until fully loaded -->
+    <style>
+      .lcp-element {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+      .lcp-loaded .lcp-element {
+        opacity: 1;
+      }
+    </style>
+    <script>
+      // Add class to body once loaded to trigger LCP elements visibility
+      window.addEventListener("load", function () {
+        document.body.classList.add("lcp-loaded");
+      });
+    </script>
   </head>
   <body>
     <div id="root"><!--app-html--></div>
