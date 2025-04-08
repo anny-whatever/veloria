@@ -3,23 +3,14 @@ module.exports = {
     {
       name: "veloria-ssr",
       script: "server.js",
-      instances: "max",
-      exec_mode: "cluster",
-      watch: false,
-      autorestart: true,
-      max_memory_restart: "1G",
       env: {
         NODE_ENV: "production",
         PORT: 3001,
       },
-      env_development: {
-        NODE_ENV: "development",
-        PORT: 3001,
-      },
-      time: true,
-      error_file: "logs/err.log",
-      out_file: "logs/out.log",
-      log_date_format: "YYYY-MM-DD HH:mm:ss",
+      instances: "max",
+      exec_mode: "cluster",
+      max_memory_restart: "300M",
+      log_date_format: "YYYY-MM-DD HH:mm Z",
     },
   ],
   deploy: {
