@@ -43,6 +43,8 @@ const Footer = () => {
                 className="w-9 h-9 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-gray-600 dark:text-white hover:bg-primary-500 hover:text-white dark:hover:bg-primary-600 transition-all duration-300"
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.9 }}
+                aria-label="Visit our Facebook page"
+                title="Veloria on Facebook"
               >
                 <Facebook size={18} />
               </motion.a>
@@ -51,6 +53,8 @@ const Footer = () => {
                 className="w-9 h-9 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-gray-600 dark:text-white hover:bg-primary-500 hover:text-white dark:hover:bg-primary-600 transition-all duration-300"
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.9 }}
+                aria-label="Follow us on Twitter"
+                title="Veloria on Twitter"
               >
                 <Twitter size={18} />
               </motion.a>
@@ -59,6 +63,8 @@ const Footer = () => {
                 className="w-9 h-9 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-gray-600 dark:text-white hover:bg-primary-500 hover:text-white dark:hover:bg-primary-600 transition-all duration-300"
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.9 }}
+                aria-label="Check our Instagram profile"
+                title="Veloria on Instagram"
               >
                 <Instagram size={18} />
               </motion.a>
@@ -67,6 +73,8 @@ const Footer = () => {
                 className="w-9 h-9 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-gray-600 dark:text-white hover:bg-primary-500 hover:text-white dark:hover:bg-primary-600 transition-all duration-300"
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.9 }}
+                aria-label="Connect with us on LinkedIn"
+                title="Veloria on LinkedIn"
               >
                 <Linkedin size={18} />
               </motion.a>
@@ -178,9 +186,9 @@ const Footer = () => {
             </ul>
 
             {/* Newsletter */}
-            <h4 className="text-base font-bold mb-2 text-gray-800 dark:text-white">
+            <h3 className="text-base font-bold mb-2 text-gray-800 dark:text-white">
               Join Our Newsletter
-            </h4>
+            </h3>
             <div className="flex">
               <input
                 type="email"

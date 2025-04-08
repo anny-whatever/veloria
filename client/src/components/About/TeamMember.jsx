@@ -100,6 +100,8 @@ const TeamMember = ({ member, index }) => {
               className={`p-2 rounded-full bg-${memberColor}/10 dark:bg-${memberColor}/20 text-${memberColor}-600 dark:text-${memberColor}-400 hover:bg-${memberColor}-500 hover:text-white transition-all duration-300`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              aria-label={`Connect with ${member.name} on ${platform}`}
+              title={`${member.name}'s ${platform} profile`}
             >
               {getSocialIcon(platform)}
             </motion.a>

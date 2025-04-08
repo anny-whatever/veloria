@@ -108,12 +108,13 @@ const ContactForm = ({ onSubmit }) => {
 
       <motion.button
         type="submit"
-        className="px-6 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 text-white rounded-lg shadow-md flex items-center justify-center"
+        className="px-8 py-4 bg-gradient-to-r from-primary-700 to-secondary-700 dark:from-primary-600 dark:to-secondary-600 text-white rounded-lg shadow-md flex items-center justify-center"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
+        aria-label="Send Message"
       >
         <span>Send Message</span>
-        <Send size={18} className="ml-2" />
+        <Send size={18} className="ml-2" aria-hidden="true" />
       </motion.button>
     </form>
   );
