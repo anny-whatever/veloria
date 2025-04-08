@@ -2,10 +2,24 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 import { splitVendorChunkPlugin } from "vite";
+import { imagetools } from "vite-imagetools";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), splitVendorChunkPlugin()],
+  plugins: [
+    react(),
+    splitVendorChunkPlugin(),
+    imagetools({
+      defaultDirectives: () => {
+        return new URLSearchParams({
+          format: "webp;avif;original", // Generate WebP, AVIF and original format
+          quality: "80", // Default quality
+          w: "800", // Default max width
+          as: "picture", // Generate picture element
+        });
+      },
+    }),
+  ],
   server: {
     allowedHosts: ["veloria.in", "www.veloria.in"],
   },

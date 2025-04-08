@@ -48,6 +48,7 @@ import ProjectsList from "./pages/Admin/ProjectsList";
 import BookingsCalendar from "./pages/Admin/BookingsCalendar";
 import Finance from "./pages/Admin/Finance";
 import AdminBookingForm from "./pages/Admin/AdminBookingForm";
+import NotFound from "./pages/NotFound";
 
 // Import placeholder components for the settings
 const AdminSettings = () => (
@@ -294,6 +295,8 @@ function App() {
             <Route path="settings" element={<AdminSettings />} />
             <Route path="profile" element={<AdminProfile />} />
           </Route>
+          {/* Catch-all route for 404 page */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
 
         <Footer />
