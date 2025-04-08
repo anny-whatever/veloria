@@ -14,7 +14,7 @@ async function createServer() {
   const app = express();
 
   // Enable compression
-  app.use(compression({ level: 6 }));
+  app.use(compression());
 
   let vite;
 
@@ -30,27 +30,6 @@ async function createServer() {
     app.use(
       serveStatic(path.resolve(__dirname, "dist/client"), {
         index: false,
-        maxAge: "1d",
-        setHeaders: (res, path) => {
-          // Set headers for assets to enable better caching
-          if (path.includes("/assets/")) {
-            res.setHeader(
-              "Cache-Control",
-              "public, max-age=2592000, immutable"
-            );
-          } else if (
-            path.match(
-              /\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/
-            )
-          ) {
-            res.setHeader(
-              "Cache-Control",
-              "public, max-age=1296000, immutable"
-            );
-          }
-          // Add header for better compression and client caching
-          res.setHeader("Vary", "Accept-Encoding");
-        },
       })
     );
 
@@ -58,13 +37,8 @@ async function createServer() {
     app.use(
       "/assets",
       express.static(path.resolve(__dirname, "dist/client/assets"), {
-        maxAge: "30d",
+        maxAge: "1y",
         immutable: true,
-        setHeaders: (res) => {
-          // Explicitly set cache headers
-          res.setHeader("Cache-Control", "public, max-age=2592000, immutable");
-          res.setHeader("Vary", "Accept-Encoding");
-        },
       })
     );
   }
@@ -119,16 +93,8 @@ async function createServer() {
         );
       }
 
-      // Set appropriate headers for HTML - use no-cache but not no-store to enable bfcache
-      res
-        .status(200)
-        .set({
-          "Content-Type": "text/html",
-          "Cache-Control": "no-cache, must-revalidate",
-          Pragma: "no-cache",
-          Expires: "0",
-        })
-        .end(htmlWithApp);
+      // Set appropriate headers and send the rendered HTML
+      res.status(200).set({ "Content-Type": "text/html" }).end(htmlWithApp);
     } catch (e) {
       // If error, let Vite handle error processing in dev, or pass to next middleware in prod
       if (!isProduction) {
@@ -140,7 +106,7 @@ async function createServer() {
   });
 
   app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
   });
 }
 

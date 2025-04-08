@@ -137,7 +137,7 @@ const WebDevelopment = () => {
                 >
                   <a
                     href="/get-started"
-                    className="bg-primary-700 hover:bg-primary-800 text-white px-6 py-3 rounded-lg font-medium transition-all"
+                    className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-all"
                   >
                     Get Started
                   </a>

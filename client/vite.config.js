@@ -14,17 +14,20 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
       },
       output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
-          ui: ["framer-motion", "lucide-react"],
-          calendar: [
-            "@fullcalendar/core",
-            "@fullcalendar/daygrid",
-            "@fullcalendar/timegrid",
-            "@fullcalendar/interaction",
-            "@fullcalendar/list",
-            "@fullcalendar/react",
-          ],
+        manualChunks: (id) => {
+          // Don't include React in manual chunks as it's treated as external
+          if (id.includes("node_modules")) {
+            if (
+              id.includes("react") ||
+              id.includes("react-dom") ||
+              id.includes("react-router-dom")
+            ) {
+              return "vendor-react";
+            }
+
+            // Other vendor dependencies
+            return "vendor";
+          }
         },
       },
     },
@@ -36,22 +39,6 @@ export default defineConfig({
     manifest: true,
     // Use clean URLs for JS/CSS assets
     cssCodeSplit: true,
-    // Optimize code bundle size
-    minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-        pure_funcs: ["console.log", "console.info", "console.debug"],
-      },
-      format: {
-        comments: false,
-      },
-    },
-    // Improve chunking strategy
-    chunkSizeWarningLimit: 1000,
-    // Tree-shaking
-    sourcemap: false,
   },
   ssr: {
     // SSR specific configurations

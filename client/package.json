@@ -8,12 +8,7 @@
     "dev:ssr": "node server.js",
     "build": "npm run generate-sitemap && vite build",
     "build:ssr": "npm run generate-sitemap && node scripts/build-ssr.js",
-    "build:analyze": "vite build --mode analyze",
     "generate-sitemap": "node scripts/generate-sitemap.js",
-    "optimize:js": "node scripts/optimize-js.js",
-    "optimize:images": "node scripts/optimize-images.js",
-    "build:production": "npm run generate-sitemap && npm run optimize:js && vite build && npm run optimize:images",
-    "build:ssr:production": "npm run generate-sitemap && npm run optimize:js && node scripts/build-ssr.js && npm run optimize:images",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "serve:ssr": "NODE_ENV=production node server.js"
@@ -48,13 +43,8 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
-    "imagemin": "^8.0.1",
-    "imagemin-webp": "^8.0.0",
     "postcss": "^8.4.29",
-    "rollup-plugin-visualizer": "^5.9.2",
-    "sharp": "^0.32.5",
     "tailwindcss": "^3.3.3",
-    "terser": "^5.19.4",
     "vite": "^4.4.5"
   }
 }

@@ -120,9 +120,9 @@ const Contact = () => {
               >
                 {info.icon}
               </div>
-              <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">
+              <h4 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">
                 {info.title}
-              </h3>
+              </h4>
               <p
                 className={`text-${info.color}-600 dark:text-${info.color}-400 font-medium mb-1`}
               >
@@ -189,8 +189,6 @@ const Contact = () => {
                     allowFullScreen=""
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    title="Google Maps showing Veloria Studio location at Palava City, Mumbai"
-                    aria-label="Veloria office location map at Palava City"
                   ></iframe>
                 </div>
               </div>
@@ -237,9 +235,8 @@ const Contact = () => {
                   className="w-full py-3 rounded-lg bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 text-white font-medium flex items-center justify-center"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  aria-label="Get directions to our office"
                 >
-                  <MapPin size={18} className="mr-2" aria-hidden="true" />
+                  <MapPin size={18} className="mr-2" />
                   Get Directions
                 </motion.button>
               </div>

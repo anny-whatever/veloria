@@ -137,15 +137,13 @@ const MobileAppDevelopment = () => {
                 >
                   <a
                     href="/get-started"
-                    className="bg-primary-700 hover:bg-primary-800 text-white px-8 py-4 rounded-lg font-medium transition-all"
-                    aria-label="Get started with mobile app development"
+                    className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-all"
                   >
                     Get Started
                   </a>
                   <a
                     href="/contact"
-                    className="bg-white dark:bg-dark-300 hover:bg-gray-100 dark:hover:bg-dark-400 text-gray-900 dark:text-white px-8 py-4 rounded-lg font-medium transition-all"
-                    aria-label="Contact us about mobile app development"
+                    className="bg-white dark:bg-dark-300 hover:bg-gray-100 dark:hover:bg-dark-400 text-gray-900 dark:text-white px-6 py-3 rounded-lg font-medium transition-all"
                   >
                     Contact Us
                   </a>
