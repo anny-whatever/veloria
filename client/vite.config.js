@@ -6,7 +6,7 @@ import { resolve } from "path";
 export default defineConfig({
   plugins: [react()],
   server: {
-    allowedHosts: ["9344-49-36-101-231.ngrok-free.app"],
+    allowedHosts: ["veloria.in", "www.veloria.in"],
   },
   build: {
     rollupOptions: {
