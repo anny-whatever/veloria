@@ -1,27 +1,11 @@
 // client/src/contexts/AuthContext.jsx
-import { createContext, useState, useEffect, useContext } from "react";
-import API from "../api/index";
+import { createContext, useState, useEffect } from "react";
+import API from "../api";
 
 const AuthContext = createContext({});
 
 // Check if code is running in browser environment
 const isBrowser = typeof window !== "undefined";
-
-// Custom hook to use the auth context
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-
-  // Provide convenience accessors
-  return {
-    ...context,
-    user: context.auth.user,
-    token: context.auth.token,
-    isAuthenticated: !!context.auth.token,
-  };
-};
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({});
