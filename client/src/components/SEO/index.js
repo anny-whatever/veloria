@@ -8,6 +8,11 @@ import {
   getServiceSchema,
   getLegalPageSchema,
 } from "./seoConfig";
+import BacklinkHelper from "./BacklinkHelper";
+import LinkBuildingStrategy from "./LinkBuildingStrategy";
+
+// Schema generators
+import { getServiceSchema as getServiceSchemaGenerator } from "./schemaGenerators";
 
 export {
   SeoHead,
@@ -16,6 +21,8 @@ export {
   KEYWORD_GROUPS,
   getOrganizationSchema,
   getLocalBusinessSchema,
-  getServiceSchema,
+  getServiceSchemaGenerator,
   getLegalPageSchema,
+  BacklinkHelper,
+  LinkBuildingStrategy,
 };

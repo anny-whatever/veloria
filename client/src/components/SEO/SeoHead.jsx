@@ -14,6 +14,10 @@ const SeoHead = ({
   keywords,
   structuredData,
   noIndex = false,
+  alternateLanguages = [],
+  author = "Veloria",
+  publishedDate,
+  modifiedDate,
 }) => {
   // Base URL for the website
   const siteUrl = "https://veloria.in";
@@ -31,6 +35,35 @@ const SeoHead = ({
       <meta name="description" content={description} />
       {keywords && <meta name="keywords" content={keywords} />}
       <link rel="canonical" href={canonical} />
+
+      {/* Author and dates for better SEO */}
+      <meta name="author" content={author} />
+      {publishedDate && (
+        <meta name="article:published_time" content={publishedDate} />
+      )}
+      {modifiedDate && (
+        <meta name="article:modified_time" content={modifiedDate} />
+      )}
+
+      {/* Alternate language versions for international SEO */}
+      {alternateLanguages.map((lang) => (
+        <link
+          key={lang.code}
+          rel="alternate"
+          hrefLang={lang.code}
+          href={`${siteUrl}${lang.path || pathname}`}
+        />
+      ))}
+      {alternateLanguages.length > 0 && (
+        <link rel="alternate" hrefLang="x-default" href={canonical} />
+      )}
+
+      {/* Rich snippet optimization tags */}
+      <meta
+        property="article:publisher"
+        content="https://www.facebook.com/veloria"
+      />
+      <meta property="article:section" content="Technology" />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={ogType} />
@@ -50,6 +83,8 @@ const SeoHead = ({
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage || defaultOgImage} />
+      <meta name="twitter:site" content="@veloria_in" />
+      <meta name="twitter:creator" content="@veloria_in" />
 
       {/* Contact Information */}
       <meta name="contact" content="info@veloria.in" />
@@ -58,6 +93,12 @@ const SeoHead = ({
 
       {/* No index if needed */}
       {noIndex && <meta name="robots" content="noindex, nofollow" />}
+      {!noIndex && (
+        <meta
+          name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
+      )}
 
       {/* Structured Data / Schema.org */}
       {structuredData && (
@@ -79,6 +120,15 @@ SeoHead.propTypes = {
   keywords: PropTypes.string,
   structuredData: PropTypes.object,
   noIndex: PropTypes.bool,
+  alternateLanguages: PropTypes.arrayOf(
+    PropTypes.shape({
+      code: PropTypes.string.isRequired,
+      path: PropTypes.string,
+    })
+  ),
+  author: PropTypes.string,
+  publishedDate: PropTypes.string,
+  modifiedDate: PropTypes.string,
 };
 
 export default SeoHead;

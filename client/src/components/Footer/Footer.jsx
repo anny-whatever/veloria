@@ -1,4 +1,6 @@
 // src/components/Footer/Footer.jsx
+import React from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Twitter,
@@ -10,13 +12,47 @@ import {
   Mail,
   Phone,
   MapPin,
+  ArrowUpRight,
 } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
+  // Define industry directories for backlinks
+  const industryDirectories = [
+    {
+      name: "Clutch",
+      url: "https://clutch.co/profile/veloria",
+      rel: "noopener noreferrer",
+    },
+    {
+      name: "GoodFirms",
+      url: "https://www.goodfirms.co/company/veloria",
+      rel: "noopener noreferrer",
+    },
+    {
+      name: "DesignRush",
+      url: "https://www.designrush.com/agency/profile/veloria",
+      rel: "noopener noreferrer",
+    },
+  ];
+
+  // Define industry associations
+  const industryAssociations = [
+    {
+      name: "NASSCOM",
+      url: "https://nasscom.in/",
+      rel: "noopener noreferrer",
+    },
+    {
+      name: "CII",
+      url: "https://www.cii.in/",
+      rel: "noopener noreferrer",
+    },
+  ];
+
   return (
-    <footer className="bg-gray-100 dark:bg-dark-100 relative overflow-hidden border-t border-gray-200 dark:border-gray-800">
+    <footer className="bg-surface-100 dark:bg-dark-100 border-t border-gray-200 dark:border-gray-800 pt-12 pb-6">
       {/* Decorative Elements - Make sure they're visible in both modes */}
       <div className="absolute top-10 left-10 w-96 h-96 rounded-full bg-gradient-to-r from-primary-500/20 to-secondary-500/20 dark:from-primary-400/10 dark:to-secondary-400/10 blur-3xl -z-10"></div>
       <div className="absolute bottom-20 right-10 w-64 h-64 rounded-full bg-gradient-to-l from-accent-500/20 to-primary-500/20 dark:from-accent-400/10 dark:to-primary-400/10 blur-3xl -z-10"></div>
@@ -26,199 +62,217 @@ const Footer = () => {
       <div className="absolute bottom-40 left-1/4 w-24 h-24 rounded-full bg-gradient-to-br from-primary-500/15 to-accent-500/15 dark:from-primary-400/8 dark:to-accent-400/8 blur-xl -z-10"></div>
       <div className="absolute top-60 left-2/3 w-16 h-16 rounded-full bg-gradient-to-tr from-secondary-500/15 to-primary-500/15 dark:from-secondary-400/8 dark:to-primary-400/8 blur-lg -z-10"></div>
 
-      <div className="container mx-auto px-4 md:px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          {/* Logo and brief info */}
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Company Info */}
           <div>
-            <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent dark:from-primary-400 dark:to-secondary-400">
+            <h3 className="text-xl font-bold mb-4 text-primary-600 dark:text-primary-400">
               Veloria
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Crafting beautiful digital experiences that resonate with your
-              audience and bring your vision to life.
+            </h3>
+            <p className="mb-4 text-gray-700 dark:text-gray-300">
+              A leading web design and development agency delivering exceptional
+              digital experiences and custom software solutions.
             </p>
-            <div className="flex space-x-3">
-              <motion.a
-                href="#"
-                className="w-9 h-9 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-gray-600 dark:text-white hover:bg-primary-500 hover:text-white dark:hover:bg-primary-600 transition-all duration-300"
-                whileHover={{ y: -3 }}
-                whileTap={{ scale: 0.9 }}
+            <div className="flex space-x-4">
+              <a
+                href="https://twitter.com/veloria"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Twitter"
+                className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
               >
-                <Facebook size={18} />
-              </motion.a>
-              <motion.a
-                href="#"
-                className="w-9 h-9 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-gray-600 dark:text-white hover:bg-primary-500 hover:text-white dark:hover:bg-primary-600 transition-all duration-300"
-                whileHover={{ y: -3 }}
-                whileTap={{ scale: 0.9 }}
+                <Twitter size={20} />
+              </a>
+              <a
+                href="https://facebook.com/veloria"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
               >
-                <Twitter size={18} />
-              </motion.a>
-              <motion.a
-                href="#"
-                className="w-9 h-9 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-gray-600 dark:text-white hover:bg-primary-500 hover:text-white dark:hover:bg-primary-600 transition-all duration-300"
-                whileHover={{ y: -3 }}
-                whileTap={{ scale: 0.9 }}
+                <Facebook size={20} />
+              </a>
+              <a
+                href="https://instagram.com/veloria"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
               >
-                <Instagram size={18} />
-              </motion.a>
-              <motion.a
-                href="#"
-                className="w-9 h-9 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-gray-600 dark:text-white hover:bg-primary-500 hover:text-white dark:hover:bg-primary-600 transition-all duration-300"
-                whileHover={{ y: -3 }}
-                whileTap={{ scale: 0.9 }}
+                <Instagram size={20} />
+              </a>
+              <a
+                href="https://linkedin.com/company/veloria"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
               >
-                <Linkedin size={18} />
-              </motion.a>
+                <Linkedin size={20} />
+              </a>
             </div>
           </div>
 
-          {/* Quick links */}
+          {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold mb-4 relative inline-block text-gray-800 dark:text-white">
+            <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">
               Quick Links
-              <div className="absolute bottom-0 left-0 w-1/2 h-0.5 bg-primary-500 dark:bg-primary-400"></div>
             </h3>
-            <ul className="space-y-3">
-              {[
-                { name: "Home", href: "/" },
-                { name: "Services", href: "/services" },
-                { name: "Get Started", href: "/get-started" },
-                { name: "Contact", href: "/contact" },
-              ].map((link, index) => (
-                <motion.li
-                  key={index}
-                  className="transition-all duration-300"
-                  whileHover={{ x: 3 }}
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  to="/"
+                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
                 >
-                  <a
-                    href={link.href}
-                    className="text-gray-600 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors duration-300"
-                  >
-                    {link.name}
-                  </a>
-                </motion.li>
-              ))}
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/services"
+                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
+                >
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/about"
+                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
+                >
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
+                >
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/get-started"
+                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
+                >
+                  Get Started
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-bold mb-4 relative inline-block text-gray-800 dark:text-white">
-              Services
-              <div className="absolute bottom-0 left-0 w-1/2 h-0.5 bg-secondary-500 dark:bg-secondary-400"></div>
-            </h3>
-            <ul className="space-y-3">
-              {[
-                { name: "Web Development", href: "/services/web-development" },
-                {
-                  name: "Mobile App Development",
-                  href: "/services/mobile-app-development",
-                },
-                { name: "UI/UX Design", href: "/services/ui-ux-design" },
-                {
-                  name: "Hotel Management System",
-                  href: "/services/hotel-management-system",
-                },
-                {
-                  name: "E-commerce Solutions",
-                  href: "/services/ecommerce-management-system",
-                },
-              ].map((service, index) => (
-                <motion.li
-                  key={index}
-                  className="transition-all duration-300"
-                  whileHover={{ x: 3 }}
-                >
-                  <a
-                    href={service.href}
-                    className="text-gray-600 hover:text-secondary-500 dark:text-gray-400 dark:hover:text-secondary-400 transition-colors duration-300"
-                  >
-                    {service.name}
-                  </a>
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact Info & Newsletter */}
-          <div>
-            <h3 className="text-lg font-bold mb-4 relative inline-block text-gray-800 dark:text-white">
+            <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">
               Contact Us
-              <div className="absolute bottom-0 left-0 w-1/2 h-0.5 bg-accent-500 dark:bg-accent-400"></div>
             </h3>
-            <ul className="space-y-3 mb-6">
+            <ul className="space-y-3">
               <li className="flex items-start">
                 <Mail
                   size={18}
-                  className="text-accent-500 dark:text-accent-400 mt-1 mr-3 flex-shrink-0"
+                  className="mr-2 text-primary-600 dark:text-primary-400 mt-1 flex-shrink-0"
                 />
-                <span className="text-gray-600 dark:text-gray-400">
-                  support@veloria.in
-                </span>
+                <a
+                  href="mailto:info@veloria.in"
+                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
+                >
+                  info@veloria.in
+                </a>
               </li>
               <li className="flex items-start">
                 <Phone
                   size={18}
-                  className="text-accent-500 dark:text-accent-400 mt-1 mr-3 flex-shrink-0"
+                  className="mr-2 text-primary-600 dark:text-primary-400 mt-1 flex-shrink-0"
                 />
-                <span className="text-gray-600 dark:text-gray-400">
-                  +91 9315 360 595
-                </span>
+                <a
+                  href="tel:+919315360595"
+                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
+                >
+                  +91 9315360595
+                </a>
               </li>
               <li className="flex items-start">
                 <MapPin
                   size={18}
-                  className="text-accent-500 dark:text-accent-400 mt-1 mr-3 flex-shrink-0"
+                  className="mr-2 text-primary-600 dark:text-primary-400 mt-1 flex-shrink-0"
                 />
-                <span className="text-gray-600 dark:text-gray-400">
-                  1603, Palava City
-                </span>
+                <span className="text-gray-700 dark:text-gray-300">India</span>
               </li>
             </ul>
+          </div>
 
-            {/* Newsletter */}
-            <h4 className="text-base font-bold mb-2 text-gray-800 dark:text-white">
-              Join Our Newsletter
-            </h4>
-            <div className="flex">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="px-4 py-2 bg-white dark:bg-dark-300 border border-gray-300 dark:border-gray-700 rounded-l-lg text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 w-full"
-              />
-              <motion.button
-                className="bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 rounded-r-lg px-3 flex items-center justify-center text-white"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Send size={18} />
-              </motion.button>
+          {/* Industry Directories - For Backlinks */}
+          <div>
+            <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">
+              Industry Recognition
+            </h3>
+            <div className="mb-4">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                Find us on:
+              </p>
+              <ul className="space-y-2">
+                {industryDirectories.map((directory, index) => (
+                  <li key={index}>
+                    <a
+                      href={directory.url}
+                      target="_blank"
+                      rel={directory.rel}
+                      className="flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
+                    >
+                      {directory.name}
+                      <ArrowUpRight size={14} className="ml-1" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                Member of:
+              </p>
+              <ul className="space-y-2">
+                {industryAssociations.map((association, index) => (
+                  <li key={index}>
+                    <a
+                      href={association.url}
+                      target="_blank"
+                      rel={association.rel}
+                      className="flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
+                    >
+                      {association.name}
+                      <ArrowUpRight size={14} className="ml-1" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="h-px bg-gray-200 dark:bg-gray-800 mb-6"></div>
+        {/* Attribution Links Container - populated by BacklinkHelper */}
+        <div className="attribution-links text-sm opacity-80 mt-6 border-t border-gray-200 dark:border-gray-700 pt-4">
+          {/* This will be populated dynamically */}
+        </div>
 
-        {/* Copyright and policy links */}
-        <div className="flex flex-col md:flex-row justify-between items-center text-gray-600 dark:text-gray-400 text-sm">
-          <p>© {currentYear} Veloria Design. All rights reserved.</p>
-
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <a
-              href="/privacy-policy"
-              className="hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-300"
+        {/* Copyright */}
+        <div className="text-center mt-8 pt-6 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-600 dark:text-gray-400">
+          <p>
+            &copy; {currentYear} Veloria. All rights reserved.{" "}
+            <Link
+              to="/privacy-policy"
+              className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
             >
               Privacy Policy
-            </a>
-            <a
-              href="/terms-of-service"
-              className="hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-300"
+            </Link>{" "}
+            |{" "}
+            <Link
+              to="/terms-of-service"
+              className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
             >
               Terms of Service
-            </a>
-          </div>
+            </Link>
+          </p>
         </div>
       </div>
     </footer>
