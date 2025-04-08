@@ -116,7 +116,7 @@ const Header = () => {
               <Heading
                 level={1}
                 align={window.innerWidth < 768 ? "center" : "left"}
-                className="leading-tight tracking-tight"
+                className="leading-tight tracking-tight lcp-element"
               >
                 Comprehensive Systems
                 <span className="block bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-secondary-400 dark:to-accent-400">

@@ -14,17 +14,67 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
       },
       output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
-          ui: ["framer-motion", "lucide-react"],
-          calendar: [
-            "@fullcalendar/core",
-            "@fullcalendar/daygrid",
-            "@fullcalendar/timegrid",
-            "@fullcalendar/interaction",
-            "@fullcalendar/list",
-            "@fullcalendar/react",
-          ],
+        manualChunks: function (id) {
+          // Core framework dependencies
+          if (
+            id.includes("node_modules/react/") ||
+            id.includes("node_modules/react-dom/") ||
+            id.includes("node_modules/scheduler/")
+          ) {
+            return "vendor-react";
+          }
+
+          // Routing libraries
+          if (
+            id.includes("node_modules/react-router") ||
+            id.includes("node_modules/@remix-run/")
+          ) {
+            return "vendor-router";
+          }
+
+          // UI components and styling
+          if (
+            id.includes("node_modules/framer-motion/") ||
+            id.includes("node_modules/lucide-react/")
+          ) {
+            return "vendor-ui";
+          }
+
+          // Calendar-related dependencies - only load on pages that use calendar
+          if (id.includes("node_modules/@fullcalendar/")) {
+            return "vendor-calendar";
+          }
+
+          // Other utilities - split into separate chunks to avoid large bundles
+          if (id.includes("node_modules/date-fns/")) {
+            return "vendor-date-fns";
+          }
+
+          if (id.includes("node_modules/axios/")) {
+            return "vendor-axios";
+          }
+
+          // Features by main sections
+          if (id.includes("/src/components/Admin/")) {
+            return "feature-admin";
+          }
+
+          if (id.includes("/src/components/Contact/")) {
+            return "feature-contact";
+          }
+
+          if (id.includes("/src/pages/GetStarted/")) {
+            return "feature-get-started";
+          }
+
+          if (id.includes("/src/pages/Services/")) {
+            return "feature-services";
+          }
+
+          // Other third-party dependencies
+          if (id.includes("node_modules/")) {
+            return "vendor-other";
+          }
         },
       },
     },
@@ -36,6 +86,8 @@ export default defineConfig({
     manifest: true,
     // Use clean URLs for JS/CSS assets
     cssCodeSplit: true,
+    // Extract CSS in a separate file
+    cssCodeSplit: true,
     // Optimize code bundle size
     minify: "terser",
     terserOptions: {
@@ -43,6 +95,10 @@ export default defineConfig({
         drop_console: true,
         drop_debugger: true,
         pure_funcs: ["console.log", "console.info", "console.debug"],
+        passes: 2,
+      },
+      mangle: {
+        safari10: true,
       },
       format: {
         comments: false,
@@ -69,5 +125,16 @@ export default defineConfig({
     alias: {
       "@": resolve(__dirname, "src"),
     },
+  },
+  // Optimize dependencies
+  optimizeDeps: {
+    include: [
+      "react",
+      "react-dom",
+      "react-router-dom",
+      "framer-motion",
+      "lucide-react",
+    ],
+    exclude: ["@fullcalendar/core"],
   },
 });
