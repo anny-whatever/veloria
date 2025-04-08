@@ -11,8 +11,13 @@ import {
 import BacklinkHelper from "./BacklinkHelper";
 import LinkBuildingStrategy from "./LinkBuildingStrategy";
 
-// Schema generators
-import { getServiceSchema as getServiceSchemaGenerator } from "./schemaGenerators";
+// Import schema generators
+import {
+  getServiceSchema as getServiceSchemaGenerator,
+  getProjectSchema,
+  getFaqSchema,
+  getPersonSchema,
+} from "./schemaGenerators";
 
 export {
   SeoHead,
@@ -21,7 +26,11 @@ export {
   KEYWORD_GROUPS,
   getOrganizationSchema,
   getLocalBusinessSchema,
+  getServiceSchema,
   getServiceSchemaGenerator,
+  getProjectSchema,
+  getFaqSchema,
+  getPersonSchema,
   getLegalPageSchema,
   BacklinkHelper,
   LinkBuildingStrategy,
