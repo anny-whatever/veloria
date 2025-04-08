@@ -71,9 +71,15 @@ const AdminProfile = () => (
 
 // Main App component with routing
 function App() {
+  const [isBrowser, setIsBrowser] = useState(false);
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const isHomePage = location.pathname === "/";
+
+  // Check if we're in browser environment
+  useEffect(() => {
+    setIsBrowser(true);
+  }, []);
 
   useEffect(() => {
     // Preload animations and resources
@@ -108,10 +114,12 @@ function App() {
   };
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    if (typeof window !== "undefined") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
   };
 
   // Animation variants for the loading elements
@@ -200,23 +208,29 @@ function App() {
           ]}
         />
 
-        <LinkBuildingStrategy
-          isHomepage={window.location.pathname === "/"}
-          currentPageUrl={window.location.href}
-          industry="Web Development"
-          authorDetails={{
-            name: "Veloria Team",
-            url: "https://veloria.in/about",
-            jobTitle: "Web Development Experts",
-          }}
-          citations={[
-            {
-              title: "Mobile App Development Guide",
-              url: "https://developer.android.com/guide",
-              type: "reference",
-            },
-          ]}
-        />
+        {isBrowser && (
+          <LinkBuildingStrategy
+            isHomepage={location.pathname === "/"}
+            currentPageUrl={
+              isBrowser
+                ? window.location.href
+                : `https://veloria.in${location.pathname}`
+            }
+            industry="Web Development"
+            authorDetails={{
+              name: "Veloria Team",
+              url: "https://veloria.in/about",
+              jobTitle: "Web Development Experts",
+            }}
+            citations={[
+              {
+                title: "Mobile App Development Guide",
+                url: "https://developer.android.com/guide",
+                type: "reference",
+              },
+            ]}
+          />
+        )}
 
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -284,18 +298,20 @@ function App() {
 
         <Footer />
 
-        <motion.button
-          onClick={scrollToTop}
-          className="fixed z-50 flex items-center justify-center w-12 h-12 text-white transition-all duration-300 rounded-full shadow-lg bottom-6 right-6 bg-primary-500 dark:bg-primary-600 hover:shadow-glow-primary"
-          whileHover={{ y: -5, scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-          aria-label="Scroll to top"
-        >
-          <ArrowUp size={20} />
-        </motion.button>
+        {isBrowser && (
+          <motion.button
+            onClick={scrollToTop}
+            className="fixed z-50 flex items-center justify-center w-12 h-12 text-white transition-all duration-300 rounded-full shadow-lg bottom-6 right-6 bg-primary-500 dark:bg-primary-600 hover:shadow-glow-primary"
+            whileHover={{ y: -5, scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+            aria-label="Scroll to top"
+          >
+            <ArrowUp size={20} />
+          </motion.button>
+        )}
       </AnimatePresence>
     </div>
   );

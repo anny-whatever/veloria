@@ -1,5 +1,5 @@
 // src/components/Header/Header.jsx
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { ArrowRight } from "lucide-react";
@@ -14,8 +14,29 @@ const Header = () => {
     threshold: 0.1,
     triggerOnce: true,
   });
+  const [isMobile, setIsMobile] = useState(false);
+  const [isBrowser, setIsBrowser] = useState(false);
+
+  // Detect if we're in the browser environment and handle mobile detection
+  useEffect(() => {
+    setIsBrowser(true);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check
+    handleResize();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const scrollToSection = (sectionId) => {
+    if (typeof window === "undefined") return;
+
     const section = document.getElementById(sectionId);
     if (section) {
       // Get the navbar height to offset the scroll position
@@ -106,7 +127,7 @@ const Header = () => {
                 className="uppercase tracking-wider"
                 color="primary"
                 weight="medium"
-                align={window.innerWidth < 768 ? "center" : "left"}
+                align={isBrowser && isMobile ? "center" : "left"}
               >
                 Digital Solutions Provider
               </Text>
@@ -115,7 +136,7 @@ const Header = () => {
             <motion.div variants={itemVariants} className="mb-6">
               <Heading
                 level={1}
-                align={window.innerWidth < 768 ? "center" : "left"}
+                align={isBrowser && isMobile ? "center" : "left"}
                 className="leading-tight tracking-tight"
               >
                 Comprehensive Systems
@@ -128,8 +149,8 @@ const Header = () => {
             <motion.div variants={itemVariants}>
               <Text
                 color="muted"
-                size={window.innerWidth < 768 ? "base" : "lg"}
-                align={window.innerWidth < 768 ? "center" : "left"}
+                size={isBrowser && isMobile ? "base" : "lg"}
+                align={isBrowser && isMobile ? "center" : "left"}
                 className="mb-8 max-w-lg"
               >
                 Specialized in management systems, web applications, and

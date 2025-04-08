@@ -5,30 +5,37 @@ import { Link } from "react-router-dom";
 
 const NavLink = ({ href, text, mobile = false, onClick }) => {
   const [isActive, setIsActive] = useState(false);
+  const [isBrowser, setIsBrowser] = useState(false);
+
+  // Check if we're in browser environment
+  useEffect(() => {
+    setIsBrowser(true);
+  }, []);
 
   useEffect(() => {
+    // Skip on server or if not a hash link
+    if (!isBrowser || !href.startsWith("#")) return;
+
     // Only add scroll listener for hash links
-    if (href.startsWith("#")) {
-      const handleScroll = () => {
-        // Get the element with this ID
-        const element = document.querySelector(href);
-        if (!element) return;
+    const handleScroll = () => {
+      // Get the element with this ID
+      const element = document.querySelector(href);
+      if (!element) return;
 
-        const rect = element.getBoundingClientRect();
-        // Check if element is in viewport
-        if (rect.top <= 100 && rect.bottom >= 100) {
-          setIsActive(true);
-        } else {
-          setIsActive(false);
-        }
-      };
+      const rect = element.getBoundingClientRect();
+      // Check if element is in viewport
+      if (rect.top <= 100 && rect.bottom >= 100) {
+        setIsActive(true);
+      } else {
+        setIsActive(false);
+      }
+    };
 
-      window.addEventListener("scroll", handleScroll);
-      // Initial check
-      handleScroll();
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
-  }, [href]);
+    window.addEventListener("scroll", handleScroll);
+    // Initial check
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [href, isBrowser]);
 
   // For links starting with #, use normal anchor behavior
   if (href.startsWith("#")) {

@@ -10,10 +10,18 @@ import ThemeToggle from "../ThemeToggle";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isBrowser, setIsBrowser] = useState(false);
   const navRef = useRef(null);
+
+  // Set isBrowser flag on client side
+  useEffect(() => {
+    setIsBrowser(true);
+  }, []);
 
   // Handle scroll effect with smooth transitions
   useEffect(() => {
+    if (!isBrowser) return;
+
     const handleScroll = () => {
       if (window.scrollY > 20) {
         setScrolled(true);
@@ -24,10 +32,12 @@ const Navbar = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isBrowser]);
 
   // Close mobile menu when clicking outside
   useEffect(() => {
+    if (!isBrowser) return;
+
     const handleClickOutside = (event) => {
       if (navRef.current && !navRef.current.contains(event.target)) {
         setIsOpen(false);
@@ -36,10 +46,12 @@ const Navbar = () => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isBrowser]);
 
   // Prevent scroll when mobile menu is open
   useEffect(() => {
+    if (!isBrowser) return;
+
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -48,7 +60,7 @@ const Navbar = () => {
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [isOpen]);
+  }, [isOpen, isBrowser]);
 
   const navbarVariants = {
     initial: { opacity: 0, y: -20 },
