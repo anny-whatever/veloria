@@ -77,6 +77,7 @@ export default defineConfig({
           }
         },
       },
+      external: ["intersection-observer", "react-helmet"],
     },
     // Create separate build outputs for client and server
     outDir: "dist/client",
@@ -84,9 +85,7 @@ export default defineConfig({
     assetsDir: "assets",
     // Generate manifest for SSR asset preloading
     manifest: true,
-    // Use clean URLs for JS/CSS assets
-    cssCodeSplit: true,
-    // Extract CSS in a separate file
+    // Use clean URLs for JS/CSS assets and extract CSS in a separate file
     cssCodeSplit: true,
     // Optimize code bundle size
     minify: "terser",
@@ -134,6 +133,7 @@ export default defineConfig({
       "react-router-dom",
       "framer-motion",
       "lucide-react",
+      "intersection-observer",
     ],
     exclude: ["@fullcalendar/core"],
   },

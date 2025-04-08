@@ -1,8 +1,6 @@
 import React, { Suspense, lazy } from "react";
-import { Helmet } from "react-helmet";
-import SeoHead from "../../components/SeoHead";
-import { PAGE_SEO } from "../../constants/seo-constants";
-import { getOrganizationSchema } from "../../utils/schema";
+import { Helmet } from "react-helmet-async";
+import { SeoHead, PAGE_SEO, getOrganizationSchema } from "../../components/SEO";
 import Header from "../../components/Header/Header";
 import LoadingSpinner from "../../components/LoadingSpinner";
 

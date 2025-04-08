@@ -4,53 +4,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 import { Routes, Route, useLocation, Outlet, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
-import Header from "./components/Header/Header";
-import Portfolio from "./components/Portfolio/Portfolio";
-import Services from "./components/Services/Services";
-import About from "./components/About/About";
-import Contact from "./components/Contact/Contact";
 import Footer from "./components/Footer/Footer";
 import ThemeToggle from "./components/ThemeToggle";
-import { SeoHead, PAGE_SEO, getOrganizationSchema } from "./components/SEO";
-import GetStarted from "./pages/GetStarted/GetStarted";
-import ServicesPage from "./pages/Services/ServicesPage";
-import HotelManagementSystem from "./pages/Services/HotelManagementSystem";
-import SchoolManagementSystem from "./pages/Services/SchoolManagementSystem";
-import HospitalManagementSystem from "./pages/Services/HospitalManagementSystem";
-import EcommerceManagementSystem from "./pages/Services/EcommerceManagementSystem";
-import ERPSystem from "./pages/Services/ERPSystem";
-import UIUXDesign from "./pages/Services/UIUXDesign";
-import WebDevelopment from "./pages/Services/WebDevelopment";
-import MobileAppDevelopment from "./pages/Services/MobileAppDevelopment";
-import CustomSoftwareDevelopment from "./pages/Services/CustomSoftwareDevelopment";
-import DatabaseSolutions from "./pages/Services/DatabaseSolutions";
-import PayrollManagementSystem from "./pages/Services/PayrollManagementSystem";
-import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
-import TermsOfService from "./pages/Legal/TermsOfService";
-import AdminDashboard from "./pages/Admin/AdminDashboard";
-import AdminHome from "./pages/Admin/AdminHome";
-import BookingsList from "./pages/Admin/BookingsList";
-import BookingDetails from "./pages/Admin/BookingDetails";
-import ContactsList from "./pages/Admin/ContactsList";
-import ContactDetails from "./pages/Admin/ContactDetails";
-import ProjectPipeline from "./pages/Admin/ProjectPipeline";
-import CreateProjectForm from "./pages/Admin/CreateProjectForm";
-import EditProjectForm from "./pages/Admin/EditProjectForm";
-import ProjectDetails from "./pages/Admin/ProjectDetails";
-import ProjectsCalendar from "./pages/Admin/ProjectsCalendar";
-import ProjectsList from "./pages/Admin/ProjectsList";
-import BookingsCalendar from "./pages/Admin/BookingsCalendar";
-import Finance from "./pages/Admin/Finance";
-import AdminBookingForm from "./pages/Admin/AdminBookingForm";
 import { useAuth } from "./contexts/AuthContext";
-
-// Load only critical components eagerly
 import LoadingSpinner from "./components/LoadingSpinner";
 
 // Lazy load all routes to reduce initial bundle size
 const Home = lazy(() => import("./pages/Home/Home"));
-const About = lazy(() => import("./pages/About/About"));
-const Contact = lazy(() => import("./pages/Contact/Contact"));
+// Import component directories instead of missing files
+const About = lazy(() => import("./components/About/About"));
+const Contact = lazy(() => import("./components/Contact/Contact"));
 const GetStarted = lazy(() => import("./pages/GetStarted/GetStarted"));
 
 // Services pages - lazily loaded
@@ -83,9 +46,22 @@ const DatabaseSolutions = lazy(() =>
   import("./pages/Services/DatabaseSolutions")
 );
 
-// Portfolio pages
-const Portfolio = lazy(() => import("./pages/Portfolio/Portfolio"));
-const PortfolioDetail = lazy(() => import("./pages/Portfolio/PortfolioDetail"));
+// Portfolio component
+const Portfolio = lazy(() => import("./components/Portfolio/Portfolio"));
+
+// Create an inline PortfolioDetail component since the file doesn't exist
+const PortfolioDetail = () => (
+  <div className="container mx-auto px-4 py-12">
+    <h1 className="text-3xl font-bold mb-8">Portfolio Project Details</h1>
+    <p className="mb-6">This is a placeholder for portfolio details.</p>
+    <button
+      onClick={() => window.history.back()}
+      className="px-6 py-2 bg-primary-500 text-white rounded hover:bg-primary-600"
+    >
+      Go Back
+    </button>
+  </div>
+);
 
 // Legal pages
 const PrivacyPolicy = lazy(() => import("./pages/Legal/PrivacyPolicy"));
@@ -106,9 +82,24 @@ const BookingDetails = lazy(() => import("./pages/Admin/BookingDetails"));
 const ContactsList = lazy(() => import("./pages/Admin/ContactsList"));
 const ContactDetails = lazy(() => import("./pages/Admin/ContactDetails"));
 const AdminBookingForm = lazy(() => import("./pages/Admin/AdminBookingForm"));
+const CreateProjectForm = lazy(() => import("./pages/Admin/CreateProjectForm"));
+const EditProjectForm = lazy(() => import("./pages/Admin/EditProjectForm"));
 
 // Fallback page for 404s
-const NotFound = lazy(() => import("./pages/NotFound"));
+const NotFound = () => (
+  <div className="flex flex-col items-center justify-center min-h-screen py-16 px-4">
+    <h1 className="text-4xl font-bold mb-4">404 - Page Not Found</h1>
+    <p className="text-lg text-center mb-8">
+      The page you're looking for doesn't exist or has been moved.
+    </p>
+    <button
+      onClick={() => (window.location.href = "/")}
+      className="px-6 py-3 bg-primary-500 text-white rounded-md hover:bg-primary-600 transition-colors"
+    >
+      Return Home
+    </button>
+  </div>
+);
 
 // Loading component that will be displayed while route components are loading
 const Loader = () => (
@@ -355,6 +346,11 @@ function App() {
                   <Route index element={<AdminHome />} />
                   <Route path="finance" element={<Finance />} />
                   <Route path="projects" element={<ProjectsList />} />
+                  <Route path="projects/new" element={<CreateProjectForm />} />
+                  <Route
+                    path="projects/:id/edit"
+                    element={<EditProjectForm />}
+                  />
                   <Route
                     path="projects/calendar"
                     element={<ProjectsCalendar />}

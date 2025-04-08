@@ -14,7 +14,10 @@ const startTime = performance.now();
 function markLCPComplete() {
   // Mark the Largest Contentful Paint time
   const lcpTime = performance.now() - startTime;
-  console.debug(`LCP completed in ${lcpTime.toFixed(2)}ms`);
+  // Avoid console logs in production
+  if (process.env.NODE_ENV !== "production") {
+    console.debug(`LCP completed in ${lcpTime.toFixed(2)}ms`);
+  }
 
   // Add class to body to animate in LCP elements
   document.body.classList.add("lcp-loaded");
@@ -25,13 +28,14 @@ function markLCPComplete() {
   }
 }
 
-// Measure Largest Contentful Paint
+// Measure Largest Contentful Paint only in browser environment
 let lcpObserver;
-if ("PerformanceObserver" in window) {
+if (typeof window !== "undefined" && "PerformanceObserver" in window) {
   lcpObserver = new PerformanceObserver((entryList) => {
     const entries = entryList.getEntries();
-    const lastEntry = entries[entries.length - 1];
-    markLCPComplete();
+    if (entries.length > 0) {
+      markLCPComplete();
+    }
   });
 
   lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
@@ -60,19 +64,14 @@ function hydrateApp() {
 
 // Load non-critical resources after page is interactive
 function loadNonCriticalResources() {
-  // Load polyfills if needed
-  if (!("IntersectionObserver" in window)) {
-    import("intersection-observer");
-  }
-
   // Load any other non-critical resources
   // This is where you'd dynamically import non-critical components
 }
 
 // If the browser supports requestIdleCallback, use it to load non-critical resources
-if ("requestIdleCallback" in window) {
+if (typeof window !== "undefined" && "requestIdleCallback" in window) {
   window.requestIdleCallback(loadNonCriticalResources);
-} else {
+} else if (typeof window !== "undefined") {
   // Otherwise use a timeout as a fallback
   setTimeout(loadNonCriticalResources, 2000);
 }
