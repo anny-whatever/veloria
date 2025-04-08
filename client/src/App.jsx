@@ -73,7 +73,7 @@ function App() {
     // Preload animations and resources
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -174,12 +174,12 @@ function App() {
   );
 
   return (
-    <div className="min-h-screen bg-surface-50 dark:bg-dark-200 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen text-gray-900 bg-surface-50 dark:bg-dark-200 dark:text-gray-100">
       <AnimatePresence mode="wait">
         {loading && isHomePage ? (
           <motion.div
             key="loader"
-            className="fixed inset-0 flex flex-col items-center justify-center bg-surface-50 dark:bg-dark-100 z-50 p-6"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center p-6 bg-surface-50 dark:bg-dark-100"
             variants={loadingVariants}
             initial="initial"
             animate="animate"
@@ -191,11 +191,11 @@ function App() {
               initial="initial"
               animate="animate"
             >
-              <h1 className="text-6xl font-bold bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-secondary-400 dark:to-accent-400">
+              <h1 className="text-6xl font-bold text-transparent bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text dark:from-primary-400 dark:via-secondary-400 dark:to-accent-400">
                 Veloria
               </h1>
               <motion.div
-                className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 rounded-full"
+                className="absolute w-16 h-1 transform -translate-x-1/2 rounded-full -bottom-2 left-1/2 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500"
                 initial={{ width: 0, opacity: 0 }}
                 animate={{ width: "80%", opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
@@ -203,7 +203,7 @@ function App() {
             </motion.div>
 
             <motion.p
-              className="text-lg text-gray-600 dark:text-gray-300 mb-8 text-center max-w-md"
+              className="max-w-md mb-8 text-lg text-center text-gray-600 dark:text-gray-300"
               variants={taglineVariants}
               initial="initial"
               animate="animate"
@@ -212,7 +212,7 @@ function App() {
             </motion.p>
 
             <motion.div
-              className="flex space-x-3 items-center"
+              className="flex items-center space-x-3"
               variants={dotsContainerVariants}
               initial="initial"
               animate="animate"
@@ -314,7 +314,7 @@ function App() {
 
             <motion.button
               onClick={scrollToTop}
-              className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-primary-500 dark:bg-primary-600 text-white shadow-lg flex items-center justify-center hover:shadow-glow-primary transition-all duration-300"
+              className="fixed z-50 flex items-center justify-center w-12 h-12 text-white transition-all duration-300 rounded-full shadow-lg bottom-6 right-6 bg-primary-500 dark:bg-primary-600 hover:shadow-glow-primary"
               whileHover={{ y: -5, scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, y: 20 }}
