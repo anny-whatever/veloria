@@ -24,10 +24,10 @@ mkdir -p logs
 echo "Deploying with PM2..."
 if pm2 list | grep -q "veloria-ssr"; then
   echo "Reloading existing PM2 process..."
-  pm2 reload ecosystem.config.js --env production
+  pm2 reload ecosystem.config.cjs --env production
 else
   echo "Starting new PM2 process..."
-  pm2 start ecosystem.config.js --env production
+  pm2 start ecosystem.config.cjs --env production
 fi
 
 # Save PM2 configuration to persist across reboots

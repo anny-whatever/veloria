@@ -54,7 +54,7 @@ This will create:
    ```
 5. Start with PM2:
    ```bash
-   pm2 start ecosystem.config.js --env production
+   pm2 start ecosystem.config.cjs --env production
    ```
 6. Save the PM2 configuration:
    ```bash
@@ -65,7 +65,7 @@ This will create:
 
 If your project is managed in a Git repository:
 
-1. Configure the `ecosystem.config.js` file with your server details
+1. Configure the `ecosystem.config.cjs` file with your server details
 2. Run:
    ```bash
    pm2 deploy production setup
