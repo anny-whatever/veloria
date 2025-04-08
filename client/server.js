@@ -32,10 +32,24 @@ async function createServer() {
         index: false,
       })
     );
+
+    // Explicitly serve the assets directory
+    app.use(
+      "/assets",
+      express.static(path.resolve(__dirname, "dist/client/assets"), {
+        maxAge: "1y",
+        immutable: true,
+      })
+    );
   }
 
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
+
+    // Skip SSR for certain paths
+    if (url.includes(".") || url.startsWith("/assets/")) {
+      return next();
+    }
 
     try {
       let template, render;

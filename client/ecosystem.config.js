@@ -5,7 +5,7 @@ export default {
       script: "server.js",
       env: {
         NODE_ENV: "production",
-        PORT: 3001,
+        PORT: 3000,
       },
       instances: "max",
       exec_mode: "cluster",
