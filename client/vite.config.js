@@ -14,6 +14,10 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
       },
       output: {
+        // Use deterministic asset names without content hashing for better caching
+        entryFileNames: "assets/[name].js",
+        chunkFileNames: "assets/[name].js",
+        assetFileNames: "assets/[name].[ext]",
         manualChunks: function (id) {
           // Core framework dependencies
           if (
@@ -96,9 +100,8 @@ export default defineConfig({
         pure_funcs: ["console.log", "console.info", "console.debug"],
         passes: 2,
       },
-      mangle: {
-        safari10: true,
-      },
+      // Disable variable name mangling to prevent reference errors
+      mangle: false,
       format: {
         comments: false,
       },
@@ -107,6 +110,8 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     // Tree-shaking
     sourcemap: false,
+    // Make asset URLs absolute so they can be properly resolved
+    base: "/",
   },
   ssr: {
     // SSR specific configurations

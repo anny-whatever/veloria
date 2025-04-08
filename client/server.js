@@ -1,147 +1,147 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import express from "express";
-import { createServer as createViteServer } from "vite";
 import compression from "compression";
-import serveStatic from "serve-static";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Constants and configuration
 const isProduction = process.env.NODE_ENV === "production";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const DIST_CLIENT_DIR = path.resolve(__dirname, "dist/client");
+const DIST_SERVER_DIR = path.resolve(__dirname, "dist/server");
 const PORT = process.env.PORT || 3000;
 
-async function createServer() {
-  const app = express();
+// Set up the express app
+const app = express();
 
-  // Enable compression
-  app.use(compression({ level: 6 }));
+// Compression middleware to optimize response size
+app.use(compression());
 
+// Cache control for static assets
+const setStaticFileHeaders = (res, path) => {
+  const isAsset =
+    /\.(js|css|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|otf|eot)$/i.test(path);
+
+  if (isAsset) {
+    // Long-term caching for static assets
+    res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+  } else {
+    // No caching for HTML and other non-asset files
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  }
+};
+
+// Setup for production vs development
+async function setupServer() {
   let vite;
-
   if (!isProduction) {
-    // In development: Create Vite server in middleware mode and configure app to use it
-    vite = await createViteServer({
+    const { createServer } = await import("vite");
+    vite = await createServer({
       server: { middlewareMode: true },
       appType: "custom",
     });
     app.use(vite.middlewares);
   } else {
-    // In production: Serve the static assets and use the client-side build
-    app.use(
-      serveStatic(path.resolve(__dirname, "dist/client"), {
-        index: false,
-        maxAge: "1d",
-        setHeaders: (res, path) => {
-          // Set headers for assets to enable better caching
-          if (path.includes("/assets/")) {
-            res.setHeader(
-              "Cache-Control",
-              "public, max-age=2592000, immutable"
-            );
-          } else if (
-            path.match(
-              /\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/
-            )
-          ) {
-            res.setHeader(
-              "Cache-Control",
-              "public, max-age=1296000, immutable"
-            );
-          }
-          // Add header for better compression and client caching
-          res.setHeader("Vary", "Accept-Encoding");
-        },
-      })
-    );
+    // Add proper MIME type handling
+    app.use((req, res, next) => {
+      if (req.path.endsWith(".js")) {
+        res.type("application/javascript");
+      } else if (req.path.endsWith(".css")) {
+        res.type("text/css");
+      }
+      next();
+    });
 
-    // Explicitly serve the assets directory
+    // Serve production static assets with appropriate cache headers
     app.use(
-      "/assets",
-      express.static(path.resolve(__dirname, "dist/client/assets"), {
-        maxAge: "30d",
-        immutable: true,
-        setHeaders: (res) => {
-          // Explicitly set cache headers
-          res.setHeader("Cache-Control", "public, max-age=2592000, immutable");
-          res.setHeader("Vary", "Accept-Encoding");
-        },
+      express.static(DIST_CLIENT_DIR, {
+        index: false,
+        setHeaders: setStaticFileHeaders,
       })
     );
   }
 
-  app.use("*", async (req, res, next) => {
+  // SSR request handler
+  app.use("*", async (req, res) => {
     const url = req.originalUrl;
-
-    // Skip SSR for certain paths
-    if (url.includes(".") || url.startsWith("/assets/")) {
-      return next();
-    }
-
     try {
       let template, render;
 
       if (!isProduction) {
-        // In development: Get and transform the index.html with Vite
+        // In development: Use Vite's features
         template = fs.readFileSync(
           path.resolve(__dirname, "index.html"),
           "utf-8"
         );
         template = await vite.transformIndexHtml(url, template);
-
-        // Load the server entry module with Vite
         render = (await vite.ssrLoadModule("/src/entry-server.jsx")).render;
       } else {
-        // In production: Use the built template and server-side renderer
+        // In production: Use built files
         template = fs.readFileSync(
-          path.resolve(__dirname, "dist/client/index.html"),
+          path.resolve(DIST_CLIENT_DIR, "index.html"),
           "utf-8"
         );
-        render = (await import("./dist/server/entry-server.js")).render;
+        render = (
+          await import(path.resolve(DIST_SERVER_DIR, "entry-server.js"))
+        ).render;
       }
 
-      // Render the app HTML and get the helmet context
-      const { html: appHtml, context: helmetContext } = render(url);
+      // Get the app HTML and state from the SSR render function
+      const { html, headTags, bodyTags } = await render(url);
 
-      // Insert the rendered app and meta tags into the template
-      let htmlWithApp = template.replace("<!--app-html-->", appHtml);
+      // Inject the app-rendered HTML into the template
+      const renderedHtml = template
+        .replace(`<!--app-html-->`, html)
+        .replace(`<!--head-tags-->`, headTags || "")
+        .replace(`<!--body-tags-->`, bodyTags || "");
 
-      // Insert meta tags if available
-      if (helmetContext && helmetContext.helmet) {
-        const { helmet } = helmetContext;
-        htmlWithApp = htmlWithApp.replace(
-          "<!--head-meta-->",
-          `
-          ${helmet.title?.toString() || ""}
-          ${helmet.meta?.toString() || ""}
-          ${helmet.link?.toString() || ""}
-          ${helmet.script?.toString() || ""}
-        `
-        );
+      // Send the rendered HTML to the client
+      res.status(200).set({ "Content-Type": "text/html" }).end(renderedHtml);
+    } catch (error) {
+      // Error handling
+      console.error(`Error rendering ${url}:`, error);
+
+      // If we're in development, let Vite handle the error
+      if (!isProduction && vite) {
+        vite.ssrFixStacktrace(error);
+        next(error);
+        return;
       }
 
-      // Set appropriate headers for HTML - use no-cache but not no-store to enable bfcache
-      res
-        .status(200)
-        .set({
-          "Content-Type": "text/html",
-          "Cache-Control": "no-cache, must-revalidate",
-          Pragma: "no-cache",
-          Expires: "0",
-        })
-        .end(htmlWithApp);
-    } catch (e) {
-      // If error, let Vite handle error processing in dev, or pass to next middleware in prod
-      if (!isProduction) {
-        vite.ssrFixStacktrace(e);
-      }
-      console.error(e.stack);
-      next(e);
+      // Production error page fallback
+      res.status(500).end(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Server Error</title>
+            <style>
+              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; }
+              h1 { color: #e53e3e; }
+              p { line-height: 1.6; }
+            </style>
+          </head>
+          <body>
+            <h1>Server Error</h1>
+            <p>We're sorry, but something went wrong on our server. Please try again later.</p>
+            <p><a href="/">Return to Homepage</a></p>
+          </body>
+        </html>
+      `);
     }
   });
 
+  // Start the server
   app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+    console.log(
+      `Server ${
+        isProduction ? "production" : "development"
+      } running at http://localhost:${PORT}`
+    );
   });
 }
 
-createServer();
+// Start the server
+setupServer().catch((error) => {
+  console.error("Error starting server:", error);
+  process.exit(1);
+});
