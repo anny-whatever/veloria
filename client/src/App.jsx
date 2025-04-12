@@ -190,50 +190,81 @@ function App() {
 
   return (
     <div className="min-h-screen text-gray-900 bg-surface-50 dark:bg-dark-200 dark:text-gray-100">
-      <AnimatePresence mode="wait">
-        <Navbar key="navbar" />
+      <Navbar />
 
-        {/* SEO Backlink Helpers */}
-        <BacklinkHelper
-          includeAttributes={true}
-          authorshipMarkup={true}
-          references={[
+      {/* SEO Backlink Helpers */}
+      <BacklinkHelper
+        includeAttributes={true}
+        authorshipMarkup={true}
+        references={[
+          {
+            title: "Web Development Best Practices",
+            url: "https://blog.veloria.in/web-development-best-practices",
+          },
+          {
+            title: "UX Design Principles",
+            url: "https://blog.veloria.in/ux-design-principles",
+          },
+          {
+            title: "Mobile App Development",
+            url: "https://blog.veloria.in/mobile-app-development",
+          },
+          {
+            title: "Custom Software Solutions",
+            url: "https://blog.veloria.in/custom-software-solutions",
+          },
+        ]}
+        citations={[
+          {
+            title: "SEO for Tech Companies",
+            url: "https://moz.com/seo-guide",
+            author: "Moz",
+          },
+          {
+            title: "Web Performance",
+            url: "https://web.dev/performance",
+            author: "Google",
+          },
+          {
+            title: "Accessibility Standards",
+            url: "https://www.w3.org/WAI/",
+            author: "W3C",
+          },
+          {
+            title: "Responsive Design",
+            url: "https://developers.google.com/web/responsive",
+            author: "Google Developers",
+          },
+        ]}
+      />
+
+      {isBrowser && (
+        <LinkBuildingStrategy
+          isHomepage={location.pathname === "/"}
+          currentPageUrl={
+            isBrowser
+              ? window.location.href
+              : `https://veloria.in${location.pathname}`
+          }
+          industry="Web Development"
+          authorDetails={{
+            name: "Veloria Team",
+            url: "https://veloria.in/about",
+            jobTitle: "Web Development Experts",
+          }}
+          citations={[
             {
-              title: "Web Development Best Practices",
-              url: "https://www.smashingmagazine.com/category/web-development/",
-            },
-            {
-              title: "Mobile App Development Trends",
-              url: "https://www.appbrain.com/stats/top-manufacturers",
+              title: "Mobile App Development Guide",
+              url: "https://developer.android.com/guide",
+              type: "reference",
             },
           ]}
         />
+      )}
 
-        {isBrowser && (
-          <LinkBuildingStrategy
-            isHomepage={location.pathname === "/"}
-            currentPageUrl={
-              isBrowser
-                ? window.location.href
-                : `https://veloria.in${location.pathname}`
-            }
-            industry="Web Development"
-            authorDetails={{
-              name: "Veloria Team",
-              url: "https://veloria.in/about",
-              jobTitle: "Web Development Experts",
-            }}
-            citations={[
-              {
-                title: "Mobile App Development Guide",
-                url: "https://developer.android.com/guide",
-                type: "reference",
-              },
-            ]}
-          />
-        )}
-
-        <Routes>
+      {/* Wrap Routes in AnimatePresence with proper locationKey for page transitions */}
+      <AnimatePresence mode="wait" initial={false}>
+        <Routes key={location.pathname} location={location}>
           <Route path="/" element={<HomePage />} />
           <Route path="/get-started" element={<GetStarted />} />
           <Route path="/services" element={<ServicesPage />} />
@@ -298,24 +329,24 @@ function App() {
           {/* Catch-all route for 404 page */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-
-        <Footer />
-
-        {isBrowser && (
-          <motion.button
-            onClick={scrollToTop}
-            className="fixed z-50 flex items-center justify-center w-12 h-12 text-white transition-all duration-300 rounded-full shadow-lg bottom-6 right-6 bg-primary-500 dark:bg-primary-600 hover:shadow-glow-primary"
-            whileHover={{ y: -5, scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
-            aria-label="Scroll to top"
-          >
-            <ArrowUp size={20} />
-          </motion.button>
-        )}
       </AnimatePresence>
+
+      <Footer />
+
+      {isBrowser && (
+        <motion.button
+          onClick={scrollToTop}
+          className="fixed z-50 flex items-center justify-center w-12 h-12 text-white transition-all duration-300 rounded-full shadow-lg bottom-6 right-6 bg-primary-500 dark:bg-primary-600 hover:shadow-glow-primary"
+          whileHover={{ y: -5, scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 }}
+          aria-label="Scroll to top"
+        >
+          <ArrowUp size={20} />
+        </motion.button>
+      )}
     </div>
   );
 }

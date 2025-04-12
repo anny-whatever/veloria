@@ -10,7 +10,6 @@ import {
   Users,
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import { SeoHead, getServiceSchema } from "../../components/SEO";
 
 const CustomSoftwareDevelopment = () => {
@@ -83,11 +82,12 @@ const CustomSoftwareDevelopment = () => {
   };
 
   // SEO metadata
-  const title = "Custom Software Development Services | Veloria";
+  const title =
+    "Custom Software Development Services | Tailored Business Solutions | Veloria";
   const description =
-    "Tailor-made software solutions designed specifically for your business needs. Our custom software development services drive efficiency, innovation, and growth.";
+    "Expert custom software development services creating tailored business applications that solve unique challenges, improve efficiency and drive growth.";
   const keywords =
-    "custom software development, bespoke software solutions, tailored software, enterprise software development, custom application development, software engineering services";
+    "custom software development, bespoke software solutions, tailored business applications, enterprise software development, custom system development, business process automation";
 
   return (
     <div className="min-h-screen bg-surface-50 dark:bg-dark-200">
@@ -99,7 +99,7 @@ const CustomSoftwareDevelopment = () => {
         structuredData={getServiceSchema({
           name: "Custom Software Development Services",
           description:
-            "Professional custom software development services tailored to your specific business requirements, ensuring optimal performance and scalability.",
+            "Professional custom software development services creating tailored applications that address specific business requirements and provide competitive advantages.",
           slug: "custom-software-development",
         })}
       />
@@ -126,8 +126,9 @@ const CustomSoftwareDevelopment = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                  Tailored software solutions designed specifically for your
-                  unique business challenges and goals.
+                  Tailored software solutions that address your specific
+                  business challenges, automate processes, and create
+                  sustainable competitive advantages.
                 </motion.p>
                 <motion.div
                   className="flex flex-wrap gap-4"
@@ -207,11 +208,12 @@ const CustomSoftwareDevelopment = () => {
           <div className="container mx-auto px-4 md:px-6">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
-                Our Custom Software Development Services
+                Custom Software Development Solutions
               </h2>
               <p className="text-gray-600 dark:text-gray-300">
                 We build tailored software solutions that address your unique
-                business challenges and provide a competitive edge.
+                business challenges, automate processes, and provide a
+                sustainable competitive edge.
               </p>
             </div>
 
@@ -504,32 +506,32 @@ const CustomSoftwareDevelopment = () => {
             <div className="max-w-3xl mx-auto space-y-6">
               {[
                 {
+                  question:
+                    "What types of custom software solutions do you develop?",
+                  answer:
+                    "We develop a wide range of custom software solutions including business process automation systems, enterprise resource planning (ERP) platforms, customer relationship management (CRM) tools, inventory management systems, workflow automation solutions, data analytics platforms, and industry-specific applications. Our expertise spans web applications, desktop software, mobile apps, and integrated enterprise systems tailored to your specific business requirements.",
+                },
+                {
                   question: "How much does custom software development cost?",
                   answer:
                     "The cost of custom software development varies widely depending on factors such as complexity, features, integrations, and timeline. Simple applications might start at $20,000-$50,000, while enterprise-level solutions can range from $100,000 to $500,000 or more. We provide detailed estimates after understanding your specific requirements during our discovery phase.",
                 },
                 {
-                  question: "How long does it take to develop custom software?",
+                  question: "What is your custom software development process?",
                   answer:
-                    "Development timelines depend on project scope and complexity. Small to medium projects typically take 3-6 months, while larger enterprise systems might require 6-12 months or more. Our agile development approach allows for incremental delivery, so you'll see working components throughout the development process rather than waiting until the very end.",
+                    "Our custom software development process follows industry best practices with a focus on collaboration and transparency. We begin with in-depth discovery and requirements analysis, followed by solution architecture and design. Development is conducted using agile methodologies with regular client feedback. After thorough testing and quality assurance, we handle deployment and provide ongoing support and maintenance to ensure your software continues evolving with your business needs.",
                 },
                 {
                   question:
-                    "What technologies do you use for custom software development?",
+                    "What are the advantages of custom software over off-the-shelf solutions?",
                   answer:
-                    "We select technologies based on your specific project requirements. For web applications, we commonly use frameworks like React, Angular, or Vue.js for front-end, and Node.js, Python, or .NET for back-end development. For database solutions, we work with SQL options like PostgreSQL and MySQL, as well as NoSQL databases like MongoDB. We're technology-agnostic and choose the best tools for your specific needs.",
+                    "Custom software offers several key advantages: it's tailored precisely to your business workflows and requirements; you have full ownership of the intellectual property; it provides unique competitive advantages your competitors don't have; it integrates seamlessly with your existing systems; it's more flexible for adaptations as your business evolves; and it eliminates recurring license fees while providing better long-term ROI despite higher initial investment.",
                 },
                 {
                   question:
-                    "Do you provide ongoing maintenance for custom software?",
+                    "How do you ensure the quality and security of custom software?",
                   answer:
-                    "Yes, we offer comprehensive maintenance and support services for the software we develop. This includes bug fixes, security updates, performance optimization, feature enhancements, and technical support. We provide flexible support packages tailored to your needs, from basic maintenance to full 24/7 support options.",
-                },
-                {
-                  question:
-                    "Can you integrate custom software with our existing systems?",
-                  answer:
-                    "Absolutely. One of the major advantages of custom software is the ability to integrate seamlessly with your existing systems and workflows. We have extensive experience developing APIs and integration solutions that connect with CRMs, ERPs, accounting software, payment gateways, and various third-party services. We ensure data flows smoothly between systems to create a unified ecosystem.",
+                    "Quality and security are foundational to our development process. We implement automated testing frameworks, conduct regular code reviews, and follow security-by-design principles. Our development practices include secure coding standards, vulnerability assessments, penetration testing, and compliance with relevant industry regulations. We also provide comprehensive documentation, knowledge transfer, and ongoing support to maintain the integrity and security of your software over time.",
                 },
               ].map((faq, index) => (
                 <motion.div
@@ -554,8 +556,6 @@ const CustomSoftwareDevelopment = () => {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 };

@@ -10,7 +10,6 @@ import {
   Users,
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import { SeoHead, getServiceSchema } from "../../components/SEO";
 
 const PayrollManagementSystem = () => {
@@ -516,7 +515,6 @@ const PayrollManagementSystem = () => {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 };

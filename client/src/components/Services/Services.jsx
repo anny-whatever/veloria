@@ -97,7 +97,7 @@ const ServiceCard = ({ icon, title, description, iconColor, delay, link }) => (
   <ScrollReveal delay={delay}>
     <Card
       hover
-      className="h-full transition-all duration-300 hover:border-l-4 hover:border-l-primary-500 dark:hover:border-l-primary-400"
+      className="h-full transition-all duration-200 border-l-transparent hover:border-l-4 hover:border-l-secondary-500 dark:hover:border-l-secondary-400"
     >
       <div className="flex flex-col h-full">
         <div className={`${iconColor} mb-5`}>{icon}</div>
@@ -144,7 +144,7 @@ const Services = () => {
         <div className="mb-10 flex justify-center">
           <a
             href="/services"
-            className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-all inline-block hover:text-white"
+            className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 transform hover:-translate-y-1 inline-block hover:text-white no-underline hover:no-underline"
           >
             View All Services
           </a>

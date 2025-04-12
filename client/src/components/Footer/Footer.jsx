@@ -251,8 +251,8 @@ const Footer = () => {
         </div>
 
         {/* Attribution Links Container - populated by BacklinkHelper */}
-        <div className="attribution-links text-sm opacity-80 mt-6 border-t border-gray-200 dark:border-gray-700 pt-4">
-          {/* This will be populated dynamically */}
+        <div className="attribution-links hidden">
+          {/* This container will be populated and styled by BacklinkHelper */}
         </div>
 
         {/* Copyright */}

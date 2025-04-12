@@ -139,7 +139,7 @@ const Header = () => {
                 align={isBrowser && isMobile ? "center" : "left"}
                 className="leading-tight tracking-tight"
               >
-                Comprehensive Systems
+                Web Design & Development
                 <span className="block bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-secondary-400 dark:to-accent-400">
                   For Modern Businesses
                 </span>
@@ -153,10 +153,9 @@ const Header = () => {
                 align={isBrowser && isMobile ? "center" : "left"}
                 className="mb-8 max-w-lg"
               >
-                Specialized in management systems, web applications, and
-                powerful E-commerce solutions that streamline operations,
-                enhance user experiences, and drive business growth across
-                multiple industries.
+                Specialized in custom software, web applications, and powerful
+                ERP systems that streamline operations, enhance user
+                experiences, and drive business growth.
               </Text>
             </motion.div>
 
@@ -174,9 +173,10 @@ const Header = () => {
                   <motion.button
                     className="btn flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-medium
                     bg-gradient-to-r from-primary-600 to-secondary-600 text-white shadow-md 
-                    hover:shadow-glow-primary transition-all duration-300 w-full"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    hover:shadow-glow-primary transition-all duration-200 w-full"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98, y: 0 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   >
                     <span>Get Started</span>
                   </motion.button>
@@ -187,9 +187,10 @@ const Header = () => {
                     onClick={() => scrollToSection("services")}
                     className="btn flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-medium
                     bg-white dark:bg-dark-100 text-primary-700 dark:text-primary-400 border-2 border-primary-400 dark:border-primary-500
-                    shadow-sm hover:bg-primary-50 dark:hover:bg-dark-200 hover:shadow-md transition-all duration-300 w-full"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    shadow-sm hover:bg-primary-50 dark:hover:bg-dark-200 hover:shadow-md transition-all duration-200 w-full"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98, y: 0 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   >
                     <span>Our Services</span>
                   </motion.button>
@@ -210,9 +211,14 @@ const Header = () => {
                   >
                     <motion.button
                       className="btn flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-medium
-                      bg-[#25D366] text-white shadow-sm hover:bg-[#22c55e] hover:shadow-md transition-all duration-300 w-full"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      bg-[#25D366] text-white shadow-sm hover:bg-[#22c55e] hover:shadow-md transition-all duration-200 w-full"
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98, y: 0 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 15,
+                      }}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

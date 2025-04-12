@@ -25,46 +25,50 @@ export const COMPANY_INFO = {
 // Page-specific SEO settings
 export const PAGE_SEO = {
   home: {
-    title: "Veloria | Leading Web & App Development Company in India",
+    title:
+      "Web Design & Development Agency | Custom Software & ERP Solutions | Veloria",
     description:
-      "Veloria is a premier web and mobile app development company in India offering custom software solutions, IT services, and management systems for hotels, schools, and healthcare.",
+      "Expert web design, development and custom software agency specializing in ERP systems, business applications and enterprise IT solutions for growing companies.",
     keywords:
-      "web development company India, app development company India, IT solutions provider India, custom software development India",
+      "web design agency, website development company, custom software development, ERP development services, IT solutions provider, web application development",
   },
   services: {
-    title: "Our Services | Web, Mobile & Custom Software Development | Veloria",
+    title:
+      "Web Development, Custom Software & ERP Development Services | Veloria",
     description:
-      "Explore our comprehensive web development, mobile app, and custom software development services. Specializing in management systems for hotels, schools, hospitals, and e-commerce solutions.",
+      "Professional web development, custom software and ERP systems development services. Specializing in business applications, management systems and IT solutions.",
     keywords:
-      "web development services, mobile app development services, custom software development India, management system development, IT solutions provider India",
+      "web development services, custom software development, ERP development services, management system development, business IT solutions, custom application development",
   },
   portfolio: {
-    title: "Our Work | Web & App Development Projects | Veloria",
+    title:
+      "Web Design & Development Portfolio | Custom Software Projects | Veloria",
     description:
-      "View our portfolio of successful web and mobile app development projects. Featuring custom management systems, e-commerce solutions, and innovative software applications.",
+      "Explore our web design, custom software and ERP system development projects. Featuring enterprise applications, management systems and software solutions.",
     keywords:
-      "web development portfolio, app development projects, software development case studies, India development agency projects",
+      "web development portfolio, custom software projects, ERP system development, management system projects, business application examples",
   },
   about: {
-    title: "About Veloria | Leading Software Development Agency in India",
+    title: "Top Web Design & Software Development Agency | Veloria",
     description:
-      "Learn about Veloria, a top-rated web development and IT solutions company in India. Our team of experts delivers exceptional digital experiences and custom software solutions.",
+      "Veloria is a leading web design and custom software development agency. Our experts deliver enterprise-grade applications and management systems.",
     keywords:
-      "web development company India, app development company India, software development agency, IT solutions provider India",
+      "top web design agency, best software development company, custom ERP developers, enterprise application development, UI/UX design services",
   },
   contact: {
-    title: "Contact Us | Veloria - Web & App Development Agency",
+    title:
+      "Contact Us | Web Design & Custom Software Development Agency | Veloria",
     description:
-      "Get in touch with Veloria for your web development, app development, or custom software needs. Based in India, we serve clients worldwide.",
+      "Get in touch with Veloria for professional web design, custom software development and ERP implementation services. Free consultation available.",
     keywords:
-      "contact web development agency, hire app developers India, custom software development company contact, IT solutions provider contact",
+      "contact web development agency, hire custom software developers, ERP implementation partners, IT solutions consultation",
   },
   getStarted: {
-    title: "Get Started | Begin Your Project with Veloria",
+    title: "Start Your Web Design or Software Development Project | Veloria",
     description:
-      "Start your web development, mobile app, or custom software project with Veloria. Fill out our project form and let's create something amazing together.",
+      "Begin your web design, custom software or ERP system development project with Veloria. Professional solutions tailored to your business requirements.",
     keywords:
-      "hire web developers India, start app development project, custom software development project, management system development India",
+      "hire web developers, start software development project, custom ERP development, management system implementation",
   },
   privacyPolicy: {
     title: "Privacy Policy | Veloria",
@@ -201,13 +205,15 @@ export const getLocalBusinessSchema = () => {
   return {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    name: COMPANY_INFO.name,
+    "@id": "https://veloria.in/#organization",
+    name: "Veloria - Web Design & Development Agency",
     image: `${COMPANY_INFO.url}/images/logo.png`,
     url: COMPANY_INFO.url,
     telephone: COMPANY_INFO.phone,
     email: COMPANY_INFO.email,
     priceRange: "₹₹₹",
-    description: COMPANY_INFO.description,
+    description:
+      "Professional web design, development and custom software agency specializing in ERP systems, business applications and enterprise software solutions.",
     address: {
       "@type": "PostalAddress",
       addressCountry: "IN",
@@ -215,7 +221,6 @@ export const getLocalBusinessSchema = () => {
     },
     geo: {
       "@type": "GeoCoordinates",
-      // Add latitude and longitude if you have a specific location
     },
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
@@ -240,14 +245,25 @@ export const getServiceSchema = (service) => {
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: service.name,
+    name: service.name,
+    description: service.description,
     provider: {
       "@type": "Organization",
       name: COMPANY_INFO.name,
       url: COMPANY_INFO.url,
     },
-    description: service.description,
-    name: service.name,
     url: `${COMPANY_INFO.url}/services/${service.slug}`,
+    offers: {
+      "@type": "Offer",
+      availability: "http://schema.org/InStock",
+      price: "",
+      priceCurrency: "INR",
+    },
+    category: "Web and Software Development Services",
+    audience: {
+      "@type": "BusinessAudience",
+      audienceType: "Businesses requiring digital solutions",
+    },
   };
 };
 

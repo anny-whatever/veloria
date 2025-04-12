@@ -6,38 +6,38 @@
 import { COMPANY_INFO } from "./seoConfig";
 
 /**
- * Generate structured data for a Service
- * @param {Object} service - Service details
- * @returns {Object} - Schema.org Service structured data
+ * Generate improved structured data for a Service
  */
-export const getServiceSchema = (service) => {
-  if (!service) return null;
+export const getServiceSchema = (serviceInfo) => {
+  const {
+    name,
+    description,
+    slug,
+    serviceType = "ProfessionalService",
+  } = serviceInfo;
 
   return {
     "@context": "https://schema.org",
     "@type": "Service",
-    serviceType: service.name,
+    serviceType: serviceType,
+    name: name,
+    description: description,
     provider: {
       "@type": "Organization",
-      name: COMPANY_INFO.name,
-      url: COMPANY_INFO.url,
+      name: "Veloria",
+      url: "https://veloria.in",
     },
-    description: service.description,
-    name: service.name,
-    url: `${COMPANY_INFO.url}/services/${service.slug}`,
+    url: `https://veloria.in/services/${slug}`,
     offers: {
       "@type": "Offer",
-      availability: "https://schema.org/InStock",
-      price: service.price || "Custom",
-      priceCurrency: service.priceCurrency || "INR",
+      availability: "http://schema.org/InStock",
+      price: "",
+      priceCurrency: "INR",
     },
-    areaServed: {
-      "@type": "Country",
-      name: "India",
-    },
+    category: "Web and Software Development Services",
     audience: {
-      "@type": "Audience",
-      audienceType: service.audience || "Businesses and Organizations",
+      "@type": "BusinessAudience",
+      audienceType: "Businesses requiring digital solutions",
     },
   };
 };

@@ -12,7 +12,6 @@ import {
   Box,
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import { SeoHead, getServiceSchema } from "../../components/SEO";
 
 const ERPSystem = () => {
@@ -86,11 +85,11 @@ const ERPSystem = () => {
 
   // SEO metadata
   const title =
-    "Enterprise Resource Planning (ERP) System Development | Veloria";
+    "ERP Development Services | Enterprise Resource Planning Systems | Veloria";
   const description =
-    "Custom ERP software development services in India. Streamline your business operations with our integrated enterprise resource planning solutions tailored to your organizational needs.";
+    "Professional ERP development services creating integrated enterprise resource planning systems that streamline operations, improve efficiency and enable data-driven decisions.";
   const keywords =
-    "erp system development, enterprise resource planning software, business management software, erp solutions, custom erp development, integrated business systems, erp implementation india";
+    "erp development services, enterprise resource planning systems, business management software, erp solutions, custom erp development, integrated business systems, erp implementation";
 
   return (
     <div className="min-h-screen bg-surface-50 dark:bg-dark-200">
@@ -100,9 +99,9 @@ const ERPSystem = () => {
         keywords={keywords}
         pathname="/services/erp-system"
         structuredData={getServiceSchema({
-          name: "Enterprise Resource Planning (ERP) System Development",
+          name: "ERP Development Services",
           description:
-            "Custom ERP software development services for streamlining business operations and integrating core business processes in a single system.",
+            "Professional ERP development services creating custom enterprise resource planning systems that integrate core business processes and enhance operational efficiency.",
           slug: "erp-system",
         })}
       />
@@ -121,7 +120,7 @@ const ERPSystem = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
                 >
-                  Enterprise Resource Planning System Development
+                  ERP Development Services
                 </motion.h1>
                 <motion.p
                   className="text-xl text-gray-700 dark:text-gray-300 mb-8"
@@ -129,9 +128,9 @@ const ERPSystem = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                  Transform your business operations with our custom-built ERP
-                  solutions designed specifically for enterprises in India and
-                  global markets.
+                  Transform your business operations with our custom-built
+                  Enterprise Resource Planning systems that integrate core
+                  processes and drive operational excellence.
                 </motion.p>
                 <motion.div
                   className="flex flex-wrap gap-4"
@@ -211,12 +210,12 @@ const ERPSystem = () => {
           <div className="container mx-auto px-4 md:px-6">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
-                Key Features of Our ERP System
+                Enterprise Resource Planning System Features
               </h2>
               <p className="text-gray-600 dark:text-gray-300">
-                Our comprehensive solution integrates all critical business
+                Our comprehensive ERP solution integrates all critical business
                 functions into a single, cohesive system tailored to your
-                organizational needs.
+                organizational needs and industry requirements.
               </p>
             </div>
 
@@ -469,32 +468,34 @@ const ERPSystem = () => {
             <div className="max-w-3xl mx-auto space-y-6">
               {[
                 {
-                  question: "How long does it take to implement an ERP system?",
+                  question:
+                    "What industries benefit most from your ERP development services?",
                   answer:
-                    "The timeline for ERP implementation varies based on the size of your organization and the complexity of your business processes. Typically, a mid-sized business ERP implementation takes 4-8 months, while larger enterprises might require 8-12 months or more. We provide a detailed implementation timeline after analyzing your specific requirements.",
+                    "Our ERP development services benefit a wide range of industries including manufacturing, retail, distribution, healthcare, education, professional services, and construction. Each industry has unique operational challenges that our customizable ERP solutions can address. We tailor our enterprise resource planning systems to the specific workflows, compliance requirements, and reporting needs of your industry, providing comprehensive business management tools that integrate all critical functions.",
                 },
                 {
                   question:
-                    "Can your ERP system integrate with our existing software?",
+                    "What modules are included in your ERP development solutions?",
                   answer:
-                    "Yes, our ERP solutions are designed with integration capabilities in mind. We can build custom integrations with your existing software systems, including accounting software, CRM, HR systems, manufacturing systems, and any industry-specific applications you use. This ensures seamless data flow across your organization.",
-                },
-                {
-                  question: "Is your ERP system suitable for small businesses?",
-                  answer:
-                    "We develop ERP solutions that scale according to business size and needs. For smaller businesses, we create modular solutions that allow you to start with only the essential components and add more functionality as your business grows. This approach makes ERP accessible and cost-effective for businesses of all sizes.",
+                    "Our ERP development solutions feature a modular architecture allowing you to select components based on your business needs. Core modules include financial management (accounting, billing, budgeting), inventory and supply chain management, human resources and payroll, customer relationship management, manufacturing and production planning, project management, and business intelligence with reporting dashboards. Each module can be customized and additional industry-specific modules can be developed.",
                 },
                 {
                   question:
-                    "How do you handle data security in your ERP systems?",
+                    "How do your ERP systems improve business operations?",
                   answer:
-                    "Security is a top priority in our ERP development. We implement multiple layers of security including role-based access controls, data encryption, secure authentication methods, audit trails, and regular security assessments. We also comply with industry-specific regulations and standards to ensure your business data remains protected.",
+                    "Our enterprise resource planning systems improve business operations by centralizing data, automating routine tasks, eliminating data silos, and providing real-time insights. This leads to increased efficiency, reduced operational costs, improved data accuracy, better inventory management, enhanced financial control, streamlined compliance, and more informed decision-making. Most clients report 20-30% improvement in operational efficiency after implementing our ERP solutions.",
                 },
                 {
                   question:
-                    "What kind of support do you provide after implementation?",
+                    "Can your ERP systems integrate with existing software?",
                   answer:
-                    "We offer comprehensive post-implementation support including technical assistance, user training, system maintenance, and regular updates. Our support packages can be customized to meet your needs, from basic technical support to full managed services. We also provide ongoing optimization services to ensure your ERP system continues to evolve with your business.",
+                    "Yes, our ERP systems are designed with comprehensive integration capabilities. We can build custom integrations with your existing software including accounting systems, CRM platforms, e-commerce solutions, manufacturing systems, warehouse management tools, and any industry-specific applications. This creates a unified ecosystem where data flows seamlessly between systems, providing a complete view of your business operations while preserving your existing technology investments.",
+                },
+                {
+                  question:
+                    "What support do you provide for ERP implementation?",
+                  answer:
+                    "We offer comprehensive support throughout the ERP implementation process and beyond. This includes system planning and architecture, data migration, user training programs, go-live assistance, and ongoing technical support. We also provide regular maintenance, performance optimization, security updates, and system enhancements to ensure your ERP solution continues to meet your evolving business needs. Our support packages can be customized based on your specific requirements.",
                 },
               ].map((faq, index) => (
                 <motion.div
@@ -519,8 +520,6 @@ const ERPSystem = () => {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 };

@@ -14,7 +14,6 @@ import {
   LayoutGrid,
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import { SeoHead, PAGE_SEO, getServiceSchema } from "../../components/SEO";
 
 const ServicesPage = () => {
@@ -378,8 +377,6 @@ const ServicesPage = () => {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 };

@@ -10,7 +10,6 @@ import {
   Server,
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import { SeoHead, getServiceSchema } from "../../components/SEO";
 
 const WebDevelopment = () => {
@@ -83,11 +82,12 @@ const WebDevelopment = () => {
   };
 
   // SEO metadata
-  const title = "Web Development Services | Veloria";
+  const title =
+    "Web Design & Development Services | Professional Website Solutions | Veloria";
   const description =
-    "Professional web development services in India. Build fast, responsive, and SEO-friendly websites optimized for all devices with our expert development team.";
+    "Expert web design and development services creating professional, responsive, and SEO-friendly websites that drive business growth and maximize online visibility.";
   const keywords =
-    "web development, website development, custom website development, responsive web design, web application development, e-commerce website development";
+    "web design agency, website development company, custom website development, responsive web design, web application development, e-commerce website development, professional website services";
 
   return (
     <div className="min-h-screen bg-surface-50 dark:bg-dark-200">
@@ -97,9 +97,9 @@ const WebDevelopment = () => {
         keywords={keywords}
         pathname="/services/web-development"
         structuredData={getServiceSchema({
-          name: "Web Development Services",
+          name: "Web Design & Development Services",
           description:
-            "Professional web development services creating fast, responsive, and SEO-friendly websites that drive business growth.",
+            "Professional web design and development services creating fast, responsive, and SEO-friendly websites that drive business growth and conversions.",
           slug: "web-development",
         })}
       />
@@ -118,7 +118,7 @@ const WebDevelopment = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
                 >
-                  Web Development Services
+                  Web Design & Development Services
                 </motion.h1>
                 <motion.p
                   className="text-xl text-gray-700 dark:text-gray-300 mb-8"
@@ -127,7 +127,8 @@ const WebDevelopment = () => {
                   transition={{ duration: 0.6, delay: 0.2 }}
                 >
                   Create stunning, high-performance websites that engage
-                  visitors, drive conversions, and grow your business online.
+                  visitors, drive conversions, and establish your professional
+                  online presence.
                 </motion.p>
                 <motion.div
                   className="flex flex-wrap gap-4"
@@ -207,12 +208,12 @@ const WebDevelopment = () => {
           <div className="container mx-auto px-4 md:px-6">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
-                Our Web Development Services
+                Professional Web Design & Development Services
               </h2>
               <p className="text-gray-600 dark:text-gray-300">
-                We provide comprehensive web development solutions that combine
-                cutting-edge technology with exceptional design to deliver
-                websites that stand out.
+                We provide comprehensive web design and development solutions
+                that combine cutting-edge technology with exceptional design to
+                deliver websites that stand out and drive business results.
               </p>
             </div>
 
@@ -464,29 +465,32 @@ const WebDevelopment = () => {
             <div className="max-w-3xl mx-auto space-y-6">
               {[
                 {
-                  question: "How long does it take to develop a website?",
+                  question:
+                    "What makes Veloria's web design and development services stand out?",
+                  answer:
+                    "Our web design and development services combine technical expertise with strategic business understanding. We create websites that not only look visually impressive but are optimized for performance, usability, and conversion. Our development process emphasizes clean code, SEO best practices, and responsive design to ensure your website performs exceptionally across all devices and search engines.",
+                },
+                {
+                  question:
+                    "How long does it take to develop a professional website?",
                   answer:
                     "The timeline varies based on the complexity and requirements of your project. A simple informational website might take 4-6 weeks, while a complex e-commerce site or web application could require 8-12 weeks or more. We'll provide a detailed timeline after understanding your specific needs, and we always work efficiently to deliver your project on schedule.",
                 },
                 {
-                  question: "What technologies do you use for web development?",
+                  question:
+                    "What technologies do you use for web design and development?",
                   answer:
-                    "We use a wide range of technologies based on project requirements. For frontend development, we work with HTML5, CSS3, JavaScript, React, Vue.js, and Angular. For backend development, we use Node.js, PHP, Python, Ruby on Rails, and .NET. Our database expertise includes MySQL, PostgreSQL, MongoDB, and more. We select the most appropriate technology stack for each project to ensure optimal performance and scalability.",
-                },
-                {
-                  question: "Will my website be mobile-friendly?",
-                  answer:
-                    "Absolutely! All websites we develop are fully responsive and optimized for all devices, including smartphones, tablets, laptops, and desktop computers. We follow a mobile-first approach to ensure your website provides an excellent user experience regardless of the device your visitors are using. With mobile traffic accounting for over 50% of web traffic, this is essential for any modern website.",
-                },
-                {
-                  question: "Do you provide website maintenance services?",
-                  answer:
-                    "Yes, we offer comprehensive website maintenance packages to keep your site running smoothly after launch. Our maintenance services include regular updates, security monitoring, performance optimization, content updates, and technical support. We recommend ongoing maintenance to ensure your website remains secure, fast, and up-to-date with the latest web standards and technologies.",
+                    "We use a wide range of modern technologies based on project requirements. For frontend development, we work with HTML5, CSS3, JavaScript, React, Vue.js, and Angular. For backend development, we use Node.js, PHP, Python, Ruby on Rails, and .NET. Our database expertise includes MySQL, PostgreSQL, MongoDB, and more. We select the most appropriate technology stack for each project to ensure optimal performance and scalability.",
                 },
                 {
                   question: "How do you ensure websites are SEO-friendly?",
                   answer:
-                    "SEO is built into our development process from the ground up. We implement technical SEO best practices including proper HTML structure, schema markup, fast loading times, mobile optimization, secure connections (HTTPS), and clean URL structures. We also ensure your website has SEO-friendly features like customizable meta tags, XML sitemaps, and proper heading structures. This provides a solid foundation for your ongoing SEO efforts.",
+                    "SEO is built into our web development process from the beginning. We implement technical SEO best practices including proper HTML structure, schema markup, fast loading times, mobile optimization, secure connections (HTTPS), and clean URL structures. We also optimize on-page elements like meta tags, headings, and content structure to establish a solid foundation for your search engine rankings.",
+                },
+                {
+                  question: "Do you provide website maintenance after launch?",
+                  answer:
+                    "Yes, we offer comprehensive website maintenance packages to keep your site running smoothly. Our maintenance services include regular updates, security monitoring, performance optimization, content updates, and technical support. We recommend ongoing maintenance to ensure your website remains secure, fast, and up-to-date with the latest web standards and technologies.",
                 },
               ].map((faq, index) => (
                 <motion.div
@@ -511,8 +515,6 @@ const WebDevelopment = () => {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 };

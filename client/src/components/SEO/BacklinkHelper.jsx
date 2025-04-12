@@ -22,66 +22,104 @@ const BacklinkHelper = ({
         let attributionContainer = document.querySelector(".attribution-links");
         if (!attributionContainer) {
           attributionContainer = document.createElement("div");
-          attributionContainer.className =
-            "attribution-links text-sm opacity-80 mt-6";
-          attributionContainer.setAttribute("data-nosnippet", "true");
+          attributionContainer.className = "attribution-links";
           footer.appendChild(attributionContainer);
         }
 
+        // Clear any existing content
+        attributionContainer.innerHTML = "";
+
+        // Add styled container
+        attributionContainer.className =
+          "attribution-links mt-8 pt-6 border-t border-gray-200 dark:border-gray-800";
+
+        // Create flex container for references and citations
+        const flexContainer = document.createElement("div");
+        flexContainer.className = "grid grid-cols-1 md:grid-cols-2 gap-6";
+        attributionContainer.appendChild(flexContainer);
+
         // Add references
         if (references.length > 0) {
-          const referencesHeader = document.createElement("p");
-          referencesHeader.className = "font-medium mt-2 mb-1";
-          referencesHeader.textContent = "References:";
-          attributionContainer.appendChild(referencesHeader);
+          const referencesContainer = document.createElement("div");
+          referencesContainer.className = "references-section";
 
-          const refList = document.createElement("ul");
-          refList.className = "list-disc pl-5 space-y-1";
+          const referencesHeader = document.createElement("h4");
+          referencesHeader.className =
+            "text-lg font-semibold mb-3 text-gray-900 dark:text-white";
+          referencesHeader.textContent = "References";
+          referencesContainer.appendChild(referencesHeader);
+
+          const refList = document.createElement("div");
+          refList.className = "grid grid-cols-2 gap-3";
 
           references.forEach((ref) => {
-            const item = document.createElement("li");
+            const item = document.createElement("div");
+            item.className = "reference-item";
+
             const link = document.createElement("a");
             link.href = ref.url;
             link.textContent = ref.title;
             link.rel = "noopener noreferrer";
             link.className =
-              "hover:underline text-primary-600 dark:text-primary-400";
+              "text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors flex items-center";
+
+            // Add arrow icon
+            const arrowIcon = document.createElement("span");
+            arrowIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>`;
+            link.appendChild(arrowIcon);
+
             item.appendChild(link);
             refList.appendChild(item);
           });
 
-          attributionContainer.appendChild(refList);
+          referencesContainer.appendChild(refList);
+          flexContainer.appendChild(referencesContainer);
         }
 
         // Add citations
         if (citations.length > 0) {
-          const citationsHeader = document.createElement("p");
-          citationsHeader.className = "font-medium mt-2 mb-1";
-          citationsHeader.textContent = "Citations:";
-          attributionContainer.appendChild(citationsHeader);
+          const citationsContainer = document.createElement("div");
+          citationsContainer.className = "citations-section";
 
-          const citeList = document.createElement("ul");
-          citeList.className = "list-disc pl-5 space-y-1";
+          const citationsHeader = document.createElement("h4");
+          citationsHeader.className =
+            "text-lg font-semibold mb-3 text-gray-900 dark:text-white";
+          citationsHeader.textContent = "Citations";
+          citationsContainer.appendChild(citationsHeader);
+
+          const citeList = document.createElement("div");
+          citeList.className = "grid grid-cols-2 gap-3";
 
           citations.forEach((cite) => {
-            const item = document.createElement("li");
+            const item = document.createElement("div");
+            item.className = "citation-item";
+
             const link = document.createElement("a");
             link.href = cite.url;
             link.textContent = cite.title;
             link.rel = "noopener noreferrer";
             link.className =
-              "hover:underline text-primary-600 dark:text-primary-400";
+              "text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors flex items-center";
+
+            // Add arrow icon
+            const arrowIcon = document.createElement("span");
+            arrowIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>`;
+            link.appendChild(arrowIcon);
+
             item.appendChild(link);
+
             if (cite.author) {
               const authorSpan = document.createElement("span");
               authorSpan.textContent = ` by ${cite.author}`;
-              authorSpan.className = "text-sm opacity-80";
+              authorSpan.className = "text-sm text-gray-500 dark:text-gray-400";
               item.appendChild(authorSpan);
             }
+
             citeList.appendChild(item);
           });
 
-          attributionContainer.appendChild(citeList);
+          citationsContainer.appendChild(citeList);
+          flexContainer.appendChild(citationsContainer);
         }
       }
     }

@@ -10,6 +10,8 @@ import "./index.css";
 export function render(url, context) {
   const helmetContext = {};
 
+  // Using renderToString can create hydration mismatches with dynamic content
+  // Use renderToStaticMarkup for consistent server/client rendering
   const html = ReactDOMServer.renderToString(
     <React.StrictMode>
       <StaticRouter location={url}>

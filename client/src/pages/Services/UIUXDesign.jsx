@@ -10,7 +10,6 @@ import {
   Figma,
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import { SeoHead, getServiceSchema } from "../../components/SEO";
 
 const UIUXDesign = () => {
@@ -513,7 +512,6 @@ const UIUXDesign = () => {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 };
