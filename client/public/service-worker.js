@@ -1,10 +1,19 @@
 // Service Worker for Veloria
-const CACHE_NAME = "veloria-cache-v2";
-const RUNTIME_CACHE = "veloria-runtime-v2";
+const CACHE_NAME = "veloria-cache-v3";
+const RUNTIME_CACHE = "veloria-runtime-v3";
+const ASSETS_CACHE = "veloria-assets-v3";
+const API_CACHE = "veloria-api-v3";
 
-// Only cache the most essential static assets during installation
-// Let other assets be cached at runtime to avoid installation failures
-const STATIC_ASSETS = ["/", "/index.html"];
+// Assets that should be cached immediately during installation
+const STATIC_ASSETS = [
+  "/",
+  "/index.html",
+  "/favicon.ico",
+  "/favicon.png",
+  "/site.webmanifest",
+  "/sitemap.xml",
+  "/robots.txt",
+];
 
 // URL canonicalization helpers
 const PREFERRED_DOMAIN = "veloria.in";
@@ -68,6 +77,34 @@ async function cacheResource(cache, url) {
   }
 }
 
+// Helper to determine cache duration based on file type
+function getCacheDuration(url) {
+  try {
+    const urlObj = new URL(url);
+    const pathname = urlObj.pathname.toLowerCase();
+
+    // Long-lived assets (1 year)
+    if (pathname.match(/\.(js|css|woff2?|ttf|otf|eot)$/)) {
+      return 31536000; // 365 days
+    }
+
+    // Medium-lived assets (1 week)
+    if (pathname.match(/\.(jpe?g|png|gif|webp|avif|svg|ico)$/)) {
+      return 604800; // 7 days
+    }
+
+    // API responses (5 minutes)
+    if (pathname.includes("/api/")) {
+      return 300; // 5 minutes
+    }
+
+    // Default (1 day)
+    return 86400; // 24 hours
+  } catch (e) {
+    return 3600; // 1 hour fallback
+  }
+}
+
 // Install event - pre-cache minimal static assets
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -101,7 +138,7 @@ self.addEventListener("install", (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener("activate", (event) => {
-  const currentCaches = [CACHE_NAME, RUNTIME_CACHE];
+  const currentCaches = [CACHE_NAME, RUNTIME_CACHE, ASSETS_CACHE, API_CACHE];
 
   event.waitUntil(
     (async () => {
@@ -145,94 +182,177 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Network-first strategy for HTML navigation
+  const url = new URL(event.request.url);
+
+  // Determine the type of request
   const isNavigationRequest =
     event.request.mode === "navigate" &&
     event.request.destination === "document";
 
-  const isAPIRequest =
-    event.request.url.includes("/api/") ||
-    event.request.url.includes("/graphql");
+  const isAPIRequest = url.pathname.includes("/api/");
+  const isAssetRequest =
+    event.request.destination === "style" ||
+    event.request.destination === "script" ||
+    event.request.destination === "font" ||
+    event.request.destination === "image" ||
+    /\.(css|js|woff2?|ttf|otf|eot|svg|png|jpe?g|gif|webp|avif|ico)$/i.test(
+      url.pathname
+    );
 
-  // Handle different types of requests
-  if (isNavigationRequest || isAPIRequest) {
-    // Network-first for navigation and API
+  // SEO files should always be fresh
+  const isSEOFile = /robots\.txt|sitemap\.xml/.test(url.pathname);
+
+  // 1. Handle SEO files - network first
+  if (isSEOFile) {
     event.respondWith(
       (async () => {
         try {
-          // Try network first
-          const response = await fetch(event.request);
+          const networkResponse = await fetch(event.request);
+          // Update cache in the background
+          const cache = await caches.open(CACHE_NAME);
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+        } catch (error) {
+          const cachedResponse = await caches.match(event.request);
+          return (
+            cachedResponse ||
+            new Response("SEO file not available", { status: 503 })
+          );
+        }
+      })()
+    );
+    return;
+  }
 
-          // Only cache successful responses
-          if (response.ok && !isAPIRequest) {
-            try {
-              const cache = await caches.open(RUNTIME_CACHE);
-              cache.put(event.request, response.clone());
-            } catch (cacheError) {
-              console.warn("Failed to cache response:", cacheError);
-            }
-          }
-
-          return response;
+  // 2. Handle navigation requests - network first, fallback to cache
+  if (isNavigationRequest) {
+    event.respondWith(
+      (async () => {
+        try {
+          const networkResponse = await fetch(event.request);
+          // Update cache in the background
+          const cache = await caches.open(CACHE_NAME);
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
         } catch (error) {
           // Network failed, try cache
           const cachedResponse = await caches.match(event.request);
-          if (cachedResponse) {
-            return cachedResponse;
-          }
+          if (cachedResponse) return cachedResponse;
 
-          // For navigation, fall back to index.html
-          if (isNavigationRequest) {
-            const indexResponse = await caches.match("/index.html");
-            if (indexResponse) {
-              return indexResponse;
-            }
-          }
+          // Fall back to index.html
+          const indexResponse = await caches.match("/index.html");
+          if (indexResponse) return indexResponse;
 
-          // No network and no cache: error response
-          return new Response("Network error occurred", {
-            status: 504,
-            headers: { "Content-Type": "text/plain" },
-          });
+          return new Response("Network error occurred", { status: 504 });
         }
       })()
     );
-  } else {
-    // Cache-first for static assets (CSS, JS, images)
+    return;
+  }
+
+  // 3. Handle API requests - stale-while-revalidate with short expiration
+  if (isAPIRequest) {
     event.respondWith(
       (async () => {
-        try {
-          // Try cache first
-          const cachedResponse = await caches.match(event.request);
-          if (cachedResponse) {
-            return cachedResponse;
-          }
+        const cache = await caches.open(API_CACHE);
 
-          // Cache miss, try network
-          const response = await fetch(event.request);
+        // Try to get from cache first
+        const cachedResponse = await cache.match(event.request);
 
-          // Cache successful responses in the background
-          if (response.ok) {
-            const responseToCache = response.clone();
-            caches
-              .open(RUNTIME_CACHE)
-              .then((cache) => cache.put(event.request, responseToCache))
-              .catch((error) =>
-                console.warn("Background caching failed:", error)
+        // Start fetching fresh data immediately
+        const networkResponsePromise = fetch(event.request)
+          .then((response) => {
+            if (response.ok) {
+              // Add Cache-Control header with proper expiration
+              const cacheDuration = getCacheDuration(event.request.url);
+              const responseWithCacheControl = new Response(
+                response.clone().body,
+                {
+                  status: response.status,
+                  statusText: response.statusText,
+                  headers: new Headers(response.headers),
+                }
               );
-          }
+              responseWithCacheControl.headers.set(
+                "Cache-Control",
+                `max-age=${cacheDuration}`
+              );
 
-          return response;
-        } catch (error) {
-          // Both cache and network failed
-          return new Response("Resource unavailable", {
-            status: 504,
-            headers: { "Content-Type": "text/plain" },
+              // Update cache
+              cache.put(event.request, responseWithCacheControl);
+            }
+            return response;
+          })
+          .catch((error) => {
+            console.error("API fetch failed:", error);
+            throw error;
           });
+
+        // Return cached response immediately if available
+        if (cachedResponse) {
+          // Revalidate in the background
+          networkResponsePromise.catch(() => {});
+          return cachedResponse;
+        }
+
+        // If no cached response, wait for network
+        return await networkResponsePromise;
+      })()
+    );
+    return;
+  }
+
+  // 4. Handle asset requests - cache first, then network
+  if (isAssetRequest) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(ASSETS_CACHE);
+
+        // Try cache first
+        const cachedResponse = await cache.match(event.request);
+        if (cachedResponse) {
+          // Revalidate in the background for next time
+          fetch(event.request)
+            .then((networkResponse) => {
+              if (networkResponse.ok) {
+                cache.put(event.request, networkResponse);
+              }
+            })
+            .catch(() => {});
+
+          return cachedResponse;
+        }
+
+        // No cache hit, use network
+        try {
+          const networkResponse = await fetch(event.request);
+          if (networkResponse.ok) {
+            // Cache for future
+            cache.put(event.request, networkResponse.clone());
+          }
+          return networkResponse;
+        } catch (error) {
+          return new Response("Asset unavailable", { status: 504 });
         }
       })()
     );
+    return;
   }
+
+  // 5. Default handling - simple network with fallback to cache
+  event.respondWith(
+    (async () => {
+      try {
+        const response = await fetch(event.request);
+        return response;
+      } catch (error) {
+        const cachedResponse = await caches.match(event.request);
+        return (
+          cachedResponse || new Response("Content unavailable", { status: 504 })
+        );
+      }
+    })()
+  );
 });
 
 // Support for updates

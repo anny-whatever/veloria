@@ -41,12 +41,8 @@ export default defineConfig({
         },
       },
     },
-    // Create separate build outputs for client and server
-    outDir: "dist/client",
     // Ensure assets have a predictable path structure
     assetsDir: "assets",
-    // Generate manifest for SSR asset preloading
-    manifest: true,
     // Use clean URLs for JS/CSS assets
     cssCodeSplit: true,
     // Enable source maps in production
@@ -61,17 +57,6 @@ export default defineConfig({
     },
     // Reduce chunk size
     chunkSizeWarningLimit: 1000,
-  },
-  ssr: {
-    // SSR specific configurations
-    noExternal: ["react-helmet-async"],
-    // Build output for server entry file
-    format: "esm",
-    target: "node",
-    // Avoid dynamic imports in SSR build
-    optimizeDeps: {
-      include: ["react", "react-dom", "react-router-dom"],
-    },
   },
   // Resolve aliases
   resolve: {

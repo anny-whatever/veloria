@@ -180,16 +180,36 @@ const ProjectForm = () => {
           />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-          Your Project Has Been Submitted!
+          Your Project Request Has Been Received!
         </h2>
         <p className="text-gray-700 dark:text-gray-300 mb-2">
-          Thank you for your {getServiceLabel(formData.serviceType)} project
-          request.
+          Thank you for choosing Veloria for your{" "}
+          {getServiceLabel(formData.serviceType)} project.
         </p>
         <p className="text-gray-700 dark:text-gray-300 mb-6">
-          Our team will review your details and get back to you within 24-48
-          hours.
+          Our expert team will review your requirements and get back to you
+          within 24-48 hours with a personalized solution and quote.
         </p>
+        <div className="mb-6 flex flex-wrap justify-center gap-4">
+          <div className="flex items-center">
+            <CheckCircle size={16} className="text-green-500 mr-2" />
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              Expert Consultation
+            </span>
+          </div>
+          <div className="flex items-center">
+            <CheckCircle size={16} className="text-green-500 mr-2" />
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              Custom Quote
+            </span>
+          </div>
+          <div className="flex items-center">
+            <CheckCircle size={16} className="text-green-500 mr-2" />
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              Tailored Solution
+            </span>
+          </div>
+        </div>
         <a
           href="/"
           className="px-6 py-3 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 text-white font-medium inline-block"
@@ -207,6 +227,15 @@ const ProjectForm = () => {
       itemType="https://schema.org/ContactForm"
       onSubmit={(e) => e.preventDefault()}
     >
+      <div className="mb-2 text-center">
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+          Request Your Free Project Consultation
+        </h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Complete this form to get a custom quote for your project needs
+        </p>
+      </div>
+
       <div className="mb-10">
         <div className="flex justify-between items-center relative">
           {[1, 2, 3].map((stepNumber) => (

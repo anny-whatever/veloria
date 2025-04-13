@@ -1,15 +1,39 @@
-# Veloria.in robots.txt file
+# Veloria.in robots.txt
 User-agent: *
 Allow: /
 
-# Sitemap
+# Prevent crawling of admin pages
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /login/
+
+# Prevent crawling of development/staging areas
+Disallow: /dev/
+Disallow: /staging/
+Disallow: /test/
+
+# Optimize crawl budget by preventing unnecessary paths
+Disallow: /public/assets/
+Disallow: /public/img/thumbnails/
+Disallow: /*.js$
+Disallow: /*.css$
+
+# Allow important crawlers full access (optional)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap locations
 Sitemap: https://veloria.in/sitemap.xml
 
-# Disallow admin areas
-Disallow: /admin/
-Disallow: /wp-admin/
-Disallow: /login
-Disallow: /dashboard
+# Page speed insight bots shouldn't count against crawl budget
+User-agent: Chrome-Lighthouse
+Allow: /
 
-# Crawl-delay for all bots: 10 seconds between requests
-Crawl-delay: 10 
+User-agent: Mediapartners-Google
+Allow: /
+
+# Host directive helps with canonical issues
+Host: veloria.in 

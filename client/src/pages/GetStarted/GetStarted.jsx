@@ -11,7 +11,7 @@ import PricingCards from "./PricingCards";
 import FaqSection from "./FaqSection";
 import CalendarBooking from "./CalendarBooking";
 import ContactForm from "../../components/Contact/ContactForm";
-import { SeoHead, PAGE_SEO } from "../../components/SEO";
+import { SeoHead, PAGE_SEO, getStartedPageSchema } from "../../components/SEO";
 import {
   ArrowLeft,
   ChevronRight,
@@ -121,6 +121,7 @@ const GetStarted = () => {
         description={PAGE_SEO.getStarted.description}
         keywords={PAGE_SEO.getStarted.keywords}
         pathname="/get-started"
+        structuredData={getStartedPageSchema()}
       />
 
       <Navbar />
@@ -150,12 +151,35 @@ const GetStarted = () => {
         >
           <motion.div variants={itemVariants} className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-300">
-              Let's Start Your Project
+              Start Your Custom Web & Software Project Today
             </h1>
             <p className="text-gray-700 dark:text-gray-300 text-lg max-w-3xl mx-auto">
-              Tell us about your project needs and let's create something
-              amazing together. We're here to bring your vision to life.
+              Transform your business with our expert web design, software
+              development, and management systems. Fill out the form below for a{" "}
+              <span className="font-semibold text-primary dark:text-primary-400">
+                free consultation
+              </span>{" "}
+              and
+              <span className="font-semibold text-primary dark:text-primary-400">
+                {" "}
+                custom quote
+              </span>{" "}
+              tailored to your specific needs.
             </p>
+            <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <span className="px-2 py-1 bg-gray-100 dark:bg-dark-300 rounded-full">
+                ✓ Free Consultation
+              </span>
+              <span className="px-2 py-1 bg-gray-100 dark:bg-dark-300 rounded-full">
+                ✓ No Obligation Quote
+              </span>
+              <span className="px-2 py-1 bg-gray-100 dark:bg-dark-300 rounded-full">
+                ✓ 24-48 Hour Response
+              </span>
+              <span className="px-2 py-1 bg-gray-100 dark:bg-dark-300 rounded-full">
+                ✓ Expert Solutions
+              </span>
+            </div>
           </motion.div>
 
           <motion.div

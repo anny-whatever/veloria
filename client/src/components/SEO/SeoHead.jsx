@@ -1,32 +1,31 @@
-import { Helmet } from "react-helmet-async";
+import React from "react";
 import PropTypes from "prop-types";
+import { Helmet } from "react-helmet-async";
 
 /**
- * SEO component for optimizing pages for search engines
+ * SeoHead Component
+ * Handles all meta tags, structured data, and other SEO elements
  */
 const SeoHead = ({
   title,
   description,
-  canonicalUrl,
-  ogType = "website",
-  ogImage,
-  pathname,
   keywords,
+  pathname,
   structuredData,
+  image = "https://veloria.in/og-image.jpg",
+  type = "website",
+  article = {},
   noIndex = false,
-  alternateLanguages = [],
-  author = "Veloria",
-  publishedDate,
-  modifiedDate,
+  children,
 }) => {
-  // Base URL for the website
+  // Determine canonical URL
   const siteUrl = "https://veloria.in";
+  const canonical = `${siteUrl}${pathname}`;
 
-  // Create the canonical URL
-  const canonical = canonicalUrl || `${siteUrl}${pathname || ""}`;
-
-  // Default image for social sharing
-  const defaultOgImage = `${siteUrl}/images/veloria-og-image.jpg`;
+  // Format structured data as string
+  const structuredDataJson = structuredData
+    ? JSON.stringify(structuredData)
+    : "";
 
   return (
     <Helmet>
@@ -34,78 +33,79 @@ const SeoHead = ({
       <title>{title}</title>
       <meta name="description" content={description} />
       {keywords && <meta name="keywords" content={keywords} />}
+
+      {/* Canonical Link */}
       <link rel="canonical" href={canonical} />
 
-      {/* Author and dates for better SEO */}
-      <meta name="author" content={author} />
-      {publishedDate && (
-        <meta name="article:published_time" content={publishedDate} />
-      )}
-      {modifiedDate && (
-        <meta name="article:modified_time" content={modifiedDate} />
-      )}
-
-      {/* Alternate language versions for international SEO */}
-      {alternateLanguages.map((lang) => (
-        <link
-          key={lang.code}
-          rel="alternate"
-          hrefLang={lang.code}
-          href={`${siteUrl}${lang.path || pathname}`}
-        />
-      ))}
-      {alternateLanguages.length > 0 && (
-        <link rel="alternate" hrefLang="x-default" href={canonical} />
-      )}
-
-      {/* Rich snippet optimization tags */}
-      <meta
-        property="article:publisher"
-        content="https://www.facebook.com/veloria"
-      />
-      <meta property="article:section" content="Technology" />
-
-      {/* Open Graph / Facebook */}
-      <meta property="og:type" content={ogType} />
-      <meta property="og:url" content={canonical} />
+      {/* OpenGraph and Facebook */}
+      <meta property="og:site_name" content="Veloria" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={ogImage || defaultOgImage} />
-      <meta
-        property="og:site_name"
-        content="Veloria - Web Design & Development Agency"
-      />
-      <meta property="og:locale" content="en_IN" />
+      <meta property="og:url" content={canonical} />
+      <meta property="og:type" content={type} />
+      <meta property="og:image" content={image} />
+      <meta property="og:image:alt" content={title} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:locale" content="en_US" />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:url" content={canonical} />
+      <meta name="twitter:site" content="@veloria_agency" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={ogImage || defaultOgImage} />
-      <meta name="twitter:site" content="@veloria_in" />
-      <meta name="twitter:creator" content="@veloria_in" />
+      <meta name="twitter:image" content={image} />
 
-      {/* Contact Information */}
-      <meta name="contact" content="info@veloria.in" />
-      <meta name="geo.region" content="IN" />
-      <meta name="geo.placename" content="India" />
+      {/* Article Specific (if applicable) */}
+      {type === "article" && (
+        <>
+          {article.publishedTime && (
+            <meta
+              property="article:published_time"
+              content={article.publishedTime}
+            />
+          )}
+          {article.modifiedTime && (
+            <meta
+              property="article:modified_time"
+              content={article.modifiedTime}
+            />
+          )}
+          {article.author && (
+            <meta property="article:author" content={article.author} />
+          )}
+          {article.section && (
+            <meta property="article:section" content={article.section} />
+          )}
+          {article.tags &&
+            article.tags.map((tag, i) => (
+              <meta property="article:tag" content={tag} key={i} />
+            ))}
+        </>
+      )}
 
-      {/* No index if needed */}
+      {/* No-index directive if needed */}
       {noIndex && <meta name="robots" content="noindex, nofollow" />}
-      {!noIndex && (
-        <meta
-          name="robots"
-          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
-        />
+
+      {/* Mobile-specific */}
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
+      />
+      <meta name="theme-color" content="#3b82f6" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+      />
+
+      {/* Structured Data */}
+      {structuredDataJson && (
+        <script type="application/ld+json">{structuredDataJson}</script>
       )}
 
-      {/* Structured Data / Schema.org */}
-      {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      )}
+      {/* Additional content */}
+      {children}
     </Helmet>
   );
 };
@@ -113,22 +113,20 @@ const SeoHead = ({
 SeoHead.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  canonicalUrl: PropTypes.string,
-  ogType: PropTypes.string,
-  ogImage: PropTypes.string,
-  pathname: PropTypes.string,
   keywords: PropTypes.string,
+  pathname: PropTypes.string.isRequired,
   structuredData: PropTypes.object,
+  image: PropTypes.string,
+  type: PropTypes.string,
+  article: PropTypes.shape({
+    publishedTime: PropTypes.string,
+    modifiedTime: PropTypes.string,
+    author: PropTypes.string,
+    section: PropTypes.string,
+    tags: PropTypes.arrayOf(PropTypes.string),
+  }),
   noIndex: PropTypes.bool,
-  alternateLanguages: PropTypes.arrayOf(
-    PropTypes.shape({
-      code: PropTypes.string.isRequired,
-      path: PropTypes.string,
-    })
-  ),
-  author: PropTypes.string,
-  publishedDate: PropTypes.string,
-  modifiedDate: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default SeoHead;

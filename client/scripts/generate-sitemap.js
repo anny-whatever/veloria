@@ -1,175 +1,180 @@
 /**
- * Generate sitemap.xml file for the Veloria website
- * Run this script during the build process to update the sitemap
+ * Automated Sitemap Generator for Veloria
+ *
+ * This script generates a sitemap.xml file based on the routes defined in the React app.
+ * It excludes admin routes and adds appropriate priorities and change frequencies.
  */
 
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Get __dirname equivalent in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Base URL of the website
 const BASE_URL = "https://veloria.in";
 
-// Get current date in ISO format
-const today = new Date().toISOString().split("T")[0];
-
-// Main website routes
-const routes = [
-  {
-    url: "/",
-    changefreq: "weekly",
-    priority: "1.0",
-  },
-  {
-    url: "/services",
-    changefreq: "monthly",
-    priority: "0.9",
-  },
-  {
-    url: "/#portfolio",
-    changefreq: "monthly",
-    priority: "0.8",
-  },
-  {
-    url: "/#about",
-    changefreq: "monthly",
-    priority: "0.7",
-  },
-  {
-    url: "/#contact",
-    changefreq: "monthly",
-    priority: "0.8",
-  },
-  {
-    url: "/get-started",
-    changefreq: "monthly",
-    priority: "0.9",
-  },
-];
-
-// Service pages
-const servicePages = [
-  {
-    url: "/services/web-development",
-    changefreq: "monthly",
-    priority: "0.8",
-  },
-  {
-    url: "/services/mobile-app-development",
-    changefreq: "monthly",
-    priority: "0.8",
-  },
-  {
-    url: "/services/custom-software-development",
-    changefreq: "monthly",
-    priority: "0.8",
-  },
-  {
-    url: "/services/ui-ux-design",
-    changefreq: "monthly",
-    priority: "0.8",
-  },
-  {
-    url: "/services/database-solutions",
-    changefreq: "monthly",
-    priority: "0.8",
-  },
-];
-
-// Management system pages - these have higher SEO value for our business
-const managementSystemPages = [
-  {
-    url: "/services/hotel-management-system",
-    changefreq: "monthly",
-    priority: "0.7",
-  },
-  {
-    url: "/services/school-management-system",
-    changefreq: "monthly",
-    priority: "0.7",
-  },
-  {
-    url: "/services/hospital-management-system",
-    changefreq: "monthly",
-    priority: "0.7",
-  },
-  {
-    url: "/services/ecommerce-management-system",
-    changefreq: "monthly",
-    priority: "0.7",
-  },
-  {
-    url: "/services/erp-system",
-    changefreq: "monthly",
-    priority: "0.7",
-  },
-  {
-    url: "/services/payroll-management-system",
-    changefreq: "monthly",
-    priority: "0.7",
-  },
-];
-
-// Blog posts or resource pages (add dynamically if needed)
-const blogPages = [
-  {
-    url: "/blog",
-    changefreq: "weekly",
-    priority: "0.6",
-  },
-];
-
-// Legal pages
-const legalPages = [
-  {
-    url: "/privacy-policy",
-    changefreq: "yearly",
-    priority: "0.3",
-  },
-  {
-    url: "/terms-of-service",
-    changefreq: "yearly",
-    priority: "0.3",
-  },
-];
-
-// Combine all routes
-const allRoutes = [
-  ...routes,
-  ...servicePages,
-  ...managementSystemPages,
-  ...blogPages,
-  ...legalPages,
-];
-
-// Generate sitemap XML content
-const generateSitemapXml = () => {
-  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-
-  allRoutes.forEach((route) => {
-    xml += "  <url>\n";
-    xml += `    <loc>${BASE_URL}${route.url}</loc>\n`;
-    xml += `    <lastmod>${today}</lastmod>\n`;
-    xml += `    <changefreq>${route.changefreq}</changefreq>\n`;
-    xml += `    <priority>${route.priority}</priority>\n`;
-    xml += "  </url>\n";
-  });
-
-  xml += "</urlset>";
-  return xml;
+// Get current date in YYYY-MM-DD format
+const getFormattedDate = () => {
+  const date = new Date();
+  return date.toISOString().split("T")[0];
 };
 
-// Write sitemap to file
-const sitemap = generateSitemapXml();
-const outputPath = path.resolve(__dirname, "../public/sitemap.xml");
+// Define routes based on App.jsx
+// Each route has a path, priority, and change frequency
+const routes = [
+  {
+    path: "/",
+    priority: "1.0",
+    changefreq: "weekly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/services",
+    priority: "0.9",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/get-started",
+    priority: "0.9",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/services/web-development",
+    priority: "0.8",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/services/mobile-app-development",
+    priority: "0.8",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/services/custom-software-development",
+    priority: "0.8",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/services/ui-ux-design",
+    priority: "0.8",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/services/database-solutions",
+    priority: "0.8",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/services/hotel-management-system",
+    priority: "0.7",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/services/school-management-system",
+    priority: "0.7",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/services/hospital-management-system",
+    priority: "0.7",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/services/ecommerce-management-system",
+    priority: "0.7",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/services/erp-system",
+    priority: "0.7",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/services/payroll-management-system",
+    priority: "0.7",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/privacy-policy",
+    priority: "0.3",
+    changefreq: "yearly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/terms-of-service",
+    priority: "0.3",
+    changefreq: "yearly",
+    lastmod: getFormattedDate(),
+  },
+  // Add additional routes as needed
+];
 
-fs.writeFileSync(outputPath, sitemap);
-console.log(`✅ Sitemap generated at ${outputPath}`);
+// Home page sections as anchors
+const homePageSections = [
+  {
+    path: "/#portfolio",
+    priority: "0.8",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/#about",
+    priority: "0.7",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+  {
+    path: "/#contact",
+    priority: "0.8",
+    changefreq: "monthly",
+    lastmod: getFormattedDate(),
+  },
+];
 
-// Export for potential programmatic use
-export { generateSitemapXml };
+// Generate the sitemap XML content
+function generateSitemapXML() {
+  let sitemapContent = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  sitemapContent +=
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" ';
+  sitemapContent += 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ';
+  sitemapContent +=
+    'xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">\n';
+
+  // Add routes
+  [...routes, ...homePageSections].forEach((route) => {
+    sitemapContent += `  <url>\n`;
+    sitemapContent += `    <loc>${BASE_URL}${route.path}</loc>\n`;
+    sitemapContent += `    <lastmod>${route.lastmod}</lastmod>\n`;
+    sitemapContent += `    <changefreq>${route.changefreq}</changefreq>\n`;
+    sitemapContent += `    <priority>${route.priority}</priority>\n`;
+    sitemapContent += `  </url>\n`;
+  });
+
+  sitemapContent += "</urlset>";
+  return sitemapContent;
+}
+
+// Write the sitemap to the public directory
+function writeSitemap() {
+  const sitemapXML = generateSitemapXML();
+  const outputPath = path.resolve(__dirname, "../public/sitemap.xml");
+
+  fs.writeFileSync(outputPath, sitemapXML);
+  console.log(`Sitemap generated at: ${outputPath}`);
+}
+
+// Execute the sitemap generation
+writeSitemap();

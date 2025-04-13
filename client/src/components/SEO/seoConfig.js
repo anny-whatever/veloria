@@ -64,11 +64,11 @@ export const PAGE_SEO = {
       "contact web development agency, hire custom software developers, ERP implementation partners, IT solutions consultation",
   },
   getStarted: {
-    title: "Start Your Web Design or Software Development Project | Veloria",
+    title: "Get Started | Custom Web & Software Development Projects | Veloria",
     description:
-      "Begin your web design, custom software or ERP system development project with Veloria. Professional solutions tailored to your business requirements.",
+      "Start your web design, custom software or ERP system development project with Veloria today. Expert solutions tailored to your business needs with free consultation and competitive pricing.",
     keywords:
-      "hire web developers, start software development project, custom ERP development, management system implementation",
+      "hire web developers, start software development project, custom ERP development, management system implementation, web development consultation, software project estimate, affordable web development India, get web development quote, business software solutions, custom app development, website design services, software development pricing, enterprise software development, ecommerce website development, mobile app development services, IT project consultation",
   },
   privacyPolicy: {
     title: "Privacy Policy | Veloria",
@@ -300,5 +300,54 @@ export const getLegalPageSchema = (pageType, lastUpdated) => {
       url: COMPANY_INFO.url,
     },
     inLanguage: "en-IN",
+  };
+};
+
+/**
+ * Generate structured data for Get Started page
+ */
+export const getStartedPageSchema = () => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${COMPANY_INFO.url}/get-started/#webpage`,
+    name: "Start Your Custom Web & Software Development Project | Veloria",
+    description:
+      "Start your web design, custom software or ERP system development project with Veloria today. Get a free consultation and custom quote.",
+    url: `${COMPANY_INFO.url}/get-started/`,
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": `${COMPANY_INFO.url}/#website`,
+      name: COMPANY_INFO.fullName,
+      url: COMPANY_INFO.url,
+    },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", ".speakable"],
+    },
+    mainEntity: {
+      "@type": "Service",
+      name: "Web and Software Development Services",
+      description:
+        "Professional web design, custom software development, and ERP system solutions tailored to your business requirements.",
+      provider: {
+        "@type": "Organization",
+        name: COMPANY_INFO.name,
+        url: COMPANY_INFO.url,
+      },
+      serviceType: "Web and Software Development",
+      offers: {
+        "@type": "Offer",
+        availability: "https://schema.org/InStock",
+        priceSpecification: {
+          "@type": "PriceSpecification",
+          priceCurrency: "INR",
+          eligibleQuantity: {
+            "@type": "QuantitativeValue",
+            value: "1",
+          },
+        },
+      },
+    },
   };
 };
