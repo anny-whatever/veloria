@@ -1,5 +1,4 @@
 import { forwardRef } from "react";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const Button = forwardRef(
@@ -51,38 +50,24 @@ const Button = forwardRef(
     ${disabled ? "opacity-50 cursor-not-allowed dark:opacity-40" : ""}
     ${className}
     flex items-center justify-center gap-2 rounded-full shadow-sm hover:shadow-md transition-all duration-300
+    ${!disabled ? "button-hover" : ""}
   `;
-
-    // Animation settings
-    const motionProps = !disabled
-      ? {
-          whileHover: { scale: 1.02 },
-          whileTap: { scale: 0.98 },
-          transition: { duration: 0.2 },
-        }
-      : {};
 
     // If it's a link to an external URL
     if (href) {
       return (
-        <motion.a
-          href={href}
-          className={buttonClasses}
-          ref={ref}
-          {...motionProps}
-          {...props}
-        >
+        <a href={href} className={buttonClasses} ref={ref} {...props}>
           {leftIcon && <span className="inline-flex">{leftIcon}</span>}
           <span>{children}</span>
           {rightIcon && <span className="inline-flex">{rightIcon}</span>}
-        </motion.a>
+        </a>
       );
     }
 
     // If it's a react-router Link
     if (to) {
       return (
-        <motion.div className={buttonClasses} {...motionProps}>
+        <div className={buttonClasses}>
           <Link
             to={to}
             className="flex items-center justify-center w-full h-full"
@@ -97,17 +82,16 @@ const Button = forwardRef(
               </span>
             )}
           </Link>
-        </motion.div>
+        </div>
       );
     }
 
     // Default button
     return (
-      <motion.button
+      <button
         className={buttonClasses}
         disabled={disabled}
         ref={ref}
-        {...motionProps}
         {...props}
       >
         {leftIcon && <span className="inline-flex">{leftIcon}</span>}
@@ -117,7 +101,7 @@ const Button = forwardRef(
             {rightIcon}
           </span>
         )}
-      </motion.button>
+      </button>
     );
   }
 );

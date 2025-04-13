@@ -141,7 +141,30 @@ async function createServer() {
           path.resolve(__dirname, "dist/client/index.html"),
           "utf-8"
         );
-        render = (await import("./dist/server/entry-server.js")).render;
+
+        // Try multiple server entry paths for compatibility
+        try {
+          // First try the new path (most reliable)
+          render = (await import("./dist/server/index.js")).render;
+        } catch (importError) {
+          console.log(
+            "Could not import from index.js, trying entry-server.js..."
+          );
+          try {
+            // Then try the direct path
+            render = (await import("./dist/server/entry-server.js")).render;
+          } catch (fallbackError) {
+            console.error("Failed to load server entry module:", fallbackError);
+            // Output helpful diagnostic information
+            console.error(
+              "Available files in dist/server:",
+              fs.existsSync(path.resolve(__dirname, "dist/server"))
+                ? fs.readdirSync(path.resolve(__dirname, "dist/server"))
+                : "directory not found"
+            );
+            throw fallbackError;
+          }
+        }
       }
 
       // Render the app HTML and get the helmet context

@@ -42,14 +42,14 @@ const Card = ({
 
   // Add interactivity if requested
   if (interactive) {
-    cardClasses += " cursor-pointer transition-all duration-300";
+    cardClasses += " cursor-pointer transition-all duration-100 ease-in-out";
   }
 
   // Props for interactive cards
   const interactiveProps = interactive
     ? {
         whileHover: {
-          y: -5,
+          y: -2,
           boxShadow:
             "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
         },
@@ -63,7 +63,7 @@ const Card = ({
     hover && !interactive
       ? {
           whileHover: {
-            y: -5,
+            y: -2,
             boxShadow:
               "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
           },
@@ -77,7 +77,7 @@ const Card = ({
     <Component
       className={cardClasses}
       {...interactiveProps}
-      {...hoverProps}
+      // {...hoverProps}
       {...props}
     >
       {children}

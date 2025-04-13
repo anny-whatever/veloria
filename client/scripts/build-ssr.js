@@ -34,7 +34,36 @@ async function buildServer() {
     },
     mode: "production",
   });
-  console.log("Server bundle built!");
+
+  // Add CJS entry point for better compatibility
+  const serverEntryPath = resolve(__dirname, "../dist/server/entry-server.js");
+  if (fs.existsSync(serverEntryPath)) {
+    // Create a CJS-compatible entry point
+    const cjsWrapperContent = `
+// CJS compatibility wrapper
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import { createRequire } from 'module';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const require = createRequire(import.meta.url);
+
+export * from './entry-server.js';
+`;
+
+    fs.writeFileSync(
+      resolve(__dirname, "../dist/server/index.js"),
+      cjsWrapperContent,
+      "utf8"
+    );
+
+    console.log("Server bundle built with CJS compatibility!");
+  } else {
+    console.error("WARNING: Server entry file not found at expected path!");
+    console.error(`Expected: ${serverEntryPath}`);
+    console.error("This will cause SSR to fail in production");
+  }
 }
 
 // Make sure the index.html has base paths correctly set
