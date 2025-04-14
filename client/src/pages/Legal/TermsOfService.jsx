@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import { SeoHead, getLegalPageSchema } from "../../components/SEO";
 
 const TermsOfService = () => {
@@ -11,7 +10,7 @@ const TermsOfService = () => {
     "Read the Terms of Service for Veloria. These terms outline the rules, guidelines, and agreements for using our services and website.";
   const keywords =
     "terms of service, terms and conditions, user agreement, legal terms, website terms, Veloria terms";
-    
+
   // Generate structured data for terms of service
   const structuredData = getLegalPageSchema("terms-of-service", "2023-04-10");
 
@@ -329,8 +328,6 @@ const TermsOfService = () => {
           </motion.div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };

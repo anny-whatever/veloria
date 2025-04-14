@@ -21,7 +21,13 @@ export default defineConfig({
     }),
   ],
   server: {
+    port: 5173,
+    strictPort: true,
     allowedHosts: ["veloria.in", "www.veloria.in"],
+    fs: {
+      // Allow serving files from one level up to the project root
+      allow: [".."],
+    },
   },
   build: {
     rollupOptions: {
@@ -62,6 +68,16 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
+    },
+  },
+  css: {
+    modules: {
+      // Generate scoped CSS by default
+      scopeBehaviour: "local",
+      // Format for the generated class names
+      localsConvention: "camelCaseOnly",
+      // Custom CSS modules pattern
+      generateScopedName: "[name]__[local]___[hash:base64:5]",
     },
   },
   // Optimize dependencies

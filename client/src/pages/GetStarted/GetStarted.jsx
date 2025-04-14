@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import ProjectForm from "./ProjectForm";
 import ProcessTimeline from "./ProcessTimeline";
 import PricingCards from "./PricingCards";
@@ -361,7 +360,7 @@ const GetStarted = () => {
         </motion.div>
       </div>
 
-      <Footer />
+      {/* Footer component removed to prevent duplicate footers */}
     </div>
   );
 };

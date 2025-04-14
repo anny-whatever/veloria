@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import { SeoHead, getLegalPageSchema } from "../../components/SEO";
 
 const PrivacyPolicy = () => {
@@ -297,8 +296,6 @@ const PrivacyPolicy = () => {
           </motion.div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
