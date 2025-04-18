@@ -9,6 +9,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import { format } from "date-fns";
 import API from "../../api";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const BookingsCalendar = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const BookingsCalendar = () => {
   const [currentView, setCurrentView] = useState("dayGridMonth");
   const [todaysBookings, setTodaysBookings] = useState([]);
   const [retryCount, setRetryCount] = useState(0);
+  const { isDarkMode } = useTheme();
 
   // Function to fetch booking events for the calendar
   const fetchEvents = useCallback(
@@ -123,13 +125,13 @@ const BookingsCalendar = () => {
 
   if (error && retryCount >= 3) {
     return (
-      <div className="p-6 text-red-700 border border-red-200 rounded-lg bg-red-50">
+      <div className="p-6 text-red-700 border border-red-200 rounded-lg bg-red-50 dark:bg-zinc-900 dark:border-red-800 dark:text-red-400">
         <div className="flex items-center mb-3">
           <AlertTriangle size={24} className="mr-2" />
           <h3 className="text-lg font-semibold">Error</h3>
         </div>
         <p>{error}</p>
-        <p className="mt-2 text-sm text-red-600">
+        <p className="mt-2 text-sm text-red-600 dark:text-red-400">
           The server returned an error when trying to load calendar events. This
           may be due to a server-side issue or misconfiguration.
         </p>
@@ -138,7 +140,7 @@ const BookingsCalendar = () => {
             setRetryCount(0);
             window.location.reload();
           }}
-          className="px-4 py-2 mt-4 text-red-700 transition-colors bg-red-100 rounded-md hover:bg-red-200"
+          className="px-4 py-2 mt-4 text-red-700 transition-colors bg-red-100 rounded-md hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50"
         >
           Retry
         </button>
@@ -146,12 +148,24 @@ const BookingsCalendar = () => {
     );
   }
 
+  // Apply dark mode class to calendar
+  useEffect(() => {
+    if (isDarkMode) {
+      document.querySelector(".fc")?.classList.add("fc-dark");
+    } else {
+      document.querySelector(".fc")?.classList.remove("fc-dark");
+    }
+  }, [isDarkMode, loading]);
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between md:flex-row md:items-center">
-        <h1 className="mb-4 text-2xl font-bold md:mb-0">
+        <h1 className="mb-4 text-2xl font-bold text-zinc-900 dark:text-zinc-100 md:mb-0">
           <div className="flex items-center">
-            <Calendar size={24} className="mr-2 text-primary" />
+            <Calendar
+              size={24}
+              className="mr-2 text-primary-600 dark:text-primary-400"
+            />
             Discovery Call Calendar
           </div>
         </h1>
@@ -159,7 +173,7 @@ const BookingsCalendar = () => {
         <div className="flex items-center space-x-2">
           <Link
             to="/admin/bookings"
-            className="flex items-center px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+            className="flex items-center px-4 py-2 text-sm border border-zinc-300 rounded-md hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800/50 dark:text-zinc-200 text-zinc-700"
           >
             <List size={18} className="mr-2" />
             List View
@@ -171,31 +185,37 @@ const BookingsCalendar = () => {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Calendar (takes up more space) */}
         <div className="lg:col-span-2">
-          <div className="overflow-hidden bg-white rounded-lg shadow-sm">
-            <div className="p-4 border-b">
+          <div className="overflow-hidden rounded-lg shadow-sm bg-zinc-50 dark:bg-zinc-900 dark:border dark:border-zinc-800">
+            <div className="p-4 border-b border-zinc-200 dark:border-zinc-800">
               <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-                <h2 className="mb-2 text-lg font-medium sm:mb-0">
+                <h2 className="mb-2 text-lg font-medium text-zinc-900 sm:mb-0 dark:text-zinc-100">
                   Discovery Call Schedule
                 </h2>
                 <div className="flex items-center">
                   <div className="flex items-center mr-4">
                     <span className="inline-block w-3 h-3 mr-1 bg-blue-500 rounded-full"></span>
-                    <span className="text-xs text-gray-500">Scheduled</span>
+                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                      Scheduled
+                    </span>
                   </div>
                   <div className="flex items-center mr-4">
                     <span className="inline-block w-3 h-3 mr-1 bg-green-500 rounded-full"></span>
-                    <span className="text-xs text-gray-500">Completed</span>
+                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                      Completed
+                    </span>
                   </div>
                   <div className="flex items-center">
                     <span className="inline-block w-3 h-3 mr-1 bg-red-500 rounded-full"></span>
-                    <span className="text-xs text-gray-500">Cancelled</span>
+                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                      Cancelled
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
             {error && retryCount < 3 && (
-              <div className="p-4 m-4 border rounded-lg text-amber-700 border-amber-200 bg-amber-50">
+              <div className="p-4 m-4 border rounded-lg text-amber-700 border-amber-200 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-900 dark:text-amber-400">
                 <div className="flex items-center">
                   <AlertTriangle size={18} className="mr-2" />
                   <p>Having trouble loading calendar events. Retrying...</p>
@@ -204,6 +224,81 @@ const BookingsCalendar = () => {
             )}
 
             <div className={loading ? "opacity-50" : ""}>
+              <style>
+                {`
+                  .fc-dark .fc-scrollgrid,
+                  .fc-dark .fc-scrollgrid-section-header,
+                  .fc-dark .fc-col-header,
+                  .fc-dark .fc-daygrid-body,
+                  .fc-dark .fc-timegrid-body,
+                  .fc-dark .fc-list,
+                  .fc-dark .fc-list-day,
+                  .fc-dark .fc-list-event {
+                    background-color: #18181b !important;
+                    border-color: #27272a !important;
+                  }
+
+                  .fc-dark .fc-scrollgrid-section-header th,
+                  .fc-dark .fc-col-header-cell,
+                  .fc-dark .fc-daygrid-day,
+                  .fc-dark .fc-timegrid-slot,
+                  .fc-dark .fc-list-day th,
+                  .fc-dark .fc-list-event td {
+                    border-color: #27272a !important;
+                  }
+
+                  .fc-dark .fc-col-header-cell a,
+                  .fc-dark .fc-daygrid-day-number,
+                  .fc-dark .fc-list-day-text,
+                  .fc-dark .fc-list-day-side-text {
+                    color: #e4e4e7 !important;
+                  }
+
+                  .fc-dark .fc-day-other .fc-daygrid-day-number {
+                    color: #71717a !important;
+                  }
+
+                  .fc-dark .fc-button-primary {
+                    background-color: #27272a !important;
+                    border-color: #3f3f46 !important;
+                    color: #e4e4e7 !important;
+                  }
+
+                  .fc-dark .fc-button-primary:hover {
+                    background-color: #3f3f46 !important;
+                  }
+
+                  .fc-dark .fc-button-primary:not(:disabled).fc-button-active,
+                  .fc-dark .fc-button-primary:not(:disabled):active {
+                    background-color: #52525b !important;
+                    border-color: #3f3f46 !important;
+                  }
+
+                  .fc-dark .fc-daygrid-day-events .fc-event,
+                  .fc-dark .fc-timegrid-event {
+                    background-color: #3f3f46 !important;
+                    border-color: #52525b !important;
+                  }
+
+                  .fc-dark .fc-list-event:hover td {
+                    background-color: #27272a !important;
+                  }
+
+                  .fc-dark .fc-list-empty {
+                    background-color: #18181b !important;
+                    color: #a1a1aa !important;
+                  }
+                  
+                  .fc-dark .fc-toolbar-title {
+                    color: #e4e4e7 !important;
+                  }
+                  
+                  .fc-dark .fc-daygrid-day.fc-day-today,
+                  .fc-dark .fc-timegrid-slot.fc-day-today {
+                    background-color: rgba(113, 113, 122, 0.2) !important;
+                  }
+                `}
+              </style>
               <FullCalendar
                 plugins={[
                   dayGridPlugin,
@@ -237,6 +332,7 @@ const BookingsCalendar = () => {
                   startTime: "09:00",
                   endTime: "19:00",
                 }}
+                className={isDarkMode ? "fc-dark" : ""}
               />
             </div>
           </div>
@@ -244,84 +340,49 @@ const BookingsCalendar = () => {
 
         {/* Today's Bookings Sidebar */}
         <div className="lg:col-span-1">
-          <div className="overflow-hidden bg-white rounded-lg shadow-sm">
-            <div className="p-4 border-b">
-              <h2 className="flex items-center text-lg font-medium">
-                <Users size={20} className="mr-2 text-primary" />
-                Today's Calls
-                <span className="flex items-center justify-center w-6 h-6 ml-2 text-xs text-white rounded-full bg-primary">
-                  {todaysBookings.length}
-                </span>
-              </h2>
-            </div>
-
-            <div>
-              {todaysBookings.length === 0 ? (
-                <div className="p-6 text-center">
-                  <Calendar size={32} className="mx-auto mb-3 text-gray-300" />
-                  <p className="text-gray-500">No calls scheduled for today</p>
-                </div>
-              ) : (
-                <div className="divide-y divide-gray-100">
-                  {todaysBookings.map((booking) => (
+          <div className="p-4 rounded-lg shadow-sm bg-zinc-50 dark:bg-zinc-900 dark:border dark:border-zinc-800">
+            <h2 className="mb-3 text-lg font-medium text-zinc-900 dark:text-zinc-100">
+              Today's Bookings
+            </h2>
+            {todaysBookings.length === 0 ? (
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                No bookings scheduled for today.
+              </p>
+            ) : (
+              <ul className="space-y-3">
+                {todaysBookings.map((booking) => (
+                  <li
+                    key={booking._id}
+                    className="p-3 text-sm border rounded-md bg-zinc-100 dark:bg-zinc-800/50 dark:border-zinc-700"
+                  >
                     <Link
-                      key={booking._id}
                       to={`/admin/bookings/${booking._id}`}
-                      className="block p-4 transition-colors hover:bg-gray-50"
+                      className="block group"
                     >
-                      <div className="flex justify-between">
-                        <div>
-                          <h3 className="font-medium text-primary">
-                            {booking.name}
-                          </h3>
-                          <p className="mt-1 text-sm text-gray-600">
-                            {booking.projectType}
-                          </p>
-                        </div>
-
-                        <div className="text-right">
-                          <div className="text-sm font-medium">
-                            {booking.time}
-                          </div>
-                          <div className="flex items-center justify-end mt-1 text-xs text-gray-500">
-                            {booking.callType === "video" ? (
-                              <span className="flex items-center">
-                                <span className="mr-1">📹</span> Video Call
-                              </span>
-                            ) : (
-                              <span className="flex items-center">
-                                <span className="mr-1">📞</span> Phone Call
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center mt-2">
-                        <span
-                          className={`px-2 py-0.5 text-xs rounded-full ${
-                            booking.status === "scheduled"
-                              ? "bg-blue-100 text-blue-800"
-                              : booking.status === "completed"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-gray-100 text-gray-800"
-                          }`}
-                        >
-                          {booking.status?.charAt(0).toUpperCase() +
-                            booking.status?.slice(1) || "Unknown"}
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-primary-600 dark:group-hover:text-primary-400">
+                          {booking.name}
+                        </span>
+                        <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                          {booking.time}
                         </span>
                       </div>
+                      <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                        {booking.projectType}
+                      </p>
                     </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           {/* Quick Actions */}
-          <div className="mt-6 overflow-hidden bg-white rounded-lg shadow-sm">
-            <div className="p-4 border-b">
-              <h2 className="text-lg font-medium">Quick Actions</h2>
+          <div className="mt-6 overflow-hidden bg-zinc-50 rounded-lg shadow-sm dark:bg-zinc-900 dark:border dark:border-zinc-800">
+            <div className="p-4 border-b dark:border-zinc-800">
+              <h2 className="text-lg font-medium dark:text-zinc-100">
+                Quick Actions
+              </h2>
             </div>
             <div className="p-4">
               <button

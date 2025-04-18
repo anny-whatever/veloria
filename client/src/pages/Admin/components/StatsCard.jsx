@@ -13,7 +13,7 @@ const StatsCard = ({
 }) => {
   return (
     <motion.div
-      className="overflow-hidden bg-white dark:bg-gray-800 rounded-lg shadow-sm"
+      className="overflow-hidden bg-white dark:bg-zinc-900 rounded-lg shadow-sm border dark:border-zinc-800"
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
     >
       <div className="p-5">
@@ -23,12 +23,12 @@ const StatsCard = ({
           >
             {icon}
           </div>
-          <span className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          <span className="text-3xl font-bold text-gray-900 dark:text-zinc-100">
             {count}
           </span>
         </div>
 
-        <h3 className="font-medium text-gray-700 dark:text-gray-300">
+        <h3 className="font-medium text-gray-700 dark:text-zinc-300">
           {title}
         </h3>
 
@@ -44,7 +44,7 @@ const StatsCard = ({
 
       <Link
         to={linkTo}
-        className={`flex items-center justify-between p-3 bg-${color}/5 dark:bg-${color}/10 text-${color} dark:text-${color}-400 text-sm border-t border-gray-100 dark:border-gray-700`}
+        className={`flex items-center justify-between p-3 bg-${color}/5 dark:bg-${color}/10 text-${color} dark:text-${color}-400 text-sm border-t border-gray-100 dark:border-zinc-800`}
       >
         <span>View details</span>
         <ChevronRight size={16} />
