@@ -2,11 +2,9 @@
 const plugin = require("tailwindcss/plugin");
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  // Add a unique comment to force rebuild
-  // FORCE_REBUILD: true,
-  darkMode: ["class"],
+export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {

@@ -76,7 +76,6 @@ function App() {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const isHomePage = location.pathname === "/";
-  const isAdminPage = location.pathname.includes("/admin");
 
   // Check if we're in browser environment
   useEffect(() => {
@@ -191,7 +190,7 @@ function App() {
 
   return (
     <div className="min-h-screen text-gray-900 bg-surface-50 dark:bg-dark-200 dark:text-gray-100">
-      {!isAdminPage && <Navbar />}
+      <Navbar />
 
       {/* SEO Backlink Helpers */}
       <BacklinkHelper
@@ -332,7 +331,7 @@ function App() {
         </Routes>
       </AnimatePresence>
 
-      {!isAdminPage && <Footer />}
+      <Footer />
 
       {isBrowser && (
         <motion.button

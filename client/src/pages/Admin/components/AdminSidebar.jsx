@@ -1,4 +1,4 @@
-// client/src/pages/Admin/components/AdminSidebar.jsx - Redesigned sidebar
+// client/src/pages/Admin/components/AdminSidebar.jsx - Updated with new navigation items
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,8 +15,6 @@ import {
   IndianRupee,
   User,
   Settings,
-  Command,
-  PanelLeftClose,
 } from "lucide-react";
 import useAuth from "../../../hooks/useAuth";
 
@@ -28,13 +26,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   const navSections = [
     {
       title: "Dashboard",
-      items: [
-        {
-          path: "/admin",
-          label: "Overview",
-          icon: <Home size={18} className="stroke-[1.5px]" />,
-        },
-      ],
+      items: [{ path: "/admin", label: "Overview", icon: <Home size={20} /> }],
     },
     {
       title: "Projects",
@@ -42,12 +34,12 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         {
           path: "/admin/projects",
           label: "Project Pipeline",
-          icon: <ClipboardList size={18} className="stroke-[1.5px]" />,
+          icon: <ClipboardList size={20} />,
         },
         {
           path: "/admin/projects/calendar",
           label: "Project Calendar",
-          icon: <Calendar size={18} className="stroke-[1.5px]" />,
+          icon: <Calendar size={20} />,
         },
       ],
     },
@@ -57,12 +49,12 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         {
           path: "/admin/bookings",
           label: "Bookings List",
-          icon: <FileText size={18} className="stroke-[1.5px]" />,
+          icon: <FileText size={20} />,
         },
         {
           path: "/admin/bookings/calendar",
           label: "Booking Calendar",
-          icon: <Calendar size={18} className="stroke-[1.5px]" />,
+          icon: <Calendar size={20} />,
         },
       ],
     },
@@ -72,7 +64,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         {
           path: "/admin/contacts",
           label: "Contact Messages",
-          icon: <MessageCircle size={18} className="stroke-[1.5px]" />,
+          icon: <MessageCircle size={20} />,
         },
       ],
     },
@@ -82,7 +74,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         {
           path: "/admin/finance",
           label: "Revenue Tracking",
-          icon: <IndianRupee size={18} className="stroke-[1.5px]" />,
+          icon: <IndianRupee size={20} />,
         },
       ],
     },
@@ -98,7 +90,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-20 bg-black/70 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-20 bg-black/50 md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -108,157 +100,115 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       </AnimatePresence>
 
       {/* Sidebar */}
-      <div
-        id="admin-sidebar"
-        className={`fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 ease-in-out ${
+      <motion.div
+        className={`fixed inset-y-0 left-0 z-30 w-64 bg-white dark:bg-gray-800 shadow-lg transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:static`}
+        } transition-transform duration-300 ease-in-out flex flex-col`}
       >
-        <div className="h-full w-64 bg-zinc-950 border-r border-zinc-800/80 shadow-xl flex flex-col relative">
-          {/* Close button for mobile */}
-          <button
-            className="absolute text-zinc-400 hover:text-zinc-200 top-4 right-4 z-50 lg:hidden"
-            id="sidebar-toggle"
-            onClick={toggleSidebar}
-            aria-label="Close sidebar"
+        {/* Close button for mobile */}
+        <button
+          className="absolute text-gray-500 dark:text-gray-400 top-4 right-4 md:hidden"
+          onClick={() => toggleSidebar()}
+        >
+          <X size={20} />
+        </button>
+
+        {/* Logo */}
+        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+          <Link
+            to="/admin"
+            className="flex items-center justify-center"
+            onClick={() => isOpen && toggleSidebar()}
           >
-            <X size={18} />
-          </button>
+            <div className="relative">
+              {/* Fallback text for any case where gradient doesn't render */}
+              <h2 className="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                Veloria
+              </h2>
 
-          {/* Logo */}
-          <div className="p-4 border-b border-zinc-800/80">
-            <Link
-              to="/admin"
-              className="flex items-center justify-center"
-              onClick={() => toggleSidebar()}
-            >
-              <div className="relative">
-                <div className="flex items-center">
-                  <div className="flex items-center justify-center w-8 h-8 mr-2 bg-zinc-900 border border-zinc-800 rounded-lg shadow-md">
-                    <Command size={18} className="text-primary-400" />
-                  </div>
-                  <h2 className="text-xl font-bold text-zinc-100">Veloria</h2>
-                </div>
-              </div>
-            </Link>
-          </div>
+              {/* Gradient overlay on top */}
+              <h2 className="absolute top-0 left-0 text-2xl font-bold text-transparent bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text">
+                Veloria
+              </h2>
+            </div>
+          </Link>
+        </div>
 
-          {/* Sidebar Toggle Button (visible on desktop) */}
-          {/* Removed the toggle button div */}
-          {/* <div className="absolute right-0 hidden transform translate-x-1/2 lg:block top-12">
-            <button
-              onClick={toggleSidebar}
-              className="flex items-center justify-center w-8 h-8 text-zinc-400 bg-zinc-900 border border-zinc-800 rounded-full hover:text-white focus:outline-none focus:ring-2 focus:ring-zinc-600"
-              aria-label="Toggle sidebar"
-            >
-              <PanelLeftClose size={16} />
-            </button>
-          </div> */}
+        {/* Nav Items */}
+        <nav className="flex-1 px-2 py-4 space-y-6 overflow-y-auto">
+          {navSections.map((section, sectionIndex) => (
+            <div key={sectionIndex}>
+              <h3 className="px-4 mb-2 text-xs font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase">
+                {section.title}
+              </h3>
+              <div className="space-y-1">
+                {section.items.map((item) => {
+                  const isActive =
+                    location.pathname === item.path ||
+                    (item.path !== "/admin" &&
+                      location.pathname.startsWith(item.path));
 
-          {/* Nav Items */}
-          <nav className="flex-1 px-2 py-4 space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
-            {navSections.map((section, sectionIndex) => (
-              <div key={sectionIndex}>
-                <h3 className="px-3 mb-2 text-xs font-medium tracking-wider text-zinc-500 uppercase">
-                  {section.title}
-                </h3>
-                <div className="space-y-1">
-                  {section.items.map((item) => {
-                    const isActive =
-                      location.pathname === item.path ||
-                      (item.path !== "/admin" &&
-                        location.pathname.startsWith(item.path));
-
-                    return (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`flex items-center px-3 py-2 text-sm rounded-md transition-colors ${
-                          isActive
-                            ? "bg-zinc-900 text-zinc-100 font-medium shadow-sm"
-                            : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/60"
-                        }`}
-                        onClick={toggleSidebar}
-                      >
-                        <span
-                          className={`mr-2 ${
-                            isActive ? "text-primary-400" : "text-zinc-500"
-                          }`}
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                        isActive
+                          ? "bg-primary/10 text-primary dark:text-primary-400"
+                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      }`}
+                      onClick={() => isOpen && toggleSidebar()}
+                    >
+                      <span className="mr-3">{item.icon}</span>
+                      <span>{item.label}</span>
+                      {isActive && (
+                        <motion.div
+                          className="ml-auto text-primary dark:text-primary-400"
+                          initial={{ scale: 0.5, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
                         >
-                          {item.icon}
-                        </span>
-                        <span>{item.label}</span>
-                        {isActive && (
-                          <motion.div
-                            className="ml-auto text-primary-400"
-                            initial={{ scale: 0.5, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                          >
-                            <div className="w-1.5 h-1.5 rounded-full bg-primary-400" />
-                          </motion.div>
-                        )}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </nav>
-
-          {/* User Profile */}
-          <div className="p-4 mt-auto border-t border-zinc-800/80">
-            <div className="flex items-center p-2 rounded-md bg-zinc-900/70">
-              <div className="flex items-center justify-center w-8 h-8 mr-2 text-white rounded-full bg-gradient-to-br from-primary-500 to-secondary-600 border border-zinc-800 shadow-sm">
-                {auth.user && auth.user.name ? (
-                  auth.user.name.charAt(0).toUpperCase()
-                ) : (
-                  <User size={16} />
-                )}
-              </div>
-              <div className="ml-2 overflow-hidden">
-                <p className="text-sm font-medium text-zinc-200 truncate">
-                  {auth.user?.name || "Admin User"}
-                </p>
-                <p className="text-xs text-zinc-500 truncate">
-                  {auth.user?.email || "admin@veloria.in"}
-                </p>
+                          <ChevronRight size={16} />
+                        </motion.div>
+                      )}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-2 mt-3">
-              <Link
-                to="/admin/settings"
-                className="flex items-center justify-center px-2 py-1.5 text-xs font-medium text-zinc-300 rounded-md bg-zinc-900 hover:bg-zinc-800 transition-colors"
-                onClick={toggleSidebar}
-              >
-                <Settings size={14} className="mr-1.5" />
-                <span>Settings</span>
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="flex items-center justify-center px-2 py-1.5 text-xs font-medium text-zinc-300 rounded-md bg-zinc-900 hover:bg-zinc-800 transition-colors"
-              >
-                <LogOut size={14} className="mr-1.5" />
-                <span>Logout</span>
-              </button>
+          ))}
+        </nav>
+
+        {/* User Profile */}
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <p className="font-medium text-gray-800 dark:text-gray-200">
+                {auth.user?.name}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {auth.user?.email}
+              </p>
             </div>
           </div>
-
-          {/* Keyboard shortcuts hint */}
-          <div className="hidden p-3 mx-3 my-2 rounded-md border border-zinc-800/80 bg-zinc-900/70 lg:block">
-            <div className="flex items-center justify-between text-xs text-zinc-500">
-              <span>Keyboard shortcuts</span>
-              <span className="flex">
-                <kbd className="px-1.5 py-0.5 mx-0.5 text-xs font-medium text-zinc-400 bg-zinc-900 rounded border border-zinc-800">
-                  ⌘
-                </kbd>
-                <kbd className="px-1.5 py-0.5 mx-0.5 text-xs font-medium text-zinc-400 bg-zinc-900 rounded border border-zinc-800">
-                  K
-                </kbd>
-              </span>
-            </div>
+          <div className="flex space-x-2">
+            <Link
+              to="/admin/settings"
+              className="flex items-center justify-center flex-1 px-2 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
+              onClick={() => isOpen && toggleSidebar()}
+            >
+              <Settings size={18} className="mr-1" />
+              <span>Settings</span>
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="flex items-center justify-center flex-1 px-2 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
+            >
+              <LogOut size={18} className="mr-1" />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };
