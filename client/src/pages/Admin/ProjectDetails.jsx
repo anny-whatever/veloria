@@ -186,66 +186,55 @@ const ProjectDetails = () => {
   // Format workflow stage
   const formatWorkflowStage = (stage) => {
     if (!stage)
-      return {
-        label: "Not Started",
-        color: "bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200",
-      };
+      return { label: "Not Started", color: "bg-gray-100 text-gray-800" };
 
     switch (stage) {
       case "discussion":
         return {
           label: "Discussion",
-          color:
-            "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200",
+          color: "bg-blue-100 text-blue-800",
           icon: <Users size={16} />,
         };
       case "design":
         return {
           label: "Design",
-          color:
-            "bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200",
+          color: "bg-purple-100 text-purple-800",
           icon: <Palette size={16} />,
         };
       case "content_collection":
         return {
           label: "Content Collection",
-          color:
-            "bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200",
+          color: "bg-amber-100 text-amber-800",
           icon: <Image size={16} />,
         };
       case "development":
         return {
           label: "Development",
-          color:
-            "bg-cyan-100 dark:bg-cyan-900 text-cyan-800 dark:text-cyan-200",
+          color: "bg-cyan-100 text-cyan-800",
           icon: <Briefcase size={16} />,
         };
       case "revisions":
         return {
           label: "Revisions",
-          color:
-            "bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-200",
+          color: "bg-pink-100 text-pink-800",
           icon: <Edit size={16} />,
         };
       case "deployment":
         return {
           label: "Deployment",
-          color:
-            "bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200",
+          color: "bg-indigo-100 text-indigo-800",
           icon: <Server size={16} />,
         };
       case "knowledge_sharing":
         return {
           label: "Knowledge Sharing",
-          color:
-            "bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200",
+          color: "bg-teal-100 text-teal-800",
           icon: <FileText size={16} />,
         };
       case "completed":
         return {
           label: "Completed",
-          color:
-            "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200",
+          color: "bg-green-100 text-green-800",
           icon: <CheckCircle size={16} />,
         };
       default:
@@ -343,7 +332,7 @@ const ProjectDetails = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-12 h-12 border-4 border-gray-300 dark:border-gray-600 rounded-full border-t-primary animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-gray-300 rounded-full border-t-primary animate-spin"></div>
       </div>
     );
   }
@@ -351,7 +340,7 @@ const ProjectDetails = () => {
   // Handle error state
   if (error) {
     return (
-      <div className="p-6 text-red-700 border border-red-200 rounded-lg bg-red-50 dark:bg-red-900/20 dark:border-red-700/40 dark:text-red-300">
+      <div className="p-6 text-red-700 border border-red-200 rounded-lg bg-red-50">
         <div className="flex items-center mb-3">
           <AlertTriangle size={24} className="mr-2" />
           <h3 className="text-lg font-semibold">Error</h3>
@@ -360,13 +349,13 @@ const ProjectDetails = () => {
         <div className="flex mt-4 space-x-3">
           <button
             onClick={retry}
-            className="px-4 py-2 text-red-700 transition-colors bg-red-100 rounded-md hover:bg-red-200 dark:bg-red-800/50 dark:text-red-200 dark:hover:bg-red-700/60"
+            className="px-4 py-2 text-red-700 transition-colors bg-red-100 rounded-md hover:bg-red-200"
           >
             Retry
           </button>
           <button
             onClick={() => navigate("/admin/projects")}
-            className="px-4 py-2 text-gray-700 transition-colors bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+            className="px-4 py-2 text-gray-700 transition-colors bg-gray-100 rounded-md hover:bg-gray-200"
           >
             Go Back
           </button>
@@ -378,7 +367,7 @@ const ProjectDetails = () => {
   // Handle case where project is not found
   if (!project) {
     return (
-      <div className="p-6 border rounded-lg bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-900/20 dark:border-amber-700/40 dark:text-amber-300">
+      <div className="p-6 border rounded-lg bg-amber-50 border-amber-200 text-amber-700">
         <div className="flex items-center mb-3">
           <AlertTriangle size={24} className="mr-2" />
           <h3 className="text-lg font-semibold">Project Not Found</h3>
@@ -388,7 +377,7 @@ const ProjectDetails = () => {
         </p>
         <Link
           to="/admin/projects"
-          className="inline-block px-4 py-2 mt-4 transition-colors rounded-md bg-amber-100 hover:bg-amber-200 text-amber-700 dark:bg-amber-800/50 dark:text-amber-200 dark:hover:bg-amber-700/60"
+          className="inline-block px-4 py-2 mt-4 transition-colors rounded-md bg-amber-100 hover:bg-amber-200 text-amber-700"
         >
           Go Back to Projects
         </Link>
@@ -407,45 +396,39 @@ const ProjectDetails = () => {
         <div className="flex items-center mb-4 md:mb-0">
           <Link
             to="/admin/projects"
-            className="p-2 mr-4 text-gray-700 transition-colors bg-gray-100 rounded-full hover:bg-gray-200 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
+            className="p-2 mr-4 transition-colors bg-gray-100 rounded-full hover:bg-gray-200"
           >
             <ChevronLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">
-              {project.projectName}
-            </h1>
-            <div className="flex flex-wrap items-center mt-1 text-sm text-gray-500 dark:text-zinc-400">
+            <h1 className="text-2xl font-bold">{project.projectName}</h1>
+            <div className="flex items-center mt-1 text-sm text-gray-500">
               <span
                 className={`px-2 py-1 rounded-full text-xs font-medium mr-2
-                  ${
-                    project.status === "new"
-                      ? "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200"
-                      : ""
-                  }
+                  ${project.status === "new" ? "bg-blue-100 text-blue-800" : ""}
                   ${
                     project.status === "contacted"
-                      ? "bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200"
+                      ? "bg-purple-100 text-purple-800"
                       : ""
                   }
                   ${
                     project.status === "in-progress"
-                      ? "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200"
+                      ? "bg-amber-100 text-amber-800"
                       : ""
                   }
                   ${
                     project.status === "quoted"
-                      ? "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-200"
+                      ? "bg-cyan-100 text-cyan-800"
                       : ""
                   }
                   ${
                     project.status === "accepted"
-                      ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200"
+                      ? "bg-green-100 text-green-800"
                       : ""
                   }
                   ${
                     project.status === "declined"
-                      ? "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200"
+                      ? "bg-red-100 text-red-800"
                       : ""
                   }
                 `}
@@ -476,7 +459,7 @@ const ProjectDetails = () => {
             <>
               <button
                 onClick={() => setEditMode(false)}
-                className="px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 dark:border-zinc-600 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Cancel
               </button>
@@ -492,7 +475,7 @@ const ProjectDetails = () => {
             <>
               <button
                 onClick={() => setEditMode(true)}
-                className="flex items-center px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 dark:border-zinc-600 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                className="flex items-center px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 <Edit size={18} className="mr-2" />
                 Edit Project
@@ -518,19 +501,17 @@ const ProjectDetails = () => {
 
       {/* Project Metrics */}
       <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-4">
-        <div className="p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-lg shadow-sm">
-          <div className="text-sm font-medium text-gray-500 dark:text-zinc-400">
-            Project Value
-          </div>
+        <div className="p-4 bg-white rounded-lg shadow-sm">
+          <div className="text-sm font-medium text-gray-500">Project Value</div>
           <div className="flex items-baseline mt-1">
-            <span className="text-2xl font-bold text-gray-900 dark:text-zinc-100">
+            <span className="text-2xl font-bold text-gray-900">
               ₹{metrics.totalValue.toLocaleString()}
             </span>
-            <span className="ml-2 text-sm text-gray-500 dark:text-zinc-400">
+            <span className="ml-2 text-sm text-gray-500">
               ({metrics.paymentProgress}% received)
             </span>
           </div>
-          <div className="w-full h-2 mt-2 bg-gray-200 dark:bg-zinc-700 rounded-full">
+          <div className="w-full h-2 mt-2 bg-gray-200 rounded-full">
             <div
               className="h-2 bg-green-500 rounded-full"
               style={{ width: `${metrics.paymentProgress}%` }}
@@ -538,20 +519,20 @@ const ProjectDetails = () => {
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-lg shadow-sm">
-          <div className="text-sm font-medium text-gray-500 dark:text-zinc-400">
+        <div className="p-4 bg-white rounded-lg shadow-sm">
+          <div className="text-sm font-medium text-gray-500">
             Project Progress
           </div>
           <div className="flex items-baseline mt-1">
-            <span className="text-2xl font-bold text-gray-900 dark:text-zinc-100">
+            <span className="text-2xl font-bold text-gray-900">
               {metrics.milestonesProgress}%
             </span>
-            <span className="ml-2 text-sm text-gray-500 dark:text-zinc-400">
+            <span className="ml-2 text-sm text-gray-500">
               ({metrics.completedMilestones}/{metrics.totalMilestones}{" "}
               milestones)
             </span>
           </div>
-          <div className="w-full h-2 mt-2 bg-gray-200 dark:bg-zinc-700 rounded-full">
+          <div className="w-full h-2 mt-2 bg-gray-200 rounded-full">
             <div
               className="h-2 bg-blue-500 rounded-full"
               style={{ width: `${metrics.milestonesProgress}%` }}
@@ -559,32 +540,35 @@ const ProjectDetails = () => {
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-lg shadow-sm">
-          <div className="text-sm font-medium text-gray-500 dark:text-zinc-400">
-            Current Stage
-          </div>
+        <div className="p-4 bg-white rounded-lg shadow-sm">
+          <div className="text-sm font-medium text-gray-500">Current Stage</div>
           <div className="flex items-center mt-1">
-            <span className={`p-1 rounded-full mr-2 ${currentStage.color}`}>
+            <span
+              className={`p-1 rounded-full mr-2 ${currentStage.color.replace(
+                "text-",
+                "bg-"
+              )}`}
+            >
               {currentStage.icon}
             </span>
-            <span className="text-xl font-bold text-gray-900 dark:text-zinc-100">
+            <span className="text-xl font-bold text-gray-900">
               {currentStage.label}
             </span>
           </div>
-          <div className="mt-2 text-sm text-gray-500 dark:text-zinc-400">
+          <div className="mt-2 text-sm text-gray-500">
             {project.startDate
               ? `Day ${metrics.daysFromStart} of project`
               : "Not started yet"}
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-lg shadow-sm">
-          <div className="text-sm font-medium text-gray-500 dark:text-zinc-400">
+        <div className="p-4 bg-white rounded-lg shadow-sm">
+          <div className="text-sm font-medium text-gray-500">
             Attention Needed
           </div>
           <div className="mt-2">
             {metrics.overdueMilestones > 0 && (
-              <div className="flex items-center mb-1 text-red-600 dark:text-red-400">
+              <div className="flex items-center mb-1 text-red-600">
                 <AlertTriangle size={14} className="mr-1" />
                 <span>
                   {metrics.overdueMilestones} overdue milestone
@@ -593,7 +577,7 @@ const ProjectDetails = () => {
               </div>
             )}
             {metrics.overduePayments > 0 && (
-              <div className="flex items-center mb-1 text-red-600 dark:text-red-400">
+              <div className="flex items-center mb-1 text-red-600">
                 <AlertTriangle size={14} className="mr-1" />
                 <span>
                   {metrics.overduePayments} overdue payment
@@ -603,7 +587,7 @@ const ProjectDetails = () => {
             )}
             {metrics.overdueMilestones === 0 &&
               metrics.overduePayments === 0 && (
-                <div className="flex items-center text-green-600 dark:text-green-400">
+                <div className="flex items-center text-green-600">
                   <CheckCircle size={14} className="mr-1" />
                   <span>No overdue items</span>
                 </div>
@@ -613,14 +597,14 @@ const ProjectDetails = () => {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="p-1 mb-6 overflow-x-auto bg-white rounded-lg shadow-sm dark:bg-zinc-900">
+      <div className="p-1 mb-6 overflow-x-auto bg-white rounded-lg shadow-sm">
         <div className="flex space-x-1">
           <button
             onClick={() => setActiveTab("overview")}
             className={`px-4 py-2 text-sm font-medium rounded-md ${
               activeTab === "overview"
                 ? "bg-accent text-white"
-                : "text-gray-700 hover:bg-gray-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                : "text-gray-700 hover:bg-gray-100"
             }`}
           >
             Overview
@@ -630,7 +614,7 @@ const ProjectDetails = () => {
             className={`px-4 py-2 text-sm font-medium rounded-md ${
               activeTab === "milestones"
                 ? "bg-accent text-white"
-                : "text-gray-700 hover:bg-gray-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                : "text-gray-700 hover:bg-gray-100"
             }`}
           >
             Milestones & Timeline
@@ -640,7 +624,7 @@ const ProjectDetails = () => {
             className={`px-4 py-2 text-sm font-medium rounded-md ${
               activeTab === "finances"
                 ? "bg-accent text-white"
-                : "text-gray-700 hover:bg-gray-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                : "text-gray-700 hover:bg-gray-100"
             }`}
           >
             Finances
@@ -650,7 +634,7 @@ const ProjectDetails = () => {
             className={`px-4 py-2 text-sm font-medium rounded-md ${
               activeTab === "workflow"
                 ? "bg-accent text-white"
-                : "text-gray-700 hover:bg-gray-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                : "text-gray-700 hover:bg-gray-100"
             }`}
           >
             Workflow
@@ -660,7 +644,7 @@ const ProjectDetails = () => {
             className={`px-4 py-2 text-sm font-medium rounded-md ${
               activeTab === "client"
                 ? "bg-accent text-white"
-                : "text-gray-700 hover:bg-gray-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                : "text-gray-700 hover:bg-gray-100"
             }`}
           >
             Client
@@ -670,7 +654,7 @@ const ProjectDetails = () => {
             className={`px-4 py-2 text-sm font-medium rounded-md ${
               activeTab === "technical"
                 ? "bg-accent text-white"
-                : "text-gray-700 hover:bg-gray-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                : "text-gray-700 hover:bg-gray-100"
             }`}
           >
             Technical Details
@@ -683,28 +667,20 @@ const ProjectDetails = () => {
         <div className="lg:col-span-2">
           {/* Tab: Overview */}
           {activeTab === "overview" && (
-            <div className="overflow-hidden bg-white rounded-lg shadow-sm dark:bg-zinc-900">
-              <div className="px-6 py-4 border-b dark:border-zinc-800">
-                <h2 className="text-lg font-medium text-gray-900 dark:text-zinc-100">
-                  Project Overview
-                </h2>
+            <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+              <div className="px-6 py-4 border-b">
+                <h2 className="text-lg font-medium">Project Overview</h2>
               </div>
               <div className="p-6">
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <div>
-                    <h3 className="font-medium text-gray-700 dark:text-zinc-300">
-                      Project Name
-                    </h3>
-                    <p className="text-lg text-gray-900 dark:text-zinc-100">
-                      {project.projectName}
-                    </p>
+                    <h3 className="font-medium text-gray-700">Project Name</h3>
+                    <p className="text-lg">{project.projectName}</p>
                   </div>
 
                   <div>
-                    <h3 className="font-medium text-gray-700 dark:text-zinc-300">
-                      Service Type
-                    </h3>
-                    <p className="flex items-center text-gray-900 dark:text-zinc-100">
+                    <h3 className="font-medium text-gray-700">Service Type</h3>
+                    <p className="flex items-center">
                       <Briefcase size={16} className="mr-2 text-accent" />
                       {formatServiceType(project.serviceType)}
                     </p>
@@ -712,19 +688,15 @@ const ProjectDetails = () => {
                 </div>
 
                 <div className="mt-6">
-                  <h3 className="font-medium text-gray-700 dark:text-zinc-300">
-                    Description
-                  </h3>
-                  <p className="mt-1 text-gray-600 whitespace-pre-line dark:text-zinc-400">
+                  <h3 className="font-medium text-gray-700">Description</h3>
+                  <p className="mt-1 text-gray-600 whitespace-pre-line">
                     {project.projectDescription}
                   </p>
                 </div>
 
                 {project.projectGoals && project.projectGoals.length > 0 && (
                   <div className="mt-6">
-                    <h3 className="font-medium text-gray-700 dark:text-zinc-300">
-                      Project Goals
-                    </h3>
+                    <h3 className="font-medium text-gray-700">Project Goals</h3>
                     <ul className="pl-5 mt-2 space-y-2 list-disc">
                       {project.projectGoals
                         .slice(
@@ -732,10 +704,7 @@ const ProjectDetails = () => {
                           showAllGoals ? project.projectGoals.length : 3
                         )
                         .map((goal, index) => (
-                          <li
-                            key={index}
-                            className="text-gray-600 dark:text-zinc-400"
-                          >
+                          <li key={index} className="text-gray-600">
                             {goal}
                           </li>
                         ))}
@@ -757,20 +726,16 @@ const ProjectDetails = () => {
 
                 <div className="grid grid-cols-1 gap-6 mt-6 md:grid-cols-2">
                   <div>
-                    <h3 className="font-medium text-gray-700 dark:text-zinc-300">
-                      Budget
-                    </h3>
-                    <p className="flex items-center mt-1 text-gray-900 dark:text-zinc-100">
+                    <h3 className="font-medium text-gray-700">Budget</h3>
+                    <p className="flex items-center mt-1">
                       <IndianRupee size={16} className="mr-2 text-green-600" />
                       {project.budget}
                     </p>
                   </div>
 
                   <div>
-                    <h3 className="font-medium text-gray-700 dark:text-zinc-300">
-                      Timeline
-                    </h3>
-                    <p className="flex items-center mt-1 text-gray-900 dark:text-zinc-100">
+                    <h3 className="font-medium text-gray-700">Timeline</h3>
+                    <p className="flex items-center mt-1">
                       <Clock size={16} className="mr-2 text-amber-600" />
                       {project.timeline === "urgent" && "Urgent (< 2 weeks)"}
                       {project.timeline === "standard" &&
@@ -783,45 +748,35 @@ const ProjectDetails = () => {
                 </div>
 
                 <div className="mt-6">
-                  <h3 className="font-medium text-gray-700 dark:text-zinc-300">
-                    Project Dates
-                  </h3>
+                  <h3 className="font-medium text-gray-700">Project Dates</h3>
                   <div className="grid grid-cols-1 gap-6 mt-2 md:grid-cols-2">
                     <div>
-                      <div className="text-sm text-gray-500 dark:text-zinc-400">
-                        Created On
-                      </div>
-                      <p className="text-gray-900 dark:text-zinc-100">
+                      <div className="text-sm text-gray-500">Created On</div>
+                      <p>
                         {project.createdAt
                           ? format(new Date(project.createdAt), "MMMM d, yyyy")
                           : "Unknown"}
                       </p>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-500 dark:text-zinc-400">
-                        Start Date
-                      </div>
-                      <p className="text-gray-900 dark:text-zinc-100">
+                      <div className="text-sm text-gray-500">Start Date</div>
+                      <p>
                         {project.startDate
                           ? format(new Date(project.startDate), "MMMM d, yyyy")
                           : "Not set"}
                       </p>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-500 dark:text-zinc-400">
-                        Deadline
-                      </div>
-                      <p className="text-gray-900 dark:text-zinc-100">
+                      <div className="text-sm text-gray-500">Deadline</div>
+                      <p>
                         {project.deadline
                           ? format(new Date(project.deadline), "MMMM d, yyyy")
                           : "Not set"}
                       </p>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-500 dark:text-zinc-400">
-                        Last Updated
-                      </div>
-                      <p className="text-gray-900 dark:text-zinc-100">
+                      <div className="text-sm text-gray-500">Last Updated</div>
+                      <p>
                         {project.updatedAt
                           ? format(new Date(project.updatedAt), "MMMM d, yyyy")
                           : "Unknown"}
@@ -835,44 +790,40 @@ const ProjectDetails = () => {
 
           {/* Tab: Milestones & Timeline */}
           {activeTab === "milestones" && (
-            <div className="overflow-hidden bg-white rounded-lg shadow-sm dark:bg-zinc-900">
-              <div className="px-6 py-4 border-b dark:border-zinc-800">
-                <h2 className="text-lg font-medium text-gray-900 dark:text-zinc-100">
+            <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+              <div className="px-6 py-4 border-b">
+                <h2 className="text-lg font-medium">
                   Project Timeline & Milestones
                 </h2>
               </div>
               <div className="p-6">
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <div>
-                    <h3 className="font-medium text-gray-700 dark:text-zinc-300">
-                      Key Dates
-                    </h3>
+                    <h3 className="font-medium text-gray-700">Key Dates</h3>
                     <div className="mt-2 space-y-3">
-                      <div className="flex justify-between p-3 rounded-md bg-gray-50 dark:bg-zinc-800">
-                        <span className="text-sm text-gray-600 dark:text-zinc-400">
+                      <div className="flex justify-between p-3 rounded-md bg-gray-50">
+                        <span className="text-sm text-gray-600">
                           Start Date
                         </span>
-                        <span className="font-medium text-gray-900 dark:text-zinc-100">
+                        <span className="font-medium">
                           {project.startDate
                             ? format(new Date(project.startDate), "MMM d, yyyy")
                             : "Not set"}
                         </span>
                       </div>
-                      <div className="flex justify-between p-3 rounded-md bg-gray-50 dark:bg-zinc-800">
-                        <span className="text-sm text-gray-600 dark:text-zinc-400">
-                          Deadline
-                        </span>
-                        <span className="font-medium text-gray-900 dark:text-zinc-100">
+                      <div className="flex justify-between p-3 rounded-md bg-gray-50">
+                        <span className="text-sm text-gray-600">Deadline</span>
+                        <span className="font-medium">
                           {project.deadline
                             ? format(new Date(project.deadline), "MMM d, yyyy")
                             : "Not set"}
                         </span>
                       </div>
-                      <div className="flex justify-between p-3 rounded-md bg-gray-50 dark:bg-zinc-800">
-                        <span className="text-sm text-gray-600 dark:text-zinc-400">
+                      <div className="flex justify-between p-3 rounded-md bg-gray-50">
+                        <span className="text-sm text-gray-600">
                           Project Duration
                         </span>
-                        <span className="font-medium text-gray-900 dark:text-zinc-100">
+                        <span className="font-medium">
                           {project.startDate && project.deadline
                             ? `${Math.ceil(
                                 (new Date(project.deadline) -
@@ -886,20 +837,18 @@ const ProjectDetails = () => {
                   </div>
 
                   <div>
-                    <h3 className="font-medium text-gray-700 dark:text-zinc-300">
-                      Progress
-                    </h3>
-                    <div className="p-3 mt-2 rounded-md bg-gray-50 dark:bg-zinc-800">
+                    <h3 className="font-medium text-gray-700">Progress</h3>
+                    <div className="p-3 mt-2 rounded-md bg-gray-50">
                       <div className="flex justify-between mb-1">
-                        <span className="text-sm text-gray-600 dark:text-zinc-400">
+                        <span className="text-sm text-gray-600">
                           Milestone Completion
                         </span>
-                        <span className="text-sm font-medium text-gray-900 dark:text-zinc-100">
+                        <span className="text-sm font-medium">
                           {metrics.completedMilestones}/
                           {metrics.totalMilestones}
                         </span>
                       </div>
-                      <div className="w-full h-2 bg-gray-200 rounded-full dark:bg-zinc-700">
+                      <div className="w-full h-2 bg-gray-200 rounded-full">
                         <div
                           className="h-2 bg-blue-500 rounded-full"
                           style={{ width: `${metrics.milestonesProgress}%` }}
@@ -911,9 +860,7 @@ const ProjectDetails = () => {
 
                 <div className="mt-6">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-medium text-gray-700 dark:text-zinc-300">
-                      Milestones
-                    </h3>
+                    <h3 className="font-medium text-gray-700">Milestones</h3>
                     <Link
                       to={`/admin/projects/${id}/edit`}
                       className="flex items-center text-sm text-accent hover:underline"
@@ -930,20 +877,20 @@ const ProjectDetails = () => {
                           key={milestone._id}
                           className={`p-4 border rounded-md ${
                             milestone.status === "completed"
-                              ? "border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-700/40"
+                              ? "border-green-200 bg-green-50"
                               : new Date(milestone.dueDate) < new Date() &&
                                 milestone.status !== "completed"
-                              ? "border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-700/40"
-                              : "border-gray-200 dark:border-zinc-700"
+                              ? "border-red-200 bg-red-50"
+                              : "border-gray-200"
                           }`}
                         >
                           <div className="flex items-start justify-between">
                             <div>
-                              <div className="text-lg font-medium text-gray-900 dark:text-zinc-100">
+                              <div className="text-lg font-medium">
                                 {milestone.name}
                               </div>
                               {milestone.description && (
-                                <div className="mt-1 text-sm text-gray-600 dark:text-zinc-400">
+                                <div className="mt-1 text-sm text-gray-600">
                                   {milestone.description}
                                 </div>
                               )}
@@ -951,15 +898,15 @@ const ProjectDetails = () => {
                                 <div className="flex items-center mr-4">
                                   <Calendar
                                     size={14}
-                                    className="mr-1 text-gray-400 dark:text-zinc-500"
+                                    className="mr-1 text-gray-400"
                                   />
                                   <span
                                     className={
                                       new Date(milestone.dueDate) <
                                         new Date() &&
                                       milestone.status !== "completed"
-                                        ? "text-red-600 font-medium dark:text-red-400"
-                                        : "text-gray-500 dark:text-zinc-400"
+                                        ? "text-red-600 font-medium"
+                                        : "text-gray-500"
                                     }
                                   >
                                     Due:{" "}
@@ -973,12 +920,12 @@ const ProjectDetails = () => {
                                   <span
                                     className={`px-2 py-1 text-xs font-medium rounded-full ${
                                       milestone.status === "pending"
-                                        ? "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200"
+                                        ? "bg-blue-100 text-blue-800"
                                         : milestone.status === "in_progress"
-                                        ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-200"
+                                        ? "bg-yellow-100 text-yellow-800"
                                         : milestone.status === "completed"
-                                        ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200"
-                                        : "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200"
+                                        ? "bg-green-100 text-green-800"
+                                        : "bg-red-100 text-red-800"
                                     }`}
                                   >
                                     {milestone.status === "in_progress"
@@ -1000,7 +947,7 @@ const ProjectDetails = () => {
                                       "in_progress"
                                     )
                                   }
-                                  className="p-2 text-yellow-500 rounded-md bg-yellow-50 hover:bg-yellow-100 dark:bg-yellow-900/30 dark:text-yellow-300 dark:hover:bg-yellow-800/40"
+                                  className="p-2 text-yellow-500 rounded-md bg-yellow-50 hover:bg-yellow-100"
                                   title="Mark as In Progress"
                                 >
                                   <Clock size={16} />
@@ -1014,7 +961,7 @@ const ProjectDetails = () => {
                                       "completed"
                                     )
                                   }
-                                  className="p-2 text-green-500 rounded-md bg-green-50 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-800/40"
+                                  className="p-2 text-green-500 rounded-md bg-green-50 hover:bg-green-100"
                                   title="Mark as Completed"
                                 >
                                   <CheckCircle size={16} />
@@ -1023,7 +970,7 @@ const ProjectDetails = () => {
                             </div>
                           </div>
                           {milestone.completedDate && (
-                            <div className="mt-2 text-xs text-gray-500 dark:text-zinc-400">
+                            <div className="mt-2 text-xs text-gray-500">
                               Completed on:{" "}
                               {format(
                                 new Date(milestone.completedDate),
@@ -1035,12 +982,9 @@ const ProjectDetails = () => {
                       ))}
                     </div>
                   ) : (
-                    <div className="p-6 mt-2 text-center border border-gray-300 border-dashed rounded-md dark:border-zinc-700">
-                      <Clock
-                        size={24}
-                        className="mx-auto mb-2 text-gray-400 dark:text-zinc-500"
-                      />
-                      <p className="text-gray-500 dark:text-zinc-400">
+                    <div className="p-6 mt-2 text-center border border-gray-300 border-dashed rounded-md">
+                      <Clock size={24} className="mx-auto mb-2 text-gray-400" />
+                      <p className="text-gray-500">
                         No milestones have been created yet
                       </p>
                       <Link
@@ -1059,24 +1003,22 @@ const ProjectDetails = () => {
 
           {/* Tab: Finances */}
           {activeTab === "finances" && (
-            <div className="overflow-hidden bg-white rounded-lg shadow-sm dark:bg-zinc-900">
-              <div className="px-6 py-4 border-b dark:border-zinc-800">
-                <h2 className="text-lg font-medium text-gray-900 dark:text-zinc-100">
-                  Project Finances
-                </h2>
+            <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+              <div className="px-6 py-4 border-b">
+                <h2 className="text-lg font-medium">Project Finances</h2>
               </div>
               <div className="p-6">
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <div>
-                    <h3 className="font-medium text-gray-700 dark:text-zinc-300">
+                    <h3 className="font-medium text-gray-700">
                       Financial Summary
                     </h3>
-                    <div className="p-4 mt-2 rounded-md bg-gray-50 dark:bg-zinc-800">
+                    <div className="p-4 mt-2 rounded-md bg-gray-50">
                       <div className="flex items-center justify-between mb-4">
-                        <span className="text-sm text-gray-600 dark:text-zinc-400">
+                        <span className="text-sm text-gray-600">
                           Project Value
                         </span>
-                        <span className="text-lg font-medium text-gray-900 dark:text-zinc-100">
+                        <span className="text-lg font-medium text-gray-900">
                           ₹
                           {project.projectValue
                             ? project.projectValue.toLocaleString()
@@ -1084,18 +1026,18 @@ const ProjectDetails = () => {
                         </span>
                       </div>
                       <div className="flex items-center justify-between mb-4">
-                        <span className="text-sm text-gray-600 dark:text-zinc-400">
+                        <span className="text-sm text-gray-600">
                           Received Payments
                         </span>
-                        <span className="text-lg font-medium text-green-600 dark:text-green-400">
+                        <span className="text-lg font-medium text-green-600">
                           ₹{metrics.receivedPayments.toLocaleString()}
                         </span>
                       </div>
-                      <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-200 dark:border-zinc-700">
-                        <span className="text-sm text-gray-600 dark:text-zinc-400">
+                      <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-200">
+                        <span className="text-sm text-gray-600">
                           Outstanding Amount
                         </span>
-                        <span className="text-lg font-medium text-amber-600 dark:text-amber-400">
+                        <span className="text-lg font-medium text-amber-600">
                           ₹
                           {(
                             metrics.totalValue - metrics.receivedPayments
@@ -1103,14 +1045,14 @@ const ProjectDetails = () => {
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-600 dark:text-zinc-300">
+                        <span className="text-sm font-medium text-gray-600">
                           Payment Progress
                         </span>
-                        <span className="text-sm font-medium text-gray-900 dark:text-zinc-100">
+                        <span className="text-sm font-medium">
                           {metrics.paymentProgress}%
                         </span>
                       </div>
-                      <div className="w-full h-2 mt-2 bg-gray-200 rounded-full dark:bg-zinc-700">
+                      <div className="w-full h-2 mt-2 bg-gray-200 rounded-full">
                         <div
                           className="h-2 bg-green-500 rounded-full"
                           style={{ width: `${metrics.paymentProgress}%` }}
@@ -1121,24 +1063,22 @@ const ProjectDetails = () => {
 
                   {project.referredBy && project.referredBy.name && (
                     <div>
-                      <h3 className="font-medium text-gray-700 dark:text-zinc-300">
+                      <h3 className="font-medium text-gray-700">
                         Referral Information
                       </h3>
-                      <div className="p-4 mt-2 border border-yellow-200 rounded-md bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-700/40">
+                      <div className="p-4 mt-2 border border-yellow-200 rounded-md bg-yellow-50">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-gray-600 dark:text-zinc-400">
+                          <span className="text-sm text-gray-600">
                             Referred By
                           </span>
-                          <span className="font-medium text-gray-900 dark:text-zinc-100">
+                          <span className="font-medium">
                             {project.referredBy.name}
                           </span>
                         </div>
                         {project.referredBy.email && (
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm text-gray-600 dark:text-zinc-400">
-                              Email
-                            </span>
-                            <span className="font-medium text-gray-900 dark:text-zinc-100">
+                            <span className="text-sm text-gray-600">Email</span>
+                            <span className="font-medium">
                               {project.referredBy.email}
                             </span>
                           </div>
@@ -1146,18 +1086,18 @@ const ProjectDetails = () => {
                         {project.referredBy.commissionPercentage > 0 && (
                           <>
                             <div className="flex items-center justify-between mb-2">
-                              <span className="text-sm text-gray-600 dark:text-zinc-400">
+                              <span className="text-sm text-gray-600">
                                 Commission
                               </span>
-                              <span className="font-medium text-gray-900 dark:text-zinc-100">
+                              <span className="font-medium">
                                 {project.referredBy.commissionPercentage}%
                               </span>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-sm text-gray-600 dark:text-zinc-400">
+                              <span className="text-sm text-gray-600">
                                 Commission Amount
                               </span>
-                              <span className="font-medium text-yellow-800 dark:text-yellow-300">
+                              <span className="font-medium text-yellow-800">
                                 ₹
                                 {(
                                   (project.projectValue *
@@ -1175,7 +1115,7 @@ const ProjectDetails = () => {
 
                 <div className="mt-6">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-medium text-gray-700 dark:text-zinc-300">
+                    <h3 className="font-medium text-gray-700">
                       Payment Schedule
                     </h3>
                     <Link
@@ -1189,45 +1129,52 @@ const ProjectDetails = () => {
 
                   {project.paymentSchedule &&
                   project.paymentSchedule.length > 0 ? (
-                    <div className="overflow-hidden border border-gray-200 rounded-lg dark:border-zinc-700">
-                      <table className="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
-                        <thead className="bg-gray-50 dark:bg-zinc-800">
+                    <div className="overflow-hidden border border-gray-200 rounded-lg">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
                           <tr>
-                            <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-zinc-400">
+                            <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                               Payment
                             </th>
-                            <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-zinc-400">
+                            <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                               Amount
                             </th>
-                            <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-zinc-400">
+                            <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                               Due Date
                             </th>
-                            <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-zinc-400">
+                            <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                               Status
                             </th>
-                            <th className="px-4 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase dark:text-zinc-400">
+                            <th className="px-4 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase">
                               Actions
                             </th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-200 dark:divide-zinc-700">
+                        <tbody className="divide-y divide-gray-200">
                           {project.paymentSchedule.map((payment) => (
                             <tr
                               key={payment._id}
-                              className={`dark:bg-zinc-900`}
+                              className={
+                                payment.status === "paid"
+                                  ? "bg-green-50"
+                                  : new Date(payment.dueDate) < new Date() &&
+                                    payment.status !== "paid"
+                                  ? "bg-red-50"
+                                  : ""
+                              }
                             >
                               <td className="px-4 py-3 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900 dark:text-zinc-100">
+                                <div className="text-sm font-medium text-gray-900">
                                   {payment.name}
                                 </div>
                                 {payment.notes && (
-                                  <div className="text-xs text-gray-500 dark:text-zinc-400">
+                                  <div className="text-xs text-gray-500">
                                     {payment.notes}
                                   </div>
                                 )}
                               </td>
                               <td className="px-4 py-3 whitespace-nowrap">
-                                <div className="text-sm font-medium text-green-600 dark:text-green-400">
+                                <div className="text-sm font-medium text-green-600">
                                   ₹{parseFloat(payment.amount).toLocaleString()}
                                 </div>
                               </td>
@@ -1236,8 +1183,8 @@ const ProjectDetails = () => {
                                   className={`text-sm ${
                                     new Date(payment.dueDate) < new Date() &&
                                     payment.status !== "paid"
-                                      ? "text-red-600 font-medium dark:text-red-400"
-                                      : "text-gray-900 dark:text-zinc-100"
+                                      ? "text-red-600 font-medium"
+                                      : "text-gray-900"
                                   }`}
                                 >
                                   {format(
@@ -1247,10 +1194,18 @@ const ProjectDetails = () => {
                                 </div>
                               </td>
                               <td className="px-4 py-3 whitespace-nowrap">
-                                <div className="text-sm text-gray-900 dark:text-zinc-100">
+                                <span
+                                  className={`px-2 py-1 text-xs font-medium rounded-full ${
+                                    payment.status === "pending"
+                                      ? "bg-blue-100 text-blue-800"
+                                      : payment.status === "paid"
+                                      ? "bg-green-100 text-green-800"
+                                      : "bg-red-100 text-red-800"
+                                  }`}
+                                >
                                   {payment.status.charAt(0).toUpperCase() +
                                     payment.status.slice(1)}
-                                </div>
+                                </span>
                               </td>
                               <td className="px-4 py-3 text-sm text-right whitespace-nowrap">
                                 <div className="flex justify-end space-x-1">
@@ -1262,7 +1217,7 @@ const ProjectDetails = () => {
                                           "paid"
                                         )
                                       }
-                                      className="p-1 text-green-600 rounded-md hover:bg-green-50 dark:hover:bg-green-900/30 dark:text-green-400"
+                                      className="p-1 text-green-600 rounded-md hover:bg-green-50"
                                       title="Mark as Paid"
                                     >
                                       <CheckCircle size={16} />
@@ -1276,7 +1231,7 @@ const ProjectDetails = () => {
                                           "pending"
                                         )
                                       }
-                                      className="p-1 text-blue-600 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/30 dark:text-blue-400"
+                                      className="p-1 text-blue-600 rounded-md hover:bg-blue-50"
                                       title="Mark as Pending"
                                     >
                                       <Clock size={16} />
@@ -1290,12 +1245,12 @@ const ProjectDetails = () => {
                       </table>
                     </div>
                   ) : (
-                    <div className="p-6 mt-2 text-center border border-gray-300 border-dashed rounded-md dark:border-zinc-700">
+                    <div className="p-6 mt-2 text-center border border-gray-300 border-dashed rounded-md">
                       <IndianRupee
                         size={24}
-                        className="mx-auto mb-2 text-gray-400 dark:text-zinc-500"
+                        className="mx-auto mb-2 text-gray-400"
                       />
-                      <p className="text-gray-500 dark:text-zinc-400">
+                      <p className="text-gray-500">
                         No payment schedule has been created yet
                       </p>
                       <Link
@@ -1314,18 +1269,16 @@ const ProjectDetails = () => {
 
           {/* Tab: Workflow */}
           {activeTab === "workflow" && (
-            <div className="overflow-hidden bg-white rounded-lg shadow-sm dark:bg-zinc-900">
-              <div className="px-6 py-4 border-b dark:border-zinc-800">
-                <h2 className="text-lg font-medium text-gray-900 dark:text-zinc-100">
-                  Project Workflow
-                </h2>
+            <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+              <div className="px-6 py-4 border-b">
+                <h2 className="text-lg font-medium">Project Workflow</h2>
               </div>
               <div className="p-6">
                 <div>
-                  <h3 className="mb-3 font-medium text-gray-700 dark:text-zinc-300">
+                  <h3 className="mb-3 font-medium text-gray-700">
                     Current Stage
                   </h3>
-                  <div className="p-4 mb-4 border rounded-md border-accent/20 bg-accent/5 dark:border-accent/40 dark:bg-accent/10">
+                  <div className="p-4 mb-4 border rounded-md border-accent/20 bg-accent/5">
                     <div className="flex items-center">
                       <span
                         className={`p-2 rounded-full mr-3 ${currentStage.color}`}
@@ -1333,10 +1286,10 @@ const ProjectDetails = () => {
                         {currentStage.icon}
                       </span>
                       <div>
-                        <h4 className="text-lg font-medium text-gray-900 dark:text-zinc-100">
+                        <h4 className="text-lg font-medium">
                           {currentStage.label}
                         </h4>
-                        <p className="text-sm text-gray-500 dark:text-zinc-400">
+                        <p className="text-sm text-gray-500">
                           {project.startDate
                             ? `Day ${metrics.daysFromStart} of project`
                             : "Project not started yet"}
@@ -1345,7 +1298,7 @@ const ProjectDetails = () => {
                     </div>
                   </div>
 
-                  <h3 className="mt-6 mb-3 font-medium text-gray-700 dark:text-zinc-300">
+                  <h3 className="mt-6 mb-3 font-medium text-gray-700">
                     Workflow Stages
                   </h3>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -1396,7 +1349,7 @@ const ProjectDetails = () => {
                         className={`flex items-center p-3 border rounded-md ${
                           project.workflowStage === stage.value
                             ? "border-accent bg-accent/10 text-accent"
-                            : "border-gray-300 text-gray-500 dark:border-zinc-700 dark:text-zinc-400"
+                            : "border-gray-300 text-gray-500"
                         }`}
                       >
                         <span className="mr-2">{stage.icon}</span>
@@ -1407,14 +1360,14 @@ const ProjectDetails = () => {
                 </div>
 
                 {project.designChoices && (
-                  <div className="p-4 mt-6 rounded-lg bg-gray-50 dark:bg-zinc-800">
+                  <div className="p-4 mt-6 rounded-lg bg-gray-50">
                     <h3 className="flex items-center mb-4 text-lg font-medium">
                       <Palette size={20} className="mr-2 text-accent" />
                       Design Details
                     </h3>
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                       <div>
-                        <div className="mb-2 text-sm font-medium text-gray-700 dark:text-zinc-300">
+                        <div className="mb-2 text-sm font-medium text-gray-700">
                           Color Palette
                         </div>
                         <div className="flex flex-wrap gap-2">
@@ -1456,7 +1409,7 @@ const ProjectDetails = () => {
                         </div>
                       </div>
                       <div>
-                        <div className="mb-2 text-sm font-medium text-gray-700 dark:text-zinc-300">
+                        <div className="mb-2 text-sm font-medium text-gray-700">
                           Fonts
                         </div>
                         <div className="flex flex-wrap gap-2">
@@ -1487,33 +1440,33 @@ const ProjectDetails = () => {
                         </div>
                       </div>
                       <div className="md:col-span-2">
-                        <div className="mb-2 text-sm font-medium text-gray-700 dark:text-zinc-300">
+                        <div className="mb-2 text-sm font-medium text-gray-700">
                           Design Notes
                         </div>
                         <div className="p-3 bg-white border border-gray-200 rounded-md">
                           {project.designChoices.designNotes ? (
-                            <p className="text-sm text-gray-600 dark:text-zinc-400">
+                            <p className="text-sm text-gray-600">
                               {project.designChoices.designNotes}
                             </p>
                           ) : (
-                            <p className="text-sm italic text-gray-400 dark:text-zinc-500">
+                            <p className="text-sm italic text-gray-400">
                               No design notes added yet
                             </p>
                           )}
                         </div>
                       </div>
                       <div>
-                        <div className="mb-2 text-sm font-medium text-gray-700 dark:text-zinc-300">
+                        <div className="mb-2 text-sm font-medium text-gray-700">
                           Approval Status
                         </div>
                         <span
                           className={`px-2 py-1 text-xs font-medium rounded-full ${
                             project.designChoices.approvalStatus === "pending"
-                              ? "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200"
+                              ? "bg-blue-100 text-blue-800"
                               : project.designChoices.approvalStatus ===
                                 "approved"
-                              ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200"
-                              : "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
                           }`}
                         >
                           {project.designChoices.approvalStatus ===
@@ -1530,23 +1483,23 @@ const ProjectDetails = () => {
                 )}
 
                 {project.contentStatus && (
-                  <div className="p-4 mt-6 rounded-lg bg-gray-50 dark:bg-zinc-800">
+                  <div className="p-4 mt-6 rounded-lg bg-gray-50">
                     <h3 className="flex items-center mb-4 text-lg font-medium">
                       <Image size={20} className="mr-2 text-accent" />
                       Content Collection
                     </h3>
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                       <div>
-                        <div className="mb-2 text-sm font-medium text-gray-700 dark:text-zinc-300">
+                        <div className="mb-2 text-sm font-medium text-gray-700">
                           Images Status
                         </div>
                         <span
                           className={`px-2 py-1 text-xs font-medium rounded-full ${
                             project.contentStatus.images === "not_started"
-                              ? "bg-gray-100 text-gray-800 dark:bg-zinc-700 dark:text-zinc-200"
+                              ? "bg-gray-100 text-gray-800"
                               : project.contentStatus.images === "in_progress"
-                              ? "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200"
-                              : "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200"
+                              ? "bg-amber-100 text-amber-800"
+                              : "bg-green-100 text-green-800"
                           }`}
                         >
                           {project.contentStatus.images === "not_started"
@@ -1557,16 +1510,16 @@ const ProjectDetails = () => {
                         </span>
                       </div>
                       <div>
-                        <div className="mb-2 text-sm font-medium text-gray-700 dark:text-zinc-300">
+                        <div className="mb-2 text-sm font-medium text-gray-700">
                           Text Content Status
                         </div>
                         <span
                           className={`px-2 py-1 text-xs font-medium rounded-full ${
                             project.contentStatus.text === "not_started"
-                              ? "bg-gray-100 text-gray-800 dark:bg-zinc-700 dark:text-zinc-200"
+                              ? "bg-gray-100 text-gray-800"
                               : project.contentStatus.text === "in_progress"
-                              ? "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200"
-                              : "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200"
+                              ? "bg-amber-100 text-amber-800"
+                              : "bg-green-100 text-green-800"
                           }`}
                         >
                           {project.contentStatus.text === "not_started"
@@ -1577,16 +1530,16 @@ const ProjectDetails = () => {
                         </span>
                       </div>
                       <div className="md:col-span-2">
-                        <div className="mb-2 text-sm font-medium text-gray-700 dark:text-zinc-300">
+                        <div className="mb-2 text-sm font-medium text-gray-700">
                           Content Notes
                         </div>
                         <div className="p-3 bg-white border border-gray-200 rounded-md">
                           {project.contentStatus.notes ? (
-                            <p className="text-sm text-gray-600 dark:text-zinc-400">
+                            <p className="text-sm text-gray-600">
                               {project.contentStatus.notes}
                             </p>
                           ) : (
-                            <p className="text-sm italic text-gray-400 dark:text-zinc-500">
+                            <p className="text-sm italic text-gray-400">
                               No content notes added yet
                             </p>
                           )}
@@ -1601,20 +1554,33 @@ const ProjectDetails = () => {
 
           {/* Tab: Client */}
           {activeTab === "client" && (
-            <div className="overflow-hidden bg-white rounded-lg shadow-sm dark:bg-zinc-900">
-              <div className="px-6 py-4 border-b dark:border-zinc-800">
-                <h2 className="text-lg font-medium text-gray-900 dark:text-zinc-100">
-                  Client Information
-                </h2>
+            <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+              <div className="px-6 py-4 border-b">
+                <h2 className="text-lg font-medium">Client Information</h2>
               </div>
               <div className="p-6">
-                <div className="overflow-hidden bg-white border border-gray-200 rounded-lg dark:bg-zinc-800 dark:border-zinc-700">
-                  <div className="divide-y divide-gray-200 dark:divide-zinc-700">
+                <div className="overflow-hidden bg-white border border-gray-200 rounded-lg">
+                  <div className="px-6 py-5 border-b border-gray-200">
+                    <div className="flex items-center">
+                      <div className="flex items-center justify-center w-12 h-12 mr-4 rounded-full bg-accent/10 text-accent">
+                        <User size={20} />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-medium text-gray-900">
+                          {project.name}
+                        </h3>
+                        <p className="text-sm text-gray-500">
+                          {project.companyName}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="divide-y divide-gray-200">
                     <div className="flex px-6 py-4">
-                      <div className="w-1/3 text-sm font-medium text-gray-500 dark:text-zinc-400">
+                      <div className="w-1/3 text-sm font-medium text-gray-500">
                         Email
                       </div>
-                      <div className="w-2/3 text-sm text-gray-900 dark:text-zinc-100">
+                      <div className="w-2/3 text-sm text-gray-900">
                         <a
                           href={`mailto:${project.email}`}
                           className="flex items-center text-accent hover:underline"
@@ -1625,10 +1591,10 @@ const ProjectDetails = () => {
                       </div>
                     </div>
                     <div className="flex px-6 py-4">
-                      <div className="w-1/3 text-sm font-medium text-gray-500 dark:text-zinc-400">
+                      <div className="w-1/3 text-sm font-medium text-gray-500">
                         Phone
                       </div>
-                      <div className="w-2/3 text-sm text-gray-900 dark:text-zinc-100">
+                      <div className="w-2/3 text-sm text-gray-900">
                         {project.phone ? (
                           <a
                             href={`tel:${project.phone}`}
@@ -1638,9 +1604,7 @@ const ProjectDetails = () => {
                             {project.phone}
                           </a>
                         ) : (
-                          <span className="text-gray-400 dark:text-zinc-500">
-                            Not provided
-                          </span>
+                          <span className="text-gray-400">Not provided</span>
                         )}
                       </div>
                     </div>
@@ -1648,28 +1612,25 @@ const ProjectDetails = () => {
                 </div>
 
                 <div className="mt-6">
-                  <h3 className="mb-3 font-medium text-gray-700 dark:text-zinc-300">
+                  <h3 className="mb-3 font-medium text-gray-700">
                     Company Information
                   </h3>
-                  <div className="overflow-hidden bg-white border border-gray-200 rounded-lg dark:bg-zinc-800 dark:border-zinc-700">
-                    <div className="divide-y divide-gray-200 dark:divide-zinc-700">
+                  <div className="overflow-hidden bg-white border border-gray-200 rounded-lg">
+                    <div className="divide-y divide-gray-200">
                       <div className="flex px-6 py-4">
-                        <div className="w-1/3 text-sm font-medium text-gray-500 dark:text-zinc-400">
+                        <div className="w-1/3 text-sm font-medium text-gray-500">
                           Company Name
                         </div>
-                        <div className="flex items-center w-2/3 text-sm text-gray-900 dark:text-zinc-100">
-                          <Building
-                            size={14}
-                            className="mr-1 text-gray-400 dark:text-zinc-500"
-                          />
+                        <div className="flex items-center w-2/3 text-sm text-gray-900">
+                          <Building size={14} className="mr-1 text-gray-400" />
                           {project.companyName}
                         </div>
                       </div>
                       <div className="flex px-6 py-4">
-                        <div className="w-1/3 text-sm font-medium text-gray-500 dark:text-zinc-400">
+                        <div className="w-1/3 text-sm font-medium text-gray-500">
                           Website
                         </div>
-                        <div className="w-2/3 text-sm text-gray-900 dark:text-zinc-100">
+                        <div className="w-2/3 text-sm text-gray-900">
                           {project.companyWebsite ? (
                             <a
                               href={
@@ -1685,33 +1646,25 @@ const ProjectDetails = () => {
                               {project.companyWebsite}
                             </a>
                           ) : (
-                            <span className="text-gray-400 dark:text-zinc-500">
-                              Not provided
-                            </span>
+                            <span className="text-gray-400">Not provided</span>
                           )}
                         </div>
                       </div>
                       <div className="flex px-6 py-4">
-                        <div className="w-1/3 text-sm font-medium text-gray-500 dark:text-zinc-400">
+                        <div className="w-1/3 text-sm font-medium text-gray-500">
                           Industry
                         </div>
-                        <div className="flex items-center w-2/3 text-sm text-gray-900 dark:text-zinc-100">
-                          <Briefcase
-                            size={14}
-                            className="mr-1 text-gray-400 dark:text-zinc-500"
-                          />
+                        <div className="flex items-center w-2/3 text-sm text-gray-900">
+                          <Briefcase size={14} className="mr-1 text-gray-400" />
                           {project.industry}
                         </div>
                       </div>
                       <div className="flex px-6 py-4">
-                        <div className="w-1/3 text-sm font-medium text-gray-500 dark:text-zinc-400">
+                        <div className="w-1/3 text-sm font-medium text-gray-500">
                           Target Audience
                         </div>
-                        <div className="flex items-center w-2/3 text-sm text-gray-900 dark:text-zinc-100">
-                          <Target
-                            size={14}
-                            className="mr-1 text-gray-400 dark:text-zinc-500"
-                          />
+                        <div className="flex items-center w-2/3 text-sm text-gray-900">
+                          <Target size={14} className="mr-1 text-gray-400" />
                           {project.targetAudience}
                         </div>
                       </div>
@@ -1724,47 +1677,45 @@ const ProjectDetails = () => {
 
           {/* Tab: Technical Details */}
           {activeTab === "technical" && (
-            <div className="overflow-hidden bg-white rounded-lg shadow-sm dark:bg-zinc-900">
-              <div className="px-6 py-4 border-b dark:border-zinc-800">
-                <h2 className="text-lg font-medium text-gray-900 dark:text-zinc-100">
-                  Technical Details
-                </h2>
+            <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+              <div className="px-6 py-4 border-b">
+                <h2 className="text-lg font-medium">Technical Details</h2>
               </div>
               <div className="p-6">
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   {/* Hosting Information */}
                   <div>
-                    <h3 className="flex items-center mb-3 font-medium text-md text-gray-900 dark:text-zinc-100">
+                    <h3 className="flex items-center mb-3 font-medium text-md">
                       <Server size={18} className="mr-2 text-accent" />
                       Hosting Details
                     </h3>
-                    <div className="p-4 rounded-lg bg-gray-50 dark:bg-zinc-800">
+                    <div className="p-4 rounded-lg bg-gray-50">
                       {project.hosting && project.hosting.provider ? (
                         <div className="space-y-3">
                           <div>
-                            <div className="text-xs font-medium text-gray-500 dark:text-zinc-400">
+                            <div className="text-xs font-medium text-gray-500">
                               Hosting Provider
                             </div>
-                            <div className="text-sm font-medium text-gray-900 dark:text-zinc-100">
+                            <div className="text-sm font-medium">
                               {project.hosting.provider}
                             </div>
                           </div>
                           {project.hosting.account && (
                             <div>
-                              <div className="text-xs font-medium text-gray-500 dark:text-zinc-400">
+                              <div className="text-xs font-medium text-gray-500">
                                 Account
                               </div>
-                              <div className="text-sm text-gray-900 dark:text-zinc-100">
+                              <div className="text-sm">
                                 {project.hosting.account}
                               </div>
                             </div>
                           )}
                           {project.hosting.renewalDate && (
                             <div>
-                              <div className="text-xs font-medium text-gray-500 dark:text-zinc-400">
+                              <div className="text-xs font-medium text-gray-500">
                                 Renewal Date
                               </div>
-                              <div className="text-sm text-gray-900 dark:text-zinc-100">
+                              <div className="text-sm">
                                 {format(
                                   new Date(project.hosting.renewalDate),
                                   "MMM d, yyyy"
@@ -1774,20 +1725,20 @@ const ProjectDetails = () => {
                           )}
                           {project.hosting.cost > 0 && (
                             <div>
-                              <div className="text-xs font-medium text-gray-500 dark:text-zinc-400">
+                              <div className="text-xs font-medium text-gray-500">
                                 Annual Cost
                               </div>
-                              <div className="text-sm text-gray-900 dark:text-zinc-100">
+                              <div className="text-sm">
                                 ₹{project.hosting.cost.toLocaleString()}
                               </div>
                             </div>
                           )}
                           {project.hosting.notes && (
                             <div>
-                              <div className="text-xs font-medium text-gray-500 dark:text-zinc-400">
+                              <div className="text-xs font-medium text-gray-500">
                                 Notes
                               </div>
-                              <div className="text-sm text-gray-900 dark:text-zinc-100">
+                              <div className="text-sm">
                                 {project.hosting.notes}
                               </div>
                             </div>
@@ -1797,9 +1748,9 @@ const ProjectDetails = () => {
                         <div className="text-center">
                           <Server
                             size={20}
-                            className="mx-auto mb-2 text-gray-400 dark:text-zinc-500"
+                            className="mx-auto mb-2 text-gray-400"
                           />
-                          <p className="text-sm text-gray-500 dark:text-zinc-400">
+                          <p className="text-sm text-gray-500">
                             No hosting details available
                           </p>
                           <Link
@@ -1816,18 +1767,18 @@ const ProjectDetails = () => {
 
                   {/* Domain Information */}
                   <div>
-                    <h3 className="flex items-center mb-3 font-medium text-md text-gray-900 dark:text-zinc-100">
+                    <h3 className="flex items-center mb-3 font-medium text-md">
                       <Globe size={18} className="mr-2 text-accent" />
                       Domain Details
                     </h3>
-                    <div className="p-4 rounded-lg bg-gray-50 dark:bg-zinc-800">
+                    <div className="p-4 rounded-lg bg-gray-50">
                       {project.domain && project.domain.name ? (
                         <div className="space-y-3">
                           <div>
-                            <div className="text-xs font-medium text-gray-500 dark:text-zinc-400">
+                            <div className="text-xs font-medium text-gray-500">
                               Domain Name
                             </div>
-                            <div className="text-sm font-medium text-gray-900 dark:text-zinc-100">
+                            <div className="text-sm font-medium">
                               {project.domain.name.startsWith("http") ? (
                                 <a
                                   href={project.domain.name}
@@ -1853,11 +1804,44 @@ const ProjectDetails = () => {
                           </div>
                           {project.domain.registrar && (
                             <div>
-                              <div className="text-xs font-medium text-gray-600 dark:text-zinc-400">
+                              <div className="text-xs font-medium text-gray-500">
                                 Registrar
                               </div>
-                              <div className="text-sm text-gray-900 dark:text-zinc-100">
+                              <div className="text-sm">
                                 {project.domain.registrar}
+                              </div>
+                            </div>
+                          )}
+                          {project.domain.renewalDate && (
+                            <div>
+                              <div className="text-xs font-medium text-gray-500">
+                                Renewal Date
+                              </div>
+                              <div className="text-sm">
+                                {format(
+                                  new Date(project.domain.renewalDate),
+                                  "MMM d, yyyy"
+                                )}
+                              </div>
+                            </div>
+                          )}
+                          {project.domain.cost > 0 && (
+                            <div>
+                              <div className="text-xs font-medium text-gray-500">
+                                Annual Cost
+                              </div>
+                              <div className="text-sm">
+                                ₹{project.domain.cost.toLocaleString()}
+                              </div>
+                            </div>
+                          )}
+                          {project.domain.notes && (
+                            <div>
+                              <div className="text-xs font-medium text-gray-500">
+                                Notes
+                              </div>
+                              <div className="text-sm">
+                                {project.domain.notes}
                               </div>
                             </div>
                           )}
@@ -1866,9 +1850,9 @@ const ProjectDetails = () => {
                         <div className="text-center">
                           <Globe
                             size={20}
-                            className="mx-auto mb-2 text-gray-400 dark:text-zinc-500"
+                            className="mx-auto mb-2 text-gray-400"
                           />
-                          <p className="text-sm text-gray-500 dark:text-zinc-400">
+                          <p className="text-sm text-gray-500">
                             No domain details available
                           </p>
                           <Link
@@ -1888,28 +1872,28 @@ const ProjectDetails = () => {
                 {project.additionalServices &&
                   project.additionalServices.length > 0 && (
                     <div className="mt-6">
-                      <h3 className="mb-3 font-medium text-gray-700 dark:text-zinc-300">
+                      <h3 className="mb-3 font-medium text-gray-700">
                         Additional Services
                       </h3>
-                      <div className="overflow-hidden bg-white border border-gray-200 rounded-lg dark:bg-zinc-800 dark:border-zinc-700">
-                        <table className="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
-                          <thead className="bg-gray-50 dark:bg-zinc-800">
+                      <div className="overflow-hidden bg-white border border-gray-200 rounded-lg">
+                        <table className="min-w-full divide-y divide-gray-200">
+                          <thead className="bg-gray-50">
                             <tr>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-zinc-400">
+                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                 Service
                               </th>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-zinc-400">
+                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                 Provider
                               </th>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-zinc-400">
+                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                 Cost
                               </th>
-                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-zinc-400">
+                              <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                 Status
                               </th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-gray-200 dark:divide-zinc-700">
+                          <tbody className="divide-y divide-gray-200">
                             {project.additionalServices.map(
                               (service, index) => (
                                 <tr key={index}>
@@ -1924,7 +1908,7 @@ const ProjectDetails = () => {
                                     </div>
                                   </td>
                                   <td className="px-4 py-3 whitespace-nowrap">
-                                    <div className="text-sm text-green-600 dark:text-green-400">
+                                    <div className="text-sm text-green-600">
                                       {service.cost
                                         ? `₹${service.cost.toLocaleString()}`
                                         : "N/A"}
@@ -1951,22 +1935,20 @@ const ProjectDetails = () => {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Project Status */}
-          <div className="overflow-hidden bg-white rounded-lg shadow-sm dark:bg-zinc-900">
-            <div className="px-6 py-4 border-b dark:border-zinc-800">
-              <h2 className="text-lg font-medium text-gray-900 dark:text-zinc-100">
-                Status
-              </h2>
+          <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+            <div className="px-6 py-4 border-b">
+              <h2 className="text-lg font-medium">Status</h2>
             </div>
             <div className="p-6">
               {editMode ? (
                 <div className="mb-4">
-                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-zinc-300">
+                  <label className="block mb-1 text-sm font-medium text-gray-700">
                     Update Status
                   </label>
                   <select
                     value={editedData.status}
                     onChange={handleStatusChange}
-                    className="w-full px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-100 dark:focus:ring-accent/70"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
                   >
                     <option value="new">New</option>
                     <option value="contacted">Contacted</option>
@@ -1982,7 +1964,32 @@ const ProjectDetails = () => {
                     className={`px-2 py-1 rounded-full text-xs font-medium mr-2
                       ${
                         project.status === "new"
-                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200"
+                          ? "bg-blue-100 text-blue-800"
+                          : ""
+                      }
+                      ${
+                        project.status === "contacted"
+                          ? "bg-purple-100 text-purple-800"
+                          : ""
+                      }
+                      ${
+                        project.status === "in-progress"
+                          ? "bg-amber-100 text-amber-800"
+                          : ""
+                      }
+                      ${
+                        project.status === "quoted"
+                          ? "bg-cyan-100 text-cyan-800"
+                          : ""
+                      }
+                      ${
+                        project.status === "accepted"
+                          ? "bg-green-100 text-green-800"
+                          : ""
+                      }
+                      ${
+                        project.status === "declined"
+                          ? "bg-red-100 text-red-800"
                           : ""
                       }
                     `}
@@ -1996,10 +2003,8 @@ const ProjectDetails = () => {
               )}
 
               <div className="mb-4">
-                <h3 className="mb-2 font-medium text-gray-700 dark:text-zinc-300">
-                  Created
-                </h3>
-                <p className="text-gray-600 dark:text-zinc-400">
+                <h3 className="mb-2 font-medium text-gray-700">Created</h3>
+                <p className="text-gray-600">
                   {project.createdAt
                     ? format(new Date(project.createdAt), "MMMM d, yyyy")
                     : "Unknown"}
@@ -2007,10 +2012,8 @@ const ProjectDetails = () => {
               </div>
 
               <div className="mb-4">
-                <h3 className="mb-2 font-medium text-gray-700 dark:text-zinc-300">
-                  Last Updated
-                </h3>
-                <p className="text-gray-600 dark:text-zinc-400">
+                <h3 className="mb-2 font-medium text-gray-700">Last Updated</h3>
+                <p className="text-gray-600">
                   {project.updatedAt
                     ? format(new Date(project.updatedAt), "MMMM d, yyyy")
                     : "Unknown"}
@@ -2020,11 +2023,9 @@ const ProjectDetails = () => {
           </div>
 
           {/* Notes */}
-          <div className="overflow-hidden bg-white rounded-lg shadow-sm dark:bg-zinc-900">
-            <div className="px-6 py-4 border-b dark:border-zinc-800">
-              <h2 className="text-lg font-medium text-gray-900 dark:text-zinc-100">
-                Notes
-              </h2>
+          <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+            <div className="px-6 py-4 border-b">
+              <h2 className="text-lg font-medium">Notes</h2>
             </div>
             <div className="p-6">
               {editMode ? (
@@ -2035,33 +2036,29 @@ const ProjectDetails = () => {
                   }
                   rows="8"
                   placeholder="Add your notes about this project..."
-                  className="w-full px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-100 dark:placeholder-zinc-400 dark:focus:ring-accent/70"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
                 ></textarea>
               ) : project.notes ? (
-                <p className="text-gray-600 whitespace-pre-line dark:text-zinc-400">
+                <p className="text-gray-600 whitespace-pre-line">
                   {project.notes}
                 </p>
               ) : (
-                <p className="italic text-gray-400 dark:text-zinc-500">
-                  No notes added yet.
-                </p>
+                <p className="italic text-gray-400">No notes added yet.</p>
               )}
             </div>
           </div>
 
           {/* Quick Actions */}
           {!editMode && (
-            <div className="overflow-hidden bg-white rounded-lg shadow-sm dark:bg-zinc-900">
-              <div className="px-6 py-4 border-b dark:border-zinc-800">
-                <h2 className="text-lg font-medium text-gray-900 dark:text-zinc-100">
-                  Quick Actions
-                </h2>
+            <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+              <div className="px-6 py-4 border-b">
+                <h2 className="text-lg font-medium">Quick Actions</h2>
               </div>
               <div className="p-4">
                 <div className="grid grid-cols-1 gap-2">
                   <Link
                     to="/admin/projects/calendar"
-                    className="flex items-center w-full px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800"
+                    className="flex items-center w-full px-3 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50"
                   >
                     <Calendar size={16} className="mr-2 text-accent" />
                     View Calendar
@@ -2070,7 +2067,7 @@ const ProjectDetails = () => {
                     onClick={() =>
                       window.open(`mailto:${project.email}`, "_blank")
                     }
-                    className="flex items-center w-full px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800"
+                    className="flex items-center w-full px-3 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50"
                   >
                     <Mail size={16} className="mr-2 text-accent" />
                     Email Client
@@ -2084,7 +2081,7 @@ const ProjectDetails = () => {
                       }
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center w-full px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800"
+                      className="flex items-center w-full px-3 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50"
                     >
                       <ExternalLink size={16} className="mr-2 text-accent" />
                       Visit Website

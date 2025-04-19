@@ -5,87 +5,57 @@ import AdminSidebar from "./components/AdminSidebar";
 import AdminHeader from "./components/AdminHeader";
 import AdminLogin from "./AdminLogin";
 import useAuth from "../../hooks/useAuth";
-import { useTheme } from "../../contexts/ThemeContext";
-import { useMediaQuery } from "../../hooks/useMediaQuery";
-import { AdminThemeProvider } from "../../contexts/AdminThemeContext.jsx";
+import DarkModeFixApplier from "./utils/DarkModeFixApplier";
 
 const AdminDashboard = () => {
   const { auth, loading } = useAuth();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 1024);
-  const { darkMode } = useTheme();
-  const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
-  const isMobile = useMediaQuery({ maxWidth: 1023 });
+  const location = useLocation();
 
-  // Toggle sidebar visibility
+  // Function to toggle sidebar
   const toggleSidebar = () => {
-    setSidebarOpen((prev) => !prev);
+    setSidebarOpen(!sidebarOpen);
   };
 
-  // Close sidebar on mobile when route changes
+  // Close sidebar when route changes
   useEffect(() => {
-    if (isMobile) {
+    if (sidebarOpen) {
       setSidebarOpen(false);
     }
-  }, [location.pathname, isMobile]);
-
-  // Close sidebar when clicking outside on mobile
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      const sidebar = document.getElementById("admin-sidebar");
-      const toggleButton = document.getElementById("sidebar-toggle");
-
-      if (
-        isMobile &&
-        sidebarOpen &&
-        sidebar &&
-        !sidebar.contains(event.target) &&
-        toggleButton &&
-        !toggleButton.contains(event.target)
-      ) {
-        setSidebarOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [sidebarOpen, isMobile]);
+  }, [location.pathname]);
 
   // If loading, show a loading spinner
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-zinc-950">
-        <div className="w-12 h-12 border-4 border-zinc-800 rounded-full border-t-primary-500 animate-spin"></div>
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-dark-100">
+        <div className="w-12 h-12 border-4 border-gray-300 dark:border-gray-600 rounded-full border-t-primary animate-spin"></div>
       </div>
     );
   }
 
   // If not authenticated, redirect to login
   if (!auth.token) {
-    return (
-      <AdminThemeProvider>
-        <AdminLogin />
-      </AdminThemeProvider>
-    );
+    return <AdminLogin />;
   }
 
   return (
-    <AdminThemeProvider>
-      <div className="min-h-screen min-w-screen bg-zinc-100 dark:bg-zinc-950 transition-colors duration-200 overflow-hidden">
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+      {/* Apply global dark mode fixes */}
+      <DarkModeFixApplier />
+
+      {/* Sidebar - no longer auto-open on desktop */}
+      <AdminSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+
+      {/* Main Content */}
+      <div className="flex flex-col flex-1 overflow-hidden">
         <AdminHeader toggleSidebar={toggleSidebar} />
-        <div className="flex h-[calc(100vh-64px)] overflow-hidden">
-          <AdminSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-          <main
-            className={`flex-1 overflow-auto p-4 transition-all duration-300`}
-          >
-            <Outlet />
-          </main>
-        </div>
+
+        <main className="flex-1 p-4 overflow-y-auto bg-gray-100 dark:bg-gray-900 md:p-6 admin-content">
+          <Outlet />
+        </main>
       </div>
-    </AdminThemeProvider>
+    </div>
   );
 };
 

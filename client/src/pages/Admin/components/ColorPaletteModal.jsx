@@ -18,51 +18,8 @@ import InputModal from "./InputModal";
  *
  * @param {Object} project - The project object
  * @param {Function} handleNestedChange - Function to update nested project properties
- * @param {string} buttonClassName - Optional class name for the button
- * @param {number} iconSize - Optional icon size for the button
  */
-const ColorPaletteModal = ({
-  project,
-  handleNestedChange,
-  buttonClassName = "inline-flex items-center px-4 py-2 text-sm font-medium text-white rounded-md bg-accent hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent",
-  iconSize = 16,
-}) => {
-  // Common color presets organized by category
-  const colorPresets = {
-    vibrant: [
-      { color: "#FF3B30", name: "Red", category: "primary" },
-      { color: "#FF9500", name: "Orange", category: "secondary" },
-      { color: "#FFCC00", name: "Yellow", category: "accent" },
-      { color: "#34C759", name: "Green", category: "primary" },
-      { color: "#007AFF", name: "Blue", category: "secondary" },
-      { color: "#5856D6", name: "Purple", category: "accent" },
-    ],
-    pastel: [
-      { color: "#FFB3B3", name: "Pastel Red", category: "primary" },
-      { color: "#FFDAB3", name: "Pastel Orange", category: "secondary" },
-      { color: "#FFFFB3", name: "Pastel Yellow", category: "accent" },
-      { color: "#B3FFB3", name: "Pastel Green", category: "primary" },
-      { color: "#B3D9FF", name: "Pastel Blue", category: "secondary" },
-      { color: "#D9B3FF", name: "Pastel Purple", category: "accent" },
-    ],
-    neutral: [
-      { color: "#F2F2F7", name: "Light Gray", category: "neutral" },
-      { color: "#E5E5EA", name: "Light Gray 2", category: "neutral" },
-      { color: "#C7C7CC", name: "Mid Gray", category: "neutral" },
-      { color: "#8E8E93", name: "Gray", category: "neutral" },
-      { color: "#636366", name: "Dark Gray", category: "neutral" },
-      { color: "#1C1C1E", name: "Almost Black", category: "neutral" },
-    ],
-    monochrome: [
-      { color: "#000000", name: "Black", category: "neutral" },
-      { color: "#333333", name: "Dark Gray", category: "neutral" },
-      { color: "#666666", name: "Medium Gray", category: "neutral" },
-      { color: "#999999", name: "Light Gray", category: "neutral" },
-      { color: "#CCCCCC", name: "Very Light Gray", category: "neutral" },
-      { color: "#FFFFFF", name: "White", category: "neutral" },
-    ],
-  };
-
+const ColorPaletteModal = ({ project, handleNestedChange }) => {
   const [showColorModal, setShowColorModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [colorInput, setColorInput] = useState("#000000");
@@ -73,34 +30,20 @@ const ColorPaletteModal = ({
   const [editingColor, setEditingColor] = useState(null);
   const [editingIndex, setEditingIndex] = useState(null);
   const initialFocusRef = useRef(null);
-  const [selectedPalette, setSelectedPalette] = useState(colorPresets.neutral);
-
-  // Update state only when project data is available and different
-  useEffect(() => {
-    console.log(
-      "Project colorPalette updated:",
-      project?.designChoices?.colorPalette
-    );
-    if (project?.designChoices?.colorPalette) {
-      setSelectedPalette(project.designChoices.colorPalette);
-    }
-  }, [project?.designChoices?.colorPalette]); // Depend specifically on the palette data
 
   // Make sure colorPalette structure exists with categories
   useEffect(() => {
-    if (!project?.designChoices?.colorPalette) {
-      console.log("Initializing colorPalette as empty array");
+    if (!project.designChoices.colorPalette) {
       handleNestedChange("designChoices", "colorPalette", []);
     }
 
     // Migrate old format if needed (array of strings to array of objects)
     if (
-      Array.isArray(project?.designChoices?.colorPalette) &&
-      project?.designChoices?.colorPalette.length > 0 &&
-      typeof project?.designChoices?.colorPalette[0] === "string"
+      Array.isArray(project.designChoices.colorPalette) &&
+      project.designChoices.colorPalette.length > 0 &&
+      typeof project.designChoices.colorPalette[0] === "string"
     ) {
-      console.log("Migrating colorPalette from old format");
-      const migratedPalette = project?.designChoices?.colorPalette.map(
+      const migratedPalette = project.designChoices.colorPalette.map(
         (color) => ({
           color,
           category: "primary",
@@ -109,7 +52,7 @@ const ColorPaletteModal = ({
       );
       handleNestedChange("designChoices", "colorPalette", migratedPalette);
     }
-  }, [project?.designChoices?.colorPalette, handleNestedChange]);
+  }, [project.designChoices.colorPalette, handleNestedChange]);
 
   /**
    * Validates if a string is a proper hex color code
@@ -119,98 +62,52 @@ const ColorPaletteModal = ({
     return regex.test(color);
   };
 
-  // Direct function to add a color to the palette - simplest implementation
-  const addColorToPalette = (newColorObj) => {
-    try {
-      // Ensure we have the color object
-      if (!newColorObj || !newColorObj.color) {
-        console.error("Invalid color object:", newColorObj);
-        return;
-      }
-
-      console.log("Adding color directly to palette:", newColorObj);
-
-      // Get current palette or create new one
-      const currentPalette = Array.isArray(project?.designChoices?.colorPalette)
-        ? [...project.designChoices.colorPalette]
-        : [];
-
-      // Add the new color
-      const updatedPalette = [...currentPalette, newColorObj];
-
-      console.log("Palette BEFORE update:", currentPalette);
-      console.log("Palette AFTER update:", updatedPalette);
-
-      // Update the project with new palette
-      handleNestedChange("designChoices", "colorPalette", updatedPalette);
-
-      return updatedPalette;
-    } catch (err) {
-      console.error("Error adding color to palette:", err);
-      return null;
-    }
-  };
-
   /**
-   * Handle color selection form submission
-   * Adds a new color to the palette
+   * Handle form submission for adding a new color
    */
   const handleColorSubmit = (e) => {
-    // Always prevent form submission!
-    if (e && e.preventDefault) {
+    // Prevent form submission and event propagation
+    if (e) {
       e.preventDefault();
-    }
-    if (e && e.stopPropagation) {
       e.stopPropagation();
     }
 
-    console.log("handleColorSubmit called with colorInput:", colorInput);
-
     if (!colorInput) {
-      console.error("No color input provided");
       setColorError("Please select a color");
       return;
     }
 
     // Validate hex color format
     if (!validateHexColor(colorInput)) {
-      console.error("Invalid hex color format:", colorInput);
       setColorError("Please enter a valid hex color (e.g. #FF5733)");
       return;
     }
 
-    try {
-      // Create new color object
-      const newColor = {
-        color: colorInput,
-        category: colorCategory,
-        name: colorName || generateColorName(colorInput),
-      };
+    // Create new color object
+    const newColor = {
+      color: colorInput,
+      category: colorCategory,
+      name: colorName || generateColorName(colorInput),
+    };
 
-      // Add color directly to palette
-      const success = addColorToPalette(newColor);
+    // Add color to palette
+    handleNestedChange("designChoices", "colorPalette", [
+      ...(project.designChoices.colorPalette || []),
+      newColor,
+    ]);
 
-      if (success) {
-        // Reset and close modal
-        setColorInput("#000000");
-        setColorName("");
-        setColorCategory("primary");
-        setColorError("");
-        setShowColorModal(false);
-      }
-    } catch (err) {
-      console.error("Error in handleColorSubmit:", err);
-      setColorError("An error occurred. Please try again.");
-    }
-
-    return false;
+    // Reset and close modal
+    setColorInput("#000000");
+    setColorName("");
+    setColorCategory("primary");
+    setColorError("");
+    setShowColorModal(false);
   };
 
   /**
    * Open edit modal for a color
    */
   const handleEditColor = (color, index) => {
-    console.log("Editing color:", color, "at index:", index);
     setEditingColor({
       color: color.color,
       category: color.category,
@@ -230,27 +127,22 @@ const ColorPaletteModal = ({
       e.stopPropagation();
     }
 
-    console.log("handleSaveEdit called with editingColor:", editingColor);
-
     if (!editingColor.color) {
-      console.error("No editing color provided");
       return;
     }
 
     // Validate hex color format
     if (!validateHexColor(editingColor.color)) {
-      console.error("Invalid hex color format for edit:", editingColor.color);
       return;
     }
 
     // Update the color at the specific index
-    const updatedColors = [...project?.designChoices?.colorPalette];
+    const updatedColors = [...project.designChoices.colorPalette];
     updatedColors[editingIndex] = {
       ...editingColor,
       name: editingColor.name || generateColorName(editingColor.color),
     };
 
-    console.log("Saving updated colors:", updatedColors);
     handleNestedChange("designChoices", "colorPalette", updatedColors);
     setShowEditModal(false);
   };
@@ -259,8 +151,7 @@ const ColorPaletteModal = ({
    * Delete a color from the palette
    */
   const handleDeleteColor = (index) => {
-    console.log("Deleting color at index:", index);
-    const updatedColors = [...project?.designChoices?.colorPalette];
+    const updatedColors = [...project.designChoices.colorPalette];
     updatedColors.splice(index, 1);
     handleNestedChange("designChoices", "colorPalette", updatedColors);
   };
@@ -334,15 +225,12 @@ const ColorPaletteModal = ({
       other: [],
     };
 
-    // Use optional chaining and default to empty array before accessing colorPalette
-    const colorPalette = project?.designChoices?.colorPalette || [];
-
-    if (colorPalette.length > 0) {
-      colorPalette.forEach((colorObj, index) => {
+    if (project.designChoices.colorPalette) {
+      project.designChoices.colorPalette.forEach((colorObj, index) => {
         if (typeof colorObj === "string") {
           // Handle old format (just strings)
           grouped.primary.push({ color: colorObj, index });
-        } else if (colorObj?.category && grouped[colorObj.category]) {
+        } else if (colorObj.category && grouped[colorObj.category]) {
           grouped[colorObj.category].push({ ...colorObj, index });
         } else {
           grouped.other.push({ ...colorObj, index });
@@ -353,32 +241,52 @@ const ColorPaletteModal = ({
     return grouped;
   };
 
-  // Update the preset color adding function to use the direct method
-  const handlePresetColorClick = (preset, e) => {
-    // Always prevent form submission!
-    if (e && e.preventDefault) {
-      e.preventDefault();
-    }
-    if (e && e.stopPropagation) {
-      e.stopPropagation();
-    }
+  // Common color presets organized by category
+  const colorPresets = {
+    vibrant: [
+      { color: "#FF3B30", name: "Red", category: "primary" },
+      { color: "#FF9500", name: "Orange", category: "secondary" },
+      { color: "#FFCC00", name: "Yellow", category: "accent" },
+      { color: "#34C759", name: "Green", category: "primary" },
+      { color: "#007AFF", name: "Blue", category: "secondary" },
+      { color: "#5856D6", name: "Purple", category: "accent" },
+    ],
+    pastel: [
+      { color: "#FFB3B3", name: "Pastel Red", category: "primary" },
+      { color: "#FFDAB3", name: "Pastel Orange", category: "secondary" },
+      { color: "#FFFFB3", name: "Pastel Yellow", category: "accent" },
+      { color: "#B3FFB3", name: "Pastel Green", category: "primary" },
+      { color: "#B3D9FF", name: "Pastel Blue", category: "secondary" },
+      { color: "#D9B3FF", name: "Pastel Purple", category: "accent" },
+    ],
+    neutral: [
+      { color: "#F2F2F7", name: "Light Gray", category: "neutral" },
+      { color: "#E5E5EA", name: "Light Gray 2", category: "neutral" },
+      { color: "#C7C7CC", name: "Mid Gray", category: "neutral" },
+      { color: "#8E8E93", name: "Gray", category: "neutral" },
+      { color: "#636366", name: "Dark Gray", category: "neutral" },
+      { color: "#1C1C1E", name: "Almost Black", category: "neutral" },
+    ],
+    monochrome: [
+      { color: "#000000", name: "Black", category: "neutral" },
+      { color: "#333333", name: "Dark Gray", category: "neutral" },
+      { color: "#666666", name: "Medium Gray", category: "neutral" },
+      { color: "#999999", name: "Light Gray", category: "neutral" },
+      { color: "#CCCCCC", name: "Very Light Gray", category: "neutral" },
+      { color: "#FFFFFF", name: "White", category: "neutral" },
+    ],
+  };
 
-    try {
-      // Create the color object from preset
-      const newColor = {
+  // Add preset color to palette with its category
+  const addPresetColor = (preset) => {
+    handleNestedChange("designChoices", "colorPalette", [
+      ...(project.designChoices.colorPalette || []),
+      {
         color: preset.color,
-        category: preset.category || "primary",
+        category: preset.category || colorCategory,
         name: preset.name,
-      };
-
-      console.log("Adding preset color:", newColor);
-
-      // Add directly to palette
-      addColorToPalette(newColor);
-    } catch (err) {
-      console.error("Error adding preset color:", err);
-      alert("Failed to add color. Please try again.");
-    }
+      },
+    ]);
   };
 
   // Color schemes (complementary, analogous, etc.)
@@ -509,157 +417,250 @@ const ColorPaletteModal = ({
 
   // Add an entire color scheme to the palette
   const addColorScheme = (scheme) => {
-    const currentPalette = [...(project?.designChoices?.colorPalette || [])];
+    const currentPalette = [...(project.designChoices.colorPalette || [])];
     const newPalette = [...currentPalette, ...scheme];
     handleNestedChange("designChoices", "colorPalette", newPalette);
   };
 
-  // Safe handler for opening the color modal
-  const openColorModal = (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    setShowColorModal(true);
-  };
-
-  // Safe handler for closing the color modal
-  const closeColorModal = (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    setShowColorModal(false);
-    setColorInput("#000000");
-    setColorName("");
-    setColorCategory("primary");
-    setColorError("");
-    setActiveTab("picker");
-  };
-
-  // Safe handler for changing tabs
-  const handleTabChange = (tab, e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    setActiveTab(tab);
-  };
-
   return (
-    <div onClick={(e) => e.stopPropagation()}>
+    <div>
+      <label className="block mb-2 text-sm font-medium text-gray-700">
+        Color Palette
+      </label>
+
+      {/* Display colors by category */}
+      <div className="mb-4 space-y-4">
+        {Object.entries(groupedColors()).map(([category, colors]) => {
+          if (colors.length === 0) return null;
+
+          return (
+            <div key={category} className="space-y-2">
+              <h4 className="text-sm font-medium text-gray-500 capitalize">
+                {category}
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {colors.map(({ color, name, index }) => (
+                  <div
+                    key={index}
+                    className="flex items-center p-1 px-2 bg-white border border-gray-300 rounded-md group hover:border-accent"
+                  >
+                    <div
+                      className="w-6 h-6 mr-2 rounded-md"
+                      style={{
+                        backgroundColor:
+                          typeof color === "string"
+                            ? color
+                            : color.color || color,
+                      }}
+                    ></div>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium">
+                        {typeof color === "string" ? color : name || color}
+                      </span>
+                      {name && (
+                        <span className="text-xs text-gray-400">
+                          {typeof color === "string" ? "" : color}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex ml-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleEditColor(
+                            typeof color === "string"
+                              ? { color, name: "", category }
+                              : { color: color.color || color, name, category },
+                            index
+                          )
+                        }
+                        className="p-1 mr-1 text-blue-600 transition-opacity rounded-md opacity-0 group-hover:opacity-100 hover:bg-blue-50"
+                      >
+                        <Edit size={14} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteColor(index)}
+                        className="p-1 text-red-600 transition-opacity rounded-md opacity-0 group-hover:opacity-100 hover:bg-red-50"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Add Color Button */}
       <button
-        type="button"
-        onClick={openColorModal}
-        className={buttonClassName}
+        type="button" // Explicitly set button type
+        onClick={() => setShowColorModal(true)}
+        className="flex items-center justify-center px-4 py-2 text-sm bg-white border rounded-md text-accent border-accent hover:bg-accent/10"
       >
-        <Palette size={iconSize} className="mr-1.5" /> Manage Colors
+        <PlusCircle size={16} className="mr-2" />
+        Add Color
       </button>
 
-      {/* Color Picker Modal */}
+      {/* Color Input Modal */}
       <InputModal
         isOpen={showColorModal}
-        onClose={closeColorModal}
+        onClose={(e) => {
+          // Explicitly prevent any default behavior
+          if (e) e.preventDefault();
+
+          // Reset states
+          setColorError("");
+          setColorInput("#000000");
+          setColorName("");
+          setActiveTab("picker");
+
+          // Close the modal
+          setShowColorModal(false);
+        }}
         onSubmit={handleColorSubmit}
         title="Add Color to Palette"
         submitText="Add Color"
-        initialFocusRef={initialFocusRef}
-        icon={
-          <Palette size={20} className="text-purple-600 dark:text-purple-400" />
-        }
+        icon={<Palette size={20} className="text-accent" />}
       >
-        <div className="space-y-4" onClick={(e) => e.stopPropagation()}>
-          {/* Tabs for Picker / Presets */}
-          <div className="flex p-1 mb-3 space-x-1 bg-gray-100 rounded-lg dark:bg-gray-700">
+        <div className="space-y-4">
+          {/* Tabs Navigation */}
+          <div className="flex border-b border-gray-200">
             <button
               type="button"
-              onClick={(e) => handleTabChange("picker", e)}
-              className={`flex-1 px-3 py-1 text-sm rounded-md ${
+              onClick={() => setActiveTab("picker")}
+              className={`px-4 py-2 text-sm font-medium ${
                 activeTab === "picker"
-                  ? "bg-white text-gray-900 shadow-sm dark:bg-gray-600 dark:text-white"
-                  : "text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                  ? "border-b-2 border-accent text-accent"
+                  : "text-gray-500 hover:text-gray-700"
               }`}
             >
               Color Picker
             </button>
             <button
               type="button"
-              onClick={(e) => handleTabChange("presets", e)}
-              className={`flex-1 px-3 py-1 text-sm rounded-md ${
+              onClick={() => setActiveTab("presets")}
+              className={`px-4 py-2 text-sm font-medium ${
                 activeTab === "presets"
-                  ? "bg-white text-gray-900 shadow-sm dark:bg-gray-600 dark:text-white"
-                  : "text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                  ? "border-b-2 border-accent text-accent"
+                  : "text-gray-500 hover:text-gray-700"
               }`}
             >
               Presets
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("schemes")}
+              className={`px-4 py-2 text-sm font-medium ${
+                activeTab === "schemes"
+                  ? "border-b-2 border-accent text-accent"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              Schemes
             </button>
           </div>
 
           {/* Color Picker Tab */}
           {activeTab === "picker" && (
-            <div className="space-y-4">
-              {/* Color Preview */}
-              <div className="flex items-center space-x-3">
-                <div
-                  className="w-10 h-10 border border-gray-300 rounded-md dark:border-gray-500"
-                  style={{ backgroundColor: editingColor?.color || colorInput }}
-                ></div>
-                <div>
-                  <label className="block mb-1 text-xs font-medium text-gray-700 dark:text-gray-300">
-                    Hex Value
-                  </label>
-                  <HexColorInput
-                    color={editingColor?.color || colorInput}
-                    onChange={(newColor) =>
-                      showEditModal
-                        ? setEditingColor({ ...editingColor, color: newColor })
-                        : setColorInput(newColor)
-                    }
-                    className="w-24 px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    prefixed
-                    alpha={false}
+            <>
+              <div className="flex flex-col items-center">
+                <HexColorPicker
+                  color={colorInput}
+                  onChange={setColorInput}
+                  className="mb-4"
+                />
+
+                <div className="flex items-center w-full space-x-2">
+                  <div
+                    className="w-12 h-12 border border-gray-300 rounded-md"
+                    style={{ backgroundColor: colorInput }}
                   />
+                  <div className="flex-1">
+                    <label className="block mb-1 text-sm font-medium text-gray-700">
+                      Hex Color
+                    </label>
+                    <div className="flex">
+                      <span className="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">
+                        #
+                      </span>
+                      <HexColorInput
+                        color={colorInput}
+                        onChange={setColorInput}
+                        className="flex-1 block w-full border-gray-300 rounded-none rounded-r-md focus:ring-accent focus:border-accent sm:text-sm"
+                        prefixed={false}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Color Picker Component - Dark Mode Compatible */}
-              <div className="p-2 bg-white rounded-md dark:bg-gray-700">
-                <HexColorPicker
-                  color={editingColor?.color || colorInput}
-                  onChange={(newColor) =>
-                    showEditModal
-                      ? setEditingColor({ ...editingColor, color: newColor })
-                      : setColorInput(newColor)
-                  }
-                  style={{ width: "100%" }}
-                />
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                    Color Name (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={colorName}
+                    onChange={(e) => setColorName(e.target.value)}
+                    placeholder={generateColorName(colorInput)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                    Category
+                  </label>
+                  <select
+                    value={colorCategory}
+                    onChange={(e) => setColorCategory(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                  >
+                    <option value="primary">Primary</option>
+                    <option value="secondary">Secondary</option>
+                    <option value="accent">Accent</option>
+                    <option value="neutral">Neutral</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
               </div>
-            </div>
+            </>
           )}
 
           {/* Presets Tab */}
           {activeTab === "presets" && (
-            <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
-              {Object.entries(colorPresets).map(([presetCategory, presets]) => (
-                <div key={presetCategory}>
-                  <h5 className="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase dark:text-gray-400">
-                    {presetCategory}
-                  </h5>
-                  <div className="flex flex-wrap gap-2">
-                    {presets.map((preset, index) => (
+            <div className="space-y-4">
+              {Object.entries(colorPresets).map(([category, colors]) => (
+                <div key={category} className="space-y-2">
+                  <h3 className="text-sm font-medium text-gray-700 capitalize">
+                    {category}
+                  </h3>
+                  <div className="grid grid-cols-3 gap-2">
+                    {colors.map((preset) => (
                       <button
+                        key={preset.color}
                         type="button"
-                        key={`${preset.color}-${index}`}
-                        onClick={(e) => handlePresetColorClick(preset, e)}
-                        className="flex items-center p-2 space-x-2 border border-gray-200 rounded-md hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
+                        onClick={() => {
+                          // Option 1: Select the color for editing in the picker
+                          setColorInput(preset.color);
+                          setColorName(preset.name);
+                          setColorCategory(preset.category || "primary");
+                          setActiveTab("picker");
+
+                          // Option 2: Add directly to palette (comment this out if using option 1)
+                          // addPresetColor(preset);
+                        }}
+                        className="flex flex-col items-center p-2 border border-gray-200 rounded-md hover:border-accent"
                       >
                         <div
-                          className="w-5 h-5 border border-gray-300 rounded dark:border-gray-500"
+                          className="w-8 h-8 mb-1 rounded-full"
                           style={{ backgroundColor: preset.color }}
                         ></div>
-                        <span className="text-xs text-gray-700 dark:text-gray-300">
-                          {preset.name}
-                        </span>
+                        <span className="text-xs">{preset.name}</span>
                       </button>
                     ))}
                   </div>
@@ -668,64 +669,79 @@ const ColorPaletteModal = ({
             </div>
           )}
 
-          {/* Color Name (Optional) */}
-          <div onClick={(e) => e.stopPropagation()}>
-            <label
-              htmlFor="colorName"
-              className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Color Name (Optional)
-            </label>
-            <input
-              id="colorName"
-              type="text"
-              value={editingColor?.name || colorName}
-              onChange={(e) => {
-                e.stopPropagation();
-                showEditModal
-                  ? setEditingColor({ ...editingColor, name: e.target.value })
-                  : setColorName(e.target.value);
-              }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-              placeholder="e.g., Primary Blue, Accent Orange"
-            />
-          </div>
+          {/* Schemes Tab */}
+          {activeTab === "schemes" && (
+            <div className="space-y-4">
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Base Color
+                </label>
+                <div className="flex space-x-2">
+                  <div
+                    className="w-10 h-10 border border-gray-300 rounded-md"
+                    style={{ backgroundColor: colorInput }}
+                  ></div>
+                  <HexColorInput
+                    color={colorInput}
+                    onChange={setColorInput}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                    prefixed={true}
+                  />
+                </div>
+              </div>
 
-          {/* Color Category */}
-          <div onClick={(e) => e.stopPropagation()}>
-            <label
-              htmlFor="colorCategory"
-              className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Category
-            </label>
-            <select
-              id="colorCategory"
-              value={editingColor?.category || colorCategory}
-              onChange={(e) => {
-                e.stopPropagation();
-                showEditModal
-                  ? setEditingColor({
-                      ...editingColor,
-                      category: e.target.value,
-                    })
-                  : setColorCategory(e.target.value);
-              }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            >
-              <option value="primary">Primary</option>
-              <option value="secondary">Secondary</option>
-              <option value="accent">Accent</option>
-              <option value="neutral">Neutral</option>
-              <option value="background">Background</option>
-              <option value="text">Text</option>
-            </select>
-          </div>
+              <div className="space-y-4">
+                {["complementary", "analogous", "triadic", "monochromatic"].map(
+                  (schemeType) => {
+                    const scheme = generateColorScheme(colorInput, schemeType);
+
+                    return (
+                      <div
+                        key={schemeType}
+                        className="p-3 border border-gray-200 rounded-md"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="text-sm font-medium text-gray-700 capitalize">
+                            {schemeType}
+                          </h3>
+                          <button
+                            type="button"
+                            onClick={() => addColorScheme(scheme)}
+                            className="flex items-center text-xs text-accent hover:underline"
+                          >
+                            <PlusCircle size={12} className="mr-1" />
+                            Add All
+                          </button>
+                        </div>
+                        <div className="flex space-x-2">
+                          {scheme.map((color, index) => (
+                            <div
+                              key={index}
+                              className="flex flex-col items-center flex-1"
+                            >
+                              <div
+                                className="w-full h-8 mb-1 rounded-md"
+                                style={{ backgroundColor: color.color }}
+                              ></div>
+                              <span className="text-xs text-gray-600">
+                                {color.name}
+                              </span>
+                              <span className="text-xs text-gray-400">
+                                {color.color}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            </div>
+          )}
 
           {colorError && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-              {colorError}
-            </p>
+            <p className="mt-1 text-sm text-red-600">{colorError}</p>
           )}
         </div>
       </InputModal>
@@ -737,96 +753,85 @@ const ColorPaletteModal = ({
         onSubmit={handleSaveEdit}
         title="Edit Color"
         submitText="Save Changes"
-        icon={<Edit size={20} className="text-amber-600 dark:text-amber-400" />}
+        icon={<Edit size={20} className="text-accent" />}
       >
-        <div className="space-y-4">
-          {/* Color Preview */}
-          <div className="flex items-center space-x-3">
-            <div
-              className="w-10 h-10 border border-gray-300 rounded-md dark:border-gray-500"
-              style={{ backgroundColor: editingColor?.color || colorInput }}
-            ></div>
-            <div>
-              <label className="block mb-1 text-xs font-medium text-gray-700 dark:text-gray-300">
-                Hex Value
-              </label>
-              <HexColorInput
-                color={editingColor?.color || colorInput}
-                onChange={(newColor) =>
-                  setEditingColor({ ...editingColor, color: newColor })
+        {editingColor && (
+          <div className="space-y-4">
+            <div className="flex flex-col items-center mb-4">
+              <HexColorPicker
+                color={editingColor.color}
+                onChange={(color) =>
+                  setEditingColor({ ...editingColor, color })
                 }
-                className="w-24 px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                prefixed
-                alpha={false}
+                className="mb-4"
               />
+
+              <div className="flex items-center w-full space-x-2">
+                <div
+                  className="w-12 h-12 border border-gray-300 rounded-md"
+                  style={{ backgroundColor: editingColor.color }}
+                />
+                <div className="flex-1">
+                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                    Hex Color
+                  </label>
+                  <div className="flex">
+                    <span className="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">
+                      #
+                    </span>
+                    <HexColorInput
+                      color={editingColor.color}
+                      onChange={(color) =>
+                        setEditingColor({ ...editingColor, color })
+                      }
+                      className="flex-1 block w-full border-gray-300 rounded-none rounded-r-md focus:ring-accent focus:border-accent sm:text-sm"
+                      prefixed={false}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Color Picker Component - Dark Mode Compatible */}
-          <div className="p-2 bg-white rounded-md dark:bg-gray-700">
-            <HexColorPicker
-              color={editingColor?.color || colorInput}
-              onChange={(newColor) =>
-                setEditingColor({ ...editingColor, color: newColor })
-              }
-              style={{ width: "100%" }}
-            />
-          </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Color Name (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={editingColor.name}
+                  onChange={(e) =>
+                    setEditingColor({ ...editingColor, name: e.target.value })
+                  }
+                  placeholder={generateColorName(editingColor.color)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                />
+              </div>
 
-          {/* Color Name (Optional) */}
-          <div onClick={(e) => e.stopPropagation()}>
-            <label
-              htmlFor="colorName"
-              className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Color Name (Optional)
-            </label>
-            <input
-              id="colorName"
-              type="text"
-              value={editingColor?.name || colorName}
-              onChange={(e) => {
-                e.stopPropagation();
-                showEditModal
-                  ? setEditingColor({ ...editingColor, name: e.target.value })
-                  : setColorName(e.target.value);
-              }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-              placeholder="e.g., Primary Blue, Accent Orange"
-            />
-          </div>
-
-          {/* Color Category */}
-          <div onClick={(e) => e.stopPropagation()}>
-            <label
-              htmlFor="colorCategory"
-              className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Category
-            </label>
-            <select
-              id="colorCategory"
-              value={editingColor?.category || colorCategory}
-              onChange={(e) => {
-                e.stopPropagation();
-                showEditModal
-                  ? setEditingColor({
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Category
+                </label>
+                <select
+                  value={editingColor.category}
+                  onChange={(e) =>
+                    setEditingColor({
                       ...editingColor,
                       category: e.target.value,
                     })
-                  : setColorCategory(e.target.value);
-              }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            >
-              <option value="primary">Primary</option>
-              <option value="secondary">Secondary</option>
-              <option value="accent">Accent</option>
-              <option value="neutral">Neutral</option>
-              <option value="background">Background</option>
-              <option value="text">Text</option>
-            </select>
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                >
+                  <option value="primary">Primary</option>
+                  <option value="secondary">Secondary</option>
+                  <option value="accent">Accent</option>
+                  <option value="neutral">Neutral</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </InputModal>
     </div>
   );

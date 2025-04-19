@@ -149,14 +149,14 @@ const BookingDetails = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-12 h-12 border-4 border-zinc-300 rounded-full border-t-primary-500 animate-spin dark:border-zinc-700 dark:border-t-primary-400"></div>
+        <div className="w-12 h-12 border-4 border-gray-300 rounded-full border-t-primary animate-spin"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-6 text-red-700 border border-red-200 rounded-lg bg-red-50 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800/50">
+      <div className="p-6 text-red-700 border border-red-200 rounded-lg bg-red-50">
         <div className="flex items-center mb-3">
           <AlertTriangle size={24} className="mr-2" />
           <h3 className="text-lg font-semibold">Error</h3>
@@ -164,7 +164,7 @@ const BookingDetails = () => {
         <p>{error}</p>
         <button
           onClick={() => navigate("/admin/bookings")}
-          className="px-4 py-2 mt-4 text-sm text-red-700 transition-colors bg-red-100 rounded-md hover:bg-red-200 dark:text-red-300 dark:bg-red-900/30 dark:hover:bg-red-900/50"
+          className="px-4 py-2 mt-4 text-red-700 transition-colors bg-red-100 rounded-md hover:bg-red-200"
         >
           Go Back
         </button>
@@ -174,7 +174,7 @@ const BookingDetails = () => {
 
   if (!booking && !isNewBooking) {
     return (
-      <div className="p-6 border rounded-lg bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-800/50">
+      <div className="p-6 border rounded-lg bg-amber-50 border-amber-200 text-amber-700">
         <div className="flex items-center mb-3">
           <AlertTriangle size={24} className="mr-2" />
           <h3 className="text-lg font-semibold">Booking Not Found</h3>
@@ -184,7 +184,7 @@ const BookingDetails = () => {
         </p>
         <Link
           to="/admin/bookings"
-          className="inline-block px-4 py-2 mt-4 text-sm transition-colors rounded-md bg-amber-100 hover:bg-amber-200 text-amber-700 dark:text-amber-300 dark:bg-amber-900/30 dark:hover:bg-amber-900/50"
+          className="inline-block px-4 py-2 mt-4 transition-colors rounded-md bg-amber-100 hover:bg-amber-200 text-amber-700"
         >
           Go Back to Bookings
         </Link>
@@ -198,13 +198,13 @@ const BookingDetails = () => {
     : "Unknown date";
 
   return (
-    <div className="text-zinc-900 dark:text-zinc-100">
+    <div>
       {/* Header */}
       <div className="flex flex-col justify-between mb-6 md:flex-row md:items-center">
         <div className="flex items-center mb-4 md:mb-0">
           <Link
             to="/admin/bookings"
-            className="p-2 mr-4 transition-colors rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300"
+            className="p-2 mr-4 transition-colors bg-gray-100 rounded-full hover:bg-gray-200"
           >
             <ChevronLeft size={20} />
           </Link>
@@ -222,15 +222,15 @@ const BookingDetails = () => {
                     ? navigate("/admin/bookings")
                     : setEditMode(false)
                 }
-                className="px-4 py-2 text-sm border border-zinc-300 rounded-md hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 transition-colors"
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveChanges}
-                className="flex items-center px-4 py-2 text-sm text-white rounded-md bg-primary-600 hover:bg-primary-700 transition-colors"
+                className="flex items-center px-4 py-2 text-white rounded-md bg-primary hover:bg-primary/90"
               >
-                <Save size={16} className="mr-1.5" />
+                <Save size={18} className="mr-2" />
                 {isNewBooking ? "Create Booking" : "Save Changes"}
               </button>
             </>
@@ -238,16 +238,16 @@ const BookingDetails = () => {
             <>
               <button
                 onClick={() => setEditMode(true)}
-                className="flex items-center px-4 py-2 text-sm border border-zinc-300 rounded-md hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 transition-colors"
+                className="flex items-center px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
               >
-                <Edit size={16} className="mr-1.5" />
+                <Edit size={18} className="mr-2" />
                 Edit Booking
               </button>
               <button
                 onClick={() => setDeleteModalOpen(true)}
-                className="flex items-center px-4 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors"
+                className="flex items-center px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700"
               >
-                <Trash2 size={16} className="mr-1.5" />
+                <Trash2 size={18} className="mr-2" />
                 Delete
               </button>
             </>
@@ -255,180 +255,404 @@ const BookingDetails = () => {
         </div>
       </div>
 
-      {/* Main Content Area */}
+      {/* Booking Information */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Left Column - Booking Details */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="p-6 border rounded-lg shadow-sm bg-zinc-50 dark:bg-zinc-900 dark:border-zinc-800">
-            <h2 className="mb-4 text-xl font-semibold">Client Information</h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <DetailItem icon={User} label="Name" value={booking.name} />
-              <DetailItem icon={Mail} label="Email" value={booking.email} />
-              {booking.phone && (
-                <DetailItem icon={Phone} label="Phone" value={booking.phone} />
-              )}
-              {booking.company && (
-                <DetailItem
-                  icon={Briefcase}
-                  label="Company"
-                  value={booking.company}
-                />
-              )}
+        {/* Main Info */}
+        <div className="space-y-6 lg:col-span-2">
+          {/* Booking Overview */}
+          <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+            <div className="px-6 py-4 border-b">
+              <h2 className="text-lg font-medium">Booking Overview</h2>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="flex">
+                  <Calendar
+                    size={20}
+                    className="flex-shrink-0 mt-1 mr-3 text-primary"
+                  />
+                  <div>
+                    <h3 className="font-medium text-gray-700">Date</h3>
+                    {editMode ? (
+                      <input
+                        type="date"
+                        name="date"
+                        value={booking.date}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p>{formattedDate}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex">
+                  <Clock
+                    size={20}
+                    className="flex-shrink-0 mt-1 mr-3 text-primary"
+                  />
+                  <div>
+                    <h3 className="font-medium text-gray-700">Time</h3>
+                    {editMode ? (
+                      <input
+                        type="time"
+                        name="time"
+                        value={booking.time}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p>
+                        {booking.time} ({booking.timezone})
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex">
+                  <Video
+                    size={20}
+                    className="flex-shrink-0 mt-1 mr-3 text-primary"
+                  />
+                  <div>
+                    <h3 className="font-medium text-gray-700">Call Type</h3>
+                    {editMode ? (
+                      <select
+                        name="callType"
+                        value={booking.callType}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      >
+                        <option value="video">Video Call</option>
+                        <option value="phone">Phone Call</option>
+                      </select>
+                    ) : (
+                      <p>
+                        {booking.callType === "video"
+                          ? "Video Call"
+                          : "Phone Call"}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex">
+                  <MessageSquare
+                    size={20}
+                    className="flex-shrink-0 mt-1 mr-3 text-primary"
+                  />
+                  <div>
+                    <h3 className="font-medium text-gray-700">Project Type</h3>
+                    {editMode ? (
+                      <input
+                        type="text"
+                        name="projectType"
+                        value={booking.projectType}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p>{booking.projectType}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {editMode ? (
+                <div className="pt-6 mt-6 border-t">
+                  <h3 className="mb-2 font-medium text-gray-700">
+                    Additional Information
+                  </h3>
+                  <textarea
+                    name="additionalInfo"
+                    value={booking.additionalInfo || ""}
+                    onChange={handleInputChange}
+                    rows="3"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  ></textarea>
+                </div>
+              ) : booking.additionalInfo ? (
+                <div className="pt-6 mt-6 border-t">
+                  <h3 className="mb-2 font-medium text-gray-700">
+                    Additional Information
+                  </h3>
+                  <p className="text-gray-600">{booking.additionalInfo}</p>
+                </div>
+              ) : null}
             </div>
           </div>
 
-          <div className="p-6 border rounded-lg shadow-sm bg-zinc-50 dark:bg-zinc-900 dark:border-zinc-800">
-            <h2 className="mb-4 text-xl font-semibold">Booking Information</h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <DetailItem icon={Calendar} label="Date" value={formattedDate} />
-              <DetailItem icon={Clock} label="Time" value={booking.time} />
-              <DetailItem
-                icon={MapPin}
-                label="Timezone"
-                value={booking.timezone}
-              />
-              <DetailItem
-                icon={Video}
-                label="Call Type"
-                value={
-                  booking.callType === "video" ? "Video Call" : "Phone Call"
-                }
-              />
-              <DetailItem
-                icon={Check}
-                label="Project Type"
-                value={booking.projectType}
-              />
+          {/* Contact Information */}
+          <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+            <div className="px-6 py-4 border-b">
+              <h2 className="text-lg font-medium">Contact Information</h2>
             </div>
-            {booking.meetingLink && (
-              <div className="mt-4">
-                <DetailItem
-                  icon={LinkIcon}
-                  label="Meeting Link"
-                  value={booking.meetingLink}
-                  isLink={true}
-                />
+            <div className="p-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="flex">
+                  <User
+                    size={20}
+                    className="flex-shrink-0 mt-1 mr-3 text-secondary"
+                  />
+                  <div>
+                    <h3 className="font-medium text-gray-700">Name</h3>
+                    {editMode ? (
+                      <input
+                        type="text"
+                        name="name"
+                        value={booking.name}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p>{booking.name}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex">
+                  <Mail
+                    size={20}
+                    className="flex-shrink-0 mt-1 mr-3 text-secondary"
+                  />
+                  <div>
+                    <h3 className="font-medium text-gray-700">Email</h3>
+                    {editMode ? (
+                      <input
+                        type="email"
+                        name="email"
+                        value={booking.email}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p className="max-w-xs truncate">{booking.email}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex">
+                  <Phone
+                    size={20}
+                    className="flex-shrink-0 mt-1 mr-3 text-secondary"
+                  />
+                  <div>
+                    <h3 className="font-medium text-gray-700">Phone</h3>
+                    {editMode ? (
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={booking.phone || ""}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p>{booking.phone || "Not provided"}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex">
+                  <Briefcase
+                    size={20}
+                    className="flex-shrink-0 mt-1 mr-3 text-secondary"
+                  />
+                  <div>
+                    <h3 className="font-medium text-gray-700">Company</h3>
+                    {editMode ? (
+                      <input
+                        type="text"
+                        name="company"
+                        value={booking.company || ""}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : (
+                      <p>{booking.company || "Not provided"}</p>
+                    )}
+                  </div>
+                </div>
               </div>
-            )}
-            {booking.additionalInfo && (
-              <div className="mt-4">
-                <h3 className="mb-2 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                  Additional Information
-                </h3>
-                <p className="text-sm whitespace-pre-wrap">
-                  {booking.additionalInfo}
-                </p>
-              </div>
-            )}
+            </div>
           </div>
         </div>
 
-        {/* Right Column - Status & Notes */}
-        <div className="lg:col-span-1 space-y-6">
-          <div className="p-6 border rounded-lg shadow-sm bg-zinc-50 dark:bg-zinc-900 dark:border-zinc-800">
-            <h2 className="mb-4 text-xl font-semibold">Status & Notes</h2>
-            <div className="mb-4">
-              <label
-                htmlFor="status"
-                className="block mb-1 text-sm font-medium text-zinc-700 dark:text-zinc-300"
-              >
-                Booking Status
-              </label>
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Booking Status */}
+          <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+            <div className="px-6 py-4 border-b">
+              <h2 className="text-lg font-medium">Status</h2>
+            </div>
+            <div className="p-6">
               {editMode ? (
-                <select
-                  id="status"
-                  name="status"
-                  value={editedData.status}
-                  onChange={handleStatusChange}
-                  className="w-full p-2 text-sm border rounded-md bg-white dark:bg-zinc-800/50 border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-colors appearance-none"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23a1a1aa' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                    backgroundPosition: "right 0.5rem center",
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "1.5em 1.5em",
-                  }}
-                >
-                  <option
-                    value="scheduled"
-                    className="bg-zinc-100 dark:bg-zinc-900"
+                <div className="mb-4">
+                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                    Update Status
+                  </label>
+                  <select
+                    value={editedData.status}
+                    onChange={handleStatusChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                   >
-                    Scheduled
-                  </option>
-                  <option
-                    value="completed"
-                    className="bg-zinc-100 dark:bg-zinc-900"
-                  >
-                    Completed
-                  </option>
-                  <option
-                    value="cancelled"
-                    className="bg-zinc-100 dark:bg-zinc-900"
-                  >
-                    Cancelled
-                  </option>
-                  <option
-                    value="rescheduled"
-                    className="bg-zinc-100 dark:bg-zinc-900"
-                  >
-                    Rescheduled
-                  </option>
-                </select>
+                    <option value="scheduled">Scheduled</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                    <option value="rescheduled">Rescheduled</option>
+                  </select>
+                </div>
               ) : (
-                <StatusBadge status={booking.status} />
+                <div className="flex items-center mb-4">
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium mr-2
+                      ${
+                        booking.status === "scheduled"
+                          ? "bg-blue-100 text-blue-800"
+                          : ""
+                      }
+                      ${
+                        booking.status === "completed"
+                          ? "bg-green-100 text-green-800"
+                          : ""
+                      }
+                      ${
+                        booking.status === "cancelled"
+                          ? "bg-red-100 text-red-800"
+                          : ""
+                      }
+                      ${
+                        booking.status === "rescheduled"
+                          ? "bg-amber-100 text-amber-800"
+                          : ""
+                      }
+                    `}
+                  >
+                    {booking.status
+                      ? booking.status.charAt(0).toUpperCase() +
+                        booking.status.slice(1)
+                      : "Unknown"}
+                  </span>
+                  <span className="text-gray-500">
+                    {booking.status === "scheduled" && "Waiting for the call"}
+                    {booking.status === "completed" &&
+                      "Call has been completed"}
+                    {booking.status === "cancelled" &&
+                      "Client cancelled the call"}
+                    {booking.status === "rescheduled" &&
+                      "Call has been rescheduled"}
+                  </span>
+                </div>
+              )}
+
+              {!isNewBooking && (
+                <div className="mb-4">
+                  <h3 className="mb-2 font-medium text-gray-700">Created</h3>
+                  <p className="text-gray-600">
+                    {booking.createdAt
+                      ? format(
+                          new Date(booking.createdAt),
+                          "MMMM d, yyyy 'at' h:mm a"
+                        )
+                      : "Unknown"}
+                  </p>
+                </div>
+              )}
+
+              {editMode ? (
+                <div className="mb-4">
+                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                    Meeting Link
+                  </label>
+                  <input
+                    type="text"
+                    value={editedData.meetingLink || ""}
+                    onChange={(e) =>
+                      setEditedData({
+                        ...editedData,
+                        meetingLink: e.target.value,
+                      })
+                    }
+                    placeholder="Add meeting link here"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+              ) : (
+                booking.meetingLink && (
+                  <div className="mb-4">
+                    <h3 className="mb-2 font-medium text-gray-700">
+                      Meeting Link
+                    </h3>
+                    <a
+                      href={booking.meetingLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center text-primary hover:underline"
+                    >
+                      <LinkIcon size={16} className="mr-1" />
+                      Open Link
+                    </a>
+                  </div>
+                )
               )}
             </div>
+          </div>
 
-            <div className="mb-4">
-              <label
-                htmlFor="notes"
-                className="block mb-1 text-sm font-medium text-zinc-700 dark:text-zinc-300"
-              >
-                Admin Notes
-              </label>
+          {/* Notes */}
+          <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+            <div className="px-6 py-4 border-b">
+              <h2 className="text-lg font-medium">Notes</h2>
+            </div>
+            <div className="p-6">
               {editMode ? (
                 <textarea
-                  id="notes"
-                  name="notes"
-                  rows={4}
-                  value={editedData.notes}
+                  value={editedData.notes || ""}
                   onChange={(e) =>
                     setEditedData({ ...editedData, notes: e.target.value })
                   }
-                  className="w-full p-2 text-sm border rounded-md bg-white dark:bg-zinc-800/50 border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-colors"
-                  placeholder="Add internal notes here..."
-                />
+                  rows="5"
+                  placeholder="Add your notes about this booking..."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                ></textarea>
+              ) : booking.notes ? (
+                <p className="text-gray-600">{booking.notes}</p>
               ) : (
-                <p className="text-sm whitespace-pre-wrap">
-                  {booking.notes || "No notes added."}
-                </p>
+                <p className="italic text-gray-400">No notes added yet.</p>
               )}
             </div>
-
-            {editMode && (
-              <div>
-                <label
-                  htmlFor="meetingLink"
-                  className="block mb-1 text-sm font-medium text-zinc-700 dark:text-zinc-300"
-                >
-                  Meeting Link (Optional)
-                </label>
-                <input
-                  type="url"
-                  id="meetingLink"
-                  name="meetingLink"
-                  value={editedData.meetingLink}
-                  onChange={(e) =>
-                    setEditedData({
-                      ...editedData,
-                      meetingLink: e.target.value,
-                    })
-                  }
-                  className="w-full p-2 text-sm border rounded-md bg-white dark:bg-zinc-800/50 border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-colors"
-                  placeholder="e.g., https://meet.google.com/xyz-abc-def"
-                />
-              </div>
-            )}
           </div>
+
+          {/* Actions */}
+          {!isNewBooking && (
+            <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+              <div className="px-6 py-4 border-b">
+                <h2 className="text-lg font-medium">Quick Actions</h2>
+              </div>
+              <div className="p-6 space-y-3">
+                <button
+                  className="flex items-center justify-center w-full px-4 py-2 text-white rounded-md bg-primary hover:bg-primary/90"
+                  onClick={() =>
+                    window.open(`mailto:${booking.email}`, "_blank")
+                  }
+                >
+                  <Mail size={18} className="mr-2" />
+                  Email Client
+                </button>
+
+                {booking.phone && (
+                  <button
+                    className="flex items-center justify-center w-full px-4 py-2 border rounded-md border-primary text-primary hover:bg-primary/10"
+                    onClick={() =>
+                      window.open(`tel:${booking.phone}`, "_blank")
+                    }
+                  >
+                    <Phone size={18} className="mr-2" />
+                    Call Client
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -437,62 +661,10 @@ const BookingDetails = () => {
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handleDelete}
-        itemName={booking.name || "this booking"}
+        title="Delete Booking"
+        message={`Are you sure you want to delete this booking from ${booking.name}? This action cannot be undone.`}
       />
     </div>
-  );
-};
-
-// Helper component for Detail Items
-const DetailItem = ({ icon: Icon, label, value, isLink = false }) => (
-  <div>
-    <dt className="flex items-center mb-1 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-      <Icon size={14} className="mr-1.5" />
-      <span>{label}</span>
-    </dt>
-    <dd className="text-sm">
-      {isLink ? (
-        <a
-          href={value}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary-600 dark:text-primary-400 hover:underline"
-        >
-          {value}
-        </a>
-      ) : (
-        value
-      )}
-    </dd>
-  </div>
-);
-
-// Helper component for Status Badge
-const StatusBadge = ({ status }) => {
-  const colors = {
-    scheduled:
-      "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-300/30",
-    completed:
-      "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border border-green-300/30",
-    cancelled:
-      "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 border border-red-300/30",
-    rescheduled:
-      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 border border-yellow-300/30",
-  };
-
-  const statusText = status
-    ? status.charAt(0).toUpperCase() + status.slice(1)
-    : "Unknown";
-
-  return (
-    <span
-      className={`px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full ${
-        colors[status] ||
-        "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-300 border border-zinc-300/30"
-      }`}
-    >
-      {statusText}
-    </span>
   );
 };
 
