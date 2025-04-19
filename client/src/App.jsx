@@ -171,6 +171,29 @@ function App() {
     },
   };
 
+  // Layout component for public routes (with Navbar and Footer)
+  const PublicLayout = () => (
+    <>
+      <Navbar />
+      <Outlet />
+      <Footer />
+      {isBrowser && (
+        <motion.button
+          onClick={scrollToTop}
+          className="fixed z-50 flex items-center justify-center w-12 h-12 text-white transition-all duration-300 rounded-full shadow-lg bottom-6 right-6 bg-primary-500 dark:bg-primary-600 hover:shadow-glow-primary"
+          whileHover={{ y: -5, scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 }}
+          aria-label="Scroll to top"
+        >
+          <ArrowUp size={20} />
+        </motion.button>
+      )}
+    </>
+  );
+
   const HomePage = () => (
     <>
       <SeoHead
@@ -190,8 +213,6 @@ function App() {
 
   return (
     <div className="min-h-screen text-gray-900 bg-surface-50 dark:bg-dark-200 dark:text-gray-100">
-      <Navbar />
-
       {/* SEO Backlink Helpers */}
       <BacklinkHelper
         includeAttributes={true}
@@ -265,49 +286,7 @@ function App() {
       {/* Wrap Routes in AnimatePresence with proper locationKey for page transitions */}
       <AnimatePresence mode="wait" initial={false}>
         <Routes key={location.pathname} location={location}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/get-started" element={<GetStarted />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route
-            path="/services/hotel-management-system"
-            element={<HotelManagementSystem />}
-          />
-          <Route
-            path="/services/school-management-system"
-            element={<SchoolManagementSystem />}
-          />
-          <Route
-            path="/services/hospital-management-system"
-            element={<HospitalManagementSystem />}
-          />
-          <Route
-            path="/services/ecommerce-management-system"
-            element={<EcommerceManagementSystem />}
-          />
-          <Route path="/services/erp-system" element={<ERPSystem />} />
-          <Route path="/services/ui-ux-design" element={<UIUXDesign />} />
-          <Route
-            path="/services/web-development"
-            element={<WebDevelopment />}
-          />
-          <Route
-            path="/services/mobile-app-development"
-            element={<MobileAppDevelopment />}
-          />
-          <Route
-            path="/services/custom-software-development"
-            element={<CustomSoftwareDevelopment />}
-          />
-          <Route
-            path="/services/database-solutions"
-            element={<DatabaseSolutions />}
-          />
-          <Route
-            path="/services/payroll-management-system"
-            element={<PayrollManagementSystem />}
-          />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-of-service" element={<TermsOfService />} />
+          {/* Admin routes without Navbar and Footer */}
           <Route path="/admin" element={<AdminDashboard />}>
             <Route index element={<AdminHome />} />
             <Route path="bookings" element={<BookingsList />} />
@@ -326,27 +305,57 @@ function App() {
             <Route path="settings" element={<AdminSettings />} />
             <Route path="profile" element={<AdminProfile />} />
           </Route>
-          {/* Catch-all route for 404 page */}
-          <Route path="*" element={<NotFound />} />
+
+          {/* Public routes with Navbar and Footer */}
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/get-started" element={<GetStarted />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route
+              path="/services/hotel-management-system"
+              element={<HotelManagementSystem />}
+            />
+            <Route
+              path="/services/school-management-system"
+              element={<SchoolManagementSystem />}
+            />
+            <Route
+              path="/services/hospital-management-system"
+              element={<HospitalManagementSystem />}
+            />
+            <Route
+              path="/services/ecommerce-management-system"
+              element={<EcommerceManagementSystem />}
+            />
+            <Route path="/services/erp-system" element={<ERPSystem />} />
+            <Route path="/services/ui-ux-design" element={<UIUXDesign />} />
+            <Route
+              path="/services/web-development"
+              element={<WebDevelopment />}
+            />
+            <Route
+              path="/services/mobile-app-development"
+              element={<MobileAppDevelopment />}
+            />
+            <Route
+              path="/services/custom-software-development"
+              element={<CustomSoftwareDevelopment />}
+            />
+            <Route
+              path="/services/database-solutions"
+              element={<DatabaseSolutions />}
+            />
+            <Route
+              path="/services/payroll-management-system"
+              element={<PayrollManagementSystem />}
+            />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            {/* Catch-all route for 404 page */}
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Routes>
       </AnimatePresence>
-
-      <Footer />
-
-      {isBrowser && (
-        <motion.button
-          onClick={scrollToTop}
-          className="fixed z-50 flex items-center justify-center w-12 h-12 text-white transition-all duration-300 rounded-full shadow-lg bottom-6 right-6 bg-primary-500 dark:bg-primary-600 hover:shadow-glow-primary"
-          whileHover={{ y: -5, scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-          aria-label="Scroll to top"
-        >
-          <ArrowUp size={20} />
-        </motion.button>
-      )}
     </div>
   );
 }
