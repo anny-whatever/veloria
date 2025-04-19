@@ -569,43 +569,6 @@ const ColorPaletteModal = ({
         }
       >
         <div className="space-y-4" onClick={(e) => e.stopPropagation()}>
-          {/* Selected Colors Preview */}
-          {project?.designChoices?.colorPalette &&
-            project.designChoices.colorPalette.length > 0 && (
-              <div className="mb-4">
-                <h5 className="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase dark:text-gray-400">
-                  Selected Colors
-                </h5>
-                <div className="flex flex-wrap gap-2">
-                  {project.designChoices.colorPalette.map((colorObj, index) => (
-                    <div
-                      key={`selected-${colorObj.color}-${index}`}
-                      className="flex items-center px-2 py-1 space-x-2 border border-gray-200 rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 group"
-                    >
-                      <div
-                        className="w-4 h-4 border border-gray-300 rounded-full dark:border-gray-500"
-                        style={{ backgroundColor: colorObj.color }}
-                      ></div>
-                      <span className="text-xs text-gray-700 dark:text-gray-300">
-                        {colorObj.name || colorObj.color}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteColor(index);
-                        }}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400"
-                        aria-label="Remove color"
-                      >
-                        <X size={12} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
           {/* Tabs for Picker / Presets */}
           <div className="flex p-1 mb-3 space-x-1 bg-gray-100 rounded-lg dark:bg-gray-700">
             <button
