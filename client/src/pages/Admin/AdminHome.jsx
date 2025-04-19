@@ -82,7 +82,7 @@ const AdminHome = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="w-12 h-12 border-4 border-gray-300 dark:border-gray-600 rounded-full border-t-primary animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-zinc-300 dark:border-zinc-600 rounded-full border-t-primary-500 animate-spin"></div>
       </div>
     );
   }
@@ -108,10 +108,10 @@ const AdminHome = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
           Admin Dashboard
         </h1>
-        <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+        <div className="flex items-center text-sm text-zinc-500 dark:text-zinc-400">
           <Clock size={16} className="mr-1" />
           <span>{new Date().toLocaleDateString()}</span>
         </div>
@@ -161,14 +161,14 @@ const AdminHome = () => {
 
       {/* Recent Activity Section */}
       <div className="grid grid-cols-1 gap-6 mt-8 lg:grid-cols-2">
-        <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-          <h2 className="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-200">
+        <div className="p-6 bg-zinc-50 dark:bg-zinc-900 rounded-lg shadow-sm border dark:border-zinc-800">
+          <h2 className="mb-4 text-xl font-semibold text-zinc-800 dark:text-zinc-200">
             Recent Bookings
           </h2>
           {recentBookings.length > 0 ? (
             <RecentSubmissionsList items={recentBookings} type="booking" />
           ) : (
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-zinc-600 dark:text-zinc-400">
               No recent bookings found.
             </p>
           )}
@@ -181,14 +181,14 @@ const AdminHome = () => {
           </Link>
         </div>
 
-        <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-          <h2 className="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-200">
+        <div className="p-6 bg-zinc-50 dark:bg-zinc-900 rounded-lg shadow-sm border dark:border-zinc-800">
+          <h2 className="mb-4 text-xl font-semibold text-zinc-800 dark:text-zinc-200">
             Recent Contact Messages
           </h2>
           {recentContacts.length > 0 ? (
             <RecentSubmissionsList items={recentContacts} type="contact" />
           ) : (
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-zinc-600 dark:text-zinc-400">
               No recent contact messages found.
             </p>
           )}

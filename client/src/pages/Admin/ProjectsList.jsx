@@ -473,17 +473,19 @@ const ProjectDetails = () => {
 
       {/* Project Metrics */}
       <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-4">
-        <div className="p-4 bg-white rounded-lg shadow-sm">
-          <div className="text-sm font-medium text-gray-500">Project Value</div>
+        <div className="p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-lg shadow-sm">
+          <div className="text-sm font-medium text-gray-500 dark:text-zinc-400">
+            Project Value
+          </div>
           <div className="flex items-baseline mt-1">
-            <span className="text-2xl font-bold text-gray-900">
+            <span className="text-2xl font-bold text-gray-900 dark:text-zinc-100">
               ${metrics.totalValue.toLocaleString()}
             </span>
-            <span className="ml-2 text-sm text-gray-500">
+            <span className="ml-2 text-sm text-gray-500 dark:text-zinc-400">
               ({metrics.paymentProgress}% received)
             </span>
           </div>
-          <div className="w-full h-2 mt-2 bg-gray-200 rounded-full">
+          <div className="w-full h-2 mt-2 bg-gray-200 dark:bg-zinc-700 rounded-full">
             <div
               className="h-2 bg-green-500 rounded-full"
               style={{ width: `${metrics.paymentProgress}%` }}
@@ -491,20 +493,20 @@ const ProjectDetails = () => {
           </div>
         </div>
 
-        <div className="p-4 bg-white rounded-lg shadow-sm">
-          <div className="text-sm font-medium text-gray-500">
+        <div className="p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-lg shadow-sm">
+          <div className="text-sm font-medium text-gray-500 dark:text-zinc-400">
             Project Progress
           </div>
           <div className="flex items-baseline mt-1">
-            <span className="text-2xl font-bold text-gray-900">
+            <span className="text-2xl font-bold text-gray-900 dark:text-zinc-100">
               {metrics.milestonesProgress}%
             </span>
-            <span className="ml-2 text-sm text-gray-500">
+            <span className="ml-2 text-sm text-gray-500 dark:text-zinc-400">
               ({metrics.completedMilestones}/{metrics.totalMilestones}{" "}
               milestones)
             </span>
           </div>
-          <div className="w-full h-2 mt-2 bg-gray-200 rounded-full">
+          <div className="w-full h-2 mt-2 bg-gray-200 dark:bg-zinc-700 rounded-full">
             <div
               className="h-2 bg-blue-500 rounded-full"
               style={{ width: `${metrics.milestonesProgress}%` }}
@@ -512,8 +514,10 @@ const ProjectDetails = () => {
           </div>
         </div>
 
-        <div className="p-4 bg-white rounded-lg shadow-sm">
-          <div className="text-sm font-medium text-gray-500">Current Stage</div>
+        <div className="p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-lg shadow-sm">
+          <div className="text-sm font-medium text-gray-500 dark:text-zinc-400">
+            Current Stage
+          </div>
           <div className="flex items-center mt-1">
             <span
               className={`p-1 rounded-full mr-2 ${currentStage.color.replace(
@@ -523,7 +527,7 @@ const ProjectDetails = () => {
             >
               {currentStage.icon}
             </span>
-            <span className="text-xl font-bold text-gray-900">
+            <span className="text-xl font-bold text-gray-900 dark:text-zinc-100">
               {currentStage.label}
             </span>
           </div>
@@ -534,8 +538,8 @@ const ProjectDetails = () => {
           </div>
         </div>
 
-        <div className="p-4 bg-white rounded-lg shadow-sm">
-          <div className="text-sm font-medium text-gray-500">
+        <div className="p-4 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-lg shadow-sm">
+          <div className="text-sm font-medium text-gray-500 dark:text-zinc-400">
             Attention Needed
           </div>
           <div className="mt-2">

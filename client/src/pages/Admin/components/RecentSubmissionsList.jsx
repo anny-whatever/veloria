@@ -6,7 +6,7 @@ import { Calendar, MessageCircle, FileText, Clock } from "lucide-react";
 const RecentSubmissionsList = ({ data = [], type, emptyMessage }) => {
   if (!data || data.length === 0) {
     return (
-      <div className="py-6 text-center text-gray-500">
+      <div className="py-6 text-center text-gray-500 dark:text-zinc-400">
         {emptyMessage || "No data available"}
       </div>
     );
@@ -68,8 +68,8 @@ const RecentSubmissionsList = ({ data = [], type, emptyMessage }) => {
         default:
           bgColor = "bg-gray-100";
           textColor = "text-gray-800";
-          darkBgColor = "dark:bg-gray-700";
-          darkTextColor = "dark:text-gray-300";
+          darkBgColor = "dark:bg-zinc-800";
+          darkTextColor = "dark:text-zinc-300";
       }
     } else if (type === "contact") {
       status = item.status || "new";
@@ -96,14 +96,14 @@ const RecentSubmissionsList = ({ data = [], type, emptyMessage }) => {
         case "archived":
           bgColor = "bg-gray-100";
           textColor = "text-gray-800";
-          darkBgColor = "dark:bg-gray-700";
-          darkTextColor = "dark:text-gray-300";
+          darkBgColor = "dark:bg-zinc-800";
+          darkTextColor = "dark:text-zinc-300";
           break;
         default:
           bgColor = "bg-gray-100";
           textColor = "text-gray-800";
-          darkBgColor = "dark:bg-gray-700";
-          darkTextColor = "dark:text-gray-300";
+          darkBgColor = "dark:bg-zinc-800";
+          darkTextColor = "dark:text-zinc-300";
       }
     } else if (type === "project") {
       status = item.status || "new";
@@ -148,8 +148,8 @@ const RecentSubmissionsList = ({ data = [], type, emptyMessage }) => {
         default:
           bgColor = "bg-gray-100";
           textColor = "text-gray-800";
-          darkBgColor = "dark:bg-gray-700";
-          darkTextColor = "dark:text-gray-300";
+          darkBgColor = "dark:bg-zinc-800";
+          darkTextColor = "dark:text-zinc-300";
       }
     }
 
@@ -201,7 +201,7 @@ const RecentSubmissionsList = ({ data = [], type, emptyMessage }) => {
   };
 
   return (
-    <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+    <ul className="divide-y divide-gray-200 dark:divide-zinc-700/50">
       {data.map((item) => (
         <li key={item._id} className="py-3">
           <Link to={getDetailLink(item, type)} className="flex group">
@@ -209,20 +209,20 @@ const RecentSubmissionsList = ({ data = [], type, emptyMessage }) => {
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-primary dark:group-hover:text-primary-400">
+                <p className="text-sm font-medium text-gray-900 dark:text-zinc-100 truncate group-hover:text-primary dark:group-hover:text-primary-400">
                   {getTitle(item, type)}
                 </p>
                 {getStatusBadge(item, type)}
               </div>
 
               <div className="mt-1">
-                <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                <p className="text-sm text-gray-500 dark:text-zinc-400 truncate">
                   {getSubtitle(item, type)}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center ml-4 text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex items-center ml-4 text-xs text-gray-500 dark:text-zinc-400">
               <Clock size={14} className="mr-1" />
               {getFormattedTime(item.createdAt)}
             </div>

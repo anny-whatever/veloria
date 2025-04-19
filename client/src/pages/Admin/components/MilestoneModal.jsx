@@ -95,125 +95,71 @@ const MilestoneModal = ({
     }));
   };
 
-  // Common milestone templates based on project type
+  // Returns milestone templates based on service type
   const getMilestoneTemplates = () => {
-    const baseTemplates = [
-      {
-        name: "Project Kickoff",
-        description:
-          "Initial meeting to discuss project goals and requirements",
-        dueDate: format(new Date(), "yyyy-MM-dd"),
-        status: "pending",
-      },
-      {
-        name: "Design Approval",
-        description: "Client approval of design mockups and wireframes",
-        dueDate: format(addDays(new Date(), 14), "yyyy-MM-dd"),
-        status: "pending",
-      },
-      {
-        name: "Content Collection",
-        description: "Gathering all content, images, and text for the project",
-        dueDate: format(addDays(new Date(), 21), "yyyy-MM-dd"),
-        status: "pending",
-      },
-      {
-        name: "Development Complete",
-        description: "Completion of all development work",
-        dueDate: format(addDays(new Date(), 30), "yyyy-MM-dd"),
-        status: "pending",
-      },
-      {
-        name: "Testing & QA",
-        description: "Testing and quality assurance of the project",
-        dueDate: format(addDays(new Date(), 35), "yyyy-MM-dd"),
-        status: "pending",
-      },
-      {
-        name: "Project Launch",
-        description: "Official launch of the project",
-        dueDate: format(addDays(new Date(), 45), "yyyy-MM-dd"),
-        status: "pending",
-      },
-      {
-        name: "Client Training",
-        description: "Training session for client on how to use the system",
-        dueDate: format(addDays(new Date(), 50), "yyyy-MM-dd"),
-        status: "pending",
-      },
-    ];
-
-    // Add service-specific templates based on project type
-    if (project.serviceType === "ecommerce") {
-      baseTemplates.push({
-        name: "Payment Integration",
-        description: "Setup and testing of payment gateways",
-        dueDate: format(addDays(new Date(), 25), "yyyy-MM-dd"),
-        status: "pending",
-      });
-      baseTemplates.push({
-        name: "Product Setup",
-        description: "Adding and configuring products in the store",
-        dueDate: format(addDays(new Date(), 28), "yyyy-MM-dd"),
-        status: "pending",
-      });
+    if (project?.serviceType === "Branding") {
+      return brandingMilestoneTemplates;
+    } else if (project?.serviceType === "Website") {
+      return websiteMilestoneTemplates;
+    } else {
+      return [];
     }
-
-    return baseTemplates;
   };
 
   return (
     <div className="mt-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-medium text-gray-700">Project Milestones</h3>
+        <h3 className="font-medium text-gray-700 dark:text-zinc-300">
+          Project Milestones
+        </h3>
         <button
           type="button" // Explicitly set to button
           onClick={() => setShowMilestoneModal(true)}
-          className="flex items-center px-3 py-1 text-sm bg-white border rounded-md text-accent border-accent hover:bg-accent/10"
+          className="flex items-center px-3 py-1 text-sm bg-white border rounded-md text-accent border-accent hover:bg-accent/10 dark:bg-zinc-800 dark:border-accent/70 dark:hover:bg-accent/20"
         >
           <PlusCircle size={16} className="mr-1" />
           Add Milestone
         </button>
       </div>
 
-      {project.milestones && project.milestones.length > 0 ? (
-        <div className="overflow-hidden bg-white border border-gray-200 rounded-lg">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+      {(project?.milestones || []).length > 0 ? (
+        <div className="overflow-hidden bg-white border border-gray-200 rounded-lg dark:bg-zinc-900 dark:border-zinc-700">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
+            <thead className="bg-gray-50 dark:bg-zinc-800">
               <tr>
-                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-zinc-400">
                   Milestone
                 </th>
-                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-zinc-400">
                   Due Date
                 </th>
-                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-zinc-400">
                   Status
                 </th>
-                <th className="px-4 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase">
+                <th className="px-4 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase dark:text-zinc-400">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
-              {project.milestones.map((milestone, index) => (
+            <tbody className="divide-y divide-gray-200 dark:divide-zinc-700">
+              {(project?.milestones || []).map((milestone, index) => (
                 <tr
                   key={milestone._id || index}
                   className={
                     milestone.status === "completed"
-                      ? "bg-green-50"
+                      ? "bg-green-50 dark:bg-green-900/20"
                       : new Date(milestone.dueDate) < new Date() &&
                         milestone.status !== "completed"
-                      ? "bg-red-50"
-                      : ""
+                      ? "bg-red-50 dark:bg-red-900/20"
+                      : "dark:bg-zinc-900"
                   }
                 >
                   <td className="px-4 py-3">
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-gray-900 dark:text-zinc-100">
                       {milestone.name}
                     </div>
                     {milestone.description && (
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-gray-500 dark:text-zinc-400">
                         {milestone.description}
                       </div>
                     )}
@@ -223,8 +169,8 @@ const MilestoneModal = ({
                       className={`text-sm ${
                         new Date(milestone.dueDate) < new Date() &&
                         milestone.status !== "completed"
-                          ? "text-red-600 font-medium"
-                          : "text-gray-900"
+                          ? "text-red-600 dark:text-red-400 font-medium"
+                          : "text-gray-900 dark:text-zinc-300"
                       }`}
                     >
                       {format(new Date(milestone.dueDate), "MMM d, yyyy")}
@@ -235,22 +181,22 @@ const MilestoneModal = ({
                       className={`px-2 py-1 text-xs font-medium rounded-full 
                       ${
                         milestone.status === "pending"
-                          ? "bg-blue-100 text-blue-800"
+                          ? "bg-blue-100 text-blue-800 dark:bg-zinc-800 dark:text-zinc-300"
                           : ""
                       }
                       ${
                         milestone.status === "in_progress"
-                          ? "bg-yellow-100 text-yellow-800"
+                          ? "bg-yellow-100 text-yellow-800 dark:bg-amber-900/30 dark:text-amber-300"
                           : ""
                       }
                       ${
                         milestone.status === "completed"
-                          ? "bg-green-100 text-green-800"
+                          ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
                           : ""
                       }
                       ${
                         milestone.status === "overdue"
-                          ? "bg-red-100 text-red-800"
+                          ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
                           : ""
                       }
                     `}
@@ -273,7 +219,7 @@ const MilestoneModal = ({
                               "completed"
                             )
                           }
-                          className="p-1 text-green-600 rounded hover:bg-green-50"
+                          className="p-1 text-green-600 rounded hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20"
                           title="Mark as Completed"
                         >
                           <svg
@@ -295,7 +241,7 @@ const MilestoneModal = ({
                       <button
                         type="button"
                         onClick={() => handleDeleteMilestone(index)}
-                        className="p-1 text-red-600 rounded hover:bg-red-50"
+                        className="p-1 text-red-600 rounded hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
                         aria-label="Delete milestone"
                       >
                         <X size={16} />
@@ -420,7 +366,7 @@ const MilestoneModal = ({
               Quick Add Templates:
             </p>
             <div className="grid grid-cols-1 gap-2 overflow-y-auto max-h-48">
-              {getMilestoneTemplates().map((template, index) => (
+              {getMilestoneTemplates()?.map((template, index) => (
                 <button
                   key={index}
                   type="button"

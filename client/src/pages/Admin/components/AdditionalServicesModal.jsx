@@ -98,54 +98,61 @@ const AdditionalServicesModal = ({ project, setProject }) => {
   return (
     <div className="mt-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-medium text-gray-700">Additional Services</h3>
+        <h3 className="font-medium text-gray-700 dark:text-gray-300">
+          Additional Services
+        </h3>
         <button
-          type="button" // Explicitly set type to prevent form submission
+          type="button"
           onClick={() => setShowServiceModal(true)}
-          className="flex items-center px-3 py-1 text-sm bg-white border rounded-md text-accent border-accent hover:bg-accent/10"
+          className="flex items-center px-3 py-1 text-sm bg-white border rounded-md text-accent border-accent hover:bg-accent/10 dark:bg-gray-700 dark:border-accent dark:text-accent dark:hover:bg-accent/20"
         >
           <PlusCircle size={16} className="mr-1" />
           Add Service
         </button>
       </div>
 
-      {project.additionalServices && project.additionalServices.length > 0 ? (
-        <div className="overflow-hidden bg-white border border-gray-200 rounded-lg">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+      {/* Safely check for project and additionalServices before rendering */}
+      {project?.additionalServices && project.additionalServices.length > 0 ? (
+        <div className="overflow-hidden bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
-                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-400">
                   Service
                 </th>
-                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-400">
                   Provider
                 </th>
-                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-400">
                   Cost
                 </th>
-                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                <th className="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-400">
                   Status
                 </th>
-                <th className="px-4 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase">
+                <th className="px-4 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase dark:text-gray-400">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
-              {project.additionalServices.map((service, index) => (
-                <tr key={index}>
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              {/* Safely map over additionalServices */}
+              {project?.additionalServices?.map((service, index) => (
+                <tr
+                  key={index}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700/30"
+                >
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
                       {service.name}
                     </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
+                    <div className="text-sm text-gray-900 dark:text-gray-400">
                       {service.provider || "N/A"}
                     </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <div className="text-sm text-green-600">
+                    <div className="text-sm text-green-600 dark:text-green-400">
                       {service.cost
                         ? `$${service.cost.toLocaleString()}`
                         : "N/A"}
@@ -156,22 +163,22 @@ const AdditionalServicesModal = ({ project, setProject }) => {
                       className={`px-2 py-1 text-xs font-medium rounded-full 
                       ${
                         service.status === "pending"
-                          ? "bg-blue-100 text-blue-800"
+                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300"
                           : ""
                       }
                       ${
                         service.status === "active"
-                          ? "bg-green-100 text-green-800"
+                          ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300"
                           : ""
                       }
                       ${
                         service.status === "inactive"
-                          ? "bg-gray-100 text-gray-800"
+                          ? "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200"
                           : ""
                       }
                       ${
                         service.status === "cancelled"
-                          ? "bg-red-100 text-red-800"
+                          ? "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300"
                           : ""
                       }
                     `}
@@ -184,7 +191,7 @@ const AdditionalServicesModal = ({ project, setProject }) => {
                     <button
                       type="button"
                       onClick={() => handleDeleteService(index)}
-                      className="p-1 text-red-600 rounded hover:bg-red-50"
+                      className="p-1 text-red-600 rounded hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/30"
                       aria-label="Delete service"
                     >
                       <Trash2 size={16} />
@@ -196,7 +203,7 @@ const AdditionalServicesModal = ({ project, setProject }) => {
           </table>
         </div>
       ) : (
-        <div className="p-4 text-center text-gray-500 border border-gray-200 border-dashed rounded-lg">
+        <div className="p-4 text-center text-gray-500 border border-gray-200 border-dashed rounded-lg dark:border-gray-700 dark:text-gray-400">
           No additional services added yet
         </div>
       )}
@@ -220,10 +227,34 @@ const AdditionalServicesModal = ({ project, setProject }) => {
         icon={<Package size={20} className="text-accent" />}
       >
         <div className="space-y-4">
+          <div className="mb-4">
+            <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              Quick Add:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {serviceTemplates.map((template) => (
+                <button
+                  key={template.name}
+                  type="button"
+                  onClick={() =>
+                    setServiceInput({
+                      ...serviceInput,
+                      name: template.name,
+                      provider: template.provider || "",
+                    })
+                  }
+                  className="px-3 py-1 text-xs border rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
+                >
+                  {template.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div>
             <label
               htmlFor="serviceName"
-              className="block mb-2 text-sm font-medium text-gray-700"
+              className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Service Name*
             </label>
@@ -235,86 +266,70 @@ const AdditionalServicesModal = ({ project, setProject }) => {
               placeholder="e.g., SEO, Maintenance, Analytics"
               value={serviceInput.name}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
             />
             {serviceError && (
-              <p className="mt-1 text-sm text-red-600">{serviceError}</p>
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                {serviceError}
+              </p>
             )}
           </div>
 
           <div>
             <label
               htmlFor="serviceProvider"
-              className="block mb-2 text-sm font-medium text-gray-700"
+              className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              Provider
+              Provider (Optional)
             </label>
             <input
               id="serviceProvider"
               name="provider"
               type="text"
-              placeholder="e.g., Google, Cloudflare"
+              placeholder="e.g., Google, Self-managed"
               value={serviceInput.provider}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
             />
           </div>
 
-          <div>
-            <label
-              htmlFor="serviceCost"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Cost ($)
-            </label>
-            <input
-              id="serviceCost"
-              name="cost"
-              type="number"
-              min="0"
-              step="0.01"
-              placeholder="0.00"
-              value={serviceInput.cost}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="serviceStatus"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Status
-            </label>
-            <select
-              id="serviceStatus"
-              name="status"
-              value={serviceInput.status}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
-            >
-              <option value="pending">Pending</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-          </div>
-
-          {/* Common services templates */}
-          <div className="pt-4 mt-2 border-t border-gray-200">
-            <p className="mb-2 text-sm font-medium text-gray-700">Quick Add:</p>
-            <div className="grid grid-cols-2 gap-2">
-              {serviceTemplates.map((template, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => setServiceInput(template)}
-                  className="p-2 text-xs text-left text-gray-700 border border-gray-200 rounded hover:bg-gray-50"
-                >
-                  {template.name}
-                </button>
-              ))}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <label
+                htmlFor="serviceCost"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
+                Cost ($)
+              </label>
+              <input
+                id="serviceCost"
+                name="cost"
+                type="number"
+                placeholder="0.00"
+                value={serviceInput.cost}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="serviceStatus"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
+                Status
+              </label>
+              <select
+                id="serviceStatus"
+                name="status"
+                value={serviceInput.status}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              >
+                <option value="pending">Pending</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
             </div>
           </div>
         </div>

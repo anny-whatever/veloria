@@ -17,8 +17,15 @@ import InputModal from "./InputModal";
  *
  * @param {Object} project - The project object
  * @param {Function} handleNestedChange - Function to update nested project properties
+ * @param {string} buttonClassName - Optional class name for the button
+ * @param {number} iconSize - Optional icon size for the button
  */
-const FontSelectionModal = ({ project, handleNestedChange }) => {
+const FontSelectionModal = ({
+  project,
+  handleNestedChange,
+  buttonClassName = "inline-flex items-center px-4 py-2 text-sm font-medium text-white rounded-md bg-accent hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent",
+  iconSize = 16,
+}) => {
   const [showFontModal, setShowFontModal] = useState(false);
   const [fontInput, setFontInput] = useState("");
   const [fontCategory, setFontCategory] = useState("heading");
@@ -40,26 +47,32 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
   // Google Fonts API Key - Consider moving this to environment variables
   const GOOGLE_FONTS_API_KEY = import.meta.env.VITE_FONT_API_KEY;
 
-  // Make sure fonts structure exists with categories
+  // Make sure fonts structure exists
   useEffect(() => {
-    if (!project.designChoices.fonts) {
-      handleNestedChange("designChoices", "fonts", []);
+    if (!project?.designChoices?.fonts) {
+      if (typeof handleNestedChange === "function") {
+        handleNestedChange("designChoices", "fonts", []);
+      }
     }
 
     // Migrate old format if needed (array of strings to array of objects)
     if (
-      Array.isArray(project.designChoices.fonts) &&
-      project.designChoices.fonts.length > 0 &&
-      typeof project.designChoices.fonts[0] === "string"
+      Array.isArray(project?.designChoices?.fonts) &&
+      project?.designChoices?.fonts.length > 0 &&
+      typeof project?.designChoices?.fonts[0] === "string"
     ) {
-      const migratedFonts = project.designChoices.fonts.map((font) => ({
+      const migratedFonts = project?.designChoices?.fonts.map((font) => ({
         family: font,
-        category: "heading",
-        variants: ["regular"],
+        category: "body",
+        fallback: "",
+        weights: [],
+        isGoogle: true,
       }));
-      handleNestedChange("designChoices", "fonts", migratedFonts);
+      if (typeof handleNestedChange === "function") {
+        handleNestedChange("designChoices", "fonts", migratedFonts);
+      }
     }
-  }, [project.designChoices.fonts, handleNestedChange]);
+  }, [project?.designChoices?.fonts, handleNestedChange]);
 
   // Fetch Google Fonts
   const fetchGoogleFonts = async () => {
@@ -199,9 +212,9 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
         };
       }
 
-      // Add font to list
+      // Add font to project
       handleNestedChange("designChoices", "fonts", [
-        ...(project.designChoices.fonts || []),
+        ...(project?.designChoices?.fonts || []),
         newFont,
       ]);
     } else if (activeTab === "custom") {
@@ -223,9 +236,9 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
         newFont.url = fontUrl.trim();
       }
 
-      // Add font to list
+      // Add font to project
       handleNestedChange("designChoices", "fonts", [
-        ...(project.designChoices.fonts || []),
+        ...(project?.designChoices?.fonts || []),
         newFont,
       ]);
     }
@@ -291,12 +304,15 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
       other: [],
     };
 
-    if (project.designChoices.fonts) {
-      project.designChoices.fonts.forEach((fontObj, index) => {
+    // Use optional chaining and default to empty array before accessing fonts
+    const fonts = project?.designChoices?.fonts || [];
+
+    if (fonts.length > 0) {
+      fonts.forEach((fontObj, index) => {
         if (typeof fontObj === "string") {
           // Handle old format (just strings)
-          grouped.heading.push({ family: fontObj, index });
-        } else if (fontObj.category && grouped[fontObj.category]) {
+          grouped.body.push({ family: fontObj, index });
+        } else if (fontObj?.category && grouped[fontObj.category]) {
           grouped[fontObj.category].push({ ...fontObj, index });
         } else {
           grouped.other.push({ ...fontObj, index });
@@ -309,7 +325,7 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
 
   // Delete a font from the list
   const handleDeleteFont = (index) => {
-    const updatedFonts = [...project.designChoices.fonts];
+    const updatedFonts = [...(project?.designChoices?.fonts || [])];
     updatedFonts.splice(index, 1);
     handleNestedChange("designChoices", "fonts", updatedFonts);
   };
@@ -326,11 +342,24 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
     return "";
   };
 
+  // Load existing font choices or set defaults
+  useEffect(() => {
+    if (project?.designChoices?.fonts) {
+      setSelectedFont(project.designChoices.fonts.heading || commonFonts[0]);
+    } else {
+      setSelectedFont(commonFonts[0]);
+    }
+  }, [project]);
+
   return (
     <div>
-      <label className="block mb-2 text-sm font-medium text-gray-700 ">
-        Fonts
-      </label>
+      <button
+        type="button"
+        onClick={() => setShowFontModal(true)}
+        className={buttonClassName}
+      >
+        <FileType size={iconSize} className="mr-1.5" /> Manage Fonts
+      </button>
 
       {/* Display fonts by category */}
       <div className="mb-4 space-y-4">
@@ -339,17 +368,18 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
 
           return (
             <div key={category} className="space-y-2">
-              <h4 className="text-sm font-medium text-gray-500 capitalize">
+              <h5 className="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase dark:text-gray-400">
                 {category}
-              </h4>
+              </h5>
               <div className="flex flex-wrap gap-2">
                 {fonts.map(({ family, index, source }) => (
                   <div
                     key={index}
-                    className="flex items-center p-1 px-2 bg-white border border-gray-300 rounded-md group hover:border-accent"
+                    className="relative flex items-center p-2 px-2 space-x-2 border border-gray-200 rounded-md group dark:border-gray-600"
+                    style={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}
                   >
                     <span
-                      className="text-sm font-medium"
+                      className="text-sm font-medium text-gray-800 dark:text-gray-200"
                       style={{
                         fontFamily:
                           typeof family === "string"
@@ -361,33 +391,35 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
                         ? family
                         : family.family || family}
                     </span>
-                    <span className="ml-1 text-xs text-gray-500">
-                      {getFontSourceLabel(fonts[index])}
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {getFontSourceLabel({ family, source })}
                     </span>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteFont(index)}
-                      className="p-1 ml-2 text-red-600 transition-opacity rounded-md opacity-0 group-hover:opacity-100 hover:bg-red-50"
-                    >
-                      <X size={14} />
-                    </button>
+
+                    {/* Action Buttons - Match Color Palette style */}
+                    <div className="absolute top-0 right-0 flex items-center p-1 space-x-1 transition-opacity duration-200 bg-white rounded-bl-md opacity-0 group-hover:opacity-100 dark:bg-gray-700">
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteFont(index)}
+                        className="p-1 text-red-600 rounded hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-900/50"
+                        aria-label="Delete font"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           );
         })}
-      </div>
 
-      {/* Add Font Button */}
-      <button
-        type="button"
-        onClick={() => setShowFontModal(true)}
-        className="flex items-center justify-center px-4 py-2 text-sm bg-white border rounded-md text-accent border-accent hover:bg-accent/10"
-      >
-        <PlusCircle size={16} className="mr-2" />
-        Add Font
-      </button>
+        {(!project?.designChoices?.fonts ||
+          project.designChoices.fonts.length === 0) && (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            No fonts added yet.
+          </p>
+        )}
+      </div>
 
       {/* Font Input Modal */}
       <InputModal
@@ -405,14 +437,14 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
         {/* Set a max-height on the content container with scrolling */}
         <div className="space-y-3 max-h-[calc(90vh-200px)] overflow-y-auto pr-1">
           {/* Tabs for different font addition methods */}
-          <div className="sticky top-0 z-10 flex bg-white border-b border-gray-200">
+          <div className="sticky top-0 z-10 flex bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
             <button
               type="button"
               onClick={() => setActiveTab("search")}
               className={`px-4 py-2 text-sm font-medium ${
                 activeTab === "search"
-                  ? "border-b-2 border-accent text-accent"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "border-b-2 border-accent text-accent dark:text-accent-lighter"
+                  : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
               }`}
             >
               Google Fonts
@@ -422,8 +454,8 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
               onClick={() => setActiveTab("custom")}
               className={`px-4 py-2 text-sm font-medium ${
                 activeTab === "custom"
-                  ? "border-b-2 border-accent text-accent"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "border-b-2 border-accent text-accent dark:text-accent-lighter"
+                  : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
               }`}
             >
               Custom Font
@@ -436,7 +468,10 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
               {/* Search Box */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <Search size={18} className="text-gray-400" />
+                  <Search
+                    size={18}
+                    className="text-gray-400 dark:text-gray-500"
+                  />
                 </div>
                 <input
                   type="text"
@@ -444,7 +479,7 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
                   placeholder="Search fonts..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full py-2 pl-10 pr-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                  className="w-full py-2 pl-10 pr-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
                 />
               </div>
 
@@ -466,7 +501,7 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
                     className={`px-3 py-1 text-xs rounded-full whitespace-nowrap ${
                       activeCategory === category
                         ? "bg-accent text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                     }`}
                   >
                     {category === "popular"
@@ -481,14 +516,16 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
               {loading ? (
                 <div className="flex items-center justify-center py-6">
                   <RefreshCw size={24} className="text-accent animate-spin" />
-                  <span className="ml-2 text-gray-600">Loading fonts...</span>
+                  <span className="ml-2 text-gray-600 dark:text-gray-300">
+                    Loading fonts...
+                  </span>
                 </div>
               ) : (
                 <>
                   {/* Font Grid with smaller max height */}
-                  <div className="grid grid-cols-1 gap-2 p-2 overflow-y-auto border border-gray-200 rounded-md sm:grid-cols-2 max-h-40">
+                  <div className="grid grid-cols-1 gap-2 p-2 overflow-y-auto border border-gray-200 rounded-md sm:grid-cols-2 max-h-40 dark:border-gray-700 dark:bg-gray-800/30">
                     {filteredFonts.length === 0 ? (
-                      <div className="flex items-center justify-center col-span-2 py-4 text-gray-500">
+                      <div className="flex items-center justify-center col-span-2 py-4 text-gray-500 dark:text-gray-400">
                         No fonts found. Try a different search term.
                       </div>
                     ) : (
@@ -497,14 +534,14 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
                           key={font.family}
                           type="button"
                           onClick={() => handleFontSelect(font)}
-                          className={`p-2 text-left border rounded-md hover:border-accent transition-colors ${
+                          className={`p-2 text-left border rounded-md transition-colors ${
                             selectedFont?.family === font.family
-                              ? "border-accent bg-accent/10"
-                              : "border-gray-200"
+                              ? "border-accent bg-accent/10 dark:bg-accent/20"
+                              : "border-gray-200 dark:border-gray-700 dark:bg-gray-800/50 hover:border-accent dark:hover:border-accent"
                           }`}
                         >
                           <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-600">
+                            <span className="text-xs text-gray-600 dark:text-gray-400">
                               {font.category}
                             </span>
                             {selectedFont?.family === font.family && (
@@ -512,13 +549,13 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
                             )}
                           </div>
                           <p
-                            className="mt-0.5 text-sm font-medium"
+                            className="mt-0.5 text-sm font-medium text-gray-800 dark:text-gray-200"
                             style={{ fontFamily: font.family }}
                           >
                             {font.family}
                           </p>
                           <p
-                            className="mt-0.5 text-xs"
+                            className="mt-0.5 text-xs text-gray-600 dark:text-gray-400"
                             style={{ fontFamily: font.family }}
                           >
                             The quick brown fox jumps
@@ -532,15 +569,15 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
                   <div className="grid grid-cols-1 gap-3 mt-3">
                     {/* Selected Font Preview - only show if selected */}
                     {selectedFont && (
-                      <div className="p-3 border border-gray-200 rounded-md">
+                      <div className="p-3 border border-gray-200 rounded-md dark:border-gray-700 dark:bg-gray-800/30">
                         <p
-                          className="mb-1 text-xl"
+                          className="mb-1 text-xl text-gray-800 dark:text-gray-200"
                           style={{ fontFamily: selectedFont.family }}
                         >
                           {selectedFont.family}
                         </p>
                         <p
-                          className="text-sm"
+                          className="text-sm text-gray-600 dark:text-gray-400"
                           style={{ fontFamily: selectedFont.family }}
                         >
                           The quick brown fox jumps over the lazy dog.
@@ -552,7 +589,7 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
                     {/* Font Details */}
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
+                        <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
                           Font Name
                         </label>
                         <input
@@ -568,19 +605,19 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
                               setSelectedFont(null);
                             }
                           }}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
                           placeholder="e.g. Roboto, Open Sans"
                         />
                       </div>
 
                       <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
+                        <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
                           Usage Category
                         </label>
                         <select
                           value={fontCategory}
                           onChange={(e) => setFontCategory(e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                         >
                           <option value="heading">Heading</option>
                           <option value="body">Body Text</option>
@@ -594,8 +631,8 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
                     {selectedFont &&
                       selectedFont.variants &&
                       selectedFont.variants.length > 0 && (
-                        <div className="text-xs text-gray-600">
-                          <span className="font-medium">
+                        <div className="text-xs text-gray-600 dark:text-gray-400">
+                          <span className="font-medium dark:text-gray-300">
                             Available Variants:
                           </span>{" "}
                           {selectedFont.variants.join(", ")}
@@ -610,52 +647,55 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
           {/* Custom Font Tab */}
           {activeTab === "custom" && (
             <>
-              <div className="p-3 border border-gray-200 rounded-md">
+              <div className="p-3 border border-gray-200 rounded-md dark:border-gray-700 dark:bg-gray-800/30">
                 <div className="mb-3">
-                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Font Name
                   </label>
                   <input
                     type="text"
                     value={fontFamily}
                     onChange={(e) => setFontFamily(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
                     placeholder="e.g. My Custom Font"
                   />
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     Enter the exact name of the font you want to use
                   </p>
                 </div>
 
                 <div className="mb-3">
-                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Font URL (optional)
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <Link size={16} className="text-gray-400" />
+                      <Link
+                        size={16}
+                        className="text-gray-400 dark:text-gray-500"
+                      />
                     </div>
                     <input
                       type="url"
                       value={fontUrl}
                       onChange={(e) => setFontUrl(e.target.value)}
-                      className="w-full py-2 pl-10 pr-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                      className="w-full py-2 pl-10 pr-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
                       placeholder="https://example.com/fonts/my-font.css"
                     />
                   </div>
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     Link to the font stylesheet or a CDN URL
                   </p>
                 </div>
 
                 <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Usage Category
                   </label>
                   <select
                     value={fontCategory}
                     onChange={(e) => setFontCategory(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   >
                     <option value="heading">Heading</option>
                     <option value="body">Body Text</option>
@@ -666,13 +706,13 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
               </div>
 
               {/* Preview notice - condensed */}
-              <div className="p-2 mt-2 border border-yellow-200 rounded-md bg-yellow-50">
+              <div className="p-2 mt-2 border border-yellow-200 rounded-md bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-900/50">
                 <div className="flex items-start">
                   <AlertTriangle
                     size={16}
-                    className="mr-2 text-yellow-500 mt-0.5 flex-shrink-0"
+                    className="mr-2 text-yellow-500 dark:text-yellow-400 mt-0.5 flex-shrink-0"
                   />
-                  <p className="text-xs text-yellow-700">
+                  <p className="text-xs text-yellow-700 dark:text-yellow-300">
                     <strong>Note:</strong> Font preview is not available for
                     custom fonts. The font will be available after saving.
                   </p>
@@ -682,14 +722,19 @@ const FontSelectionModal = ({ project, handleNestedChange }) => {
           )}
 
           {fontError && (
-            <p className="mt-1 text-sm text-red-600">{fontError}</p>
+            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+              {fontError}
+            </p>
           )}
 
           {/* Tip section - condensed */}
-          <div className="p-2 mt-2 rounded-md bg-gray-50">
-            <p className="text-xs text-gray-500">
-              <strong>Tip:</strong> For best results, choose web-safe fonts or
-              popular Google Fonts that are widely available.
+          <div className="p-2 mt-2 rounded-md bg-gray-50 dark:bg-gray-700/50">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              <strong className="font-medium text-gray-700 dark:text-gray-300">
+                Tip:
+              </strong>{" "}
+              For best results, choose web-safe fonts or popular Google Fonts
+              that are widely available.
             </p>
           </div>
         </div>
