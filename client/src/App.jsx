@@ -213,149 +213,210 @@ function App() {
 
   return (
     <div className="min-h-screen text-gray-900 bg-surface-50 dark:bg-dark-200 dark:text-gray-100">
-      {/* SEO Backlink Helpers */}
-      <BacklinkHelper
-        includeAttributes={true}
-        authorshipMarkup={true}
-        references={[
-          {
-            title: "Web Development Best Practices",
-            url: "https://blog.veloria.in/web-development-best-practices",
-          },
-          {
-            title: "UX Design Principles",
-            url: "https://blog.veloria.in/ux-design-principles",
-          },
-          {
-            title: "Mobile App Development",
-            url: "https://blog.veloria.in/mobile-app-development",
-          },
-          {
-            title: "Custom Software Solutions",
-            url: "https://blog.veloria.in/custom-software-solutions",
-          },
-        ]}
-        citations={[
-          {
-            title: "SEO for Tech Companies",
-            url: "https://moz.com/seo-guide",
-            author: "Moz",
-          },
-          {
-            title: "Web Performance",
-            url: "https://web.dev/performance",
-            author: "Google",
-          },
-          {
-            title: "Accessibility Standards",
-            url: "https://www.w3.org/WAI/",
-            author: "W3C",
-          },
-          {
-            title: "Responsive Design",
-            url: "https://developers.google.com/web/responsive",
-            author: "Google Developers",
-          },
-        ]}
-      />
+      {/* Loading Screen */}
+      <AnimatePresence mode="wait">
+        {loading && (
+          <motion.div
+            key="loading"
+            variants={loadingVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center min-h-screen bg-surface-50 dark:bg-dark-200"
+          >
+            {/* Logo */}
+            <motion.div
+              variants={logoVariants}
+              initial="initial"
+              animate="animate"
+              className="mb-6"
+            >
+              <h1 className="text-4xl font-bold text-transparent bg-gradient-to-r from-primary to-secondary bg-clip-text">
+                Veloria
+              </h1>
+            </motion.div>
 
-      {isBrowser && (
-        <LinkBuildingStrategy
-          isHomepage={location.pathname === "/"}
-          currentPageUrl={
-            isBrowser
-              ? window.location.href
-              : `https://veloria.in${location.pathname}`
-          }
-          industry="Web Development"
-          authorDetails={{
-            name: "Veloria Team",
-            url: "https://veloria.in/about",
-            jobTitle: "Web Development Experts",
-          }}
-          citations={[
-            {
-              title: "Mobile App Development Guide",
-              url: "https://developer.android.com/guide",
-              type: "reference",
-            },
-          ]}
-        />
-      )}
+            {/* Tagline */}
+            <motion.p
+              variants={taglineVariants}
+              initial="initial"
+              animate="animate"
+              className="mb-8 text-gray-600 dark:text-gray-400"
+            >
+              Crafting Digital Excellence
+            </motion.p>
 
-      {/* Wrap Routes in AnimatePresence with proper locationKey for page transitions */}
-      <AnimatePresence mode="wait" initial={false}>
-        <Routes key={location.pathname} location={location}>
-          {/* Admin routes without Navbar and Footer */}
-          <Route path="/admin" element={<AdminDashboard />}>
-            <Route index element={<AdminHome />} />
-            <Route path="bookings" element={<BookingsList />} />
-            <Route path="bookings/new" element={<AdminBookingForm />} />
-            <Route path="bookings/:id" element={<BookingDetails />} />
-            <Route path="bookings/calendar" element={<BookingsCalendar />} />
-            <Route path="contacts" element={<ContactsList />} />
-            <Route path="contacts/:id" element={<ContactDetails />} />
-            <Route path="projects" element={<ProjectPipeline />} />
-            <Route path="projects/list" element={<ProjectsList />} />
-            <Route path="projects/new" element={<CreateProjectForm />} />
-            <Route path="projects/calendar" element={<ProjectsCalendar />} />
-            <Route path="projects/:id/edit" element={<EditProjectForm />} />
-            <Route path="projects/:id" element={<ProjectDetails />} />
-            <Route path="finance" element={<Finance />} />
-            <Route path="settings" element={<AdminSettings />} />
-            <Route path="profile" element={<AdminProfile />} />
-          </Route>
-
-          {/* Public routes with Navbar and Footer */}
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/get-started" element={<GetStarted />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route
-              path="/services/hotel-management-system"
-              element={<HotelManagementSystem />}
-            />
-            <Route
-              path="/services/school-management-system"
-              element={<SchoolManagementSystem />}
-            />
-            <Route
-              path="/services/hospital-management-system"
-              element={<HospitalManagementSystem />}
-            />
-            <Route
-              path="/services/ecommerce-management-system"
-              element={<EcommerceManagementSystem />}
-            />
-            <Route path="/services/erp-system" element={<ERPSystem />} />
-            <Route path="/services/ui-ux-design" element={<UIUXDesign />} />
-            <Route
-              path="/services/web-development"
-              element={<WebDevelopment />}
-            />
-            <Route
-              path="/services/mobile-app-development"
-              element={<MobileAppDevelopment />}
-            />
-            <Route
-              path="/services/custom-software-development"
-              element={<CustomSoftwareDevelopment />}
-            />
-            <Route
-              path="/services/database-solutions"
-              element={<DatabaseSolutions />}
-            />
-            <Route
-              path="/services/payroll-management-system"
-              element={<PayrollManagementSystem />}
-            />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms-of-service" element={<TermsOfService />} />
-            {/* Catch-all route for 404 page */}
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
+            {/* Animated dots */}
+            <motion.div
+              variants={dotsContainerVariants}
+              initial="initial"
+              animate="animate"
+              className="flex space-x-2"
+            >
+              {[...Array(3)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  variants={dotVariants}
+                  className="w-3 h-3 rounded-full bg-gradient-to-r from-primary to-secondary"
+                />
+              ))}
+            </motion.div>
+          </motion.div>
+        )}
       </AnimatePresence>
+
+      {/* Main Content */}
+      {!loading && (
+        <motion.div
+          variants={contentVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {/* SEO Backlink Helpers */}
+          <BacklinkHelper
+            includeAttributes={true}
+            authorshipMarkup={true}
+            references={[
+              {
+                title: "Web Development Best Practices",
+                url: "https://blog.veloria.in/web-development-best-practices",
+              },
+              {
+                title: "UX Design Principles",
+                url: "https://blog.veloria.in/ux-design-principles",
+              },
+              {
+                title: "Mobile App Development",
+                url: "https://blog.veloria.in/mobile-app-development",
+              },
+              {
+                title: "Custom Software Solutions",
+                url: "https://blog.veloria.in/custom-software-solutions",
+              },
+            ]}
+            citations={[
+              {
+                title: "SEO for Tech Companies",
+                url: "https://moz.com/seo-guide",
+                author: "Moz",
+              },
+              {
+                title: "Web Performance",
+                url: "https://web.dev/performance",
+                author: "Google",
+              },
+              {
+                title: "Accessibility Standards",
+                url: "https://www.w3.org/WAI/",
+                author: "W3C",
+              },
+              {
+                title: "Responsive Design",
+                url: "https://developers.google.com/web/responsive",
+                author: "Google Developers",
+              },
+            ]}
+          />
+
+          {isBrowser && (
+            <LinkBuildingStrategy
+              isHomepage={location.pathname === "/"}
+              currentPageUrl={
+                isBrowser
+                  ? window.location.href
+                  : `https://veloria.in${location.pathname}`
+              }
+              industry="Web Development"
+              authorDetails={{
+                name: "Veloria Team",
+                url: "https://veloria.in/about",
+                jobTitle: "Web Development Experts",
+              }}
+              citations={[
+                {
+                  title: "Mobile App Development Guide",
+                  url: "https://developer.android.com/guide",
+                  type: "reference",
+                },
+              ]}
+            />
+          )}
+
+          {/* Wrap Routes in AnimatePresence with proper locationKey for page transitions */}
+          <AnimatePresence mode="wait" initial={false}>
+            <Routes key={location.pathname} location={location}>
+              {/* Admin routes without Navbar and Footer */}
+              <Route path="/admin" element={<AdminDashboard />}>
+                <Route index element={<AdminHome />} />
+                <Route path="bookings" element={<BookingsList />} />
+                <Route path="bookings/new" element={<AdminBookingForm />} />
+                <Route path="bookings/:id" element={<BookingDetails />} />
+                <Route path="bookings/calendar" element={<BookingsCalendar />} />
+                <Route path="contacts" element={<ContactsList />} />
+                <Route path="contacts/:id" element={<ContactDetails />} />
+                <Route path="projects" element={<ProjectPipeline />} />
+                <Route path="projects/list" element={<ProjectsList />} />
+                <Route path="projects/new" element={<CreateProjectForm />} />
+                <Route path="projects/calendar" element={<ProjectsCalendar />} />
+                <Route path="projects/:id/edit" element={<EditProjectForm />} />
+                <Route path="projects/:id" element={<ProjectDetails />} />
+                <Route path="finance" element={<Finance />} />
+                <Route path="settings" element={<AdminSettings />} />
+                <Route path="profile" element={<AdminProfile />} />
+              </Route>
+
+              {/* Public routes with Navbar and Footer */}
+              <Route element={<PublicLayout />}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/get-started" element={<GetStarted />} />
+                <Route path="/services" element={<ServicesPage />} />
+                <Route
+                  path="/services/hotel-management-system"
+                  element={<HotelManagementSystem />}
+                />
+                <Route
+                  path="/services/school-management-system"
+                  element={<SchoolManagementSystem />}
+                />
+                <Route
+                  path="/services/hospital-management-system"
+                  element={<HospitalManagementSystem />}
+                />
+                <Route
+                  path="/services/ecommerce-management-system"
+                  element={<EcommerceManagementSystem />}
+                />
+                <Route path="/services/erp-system" element={<ERPSystem />} />
+                <Route path="/services/ui-ux-design" element={<UIUXDesign />} />
+                <Route
+                  path="/services/web-development"
+                  element={<WebDevelopment />}
+                />
+                <Route
+                  path="/services/mobile-app-development"
+                  element={<MobileAppDevelopment />}
+                />
+                <Route
+                  path="/services/custom-software-development"
+                  element={<CustomSoftwareDevelopment />}
+                />
+                <Route
+                  path="/services/database-solutions"
+                  element={<DatabaseSolutions />}
+                />
+                <Route
+                  path="/services/payroll-management-system"
+                  element={<PayrollManagementSystem />}
+                />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                {/* Catch-all route for 404 page */}
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </AnimatePresence>
+        </motion.div>
+      )}
     </div>
   );
 }
