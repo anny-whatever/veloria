@@ -33,42 +33,7 @@ import DatabaseSolutions from "./pages/Services/DatabaseSolutions";
 import PayrollManagementSystem from "./pages/Services/PayrollManagementSystem";
 import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
 import TermsOfService from "./pages/Legal/TermsOfService";
-import AdminDashboard from "./pages/Admin/AdminDashboard";
-import AdminHome from "./pages/Admin/AdminHome";
-import BookingsList from "./pages/Admin/BookingsList";
-import BookingDetails from "./pages/Admin/BookingDetails";
-import ContactsList from "./pages/Admin/ContactsList";
-import ContactDetails from "./pages/Admin/ContactDetails";
-import ProjectPipeline from "./pages/Admin/ProjectPipeline";
-import CreateProjectForm from "./pages/Admin/CreateProjectForm";
-import EditProjectForm from "./pages/Admin/EditProjectForm";
-import ProjectDetails from "./pages/Admin/ProjectDetails";
-import ProjectsCalendar from "./pages/Admin/ProjectsCalendar";
-import ProjectsList from "./pages/Admin/ProjectsList";
-import BookingsCalendar from "./pages/Admin/BookingsCalendar";
-import Finance from "./pages/Admin/Finance";
-import AdminBookingForm from "./pages/Admin/AdminBookingForm";
 import NotFound from "./pages/NotFound";
-
-// Import placeholder components for the settings
-const AdminSettings = () => (
-  <div className="p-6">
-    <h1 className="mb-4 text-2xl font-bold">Admin Settings</h1>
-    <p>
-      This page is under construction. Admin settings will be available soon.
-    </p>
-  </div>
-);
-
-const AdminProfile = () => (
-  <div className="p-6">
-    <h1 className="mb-4 text-2xl font-bold">Admin Profile</h1>
-    <p>
-      This page is under construction. Admin profile settings will be available
-      soon.
-    </p>
-  </div>
-);
 
 // Main App component with routing
 function App() {
@@ -345,26 +310,6 @@ function App() {
           {/* Wrap Routes in AnimatePresence with proper locationKey for page transitions */}
           <AnimatePresence mode="wait" initial={false}>
             <Routes key={location.pathname} location={location}>
-              {/* Admin routes without Navbar and Footer */}
-              <Route path="/admin" element={<AdminDashboard />}>
-                <Route index element={<AdminHome />} />
-                <Route path="bookings" element={<BookingsList />} />
-                <Route path="bookings/new" element={<AdminBookingForm />} />
-                <Route path="bookings/:id" element={<BookingDetails />} />
-                <Route path="bookings/calendar" element={<BookingsCalendar />} />
-                <Route path="contacts" element={<ContactsList />} />
-                <Route path="contacts/:id" element={<ContactDetails />} />
-                <Route path="projects" element={<ProjectPipeline />} />
-                <Route path="projects/list" element={<ProjectsList />} />
-                <Route path="projects/new" element={<CreateProjectForm />} />
-                <Route path="projects/calendar" element={<ProjectsCalendar />} />
-                <Route path="projects/:id/edit" element={<EditProjectForm />} />
-                <Route path="projects/:id" element={<ProjectDetails />} />
-                <Route path="finance" element={<Finance />} />
-                <Route path="settings" element={<AdminSettings />} />
-                <Route path="profile" element={<AdminProfile />} />
-              </Route>
-
               {/* Public routes with Navbar and Footer */}
               <Route element={<PublicLayout />}>
                 <Route path="/" element={<HomePage />} />

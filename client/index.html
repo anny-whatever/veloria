@@ -33,48 +33,6 @@
 
     <!-- Page performance optimizations -->
     <script>
-      // Improved service worker registration with proper error handling
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", function () {
-          // Delay service worker registration slightly to prioritize page rendering
-          setTimeout(() => {
-            navigator.serviceWorker
-              .register("/service-worker.js", { scope: "/" })
-              .then(function (registration) {
-                console.log("Service worker registered successfully");
-
-                // Listen for service worker updates
-                registration.addEventListener("updatefound", () => {
-                  const newWorker = registration.installing;
-
-                  // Track state changes for the installing worker
-                  newWorker.addEventListener("statechange", () => {
-                    if (
-                      newWorker.state === "installed" &&
-                      navigator.serviceWorker.controller
-                    ) {
-                      console.log("New service worker available");
-                    }
-                  });
-                });
-              })
-              .catch(function (error) {
-                // Handle registration errors gracefully
-                console.warn("Service worker registration failed:", error);
-              });
-          }, 1000);
-        });
-
-        // Handle service worker updates
-        let refreshing = false;
-        navigator.serviceWorker.addEventListener("controllerchange", () => {
-          if (!refreshing) {
-            refreshing = true;
-            window.location.reload();
-          }
-        });
-      }
-
       // Mark LCP candidates for faster identification
       document.addEventListener("DOMContentLoaded", () => {
         const imgs = document.querySelectorAll("img");
