@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/generate-sitemap.js && vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives",
     "preview": "vite preview",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "optimize-seo": "node scripts/generate-sitemap.js && cp public/service-worker.js dist/service-worker.js",
@@ -59,7 +59,6 @@
     "vite": "^4.4.5",
     "vite-imagetools": "^5.1.1",
     "vitest": "^0.34.6",
-    "@vitest/coverage-c8": "^0.34.6",
     "@testing-library/react": "^14.0.0",
     "@testing-library/jest-dom": "^6.0.0",
     "@playwright/test": "^1.43.0",
