@@ -4,13 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
-import Header from "./components/Header/Header";
+import ModernHero from "./components/Hero/ModernHero";
 import Portfolio from "./components/Portfolio/Portfolio";
-import Services from "./components/Services/Services";
+import SpotlightServices from "./components/Services/SpotlightServices";
+import GlobalReach from "./components/GlobalReach";
 import About from "./components/About/About";
 import Contact from "./components/Contact/Contact";
 import Footer from "./components/Footer/Footer";
-import ThemeToggle from "./components/ThemeToggle";
 import {
   SeoHead,
   PAGE_SEO,
@@ -145,7 +145,7 @@ function App() {
       {isBrowser && (
         <motion.button
           onClick={scrollToTop}
-          className="fixed z-50 flex items-center justify-center w-12 h-12 text-white transition-all duration-300 rounded-full shadow-lg bottom-6 right-6 bg-primary-500 dark:bg-primary-600 hover:shadow-glow-primary"
+          className="fixed z-50 flex items-center justify-center w-12 h-12 text-white transition-all duration-300 rounded-full shadow-lg bottom-6 right-6 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 hover:shadow-primary-500/25"
           whileHover={{ y: -5, scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0, y: 20 }}
@@ -168,8 +168,9 @@ function App() {
         pathname="/"
         structuredData={getOrganizationSchema()}
       />
-      <Header />
-      <Services />
+      <ModernHero />
+      <SpotlightServices />
+      <GlobalReach />
       <Portfolio />
       <About />
       <Contact />
@@ -177,7 +178,7 @@ function App() {
   );
 
   return (
-    <div className="min-h-screen text-gray-900 bg-surface-50 dark:bg-dark-200 dark:text-gray-100">
+    <div className="min-h-screen text-white bg-black">
       {/* Loading Screen */}
       <AnimatePresence mode="wait">
         {loading && (
@@ -187,7 +188,7 @@ function App() {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center min-h-screen bg-surface-50 dark:bg-dark-200"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center min-h-screen bg-black"
           >
             {/* Logo */}
             <motion.div
@@ -196,8 +197,8 @@ function App() {
               animate="animate"
               className="mb-6"
             >
-              <h1 className="text-4xl font-bold text-transparent bg-gradient-to-r from-primary to-secondary bg-clip-text">
-                Veloria
+              <h1 className="text-4xl font-bold text-transparent bg-gradient-to-r from-primary-500 to-accent-700 bg-clip-text">
+                Veloria Labs
               </h1>
             </motion.div>
 
@@ -208,7 +209,7 @@ function App() {
               animate="animate"
               className="mb-8 text-gray-600 dark:text-gray-400"
             >
-              Crafting Digital Excellence
+              Engineering Tomorrow's Products
             </motion.p>
 
             {/* Animated dots */}

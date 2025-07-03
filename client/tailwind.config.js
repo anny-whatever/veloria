@@ -8,44 +8,44 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Primary color with HSL variations for better control
+        // Primary color - Purple (#8b5cf6) for innovation and technical sophistication
         primary: {
-          50: "hsl(37, 100%, 97%)",
-          100: "hsl(37, 100%, 92%)",
-          200: "hsl(37, 95%, 84%)",
-          300: "hsl(37, 90%, 76%)",
-          400: "hsl(37, 85%, 68%)",
-          500: "hsl(37, 80%, 60%)", // Base color: #ecb761
-          600: "hsl(37, 75%, 52%)",
-          700: "hsl(37, 70%, 44%)",
-          800: "hsl(37, 65%, 36%)",
-          900: "hsl(37, 60%, 28%)",
+          50: "hsl(266, 100%, 98%)",
+          100: "hsl(266, 100%, 95%)",
+          200: "hsl(266, 85%, 91%)",
+          300: "hsl(266, 80%, 84%)",
+          400: "hsl(266, 75%, 75%)",
+          500: "hsl(266, 91%, 65%)", // Base color: #8b5cf6
+          600: "hsl(266, 85%, 58%)",
+          700: "hsl(266, 80%, 50%)",
+          800: "hsl(266, 75%, 42%)",
+          900: "hsl(266, 70%, 35%)",
         },
-        // Secondary color with HSL variations
+        // Secondary color - White variations for clean code aesthetic
         secondary: {
-          50: "hsl(340, 100%, 97%)",
-          100: "hsl(340, 100%, 92%)",
-          200: "hsl(340, 60%, 88%)",
-          300: "hsl(340, 55%, 80%)",
-          400: "hsl(340, 50%, 72%)",
-          500: "hsl(340, 45%, 65%)", // Base color: #deb0bd
-          600: "hsl(340, 40%, 57%)",
-          700: "hsl(340, 35%, 49%)",
-          800: "hsl(340, 30%, 41%)",
-          900: "hsl(340, 25%, 33%)",
+          50: "hsl(0, 0%, 100%)",
+          100: "hsl(0, 0%, 99%)",
+          200: "hsl(0, 0%, 98%)",
+          300: "hsl(0, 0%, 96%)",
+          400: "hsl(0, 0%, 94%)",
+          500: "hsl(0, 0%, 92%)", // Clean white variations
+          600: "hsl(0, 0%, 88%)",
+          700: "hsl(0, 0%, 82%)",
+          800: "hsl(0, 0%, 74%)",
+          900: "hsl(0, 0%, 64%)",
         },
-        // Accent color with HSL variations
+        // Accent color - Black (#0f0f23) for authority and technical expertise
         accent: {
-          50: "hsl(245, 100%, 97%)",
-          100: "hsl(245, 100%, 92%)",
-          200: "hsl(245, 50%, 86%)",
-          300: "hsl(245, 45%, 78%)",
-          400: "hsl(245, 40%, 70%)",
-          500: "hsl(245, 35%, 62%)", // Base color: #8b86be
-          600: "hsl(245, 30%, 54%)",
-          700: "hsl(245, 25%, 46%)",
-          800: "hsl(245, 20%, 38%)",
-          900: "hsl(245, 15%, 30%)",
+          50: "hsl(240, 38%, 97%)",
+          100: "hsl(240, 40%, 94%)",
+          200: "hsl(240, 42%, 88%)",
+          300: "hsl(240, 44%, 78%)",
+          400: "hsl(240, 46%, 64%)",
+          500: "hsl(240, 48%, 42%)",
+          600: "hsl(240, 50%, 32%)",
+          700: "hsl(240, 52%, 24%)",
+          800: "hsl(240, 54%, 16%)",
+          900: "hsl(240, 56%, 9%)", // Base color: #0f0f23
         },
         // Light color with HSL variations
         light: {

@@ -1,10 +1,8 @@
 // src/components/Navbar/Navbar.jsx
 import { useState, useEffect, useRef } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
-import NavLink from "./NavLink";
-import ThemeToggle from "../ThemeToggle";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,77 +64,68 @@ const Navbar = () => {
       ref={navRef}
       className={`fixed w-full z-50 transition-all duration-500 ${
         scrolled
-          ? "py-3 bg-surface-50/90 backdrop-blur-md dark:bg-dark-200/90 shadow-sm"
-          : "py-5 bg-transparent"
-      } navbar-animation`}
+          ? "py-3 bg-black/95 backdrop-blur-lg border-b border-gray-800/50"
+          : "py-5 bg-black/30 backdrop-blur-sm"
+      }`}
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <div className="logo-hover">
+          <div className="transform hover:scale-105 transition-transform duration-200">
             <Logo />
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center md:space-x-3 lg:space-x-6 flex-wrap">
+          <div className="hidden md:flex items-center md:space-x-6 lg:space-x-8">
             <Link
               to="/"
-              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300 text-sm lg:text-base py-2`}
+              className="text-gray-300 hover:text-white hover:bg-white/5 px-3 py-2 rounded-lg transition-all duration-300 text-sm lg:text-base font-medium"
             >
               Home
             </Link>
             <a
               href="/#services"
-              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300 text-sm lg:text-base py-2`}
+              className="text-gray-300 hover:text-white hover:bg-white/5 px-3 py-2 rounded-lg transition-all duration-300 text-sm lg:text-base font-medium"
             >
               Services
             </a>
             <a
               href="/#portfolio"
-              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300 text-sm lg:text-base py-2`}
+              className="text-gray-300 hover:text-white hover:bg-white/5 px-3 py-2 rounded-lg transition-all duration-300 text-sm lg:text-base font-medium"
             >
               Portfolio
             </a>
             <a
               href="/#about"
-              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300 text-sm lg:text-base py-2`}
+              className="text-gray-300 hover:text-white hover:bg-white/5 px-3 py-2 rounded-lg transition-all duration-300 text-sm lg:text-base font-medium"
             >
               About
             </a>
             <a
               href="/#contact"
-              className={`text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-300 text-sm lg:text-base py-2`}
+              className="text-gray-300 hover:text-white hover:bg-white/5 px-3 py-2 rounded-lg transition-all duration-300 text-sm lg:text-base font-medium"
             >
               Contact
             </a>
 
-            {/* Dark mode toggle */}
-            <ThemeToggle className="mx-1" />
-
             <Link to="/get-started">
-              <button className="btn-primary px-4 lg:px-6 py-2 text-white text-sm lg:text-base ml-1 hover-scale">
+              <button className="group relative inline-flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-6 py-2.5 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-primary-500/25 text-sm lg:text-base">
                 Get Started
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
               </button>
             </Link>
           </div>
 
-          {/* Mobile Menu Button and Dark Mode Toggle */}
-          <div className="md:hidden flex items-center space-x-2">
-            {/* Dark mode toggle */}
-            <ThemeToggle size="small" />
-
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="focus:outline-none relative z-50 p-2 rounded-full bg-surface-200 dark:bg-dark-100 menu-button"
+              className="focus:outline-none relative z-50 p-3 rounded-full bg-gray-800/50 border border-gray-700/50 backdrop-blur-sm hover:bg-gray-700/50 transition-all duration-200"
             >
               {isOpen ? (
-                <div className="icon-animate">
-                  <X size={20} className="text-accent-500" />
-                </div>
+                <X size={20} className="text-white" />
               ) : (
-                <div className="icon-animate">
-                  <Menu size={20} className="text-accent-500" />
-                </div>
+                <Menu size={20} className="text-white" />
               )}
             </button>
           </div>
@@ -144,63 +133,52 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         <div
-          className={`md:hidden fixed inset-0 bg-surface-50/95 dark:bg-dark-100/95 backdrop-blur-md z-40 pt-20 mobile-menu h-screen ${
-            isOpen ? "open" : "closed"
+          className={`md:hidden fixed inset-0 bg-black/95 backdrop-blur-lg z-40 pt-20 transition-all duration-300 ${
+            isOpen ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
         >
-          <div className="flex flex-col items-center space-y-6 py-10">
-            <div className="menu-link">
-              <Link
-                to="/"
-                className="text-xl font-medium text-gray-800 dark:text-white hover:text-primary dark:hover:text-primary-400"
-                onClick={() => setIsOpen(false)}
-              >
-                Home
-              </Link>
-            </div>
-            <div className="menu-link">
-              <a
-                href="/#services"
-                className="text-xl font-medium text-gray-800 dark:text-white hover:text-primary dark:hover:text-primary-400"
-                onClick={() => setIsOpen(false)}
-              >
-                Services
-              </a>
-            </div>
-            <div className="menu-link">
-              <a
-                href="/#portfolio"
-                className="text-xl font-medium text-gray-800 dark:text-white hover:text-primary dark:hover:text-primary-400"
-                onClick={() => setIsOpen(false)}
-              >
-                Portfolio
-              </a>
-            </div>
-            <div className="menu-link">
-              <a
-                href="/#about"
-                className="text-xl font-medium text-gray-800 dark:text-white hover:text-primary dark:hover:text-primary-400"
-                onClick={() => setIsOpen(false)}
-              >
-                About
-              </a>
-            </div>
-            <div className="menu-link">
-              <a
-                href="/#contact"
-                className="text-xl font-medium text-gray-800 dark:text-white hover:text-primary dark:hover:text-primary-400"
-                onClick={() => setIsOpen(false)}
-              >
-                Contact
-              </a>
-            </div>
-            <div className="menu-link">
-              <Link to="/get-started" onClick={() => setIsOpen(false)}>
-                <button className="mt-4 btn-primary px-8 py-3 w-full text-white">
-                  Get Started
-                </button>
-              </Link>
-            </div>
+          <div className="flex flex-col items-center space-y-8 py-12">
+            <Link
+              to="/"
+              className="text-2xl font-medium text-gray-300 hover:text-white hover:bg-white/5 px-6 py-3 rounded-lg transition-all duration-300"
+              onClick={() => setIsOpen(false)}
+            >
+              Home
+            </Link>
+            <a
+              href="/#services"
+              className="text-2xl font-medium text-gray-300 hover:text-white hover:bg-white/5 px-6 py-3 rounded-lg transition-all duration-300"
+              onClick={() => setIsOpen(false)}
+            >
+              Services
+            </a>
+            <a
+              href="/#portfolio"
+              className="text-2xl font-medium text-gray-300 hover:text-white hover:bg-white/5 px-6 py-3 rounded-lg transition-all duration-300"
+              onClick={() => setIsOpen(false)}
+            >
+              Portfolio
+            </a>
+            <a
+              href="/#about"
+              className="text-2xl font-medium text-gray-300 hover:text-white hover:bg-white/5 px-6 py-3 rounded-lg transition-all duration-300"
+              onClick={() => setIsOpen(false)}
+            >
+              About
+            </a>
+            <a
+              href="/#contact"
+              className="text-2xl font-medium text-gray-300 hover:text-white hover:bg-white/5 px-6 py-3 rounded-lg transition-all duration-300"
+              onClick={() => setIsOpen(false)}
+            >
+              Contact
+            </a>
+            <Link to="/get-started" onClick={() => setIsOpen(false)}>
+              <button className="group inline-flex items-center gap-3 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 text-lg mt-4">
+                Get Started
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+              </button>
+            </Link>
           </div>
         </div>
       </div>

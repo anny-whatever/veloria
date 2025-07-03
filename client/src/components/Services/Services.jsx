@@ -1,16 +1,17 @@
 // src/components/Services/Services.jsx
 import {
-  Smartphone,
+  Rocket,
   Palette,
   Monitor,
   Code,
   Database,
-  Hotel,
-  School,
-  Hospital,
-  ShoppingBag,
+  Zap,
+  Shield,
+  GitBranch,
+  Bot,
   LayoutGrid,
-  DollarSign,
+  Users,
+  Settings,
 } from "lucide-react";
 import { Section, Container, Grid, GridItem } from "../Grid";
 import Card from "../Card";
@@ -20,76 +21,76 @@ import ScrollReveal from "../ScrollReveal";
 
 const serviceItems = [
   {
-    icon: <Palette size={36} />,
-    title: "UI/UX Design",
+    icon: <Rocket size={36} />,
+    title: "MVP Development",
     description:
-      "Create intuitive, beautiful interfaces that delight your users and enhance their experience with your brand.",
+      "Ship production-ready MVPs in 4-8 weeks. From idea to market with enterprise-grade architecture that scales.",
     iconColor: "text-primary-500 dark:text-primary-400",
     delay: 0.1,
-    link: "/services/ui-ux-design",
+    link: "/services/mvp-development",
   },
   {
-    icon: <Monitor size={36} />,
-    title: "Web Development",
+    icon: <Code size={36} />,
+    title: "Product Engineering",
     description:
-      "Custom websites built with modern technologies that are fast, secure, and optimized for all devices.",
-    iconColor: "text-secondary-500 dark:text-secondary-400",
+      "Full-stack development with modern technologies. Clean code, automated testing, and CI/CD from day one.",
+    iconColor: "text-accent-600 dark:text-accent-400",
     delay: 0.2,
-    link: "/services/web-development",
+    link: "/services/product-engineering",
   },
   {
-    icon: <Smartphone size={36} />,
-    title: "Mobile App Development",
+    icon: <Bot size={36} />,
+    title: "AI Integration",
     description:
-      "Native and cross-platform mobile applications that provide seamless experiences on any device.",
-    iconColor: "text-accent-500 dark:text-accent-400",
+      "Integrate cutting-edge AI capabilities into your product. From LLM-powered features to custom ML models.",
+    iconColor: "text-primary-600 dark:text-primary-300",
     delay: 0.3,
-    link: "/services/mobile-app-development",
-  },
-  {
-    icon: <Hotel size={36} />,
-    title: "Hotel Management",
-    description:
-      "Comprehensive hotel management systems to streamline operations, improve guest experience, and maximize revenue.",
-    iconColor: "text-primary-500 dark:text-primary-400",
-    delay: 0.4,
-    link: "/services/hotel-management-system",
-  },
-  {
-    icon: <School size={36} />,
-    title: "School Management",
-    description:
-      "Powerful school management software to digitize educational institutions' administrative processes.",
-    iconColor: "text-secondary-500 dark:text-secondary-400",
-    delay: 0.5,
-    link: "/services/school-management-system",
-  },
-  {
-    icon: <ShoppingBag size={36} />,
-    title: "E-commerce Solutions",
-    description:
-      "Build powerful online stores that drive sales and provide exceptional shopping experiences.",
-    iconColor: "text-accent-500 dark:text-accent-400",
-    delay: 0.6,
-    link: "/services/ecommerce-management-system",
+    link: "/services/ai-integration",
   },
   {
     icon: <LayoutGrid size={36} />,
-    title: "ERP Systems",
+    title: "Technical Architecture",
     description:
-      "Integrated enterprise resource planning solutions that connect all aspects of your business in a single system.",
-    iconColor: "text-neutral-500 dark:text-neutral-400",
-    delay: 1.0,
-    link: "/services/erp-system",
+      "Scalable system design and architecture consulting. Build for scale from the beginning, not as an afterthought.",
+    iconColor: "text-accent-700 dark:text-accent-400",
+    delay: 0.4,
+    link: "/services/technical-architecture",
   },
   {
-    icon: <DollarSign size={36} />,
-    title: "Payroll Management",
+    icon: <Shield size={36} />,
+    title: "DevOps & Infrastructure",
     description:
-      "Reliable payroll management systems to automate salary processing and tax calculations.",
-    iconColor: "text-primary-500 dark:text-primary-400",
-    delay: 1.1,
-    link: "/services/payroll-management-system",
+      "Production-ready infrastructure on AWS/GCP. Monitoring, logging, security, and 99.9% uptime guarantees.",
+    iconColor: "text-primary-700 dark:text-primary-400",
+    delay: 0.5,
+    link: "/services/devops-infrastructure",
+  },
+  {
+    icon: <Users size={36} />,
+    title: "Startup Advisory",
+    description:
+      "Technical co-founder on-demand. Architecture decisions, tech stack choices, and engineering team leadership.",
+    iconColor: "text-accent-800 dark:text-accent-300",
+    delay: 0.6,
+    link: "/services/startup-advisory",
+  },
+  {
+    icon: <Database size={36} />,
+    title: "API Development",
+    description:
+      "RESTful and GraphQL APIs designed for scale. Documentation, versioning, and developer-first experiences.",
+    iconColor: "text-primary-800 dark:text-primary-400",
+    delay: 0.7,
+    link: "/services/api-development",
+  },
+  {
+    icon: <GitBranch size={36} />,
+    title: "Technical Due Diligence",
+    description:
+      "Comprehensive code audits and technical assessments. Prepare for investment rounds with confidence.",
+    iconColor: "text-accent-600 dark:text-accent-400",
+    delay: 0.8,
+    link: "/services/technical-due-diligence",
   },
 ];
 
@@ -97,19 +98,17 @@ const ServiceCard = ({ icon, title, description, iconColor, delay, link }) => (
   <ScrollReveal delay={delay}>
     <Card
       hover
-      className="h-full transition-all duration-200 border-l-transparent hover:border-l-4 hover:border-l-secondary-500 dark:hover:border-l-secondary-400"
+      className="h-full transition-all duration-200 border-l-transparent hover:border-l-4 hover:border-l-primary-500 bg-white/10 backdrop-blur-sm border border-gray-700/50 hover:bg-white/20"
     >
       <div className="flex flex-col h-full">
         <div className={`${iconColor} mb-5`}>{icon}</div>
-        <Heading level={3} className="mb-3">
+        <Heading level={3} className="mb-3 text-white">
           {title}
         </Heading>
-        <Text color="muted" className="mt-auto mb-4">
-          {description}
-        </Text>
+        <Text className="mt-auto mb-4 text-gray-300">{description}</Text>
         <a
           href={link}
-          className="inline-block text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors mt-auto"
+          className="inline-block text-primary-400 font-medium hover:text-primary-300 transition-colors mt-auto"
         >
           Learn more →
         </a>
@@ -120,31 +119,34 @@ const ServiceCard = ({ icon, title, description, iconColor, delay, link }) => (
 
 const Services = () => {
   return (
-    <Section id="services" className="bg-surface-100 dark:bg-dark-100">
+    <Section
+      id="services"
+      className="bg-gradient-to-b from-black via-gray-900 to-surface-100 dark:to-dark-100 pt-24"
+    >
       <Container>
         <ScrollReveal className="mb-16 max-w-3xl mx-auto text-center">
           <Text
             color="primary"
             size="sm"
             weight="medium"
-            className="uppercase tracking-wider mb-3"
+            className="uppercase tracking-wider mb-3 text-primary-400"
           >
-            Our Services
+            Product Engineering Services
           </Text>
-          <Heading level={2} className="mb-4">
-            Comprehensive Digital Solutions
+          <Heading level={2} className="mb-4 text-white">
+            From MVP to Scale
           </Heading>
-          <Text color="muted" size="lg">
-            We offer a wide range of services designed to help businesses
-            streamline operations, enhance customer experiences, and drive
-            growth in today's digital landscape.
+          <Text size="lg" className="text-gray-300">
+            We partner with technical founders and startups to build
+            production-ready products that scale. Enterprise-grade engineering
+            with startup velocity.
           </Text>
         </ScrollReveal>
 
         <div className="mb-10 flex justify-center">
           <a
             href="/services"
-            className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 transform hover:-translate-y-1 inline-block hover:text-white no-underline hover:no-underline"
+            className="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 hover:shadow-lg hover:shadow-primary-500/25 inline-block hover:text-white no-underline hover:no-underline"
           >
             View All Services
           </a>

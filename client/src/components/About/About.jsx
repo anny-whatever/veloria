@@ -13,20 +13,20 @@ const About = () => {
   const teamMembers = [
     {
       name: "Anwar Khan",
-      role: "Founder & Creative Director",
+      role: "Founder & Chief Technology Officer",
       image: "/team-placeholder1.jpg",
-      bio: "With over 5 years of experience in design and branding, Anwar leads our creative vision with passion and precision.",
+      bio: "With over 8 years of engineering leadership experience, Anwar architects scalable systems and leads technical strategy for high-growth startups.",
       social: {
         twitter: "#",
         linkedin: "#",
-        instagram: "#",
+        github: "#",
       },
     },
     {
       name: "Pritam Das",
-      role: "Lead Developer",
+      role: "Principal Engineer",
       image: "/team-placeholder2.jpg",
-      bio: "Pritam brings technical expertise and innovative solutions to every project, ensuring flawless functionality.",
+      bio: "Pritam specializes in building production-ready platforms that scale. Expert in distributed systems, DevOps, and modern engineering practices.",
       social: {
         twitter: "#",
         linkedin: "#",
@@ -35,24 +35,24 @@ const About = () => {
     },
     {
       name: "Lisa Patel",
-      role: "UX/UI Designer",
+      role: "Product Engineering Lead",
       image: "/team-placeholder3.jpg",
-      bio: "Lisa crafts intuitive user experiences that delight customers and drive engagement for our clients.",
+      bio: "Lisa bridges product strategy with technical implementation, ensuring MVPs ship fast while maintaining enterprise-grade quality.",
       social: {
-        dribbble: "#",
+        twitter: "#",
         linkedin: "#",
-        instagram: "#",
+        github: "#",
       },
     },
     {
       name: "Sabia Khan",
-      role: "Marketing Strategist",
+      role: "DevOps & Infrastructure Engineer",
       image: "/team-placeholder4.jpg",
-      bio: "Sabia develops data-driven marketing strategies that connect brands with their ideal audiences.",
+      bio: "Sabia builds reliable infrastructure that scales. Expert in AWS, monitoring, security, and achieving 99.9% uptime for production systems.",
       social: {
         twitter: "#",
         linkedin: "#",
-        instagram: "#",
+        github: "#",
       },
     },
   ];
@@ -116,11 +116,11 @@ const About = () => {
             variants={itemVariants}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-              About Veloria
+              About Veloria Labs
             </h2>
             <p className="text-gray-600 dark:text-gray-300 text-lg">
-              We're a team of passionate designers and developers creating
-              beautiful digital experiences for brands and individuals.
+              We're a product engineering lab that partners with technical founders 
+              to build scalable, production-ready platforms that drive startup success.
             </p>
           </motion.div>
 
@@ -128,25 +128,25 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
             <motion.div variants={itemVariants}>
               <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-                Our Story
+                Our Mission
               </h3>
               <div className="space-y-4 text-gray-600 dark:text-gray-300">
                 <p>
-                  Founded in 2018, Veloria was born from a passion for creating
-                  beautiful, functional websites specifically for brands that
-                  cater to individuals. We noticed that these brands often often
-                  struggled to find design partners who truly understood their
-                  unique needs and audience.
+                  Veloria Labs emerged from a critical need in the startup ecosystem: 
+                  technical founders need engineering partners who understand both 
+                  rapid MVP development and enterprise-scale architecture. We bridge 
+                  the gap between "ship fast" and "build right."
                 </p>
                 <p>
-                  What started as a small studio has grown into a full-service
-                  agency with a team of specialists dedicated to helping these
-                  brands shine in the digital space.
+                  Our team combines startup velocity with enterprise engineering 
+                  practices. We've helped technical founders validate ideas in 
+                  weeks, not months, while building platforms that scale to 
+                  millions of users without technical debt.
                 </p>
                 <p>
-                  Today, we're proud to have partnered with over 30 brands
-                  across the globe, creating digital experiences that resonate
-                  with their audiences and drive meaningful results.
+                  Today, we're the technical co-founder that startup teams wish 
+                  they had—bringing years of production experience, architectural 
+                  expertise, and a deep understanding of the startup journey.
                 </p>
               </div>
             </motion.div>
@@ -329,12 +329,11 @@ const About = () => {
 
               <div className="text-center mt-6">
                 <h4 className="text-xl font-bold text-primary-600 dark:text-primary-400 mb-2">
-                  Our Mission
+                  Engineering Excellence
                 </h4>
                 <p className="text-gray-600 dark:text-gray-300">
-                  To transform brands with beautiful, functional digital
-                  experiences that connect with their audience and drive
-                  meaningful results.
+                  Building production-ready platforms that scale from MVP to 
+                  millions of users with enterprise-grade architecture and startup velocity.
                 </p>
               </div>
             </motion.div>
@@ -343,27 +342,27 @@ const About = () => {
           {/* Values section */}
           <motion.div className="mb-20" variants={itemVariants}>
             <h3 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">
-              Our Values
+              Our Engineering Principles
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 {
-                  title: "Creativity & Innovation",
+                  title: "Technical Excellence",
                   description:
-                    "We push boundaries and think outside the box to deliver unique solutions.",
+                    "Clean code, automated testing, and enterprise-grade architecture that scales from day one.",
                   color: "primary",
                 },
                 {
-                  title: "Quality & Excellence",
+                  title: "Startup Velocity",
                   description:
-                    "We hold ourselves to the highest standards in everything we create.",
-                  color: "secondary",
+                    "Ship MVPs in weeks, not months, while maintaining production-ready quality standards.",
+                  color: "accent",
                 },
                 {
-                  title: "Empathy & Understanding",
+                  title: "Partnership Mindset",
                   description:
-                    "We listen deeply to understand your brand and your audience's needs.",
-                  color: "accent",
+                    "We act as your technical co-founder, making strategic decisions that drive long-term success.",
+                  color: "primary",
                 },
               ].map((value, index) => (
                 <motion.div

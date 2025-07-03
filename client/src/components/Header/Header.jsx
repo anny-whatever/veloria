@@ -6,10 +6,8 @@ import { ArrowRight } from "lucide-react";
 import Button from "../Button";
 import { Heading, default as Text } from "../Text";
 import { Link } from "react-router-dom";
-import { useTheme } from "../../contexts/ThemeContext";
 
 const Header = () => {
-  const { isDarkMode } = useTheme();
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
@@ -83,29 +81,29 @@ const Header = () => {
     <header
       id="home"
       ref={ref}
-      className="min-h-screen relative flex items-center overflow-hidden bg-surface-50 dark:bg-dark-200 pt-20"
+      className="min-h-screen relative flex items-center overflow-hidden bg-black pt-20"
     >
       {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-dot-pattern bg-[length:20px_20px] opacity-[0.03] dark:opacity-[0.05]"></div>
+      <div className="absolute inset-0 bg-dot-pattern bg-[length:20px_20px] opacity-[0.05]"></div>
 
       {/* Abstract shapes/background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute -top-20 right-0 w-[40vw] h-[40vw] max-w-[600px] max-h-[600px] bg-gradient-radial from-primary-200/30 to-transparent rounded-full opacity-60 dark:from-primary-900/20"
+          className="absolute -top-20 right-0 w-[40vw] h-[40vw] max-w-[600px] max-h-[600px] bg-gradient-radial from-primary-900/20 to-transparent rounded-full opacity-60"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 0.6, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.2 }}
         ></motion.div>
 
         <motion.div
-          className="absolute -bottom-20 left-0 w-[50vw] h-[50vw] max-w-[800px] max-h-[800px] bg-gradient-radial from-accent-200/20 to-transparent rounded-full opacity-60 dark:from-accent-900/15"
+          className="absolute -bottom-20 left-0 w-[50vw] h-[50vw] max-w-[800px] max-h-[800px] bg-gradient-radial from-accent-900/15 to-transparent rounded-full opacity-60"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 0.6, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.4 }}
         ></motion.div>
 
         <motion.div
-          className="absolute top-1/3 left-1/4 w-[20vw] h-[20vw] max-w-[300px] max-h-[300px] bg-gradient-radial from-light-200/20 to-transparent rounded-full opacity-40 dark:from-light-900/10"
+          className="absolute top-1/3 left-1/4 w-[20vw] h-[20vw] max-w-[300px] max-h-[300px] bg-gradient-radial from-light-900/10 to-transparent rounded-full opacity-40"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 0.4, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.6 }}
@@ -129,7 +127,7 @@ const Header = () => {
                 weight="medium"
                 align={isBrowser && isMobile ? "center" : "left"}
               >
-                Digital Solutions Provider
+                Product Engineering Lab
               </Text>
             </motion.div>
 
@@ -139,9 +137,9 @@ const Header = () => {
                 align={isBrowser && isMobile ? "center" : "left"}
                 className="leading-tight tracking-tight"
               >
-                Web Design & Development
-                <span className="block bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-secondary-400 dark:to-accent-400">
-                  For Modern Businesses
+                Engineering Tomorrow's
+                <span className="block bg-gradient-to-r from-primary-400 via-accent-400 to-primary-300 bg-clip-text text-transparent">
+                  Products
                 </span>
               </Heading>
             </motion.div>
@@ -153,9 +151,9 @@ const Header = () => {
                 align={isBrowser && isMobile ? "center" : "left"}
                 className="mb-8 max-w-lg"
               >
-                Specialized in custom software, web applications, and powerful
-                ERP systems that streamline operations, enhance user
-                experiences, and drive business growth.
+                From MVP to Scale - We build production-ready platforms that
+                technical founders trust. Ship in weeks, not months, with
+                enterprise-grade architecture and 99.9% uptime.
               </Text>
             </motion.div>
 
@@ -186,8 +184,8 @@ const Header = () => {
                   <motion.button
                     onClick={() => scrollToSection("services")}
                     className="btn flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-medium
-                    bg-white dark:bg-dark-100 text-primary-700 dark:text-primary-400 border-2 border-primary-400 dark:border-primary-500
-                    shadow-sm hover:bg-primary-50 dark:hover:bg-dark-200 hover:shadow-md transition-all duration-200 w-full"
+                    bg-gray-800 text-primary-400 border-2 border-primary-500
+                    shadow-sm hover:bg-gray-700 hover:shadow-md transition-all duration-200 w-full"
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98, y: 0 }}
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
