@@ -129,7 +129,7 @@ const Portfolio = () => {
 
         {/* Minimal CTA Section */}
         <motion.div
-          className="pt-16 text-center border-t border-dashed border-gray-700/40"
+          className="pt-4 text-center border-dashed border-gray-700/40"
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{
@@ -207,15 +207,9 @@ const PortfolioFeature = ({ project, index }) => {
       <div className="relative z-10 p-8 md:p-10 min-h-[280px] flex flex-col justify-between">
         {/* Icon and category */}
         <div className="mb-6">
-          <motion.div
-            className="mb-4 text-gray-500 transition-colors duration-300 group-hover/feature:text-gray-400"
-            whileHover={{
-              rotate: [0, -10, 10, 0],
-              transition: { duration: 0.5 },
-            }}
-          >
+          <div className="mb-4 text-gray-500 transition-colors duration-300 group-hover/feature:text-gray-400">
             {categoryIcons[project.category] || categoryIcons.default}
-          </motion.div>
+          </div>
 
           <div className="space-y-3">
             <h3 className="text-lg font-light text-white transition-colors duration-300 group-hover/feature:text-gray-100">

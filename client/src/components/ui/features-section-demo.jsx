@@ -77,7 +77,7 @@ export default function FeaturesSectionDemo() {
 
   return (
     <motion.div
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 relative z-10 max-w-6xl mx-auto gap-0"
+      className="grid relative z-10 grid-cols-1 gap-0 mx-auto max-w-6xl md:grid-cols-2 lg:grid-cols-4"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -132,35 +132,29 @@ const Feature = ({ title, description, icon, index }) => {
       }}
     >
       {/* Subtle gradient overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-800/0 to-gray-900/0 group-hover/feature:from-gray-800/3 group-hover/feature:to-gray-900/8 transition-all duration-700 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br transition-all duration-700 pointer-events-none from-gray-800/0 to-gray-900/0 group-hover/feature:from-gray-800/3 group-hover/feature:to-gray-900/8" />
 
       <div className="relative z-10 p-8 md:p-10 min-h-[240px] flex flex-col justify-between">
         {/* Icon and title */}
         <div className="mb-6">
-          <motion.div
-            className="mb-4 text-gray-500 group-hover/feature:text-gray-400 transition-colors duration-300"
-            whileHover={{
-              rotate: [0, -8, 8, 0],
-              transition: { duration: 0.4 },
-            }}
-          >
+          <div className="mb-4 text-gray-500 transition-colors duration-300 group-hover/feature:text-gray-400">
             {icon}
-          </motion.div>
+          </div>
 
           <div className="space-y-3">
-            <h3 className="text-base font-light text-white group-hover/feature:text-gray-100 transition-colors duration-300 leading-snug">
+            <h3 className="text-base font-light leading-snug text-white transition-colors duration-300 group-hover/feature:text-gray-100">
               {title}
             </h3>
-            <p className="text-sm text-gray-500 font-light leading-relaxed group-hover/feature:text-gray-400 transition-colors duration-300">
+            <p className="text-sm font-light leading-relaxed text-gray-500 transition-colors duration-300 group-hover/feature:text-gray-400">
               {description}
             </p>
           </div>
         </div>
 
         {/* Minimal accent indicator */}
-        <div className="flex items-center justify-end">
+        <div className="flex justify-end items-center">
           <motion.div
-            className="w-6 h-px bg-gray-700/50 group-hover/feature:bg-gray-500/70 transition-colors duration-300"
+            className="w-6 h-px transition-colors duration-300 bg-gray-700/50 group-hover/feature:bg-gray-500/70"
             whileHover={{ scaleX: 1.3 }}
             transition={{ duration: 0.3 }}
           />
