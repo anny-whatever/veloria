@@ -61,7 +61,7 @@ const Footer = () => {
         style={{
           background: isGetStartedPage
             ? "black"
-            : "linear-gradient(to bottom, #EDEDED 0%, #D0D0D0 30%, #B0B0B0 60%, #6B7280 100%)",
+            : "linear-gradient(to bottom, #EDEDED 0%, #D0D0D0 30%, #B0B0B0 60%, #6B7280 1600%)",
         }}
       />
 
