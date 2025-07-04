@@ -1,7 +1,7 @@
 // src/components/Navbar/Navbar.jsx
 import { useState, useEffect, useRef } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import {
   scrollToSection,
@@ -15,6 +15,10 @@ const Navbar = () => {
   const [currentSection, setCurrentSection] = useState("home");
   const [isBrowser, setIsBrowser] = useState(false);
   const navRef = useRef(null);
+  const location = useLocation();
+
+  // Check if we're on the GetStarted page
+  const isGetStartedPage = location.pathname === "/get-started";
 
   // Section IDs for detection
   const sectionIds = [
@@ -105,7 +109,14 @@ const Navbar = () => {
   };
 
   // Get current navbar colors
-  const navbarColors = getNavbarColors(currentSection);
+  const navbarColors = isGetStartedPage
+    ? {
+        bg: "rgba(0, 0, 0, 0.9)", // Full black for GetStarted page
+        text: "text-white",
+        hoverText: "hover:text-gray-200",
+        shadow: "shadow-xl",
+      }
+    : getNavbarColors(currentSection);
 
   return (
     <nav
@@ -117,140 +128,237 @@ const Navbar = () => {
         paddingBottom: scrolled ? "0.5rem" : "1rem",
       }}
     >
-      <div className="container mx-auto px-4">
+      <div className="container px-4 mx-auto">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <div className="transform transition-transform duration-200 hover:scale-105">
+          <div className="transition-transform duration-200 transform hover:scale-105">
             <Logo />
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <button
-              onClick={handleHomeClick}
-              className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
-            >
-              Home
-            </button>
-            <button
-              onClick={() => handleSectionClick("services")}
-              className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
-            >
-              Services
-            </button>
-            <button
-              onClick={() => handleSectionClick("portfolio")}
-              className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
-            >
-              Portfolio
-            </button>
-            <button
-              onClick={() => handleSectionClick("about")}
-              className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
-            >
-              About
-            </button>
-            <button
-              onClick={() => handleSectionClick("contact")}
-              className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
-            >
-              Contact
-            </button>
+          <div className="hidden items-center space-x-8 md:flex">
+            {isGetStartedPage ? (
+              <>
+                <Link
+                  to="/"
+                  className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/#services"
+                  className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
+                >
+                  Services
+                </Link>
+                <Link
+                  to="/#portfolio"
+                  className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
+                >
+                  Portfolio
+                </Link>
+                <Link
+                  to="/#about"
+                  className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
+                >
+                  About
+                </Link>
+                <Link
+                  to="/#contact"
+                  className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
+                >
+                  Contact
+                </Link>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={handleHomeClick}
+                  className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
+                >
+                  Home
+                </button>
+                <button
+                  onClick={() => handleSectionClick("services")}
+                  className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
+                >
+                  Services
+                </button>
+                <button
+                  onClick={() => handleSectionClick("portfolio")}
+                  className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
+                >
+                  Portfolio
+                </button>
+                <button
+                  onClick={() => handleSectionClick("about")}
+                  className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
+                >
+                  About
+                </button>
+                <button
+                  onClick={() => handleSectionClick("contact")}
+                  className={`${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200 font-medium no-underline`}
+                >
+                  Contact
+                </button>
+              </>
+            )}
 
-            <Link to="/get-started">
-              <button className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-6 py-2 rounded-full font-medium transition-all duration-200 transform hover:scale-105 no-underline">
-                Get Started
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </Link>
+            {!isGetStartedPage && (
+              <Link to="/get-started">
+                <button className="inline-flex gap-2 items-center px-6 py-2 font-medium text-white no-underline bg-gradient-to-r rounded-full transition-all duration-200 transform from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 hover:scale-105">
+                  Get Started
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`p-2 ${navbarColors.text} ${navbarColors.hoverText} transition-colors duration-200`}
+              className={`p-2 ${navbarColors.text} ${navbarColors.hoverText} transition-all duration-200 hover:scale-105 transform`}
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              <Menu size={24} />
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation Backdrop */}
         <div
-          className={`md:hidden fixed inset-0 z-40 pt-20 transition-all duration-300 ${
-            isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
-          style={{
-            backgroundColor:
-              navbarColors.bg === "transparent"
-                ? "rgba(255, 255, 255, 0.95)"
-                : navbarColors.bg,
-            backdropFilter: "blur(16px)",
-          }}
+          className={`md:hidden fixed inset-0 z-40 transition-all duration-300 ${
+            isOpen ? "visible opacity-100" : "invisible opacity-0"
+          } ${
+            isGetStartedPage ? "bg-gray-900/95" : "bg-gray-900/90"
+          } backdrop-blur-xl`}
+          onClick={() => setIsOpen(false)}
         >
-          <div className="flex flex-col items-center space-y-8 py-12">
-            <button
-              onClick={handleHomeClick}
-              className={`text-xl font-medium transition-colors duration-200 no-underline ${
-                navbarColors.bg === "#EDEDED" ||
-                navbarColors.bg === "rgba(255, 255, 255, 0.9)"
-                  ? "text-gray-700 hover:text-gray-900"
-                  : "text-white hover:text-gray-200"
-              }`}
-            >
-              Home
-            </button>
-            <button
-              onClick={() => handleSectionClick("services")}
-              className={`text-xl font-medium transition-colors duration-200 no-underline ${
-                navbarColors.bg === "#EDEDED" ||
-                navbarColors.bg === "rgba(255, 255, 255, 0.9)"
-                  ? "text-gray-700 hover:text-gray-900"
-                  : "text-white hover:text-gray-200"
-              }`}
-            >
-              Services
-            </button>
-            <button
-              onClick={() => handleSectionClick("portfolio")}
-              className={`text-xl font-medium transition-colors duration-200 no-underline ${
-                navbarColors.bg === "#EDEDED" ||
-                navbarColors.bg === "rgba(255, 255, 255, 0.9)"
-                  ? "text-gray-700 hover:text-gray-900"
-                  : "text-white hover:text-gray-200"
-              }`}
-            >
-              Portfolio
-            </button>
-            <button
-              onClick={() => handleSectionClick("about")}
-              className={`text-xl font-medium transition-colors duration-200 no-underline ${
-                navbarColors.bg === "#EDEDED" ||
-                navbarColors.bg === "rgba(255, 255, 255, 0.9)"
-                  ? "text-gray-700 hover:text-gray-900"
-                  : "text-white hover:text-gray-200"
-              }`}
-            >
-              About
-            </button>
-            <button
-              onClick={() => handleSectionClick("contact")}
-              className={`text-xl font-medium transition-colors duration-200 no-underline ${
-                navbarColors.bg === "#EDEDED" ||
-                navbarColors.bg === "rgba(255, 255, 255, 0.9)"
-                  ? "text-gray-700 hover:text-gray-900"
-                  : "text-white hover:text-gray-200"
-              }`}
-            >
-              Contact
-            </button>
-            <Link to="/get-started" onClick={() => setIsOpen(false)}>
-              <button className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-3 rounded-full font-medium transition-all duration-200 transform hover:scale-105 text-lg mt-4 no-underline">
-                Get Started
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </Link>
+          {/* Close Button */}
+          <button
+            onClick={() => setIsOpen(false)}
+            className="absolute top-6 right-6 z-50 p-2 rounded-full backdrop-blur-sm transition-all duration-200 bg-white/10 hover:bg-white/20"
+          >
+            <X size={24} className="text-white" />
+          </button>
+
+          {/* Mobile Menu Content */}
+          <div
+            className="flex flex-col justify-center items-center min-h-screen bg-black"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Logo */}
+            <div className="mb-12">
+              <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-light-400 to-accent-400">
+                Veloria Labs
+              </h1>
+            </div>
+
+            {/* Navigation Items */}
+            <div className="flex flex-col items-center space-y-8">
+              {isGetStartedPage ? (
+                <>
+                  <Link
+                    to="/"
+                    onClick={() => setIsOpen(false)}
+                    className="text-2xl font-light text-white no-underline transition-all duration-300 transform hover:text-primary-400 hover:scale-105"
+                  >
+                    Home
+                  </Link>
+                  <Link
+                    to="/#services"
+                    onClick={() => setIsOpen(false)}
+                    className="text-2xl font-light text-white no-underline transition-all duration-300 transform hover:text-primary-400 hover:scale-105"
+                  >
+                    Services
+                  </Link>
+                  <Link
+                    to="/#portfolio"
+                    onClick={() => setIsOpen(false)}
+                    className="text-2xl font-light text-white no-underline transition-all duration-300 transform hover:text-primary-400 hover:scale-105"
+                  >
+                    Portfolio
+                  </Link>
+                  <Link
+                    to="/#about"
+                    onClick={() => setIsOpen(false)}
+                    className="text-2xl font-light text-white no-underline transition-all duration-300 transform hover:text-primary-400 hover:scale-105"
+                  >
+                    About
+                  </Link>
+                  <Link
+                    to="/#contact"
+                    onClick={() => setIsOpen(false)}
+                    className="text-2xl font-light text-white no-underline transition-all duration-300 transform hover:text-primary-400 hover:scale-105"
+                  >
+                    Contact
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => {
+                      handleHomeClick();
+                      setIsOpen(false);
+                    }}
+                    className="text-2xl font-light text-white no-underline transition-all duration-300 transform hover:text-primary-400 hover:scale-105"
+                  >
+                    Home
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleSectionClick("services");
+                      setIsOpen(false);
+                    }}
+                    className="text-2xl font-light text-white no-underline transition-all duration-300 transform hover:text-primary-400 hover:scale-105"
+                  >
+                    Services
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleSectionClick("portfolio");
+                      setIsOpen(false);
+                    }}
+                    className="text-2xl font-light text-white no-underline transition-all duration-300 transform hover:text-primary-400 hover:scale-105"
+                  >
+                    Portfolio
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleSectionClick("about");
+                      setIsOpen(false);
+                    }}
+                    className="text-2xl font-light text-white no-underline transition-all duration-300 transform hover:text-primary-400 hover:scale-105"
+                  >
+                    About
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleSectionClick("contact");
+                      setIsOpen(false);
+                    }}
+                    className="text-2xl font-light text-white no-underline transition-all duration-300 transform hover:text-primary-400 hover:scale-105"
+                  >
+                    Contact
+                  </button>
+
+                  {/* Get Started Button */}
+                  <div className="mt-12">
+                    <Link to="/get-started" onClick={() => setIsOpen(false)}>
+                      <button className="inline-flex gap-3 items-center px-10 py-4 text-lg font-medium text-white bg-gradient-to-r rounded-full shadow-lg backdrop-blur-sm transition-all duration-300 transform from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 hover:scale-105 hover:shadow-primary-500/25">
+                        Get Started
+                        <ArrowRight className="w-5 h-5" />
+                      </button>
+                    </Link>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Decorative Elements */}
+            <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t to-transparent pointer-events-none from-primary-900/20" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl to-transparent pointer-events-none from-accent-900/20" />
           </div>
         </div>
       </div>

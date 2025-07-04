@@ -1,7 +1,7 @@
 // src/pages/GetStarted/FaqSection.jsx
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, MessageSquare } from "lucide-react";
+import { ChevronDown, ChevronUp, MessageSquare, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const FaqSection = ({ setActiveSection }) => {
@@ -15,7 +15,7 @@ const FaqSection = ({ setActiveSection }) => {
     {
       question: "How long does it take to build a website?",
       answer:
-        "Timeline depends on the complexity of your project. A simple landing page can be completed in 2 weeks, while e-commerce sites typically take 4-6 weeks. Blog and portfolio sites usually take 3-4 weeks. During our initial consultation, we&apos;ll provide you with a specific timeline based on your requirements.",
+        "Timeline depends on the complexity of your project. A simple landing page can be completed in 2 weeks, while e-commerce sites typically take 4-6 weeks. Blog and portfolio sites usually take 3-4 weeks. During our initial consultation, we'll provide you with a specific timeline based on your requirements.",
     },
     {
       question: "What do I need to provide to get started?",
@@ -28,158 +28,133 @@ const FaqSection = ({ setActiveSection }) => {
         "Yes, we include one year of free hosting with all our packages. We can also register a domain for you (included in the price if it costs under ₹1,500 per year). After the first year, we offer hosting maintenance plans or can help you transition to your preferred hosting provider.",
     },
     {
-      question: "Can I update the website myself after it's built?",
+      question: "Can you help with redesigning an existing website?",
       answer:
-        "Absolutely! All our websites come with a user-friendly content management system that allows you to update text, images, add new products or blog posts, and make basic changes without any technical knowledge. We provide training on how to use the system once your site is complete.",
+        "Absolutely! We specialize in website redesigns to improve performance, user experience, and modern design standards. We can work with your existing content and structure or completely rebuild your site. We'll analyze your current website and provide recommendations for improvement.",
     },
     {
-      question: "What payment methods do you accept?",
+      question: "What happens after my website is launched?",
       answer:
-        "We accept bank transfers, UPI payments, and major credit/debit cards. For projects, we typically require a 20% deposit to begin work, with the remaining balance due upon project completion. For larger projects, we may set up milestone payments.",
+        "After launch, we provide ongoing support including content updates, security monitoring, and technical maintenance. We offer different support packages based on your needs. We also provide training on how to manage your website's content and can help with future enhancements.",
     },
     {
-      question: "Do you offer maintenance and support after launch?",
+      question: "Do you offer custom software development?",
       answer:
-        "Yes, we provide one month of free bug fixes after launch. For ongoing support, we offer various maintenance packages that include regular updates, security monitoring, performance optimization, and content updates. We can discuss these options during our consultation.",
+        "Yes, we develop custom software solutions including web applications, management systems, and enterprise software. Our team has experience in various technologies and can build solutions tailored to your specific business requirements.",
     },
     {
-      question: "Can you redesign my existing website?",
+      question: "What is your pricing structure?",
       answer:
-        "Yes, we specialize in website redesigns. We&apos;ll analyze your current site, identify areas for improvement, and create a fresh, modern design while preserving your brand identity. We can also help migrate content from your existing site to the new one.",
+        "Our pricing is project-based and depends on the scope, complexity, and timeline of your project. We provide detailed quotes after understanding your requirements. We believe in transparent pricing with no hidden costs. Payment is typically split into milestones throughout the project.",
     },
     {
       question: "Do you provide SEO services?",
       answer:
-        "All our websites are built with SEO best practices in mind, including proper HTML structure, mobile optimization, and fast loading times. We include basic on-page SEO setup, but for comprehensive SEO campaigns including keyword research, content strategy, and ongoing optimization, we offer specialized SEO packages as an add-on service.",
-    },
-    {
-      question: "What happens if I'm not satisfied with the design?",
-      answer:
-        "Your satisfaction is our priority. Our design process includes up to three rounds of revisions to ensure you're completely happy with the final result. We maintain open communication throughout the project and incorporate your feedback at each stage to prevent any misalignment of expectations.",
-    },
-    {
-      question: "Can you help with content creation?",
-      answer:
-        "Yes, we offer content creation services including copywriting, photography sourcing, custom graphics, and product descriptions as add-on services. If you need help creating compelling content for your website, we can discuss these options during our initial consultation.",
+        "Yes, we implement SEO best practices in all our websites, including proper meta tags, structured data, fast loading speeds, and mobile optimization. We can also provide ongoing SEO services to help improve your search engine rankings and online visibility.",
     },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-  };
-
   return (
-    <div>
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold mb-2 dark:text-white">
-          Frequently Asked Questions
-        </h3>
-        <p className="text-gray-600 dark:text-gray-300">
-          Find answers to common questions about our services and process.
-        </p>
-      </div>
+    <div className="relative">
+      {/* Timeline line */}
+      <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-gray-600 via-gray-700 to-gray-600" />
 
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="space-y-4 mb-12"
-      >
+      <div className="space-y-8">
         {faqs.map((faq, index) => (
           <motion.div
             key={index}
-            variants={itemVariants}
-            className={`border ${
-              activeIndex === index
-                ? "border-primary/50 dark:border-primary-400/50 bg-primary/5 dark:bg-primary-900/10"
-                : "border-gray-200 dark:border-gray-700"
-            } rounded-lg overflow-hidden transition-colors duration-300 dark:bg-dark-200`}
+            className="relative"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.1 }}
           >
-            <div
-              className={`p-5 flex justify-between items-center cursor-pointer ${
-                activeIndex === index
-                  ? "border-b border-primary/50 dark:border-primary-400/50"
-                  : ""
-              }`}
-              onClick={() => toggleFaq(index)}
-            >
-              <h4 className="font-medium text-lg pr-8 dark:text-white">
-                {faq.question}
-              </h4>
+            <div className="flex items-start gap-6">
+              {/* Step indicator */}
               <div
-                className={`flex items-center justify-center w-7 h-7 rounded-full ${
-                  activeIndex === index
-                    ? "bg-primary-600 dark:bg-primary-400 text-white"
-                    : "bg-gray-200 dark:bg-dark-300 text-gray-600 dark:text-gray-300"
-                }`}
+                className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                  index % 3 === 0
+                    ? "bg-gray-600 hover:bg-gray-500"
+                    : index % 3 === 1
+                    ? "bg-gray-700 hover:bg-gray-600"
+                    : "bg-gray-500 hover:bg-gray-400"
+                } text-white z-10 flex-shrink-0 transition-all duration-300 cursor-pointer`}
+                onClick={() => toggleFaq(index)}
               >
-                {activeIndex === index ? (
-                  <ChevronUp size={18} />
-                ) : (
-                  <ChevronDown size={18} />
-                )}
+                <span className="text-lg font-light">{index + 1}</span>
               </div>
-            </div>
 
-            <AnimatePresence>
-              {activeIndex === index && (
+              {/* FAQ content */}
+              <div
+                className={`flex-grow cursor-pointer transition-all duration-300 ${
+                  activeIndex === index ? "text-white" : "text-gray-300"
+                }`}
+                onClick={() => toggleFaq(index)}
+              >
+                <div className="mb-2">
+                  <h3 className="text-lg font-light mb-1">{faq.question}</h3>
+                  <div className="w-8 h-px bg-gray-600" />
+                </div>
+
+                {/* Expandable answer */}
                 <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
+                  initial={false}
+                  animate={{
+                    height: activeIndex === index ? "auto" : 0,
+                    opacity: activeIndex === index ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="overflow-hidden"
                 >
-                  <div className="p-5 text-gray-600 dark:text-gray-300">
-                    {faq.answer}
+                  <div className="pt-4 pb-2">
+                    <p className="text-sm font-light text-gray-400 leading-relaxed">
+                      {faq.answer}
+                    </p>
                   </div>
                 </motion.div>
-              )}
-            </AnimatePresence>
+              </div>
+            </div>
           </motion.div>
         ))}
-      </motion.div>
+      </div>
 
-      <div className="bg-gray-50 dark:bg-dark-300 rounded-xl p-6 border border-gray-200 dark:border-gray-700 text-center">
-        <h4 className="text-lg font-bold mb-3 dark:text-white">
-          Still have questions?
-        </h4>
-        <p className="text-gray-600 dark:text-gray-300 mb-6">
-          We're here to help! Contact us directly or schedule a discovery call.
+      {/* Bottom CTA */}
+      <motion.div
+        className="mt-12 pt-8 border-t border-gray-800 text-center"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+      >
+        <div className="mb-6">
+          <h3 className="text-lg font-light text-white mb-2">
+            Still Have Questions?
+          </h3>
+          <div className="w-12 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent mx-auto" />
+        </div>
+        <p className="text-gray-400 font-light mb-6 leading-relaxed">
+          We're here to help! Get in touch and we'll answer any questions you
+          have about your project.
         </p>
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Link to="/#contact">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-6 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400 text-white rounded-lg shadow-md w-full sm:w-auto"
-            >
-              <div className="flex items-center justify-center">
-                <MessageSquare size={18} className="mr-2" />
-                <span>Contact Us</span>
-              </div>
-            </motion.button>
-          </Link>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <motion.button
+            onClick={() => setActiveSection("contact")}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-6 py-3 border border-primary-600 dark:border-primary-400 text-primary-600 dark:text-primary-300 rounded-lg w-full sm:w-auto hover:bg-primary/5 dark:hover:bg-primary-900/10 transition-colors"
-            onClick={() => setActiveSection("booking")}
+            className="flex items-center gap-2 px-6 py-3 bg-white text-black font-light transition-all duration-300 hover:bg-gray-100"
           >
-            Schedule a Call
+            <MessageSquare size={16} />
+            <span>Contact Us</span>
+          </motion.button>
+          <motion.button
+            onClick={() => setActiveSection("booking")}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 px-6 py-3 bg-gray-800 text-white font-light transition-all duration-300 hover:bg-gray-700 border border-gray-700"
+          >
+            <Calendar size={16} />
+            <span>Book a Call</span>
           </motion.button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

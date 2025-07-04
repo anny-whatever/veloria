@@ -1,7 +1,7 @@
 // src/components/Contact/ContactForm.jsx
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send } from "lucide-react";
+import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { submitContactForm } from "../../api";
 
 const ContactForm = ({ onSubmit }) => {
@@ -103,126 +103,201 @@ const ContactForm = ({ onSubmit }) => {
     }
   };
 
-  const inputClasses =
-    "w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-200 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-400 transition-colors duration-200";
-  const labelClasses =
-    "block text-gray-700 dark:text-gray-300 mb-2 font-medium";
-  const errorClasses = "text-red-500 dark:text-red-400 text-sm mt-1";
+  if (submitStatus === "success") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="text-center py-12"
+      >
+        <div className="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-gray-600 rounded-full">
+          <CheckCircle size={32} className="text-white" />
+        </div>
+        <h3 className="mb-3 text-xl font-light text-white">
+          Message Sent Successfully
+        </h3>
+        <div className="w-12 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent mx-auto mb-6" />
+        <p className="text-gray-400 font-light leading-relaxed max-w-md mx-auto">
+          Thank you for your message! We'll get back to you within 24 hours with
+          a detailed response.
+        </p>
+      </motion.div>
+    );
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {submitStatus === "success" && (
-        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-600 dark:text-green-400 rounded-lg p-3">
-          Thank you for your message! We'll get back to you soon.
-        </div>
-      )}
-
+    <div>
+      {/* Status Messages */}
       {submitStatus === "error" && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg p-3">
-          {apiError ||
-            "There was a problem sending your message. Please try again or contact us directly."}
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 p-4 bg-red-900/20 border border-red-800/50 rounded-lg flex items-start gap-3"
+        >
+          <AlertCircle
+            size={20}
+            className="text-red-400 flex-shrink-0 mt-0.5"
+          />
+          <div>
+            <p className="text-red-300 font-light text-sm">
+              {apiError ||
+                "There was a problem sending your message. Please try again or contact us directly."}
+            </p>
+          </div>
+        </motion.div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label htmlFor="name" className={labelClasses}>
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Your name"
-            className={inputClasses}
-          />
-          {errors.name && <p className={errorClasses}>{errors.name}</p>}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Name and Email Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label
+              htmlFor="name"
+              className="block mb-3 font-light text-gray-300"
+            >
+              Your Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Your full name"
+              className="w-full px-0 py-4 bg-transparent border-0 border-b border-gray-800 text-white placeholder-gray-400 font-light focus:outline-none focus:border-gray-600 transition-all duration-300"
+            />
+            {errors.name && (
+              <p className="mt-2 text-sm text-red-400 font-light">
+                {errors.name}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="email"
+              className="block mb-3 font-light text-gray-300"
+            >
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="your.email@example.com"
+              className="w-full px-0 py-4 bg-transparent border-0 border-b border-gray-800 text-white placeholder-gray-400 font-light focus:outline-none focus:border-gray-600 transition-all duration-300"
+            />
+            {errors.email && (
+              <p className="mt-2 text-sm text-red-400 font-light">
+                {errors.email}
+              </p>
+            )}
+          </div>
         </div>
 
-        <div>
-          <label htmlFor="email" className={labelClasses}>
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="your.email@example.com"
-            className={inputClasses}
-          />
-          {errors.email && <p className={errorClasses}>{errors.email}</p>}
+        {/* Phone and Subject Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label
+              htmlFor="phone"
+              className="block mb-3 font-light text-gray-300"
+            >
+              Phone Number
+              <span className="text-gray-500 text-sm ml-1">(Optional)</span>
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="Your phone number"
+              className="w-full px-0 py-4 bg-transparent border-0 border-b border-gray-800 text-white placeholder-gray-400 font-light focus:outline-none focus:border-gray-600 transition-all duration-300"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="subject"
+              className="block mb-3 font-light text-gray-300"
+            >
+              Subject
+            </label>
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              value={formData.subject}
+              onChange={handleChange}
+              placeholder="What's this about?"
+              className="w-full px-0 py-4 bg-transparent border-0 border-b border-gray-800 text-white placeholder-gray-400 font-light focus:outline-none focus:border-gray-600 transition-all duration-300"
+            />
+          </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Message Field */}
         <div>
-          <label htmlFor="phone" className={labelClasses}>
-            Phone (optional)
+          <label
+            htmlFor="message"
+            className="block mb-3 font-light text-gray-300"
+          >
+            Message
           </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
+          <textarea
+            id="message"
+            name="message"
+            value={formData.message}
             onChange={handleChange}
-            placeholder="Your phone number"
-            className={inputClasses}
+            placeholder="Tell us about your project, goals, and how we can help you..."
+            rows="5"
+            className="w-full px-0 py-4 bg-transparent border-0 border-b border-gray-800 text-white placeholder-gray-400 font-light focus:outline-none focus:border-gray-600 transition-all duration-300 resize-none"
           />
+          {errors.message && (
+            <p className="mt-2 text-sm text-red-400 font-light">
+              {errors.message}
+            </p>
+          )}
         </div>
 
-        <div>
-          <label htmlFor="subject" className={labelClasses}>
-            Subject
-          </label>
-          <input
-            type="text"
-            id="subject"
-            name="subject"
-            value={formData.subject}
-            onChange={handleChange}
-            placeholder="What's this about?"
-            className={inputClasses}
-          />
+        {/* Submit Button */}
+        <div className="pt-6">
+          <motion.button
+            type="submit"
+            disabled={isSubmitting}
+            whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+            whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+            className={`w-full px-6 py-4 font-light transition-all duration-300 flex items-center justify-center gap-3 ${
+              isSubmitting
+                ? "bg-gray-800 text-gray-400 cursor-not-allowed"
+                : "bg-white text-black hover:bg-gray-100"
+            }`}
+          >
+            {isSubmitting ? (
+              <>
+                <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                <span>Sending Message...</span>
+              </>
+            ) : (
+              <>
+                <Send size={18} />
+                <span>Send Message</span>
+              </>
+            )}
+          </motion.button>
         </div>
-      </div>
 
-      <div>
-        <label htmlFor="message" className={labelClasses}>
-          Message
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          value={formData.message}
-          onChange={handleChange}
-          rows="5"
-          placeholder="Tell us about your project..."
-          className={inputClasses}
-        ></textarea>
-        {errors.message && <p className={errorClasses}>{errors.message}</p>}
-      </div>
-
-      <motion.button
-        type="submit"
-        disabled={isSubmitting}
-        className="btn-primary px-8 py-3 rounded-full text-white dark:text-white font-medium inline-flex items-center justify-center gap-2 w-full md:w-auto"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        {isSubmitting ? (
-          <span>Sending...</span>
-        ) : (
-          <>
-            <span>Send Message</span>
-            <Send size={16} />
-          </>
-        )}
-      </motion.button>
-    </form>
+        {/* Info Text */}
+        <div className="pt-6 border-t border-gray-800">
+          <p className="text-sm text-gray-400 font-light leading-relaxed text-center">
+            We typically respond to all inquiries within 24 hours. For urgent
+            projects, feel free to call us directly at{" "}
+            <span className="text-gray-300">+91 9315 360 595</span>.
+          </p>
+        </div>
+      </form>
+    </div>
   );
 };
 

@@ -20,8 +20,8 @@ const ProcessTimeline = ({ setActiveSection }) => {
       id: 1,
       title: "Initial Consultation",
       description:
-        "We discuss your requirements, goals, and budget to determine if we&apos;re a good fit for each other.",
-      icon: <Coffee size={24} />,
+        "We discuss your requirements, goals, and budget to determine if we're a good fit for each other.",
+      icon: <Coffee size={20} />,
       color: "primary",
       details: [
         "In-depth discussion about your project needs and vision",
@@ -35,7 +35,7 @@ const ProcessTimeline = ({ setActiveSection }) => {
       title: "Project Planning",
       description:
         "We collect all necessary assets and information to create a detailed project plan.",
-      icon: <FileText size={24} />,
+      icon: <FileText size={20} />,
       color: "secondary",
       details: [
         "Brand assets collection (logos, images, content)",
@@ -51,7 +51,7 @@ const ProcessTimeline = ({ setActiveSection }) => {
       title: "Design Phase",
       description:
         "Based on your preferences, we create beautiful design mockups for your approval.",
-      icon: <Palette size={24} />,
+      icon: <Palette size={20} />,
       color: "accent",
       details: [
         "Initial design concepts presented",
@@ -65,84 +65,85 @@ const ProcessTimeline = ({ setActiveSection }) => {
       id: 4,
       title: "Development",
       description:
-        "Once designs are approved, we start building your website with regular progress updates.",
-      icon: <Code size={24} />,
+        "Our developers build your website or application using the latest technologies.",
+      icon: <Code size={20} />,
       color: "primary",
       details: [
-        "Frontend development based on approved designs",
-        "Backend functionality implementation",
-        "Content management system setup",
-        "Payment gateway integration (for e-commerce)",
-        "Daily progress updates through client portal",
-        "Regular check-ins and milestone reviews",
+        "Clean, semantic code development",
+        "SEO optimization built-in",
+        "Cross-browser compatibility testing",
+        "Performance optimization",
+        "Security best practices implementation",
+        "Mobile-first responsive development",
       ],
     },
     {
       id: 5,
-      title: "Testing & Refinement",
+      title: "Testing & QA",
       description:
-        "We thoroughly test your website to ensure everything works flawlessly.",
-      icon: <CheckCircle size={24} />,
+        "Thorough testing to ensure everything works perfectly across all devices and browsers.",
+      icon: <CheckCircle size={20} />,
       color: "secondary",
       details: [
-        "Comprehensive quality assurance testing",
-        "Cross-browser and cross-device compatibility checks",
-        "Performance optimization",
-        "Security testing",
-        "Content review and spell-checking",
-        "Client review and final adjustments",
+        "Cross-browser compatibility testing",
+        "Mobile responsiveness testing",
+        "Performance and speed optimization",
+        "Security vulnerability testing",
+        "User experience testing",
+        "Final client review and approval",
       ],
     },
     {
       id: 6,
-      title: "Launch",
+      title: "Launch & Support",
       description:
-        "We deploy your website to your domain and provide training on how to use it.",
-      icon: <Rocket size={24} />,
+        "We deploy your project and provide ongoing support to ensure smooth operations.",
+      icon: <Rocket size={20} />,
       color: "accent",
       details: [
         "Domain and hosting setup",
-        "Website deployment",
-        "Final checks in live environment",
-        "Training session on content management system",
-        "Documentation and user guides provided",
-        "Google Search Console and Analytics setup",
+        "SSL certificate installation",
+        "Production deployment",
+        "Post-launch monitoring",
+        "1 year of free hosting included",
+        "Ongoing maintenance and support options",
       ],
     },
   ];
 
+  const getColorClasses = (color) => {
+    switch (color) {
+      case "primary":
+        return "bg-gray-600 hover:bg-gray-500";
+      case "secondary":
+        return "bg-gray-700 hover:bg-gray-600";
+      case "accent":
+        return "bg-gray-500 hover:bg-gray-400";
+      default:
+        return "bg-gray-600 hover:bg-gray-500";
+    }
+  };
+
   return (
-    <div>
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold mb-2 dark:text-white">Our Process</h3>
-        <p className="text-gray-600 dark:text-gray-300">
-          We follow a structured approach to deliver quality websites on time.
-        </p>
-      </div>
+    <div className="relative">
+      {/* Timeline line */}
+      <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-gray-600 via-gray-700 to-gray-600" />
 
-      <div className="relative mb-10">
-        {/* Timeline line */}
-        <div className="absolute h-full w-1 bg-gray-300 dark:bg-gray-700 left-6 top-0"></div>
-
-        {/* Timeline steps */}
+      <div className="space-y-8">
         {steps.map((step, index) => (
           <motion.div
             key={step.id}
-            className="mb-6 relative z-10"
+            className="relative"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <div className="flex">
+            <div className="flex items-start gap-6">
               {/* Step indicator */}
               <div
-                className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                  step.color === "primary"
-                    ? "bg-primary-600 dark:bg-primary-500"
-                    : step.color === "secondary"
-                    ? "bg-secondary-600 dark:bg-secondary-500"
-                    : "bg-accent-600 dark:bg-accent-500"
-                } text-white z-10 flex-shrink-0 shadow-lg`}
+                className={`w-12 h-12 rounded-full flex items-center justify-center ${getColorClasses(
+                  step.color
+                )} text-white z-10 flex-shrink-0 transition-all duration-300 cursor-pointer`}
                 onClick={() =>
                   setActiveStep(activeStep === step.id ? null : step.id)
                 }
@@ -152,127 +153,94 @@ const ProcessTimeline = ({ setActiveSection }) => {
 
               {/* Step content */}
               <div
-                className={`ml-6 bg-white dark:bg-dark-200 rounded-lg border-2 ${
-                  activeStep === step.id
-                    ? step.color === "primary"
-                      ? "border-primary-600 dark:border-primary-500"
-                      : step.color === "secondary"
-                      ? "border-secondary-600 dark:border-secondary-500"
-                      : "border-accent-600 dark:border-accent-500"
-                    : "border-gray-300 dark:border-gray-700"
-                } flex-grow hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer`}
+                className={`flex-grow cursor-pointer transition-all duration-300 ${
+                  activeStep === step.id ? "text-white" : "text-gray-300"
+                }`}
                 onClick={() =>
                   setActiveStep(activeStep === step.id ? null : step.id)
                 }
               >
-                <div className="p-5">
-                  <div className="flex justify-between items-center">
-                    <h4 className="text-lg font-bold text-gray-800 dark:text-white">
-                      {index + 1}. {step.title}
-                    </h4>
-                    <span
-                      className={`${
-                        step.color === "primary"
-                          ? "text-primary-600 dark:text-primary-400"
-                          : step.color === "secondary"
-                          ? "text-secondary-600 dark:text-secondary-400"
-                          : "text-accent-600 dark:text-accent-400"
-                      } text-sm font-medium`}
-                    >
-                      {activeStep === step.id
-                        ? "Click to collapse"
-                        : "Click to see details"}
-                    </span>
-                  </div>
-                  <p className="text-gray-700 dark:text-gray-300 mt-1">
-                    {step.description}
-                  </p>
-
-                  {/* Expanded details */}
-                  {activeStep === step.id && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className={`mt-4 pt-4 border-t border-gray-300 dark:border-gray-700`}
-                    >
-                      <ul className="space-y-2">
-                        {step.details.map((detail, idx) => (
-                          <li key={idx} className="flex items-start">
-                            <CheckCircle
-                              size={18}
-                              className={`${
-                                step.color === "primary"
-                                  ? "text-primary-600 dark:text-primary-400"
-                                  : step.color === "secondary"
-                                  ? "text-secondary-600 dark:text-secondary-400"
-                                  : "text-accent-600 dark:text-accent-400"
-                              } mt-0.5 mr-3 flex-shrink-0`}
-                            />
-                            <span className="text-gray-700 dark:text-gray-300">
-                              {detail}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </motion.div>
-                  )}
+                <div className="mb-2">
+                  <h3 className="text-lg font-light mb-1">{step.title}</h3>
+                  <div className="w-8 h-px bg-gray-600" />
                 </div>
+                <p className="text-sm font-light text-gray-400 mb-4 leading-relaxed">
+                  {step.description}
+                </p>
+
+                {/* Expandable details */}
+                <motion.div
+                  initial={false}
+                  animate={{
+                    height: activeStep === step.id ? "auto" : 0,
+                    opacity: activeStep === step.id ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="overflow-hidden"
+                >
+                  <div className="space-y-2 pt-2 border-t border-gray-800">
+                    {step.details.map((detail, detailIndex) => (
+                      <motion.div
+                        key={detailIndex}
+                        className="flex items-start gap-3"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{
+                          opacity: activeStep === step.id ? 1 : 0,
+                          x: activeStep === step.id ? 0 : -10,
+                        }}
+                        transition={{
+                          delay: activeStep === step.id ? detailIndex * 0.1 : 0,
+                          duration: 0.3,
+                        }}
+                      >
+                        <div className="w-1 h-1 bg-gray-500 rounded-full mt-2 flex-shrink-0" />
+                        <span className="text-sm font-light text-gray-400 leading-relaxed">
+                          {detail}
+                        </span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
               </div>
             </div>
           </motion.div>
         ))}
       </div>
 
-      <div className="p-6 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-dark-300 rounded-xl">
-        <div className="flex items-start">
-          <Layers
-            size={24}
-            className="flex-shrink-0 mt-1 mr-4 text-primary dark:text-primary-400"
-          />
-          <div>
-            <h4 className="mb-2 text-lg font-bold dark:text-white">
-              Our Client Portal
-            </h4>
-            <p className="mb-4 text-gray-600 dark:text-gray-300">
-              Once your project begins, you'll get access to our client portal
-              where you can:
-            </p>
-            <ul className="space-y-2">
-              {[
-                "Track the daily progress of your website development",
-                "View and approve design mockups",
-                "Communicate directly with your project manager",
-                "Upload and manage content and assets",
-                "Review project milestones and timelines",
-              ].map((feature, index) => (
-                <li key={index} className="flex items-start">
-                  <CheckCircle
-                    size={18}
-                    className="text-green-500 dark:text-green-400 mt-0.5 mr-3 flex-shrink-0"
-                  />
-                  <span className="dark:text-gray-300">{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+      {/* Bottom CTA */}
+      <motion.div
+        className="mt-12 pt-8 border-t border-gray-800 text-center"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+      >
+        <div className="mb-6">
+          <h3 className="text-lg font-light text-white mb-2">
+            Ready to Start Your Project?
+          </h3>
+          <div className="w-12 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent mx-auto" />
         </div>
-      </div>
-
-      <div className="flex justify-center mt-8">
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="px-8 py-3 text-white rounded-lg shadow-md bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400"
-          onClick={() => setActiveSection("form")}
-        >
-          <div className="flex items-center">
-            <MessageSquare size={20} className="mr-2" />
-            <span>Start Your Project Now</span>
-          </div>
-        </motion.button>
-      </div>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <motion.button
+            onClick={() => setActiveSection("contact")}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 px-6 py-3 bg-white text-black font-light transition-all duration-300 hover:bg-gray-100"
+          >
+            <MessageSquare size={16} />
+            <span>Get Started</span>
+          </motion.button>
+          <motion.button
+            onClick={() => setActiveSection("booking")}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 px-6 py-3 bg-gray-800 text-white font-light transition-all duration-300 hover:bg-gray-700 border border-gray-700"
+          >
+            <Coffee size={16} />
+            <span>Book a Call</span>
+          </motion.button>
+        </div>
+      </motion.div>
     </div>
   );
 };

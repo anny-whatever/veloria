@@ -257,7 +257,7 @@ const CalendarBooking = () => {
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
 
   if (isSubmitted) {
@@ -267,73 +267,78 @@ const CalendarBooking = () => {
         animate={{ opacity: 1, scale: 1 }}
         className="py-12 text-center"
       >
-        <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 bg-green-100 rounded-full">
-          <CheckCircle size={40} className="text-green-600" />
+        <div className="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-gray-600">
+          <CheckCircle size={32} className="text-white" />
         </div>
-        <h3 className="mb-2 text-2xl font-bold">Discovery Call Scheduled!</h3>
-        <p className="max-w-lg mx-auto mb-8 text-gray-600">
+        <h3 className="mb-3 text-xl font-light text-white">
+          Discovery Call Scheduled
+        </h3>
+        <div className="w-12 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent mx-auto mb-6" />
+        <p className="max-w-lg mx-auto mb-8 text-gray-400 font-light leading-relaxed">
           Your discovery call has been scheduled for{" "}
           {new Date(formData.date).toLocaleDateString()} at {formData.time}.
           You'll receive a confirmation email with the call details shortly.
         </p>
-        <div className="max-w-md p-6 mx-auto mb-8 border border-gray-200 bg-gray-50 rounded-xl">
-          <div className="flex items-start mb-4">
-            <Calendar
-              size={20}
-              className="flex-shrink-0 mt-1 mr-3 text-primary"
-            />
-            <div>
-              <p className="font-medium">Date</p>
-              <p className="text-gray-600">
-                {new Date(formData.date).toLocaleDateString("en-US", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </p>
+        <div className="max-w-md p-6 mx-auto mb-8 border border-gray-800 bg-gray-900/50 backdrop-blur-sm">
+          <div className="space-y-4">
+            <div className="flex items-start gap-3">
+              <Calendar
+                size={18}
+                className="flex-shrink-0 mt-1 text-gray-400"
+              />
+              <div>
+                <p className="font-light text-white">Date</p>
+                <p className="text-sm text-gray-400">
+                  {new Date(formData.date).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-start mb-4">
-            <Clock size={20} className="flex-shrink-0 mt-1 mr-3 text-primary" />
-            <div>
-              <p className="font-medium">Time</p>
-              <p className="text-gray-600">
-                {formData.time} ({formData.timezone})
-              </p>
+            <div className="flex items-start gap-3">
+              <Clock size={18} className="flex-shrink-0 mt-1 text-gray-400" />
+              <div>
+                <p className="font-light text-white">Time</p>
+                <p className="text-sm text-gray-400">
+                  {formData.time} ({formData.timezone})
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-start">
-            <VideoIcon
-              size={20}
-              className="flex-shrink-0 mt-1 mr-3 text-primary"
-            />
-            <div>
-              <p className="font-medium">Call Type</p>
-              <p className="text-gray-600">
-                {formData.callType === "video"
-                  ? "Video Call (Zoom)"
-                  : "Phone Call"}
-              </p>
+            <div className="flex items-start gap-3">
+              <VideoIcon
+                size={18}
+                className="flex-shrink-0 mt-1 text-gray-400"
+              />
+              <div>
+                <p className="font-light text-white">Call Type</p>
+                <p className="text-sm text-gray-400">
+                  {formData.callType === "video"
+                    ? "Video Call (Zoom)"
+                    : "Phone Call"}
+                </p>
+              </div>
             </div>
-          </div>
 
-          {bookingDetails?.meetingDetails?.link && (
-            <div className="pt-4 mt-4 border-t border-gray-200">
-              <a
-                href={bookingDetails.meetingDetails.link}
-                className="font-medium text-primary hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Join Zoom Meeting
-              </a>
-            </div>
-          )}
+            {bookingDetails?.meetingDetails?.link && (
+              <div className="pt-4 mt-4 border-t border-gray-800">
+                <a
+                  href={bookingDetails.meetingDetails.link}
+                  className="font-light text-gray-300 hover:text-white transition-colors"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Join Zoom Meeting
+                </a>
+              </div>
+            )}
+          </div>
         </div>
         <button
           onClick={() => (window.location.href = "/")}
-          className="px-6 py-3 text-white rounded-lg bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400"
+          className="px-6 py-3 bg-white text-black font-light transition-all duration-300 hover:bg-gray-100"
         >
           Return to Home
         </button>
@@ -343,37 +348,30 @@ const CalendarBooking = () => {
 
   return (
     <div>
-      <div className="mb-8 text-center">
-        <h3 className="mb-2 text-2xl font-bold">Book a Discovery Call</h3>
-        <p className="text-gray-600">
-          Schedule a free 30-minute consultation to discuss your project needs.
-        </p>
-      </div>
-
       {/* API Error Message */}
       {apiError && (
-        <div className="p-4 mb-6 text-red-700 border border-red-200 rounded-lg bg-red-50">
+        <div className="p-4 mb-6 text-red-300 border border-red-800/50 bg-red-900/20">
           {apiError}
         </div>
       )}
 
       {/* Progress indicator */}
       <div className="mb-8">
-        <div className="flex justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <div className="flex justify-between mb-3">
+          <span className="text-sm font-light text-gray-300">
             Step {currentStep} of 2
           </span>
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <span className="text-sm font-light text-gray-300">
             {currentStep === 1 ? "50%" : "100%"} Complete
           </span>
         </div>
-        <div className="w-full h-3 overflow-hidden bg-gray-200 dark:bg-gray-700 rounded-full">
+        <div className="w-full h-2 bg-gray-800 overflow-hidden">
           <motion.div
-            className="h-full bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary to-secondary"
+            className="h-full bg-gradient-to-r from-gray-600 to-gray-500"
             initial={{ width: "0%" }}
             animate={{ width: currentStep === 1 ? "50%" : "100%" }}
             transition={{ duration: 0.3 }}
-          ></motion.div>
+          />
         </div>
       </div>
 
@@ -384,35 +382,34 @@ const CalendarBooking = () => {
         animate="visible"
       >
         {currentStep === 1 ? (
-          <div>
-            <h4 className="mb-6 text-xl font-semibold">Select Date & Time</h4>
+          <div className="space-y-8">
+            <div className="mb-6">
+              <h4 className="text-lg font-light text-white mb-2">
+                Select Date & Time
+              </h4>
+              <div className="w-8 h-px bg-gray-600" />
+            </div>
 
             {/* Calendar */}
-            <div className="mb-8">
-              <div className="bg-white dark:bg-dark-200 rounded-xl shadow-md p-4">
-                <div className="flex justify-between items-center mb-4">
-                  <h4 className="text-lg font-medium dark:text-white">
+            <div>
+              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h4 className="text-lg font-light text-white">
                     {currentDate.toLocaleString("default", { month: "long" })}{" "}
                     {currentDate.getFullYear()}
                   </h4>
                   <div className="flex space-x-2">
                     <button
                       onClick={handlePrevMonth}
-                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-dark-300"
+                      className="p-2 hover:bg-gray-800 transition-colors"
                     >
-                      <ChevronLeft
-                        size={18}
-                        className="text-gray-600 dark:text-gray-300"
-                      />
+                      <ChevronLeft size={18} className="text-gray-400" />
                     </button>
                     <button
                       onClick={handleNextMonth}
-                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-dark-300"
+                      className="p-2 hover:bg-gray-800 transition-colors"
                     >
-                      <ChevronRight
-                        size={18}
-                        className="text-gray-600 dark:text-gray-300"
-                      />
+                      <ChevronRight size={18} className="text-gray-400" />
                     </button>
                   </div>
                 </div>
@@ -422,7 +419,7 @@ const CalendarBooking = () => {
                   {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
                     <div
                       key={day}
-                      className="h-8 flex items-center justify-center text-sm font-medium text-gray-500 dark:text-gray-400"
+                      className="h-8 flex items-center justify-center text-sm font-light text-gray-400"
                     >
                       {day}
                     </div>
@@ -431,17 +428,17 @@ const CalendarBooking = () => {
                   {calendarDays.map((day, i) => (
                     <div
                       key={i}
-                      className={`h-10 flex items-center justify-center rounded-full text-sm cursor-pointer transition-colors ${
+                      className={`h-10 flex items-center justify-center text-sm cursor-pointer transition-all duration-300 ${
                         day.isDisabled
-                          ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
+                          ? "text-gray-600 cursor-not-allowed"
                           : day.isToday
-                          ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold"
+                          ? "bg-gray-600 text-white font-light"
                           : selectedDate &&
                             day.date &&
                             day.date.toDateString() ===
                               selectedDate.toDateString()
-                          ? "bg-primary-600 dark:bg-primary-600 text-white font-medium"
-                          : "hover:bg-gray-100 dark:hover:bg-dark-300 text-gray-800 dark:text-gray-300"
+                          ? "bg-white text-black font-light"
+                          : "hover:bg-gray-800 text-gray-300"
                       }`}
                       onClick={() => {
                         if (!day.isDisabled && day.date) {
@@ -455,39 +452,43 @@ const CalendarBooking = () => {
                 </div>
               </div>
               {errors.date && (
-                <p className="mt-1 text-red-500">{errors.date}</p>
+                <p className="mt-2 text-sm text-red-400 font-light">
+                  {errors.date}
+                </p>
               )}
             </div>
 
             {/* Time slots */}
-            <div className="mb-8">
-              <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+            <div>
+              <label className="block mb-3 font-light text-gray-300">
                 Select a Time
               </label>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {timeSlots.map((time) => (
                   <div
                     key={time}
-                    className={`p-3 text-center rounded-lg cursor-pointer border ${
+                    className={`p-3 text-center cursor-pointer border transition-all duration-300 ${
                       selectedTime === time
-                        ? "bg-primary-600 dark:bg-primary-600 border-primary-600 dark:border-primary-600 text-white"
-                        : "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-dark-300 text-gray-800 dark:text-gray-300"
+                        ? "bg-white text-black border-white"
+                        : "border-gray-800 hover:bg-gray-800 text-gray-300 hover:border-gray-700"
                     }`}
                     onClick={() => handleTimeSelect(time)}
                   >
-                    {time}
+                    <span className="text-sm font-light">{time}</span>
                   </div>
                 ))}
               </div>
               {errors.time && (
-                <p className="mt-1 text-red-500">{errors.time}</p>
+                <p className="mt-2 text-sm text-red-400 font-light">
+                  {errors.time}
+                </p>
               )}
             </div>
 
             {/* Timezone */}
-            <div className="mb-8">
+            <div>
               <label
-                className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
+                className="block mb-3 font-light text-gray-300"
                 htmlFor="timezone"
               >
                 Your Timezone
@@ -497,50 +498,57 @@ const CalendarBooking = () => {
                 name="timezone"
                 value={formData.timezone}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
+                className="w-full px-0 py-4 border-0 border-b border-gray-800 focus:outline-none focus:border-gray-600 bg-transparent text-white font-light [&>option]:bg-gray-800 [&>option]:text-white"
+                style={{ colorScheme: "dark" }}
               >
                 {timezones.map((tz) => (
-                  <option key={tz.value} value={tz.value}>
+                  <option
+                    key={tz.value}
+                    value={tz.value}
+                    className="bg-gray-800 text-white"
+                  >
                     {tz.label}
                   </option>
                 ))}
               </select>
               {errors.timezone && (
-                <p className="mt-1 text-red-500">{errors.timezone}</p>
+                <p className="mt-2 text-sm text-red-400 font-light">
+                  {errors.timezone}
+                </p>
               )}
             </div>
 
             {/* Call Type */}
-            <div className="mb-8">
-              <label className="block mb-2 font-medium text-gray-700">
+            <div>
+              <label className="block mb-3 font-light text-gray-300">
                 Call Type
               </label>
               <div className="grid grid-cols-2 gap-4">
                 {callTypes.map((type) => (
                   <div
                     key={type.id}
-                    className={`p-4 rounded-lg cursor-pointer border ${
+                    className={`p-4 cursor-pointer border transition-all duration-300 ${
                       formData.callType === type.id
-                        ? "border-primary-600 dark:border-primary-400 bg-primary/5 dark:bg-primary-900/20"
-                        : "border-gray-200 dark:border-gray-700"
-                    } hover:shadow-md transition-shadow duration-300`}
+                        ? "border-gray-600 bg-gray-800/50"
+                        : "border-gray-800 hover:border-gray-700 hover:bg-gray-900/50"
+                    }`}
                     onClick={() =>
                       handleChange({
                         target: { name: "callType", value: type.id },
                       })
                     }
                   >
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-3">
                       <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        className={`w-10 h-10 flex items-center justify-center ${
                           formData.callType === type.id
-                            ? "bg-primary-600 dark:bg-primary-600 text-white"
-                            : "bg-gray-200 dark:bg-dark-300 text-gray-700 dark:text-gray-400"
+                            ? "bg-gray-600 text-white"
+                            : "bg-gray-800 text-gray-400"
                         }`}
                       >
                         {type.icon}
                       </div>
-                      <span className="ml-3 font-medium text-gray-800 dark:text-white">
+                      <span className="font-light text-white">
                         {type.label}
                       </span>
                     </div>
@@ -548,166 +556,192 @@ const CalendarBooking = () => {
                 ))}
               </div>
               {errors.callType && (
-                <p className="mt-1 text-red-500">{errors.callType}</p>
+                <p className="mt-2 text-sm text-red-400 font-light">
+                  {errors.callType}
+                </p>
               )}
             </div>
           </div>
         ) : (
-          <div>
-            <h4 className="mb-6 text-xl font-semibold">Your Information</h4>
+          <div className="space-y-6">
+            <div className="mb-6">
+              <h4 className="text-lg font-light text-white mb-2">
+                Your Information
+              </h4>
+              <div className="w-8 h-px bg-gray-600" />
+            </div>
 
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div>
-                  <label
-                    className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
-                    htmlFor="name"
-                  >
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
-                    placeholder="Your full name"
-                  />
-                  {errors.name && (
-                    <p className="mt-1 text-red-500">{errors.name}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label
-                    className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
-                    htmlFor="email"
-                  >
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
-                    placeholder="your.email@example.com"
-                  />
-                  {errors.email && (
-                    <p className="mt-1 text-red-500">{errors.email}</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div>
-                  <label
-                    className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
-                    htmlFor="phone"
-                  >
-                    Phone Number (Optional)
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
-                    placeholder="Your contact number"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
-                    htmlFor="company"
-                  >
-                    Company/Brand (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    id="company"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
-                    placeholder="Your company or brand name"
-                  />
-                </div>
-              </div>
-
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div>
                 <label
-                  className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
-                  htmlFor="projectType"
+                  className="block mb-3 font-light text-gray-300"
+                  htmlFor="name"
                 >
-                  What type of project are you interested in?
+                  Your Name
                 </label>
-                <select
-                  id="projectType"
-                  name="projectType"
-                  value={formData.projectType}
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
-                >
-                  <option value="">Select project type</option>
-                  {projectTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-                {errors.projectType && (
-                  <p className="mt-1 text-red-500">{errors.projectType}</p>
+                  className="w-full px-0 py-4 bg-transparent border-0 border-b border-gray-800 text-white placeholder-gray-400 font-light focus:outline-none focus:border-gray-600 transition-all duration-300"
+                  placeholder="Your full name"
+                />
+                {errors.name && (
+                  <p className="mt-2 text-sm text-red-400 font-light">
+                    {errors.name}
+                  </p>
                 )}
               </div>
 
               <div>
                 <label
-                  className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
-                  htmlFor="additionalInfo"
+                  className="block mb-3 font-light text-gray-300"
+                  htmlFor="email"
                 >
-                  Anything specific you'd like to discuss? (Optional)
+                  Email Address
                 </label>
-                <textarea
-                  id="additionalInfo"
-                  name="additionalInfo"
-                  value={formData.additionalInfo}
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
                   onChange={handleChange}
-                  rows="4"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-dark-200 text-gray-900 dark:text-white"
-                  placeholder="Share any specific topics or questions you'd like to discuss during the call..."
-                ></textarea>
+                  className="w-full px-0 py-4 bg-transparent border-0 border-b border-gray-800 text-white placeholder-gray-400 font-light focus:outline-none focus:border-gray-600 transition-all duration-300"
+                  placeholder="your.email@example.com"
+                />
+                {errors.email && (
+                  <p className="mt-2 text-sm text-red-400 font-light">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div>
+                <label
+                  className="block mb-3 font-light text-gray-300"
+                  htmlFor="phone"
+                >
+                  Phone Number (Optional)
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full px-0 py-4 bg-transparent border-0 border-b border-gray-800 text-white placeholder-gray-400 font-light focus:outline-none focus:border-gray-600 transition-all duration-300"
+                  placeholder="Your contact number"
+                />
               </div>
 
-              <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
-                <div className="flex items-center mb-3">
-                  <Users size={20} className="mr-3 text-primary" />
-                  <h5 className="font-medium">Your Discovery Call Details</h5>
-                </div>
-                <div className="space-y-2 text-sm text-gray-600 pl-9">
-                  <p>
-                    <span className="font-medium">Date:</span>{" "}
+              <div>
+                <label
+                  className="block mb-3 font-light text-gray-300"
+                  htmlFor="company"
+                >
+                  Company/Brand (Optional)
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                  className="w-full px-0 py-4 bg-transparent border-0 border-b border-gray-800 text-white placeholder-gray-400 font-light focus:outline-none focus:border-gray-600 transition-all duration-300"
+                  placeholder="Your company or brand name"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                className="block mb-3 font-light text-gray-300"
+                htmlFor="projectType"
+              >
+                What type of project are you interested in?
+              </label>
+              <select
+                id="projectType"
+                name="projectType"
+                value={formData.projectType}
+                onChange={handleChange}
+                className="w-full px-0 py-4 border-0 border-b border-gray-800 focus:outline-none focus:border-gray-600 bg-transparent text-white font-light [&>option]:bg-gray-800 [&>option]:text-white"
+                style={{ colorScheme: "dark" }}
+              >
+                <option value="" className="bg-gray-800 text-white">
+                  Select project type
+                </option>
+                {projectTypes.map((type) => (
+                  <option
+                    key={type}
+                    value={type}
+                    className="bg-gray-800 text-white"
+                  >
+                    {type}
+                  </option>
+                ))}
+              </select>
+              {errors.projectType && (
+                <p className="mt-2 text-sm text-red-400 font-light">
+                  {errors.projectType}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label
+                className="block mb-3 font-light text-gray-300"
+                htmlFor="additionalInfo"
+              >
+                Anything specific you'd like to discuss? (Optional)
+              </label>
+              <textarea
+                id="additionalInfo"
+                name="additionalInfo"
+                value={formData.additionalInfo}
+                onChange={handleChange}
+                rows="4"
+                className="w-full px-0 py-4 bg-transparent border-0 border-b border-gray-800 text-white placeholder-gray-400 font-light focus:outline-none focus:border-gray-600 transition-all duration-300 resize-none"
+                placeholder="Share any specific topics or questions you'd like to discuss during the call..."
+              />
+            </div>
+
+            <div className="p-6 border border-gray-800 bg-gray-900/50 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <Users size={20} className="text-gray-400" />
+                <h5 className="font-light text-white">
+                  Your Discovery Call Details
+                </h5>
+              </div>
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center gap-3">
+                  <span className="font-light text-gray-300">Date:</span>
+                  <span className="text-gray-400">
                     {selectedDate &&
                       new Date(formData.date).toLocaleDateString("en-US", {
                         weekday: "long",
                         month: "long",
                         day: "numeric",
                       })}
-                  </p>
-                  <p>
-                    <span className="font-medium">Time:</span> {formData.time} (
-                    {formData.timezone})
-                  </p>
-                  <p>
-                    <span className="font-medium">Call Type:</span>{" "}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="font-light text-gray-300">Time:</span>
+                  <span className="text-gray-400">
+                    {formData.time} ({formData.timezone})
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="font-light text-gray-300">Call Type:</span>
+                  <span className="text-gray-400">
                     {formData.callType === "video"
                       ? "Video Call (Zoom)"
                       : "Phone Call"}
-                  </p>
+                  </span>
                 </div>
               </div>
             </div>
@@ -716,13 +750,13 @@ const CalendarBooking = () => {
       </motion.div>
 
       {/* Navigation buttons */}
-      <div className="flex justify-between mt-8">
+      <div className="flex justify-between mt-12">
         {currentStep > 1 && (
           <button
             onClick={handlePrevious}
-            className="px-6 py-3 flex items-center text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-dark-300 rounded-lg hover:bg-gray-200 dark:hover:bg-dark-400 transition-colors"
+            className="px-6 py-3 flex items-center gap-2 text-gray-400 bg-gray-900/50 hover:bg-gray-800 transition-colors font-light"
           >
-            <ChevronLeft size={18} className="mr-2" />
+            <ChevronLeft size={18} />
             Back
           </button>
         )}
@@ -730,26 +764,26 @@ const CalendarBooking = () => {
         {currentStep < 2 ? (
           <button
             onClick={handleNext}
-            className="px-6 py-3 flex items-center text-white rounded-lg bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400 hover:opacity-90 transition-opacity ml-auto"
+            className="px-6 py-3 flex items-center gap-2 text-black bg-white hover:bg-gray-100 transition-colors ml-auto font-light"
           >
             Continue
-            <ChevronRight size={18} className="ml-2" />
+            <ChevronRight size={18} />
           </button>
         ) : (
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="px-6 py-3 flex items-center text-white rounded-lg bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400 hover:opacity-90 transition-opacity ml-auto disabled:opacity-70"
+            className="px-6 py-3 flex items-center gap-2 text-black bg-white hover:bg-gray-100 transition-colors ml-auto font-light disabled:opacity-50"
           >
             {isSubmitting ? (
               <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
                 Scheduling...
               </>
             ) : (
               <>
                 Schedule Call
-                <ChevronRight size={18} className="ml-2" />
+                <ChevronRight size={18} />
               </>
             )}
           </button>
