@@ -1,6 +1,6 @@
 "use client";
 
-import { useMotionValue, motion, useMotionTemplate } from "framer-motion";
+import { useMotionValue, motion, useMotionTemplate } from "motion/react";
 import React, { useState } from "react";
 import { CanvasRevealEffect } from "./canvas-reveal-effect";
 import { cn } from "../../lib/utils";
@@ -14,7 +14,6 @@ export const CardSpotlight = ({
 }) => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-
   function handleMouseMove({ currentTarget, clientX, clientY }) {
     let { left, top } = currentTarget.getBoundingClientRect();
 
@@ -25,7 +24,6 @@ export const CardSpotlight = ({
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseEnter = () => setIsHovering(true);
   const handleMouseLeave = () => setIsHovering(false);
-
   return (
     <div
       className={cn(

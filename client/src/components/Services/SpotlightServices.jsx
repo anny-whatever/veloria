@@ -103,19 +103,19 @@ const ServiceSpotlightCard = ({
 }) => (
   <ScrollReveal delay={delay}>
     <CardSpotlight className="h-auto min-h-[320px] p-6 bg-gradient-to-br from-stone-950 via-zinc-950 to-gray-950 border-gray-700 hover:border-primary-500/50 transition-all duration-300">
-      <div className="flex flex-col h-full relative z-20">
+      <div className="flex relative z-20 flex-col h-full">
         <div className="flex mb-4">
-          <div className="text-primary-400 mr-3">{icon}</div>
-          <Heading level={3} className="text-white text-lg font-semibold">
+          <div className="mr-3 text-primary-400">{icon}</div>
+          <Heading level={3} className="text-lg font-semibold text-white">
             {title}
           </Heading>
         </div>
 
-        <Text className="text-white mb-4 leading-relaxed">{description}</Text>
+        <Text className="mb-4 leading-relaxed text-white">{description}</Text>
 
-        <ul className="list-none space-y-2 mt-auto">
+        <ul className="mt-auto space-y-2 list-none">
           {features.map((feature, index) => (
-            <li key={index} className="flex items-start gap-2 text-sm">
+            <li key={index} className="flex gap-2 items-start text-sm">
               <CheckIcon />
               <span className="text-gray-300">{feature}</span>
             </li>
@@ -148,29 +148,29 @@ const SpotlightServices = () => {
   return (
     <Section
       id="services"
-      className="bg-gradient-to-b from-black via-gray-950 to-gray-950 py-24"
+      className="py-24 bg-gradient-to-b from-black via-gray-950 to-gray-950"
     >
       <Container>
-        <ScrollReveal className="mb-16 max-w-3xl mx-auto text-center">
+        <ScrollReveal className="mx-auto mb-16 max-w-3xl text-center">
           <Text
             color="primary"
             size="sm"
             weight="medium"
-            className="uppercase tracking-wider mb-3 text-primary-400"
+            className="mb-3 tracking-wider uppercase text-primary-400"
           >
             Product Engineering Services
           </Text>
-          <Heading level={2} className="mb-6 text-white text-4xl">
+          <Heading level={2} className="mb-6 text-4xl text-white">
             Engineering Tomorrow's Products
           </Heading>
-          <Text size="lg" className="text-white leading-relaxed">
+          <Text size="lg" className="leading-relaxed text-white">
             We partner with technical founders and startups to build
             production-ready products that scale. Enterprise-grade engineering
             with startup velocity.
           </Text>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 gap-6 mb-12 md:grid-cols-2 lg:grid-cols-3">
           {serviceItems.map((service, index) => (
             <ServiceSpotlightCard key={index} {...service} />
           ))}
@@ -180,7 +180,7 @@ const SpotlightServices = () => {
           <ScrollReveal delay={0.7}>
             <a
               href="/services"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-primary-500/25"
+              className="inline-flex gap-2 items-center px-8 py-4 font-semibold text-white bg-gradient-to-r rounded-lg transition-all duration-300 transform hover:text-white from-primary-600 to-primary-500 hover:from-primary-700 hover:no-underline hover:to-primary-600 hover:scale-105 hover:shadow-xl hover:shadow-primary-500/25"
             >
               <span>Explore All Services</span>
               <svg

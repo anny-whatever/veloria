@@ -26,9 +26,9 @@ const ModernHero = () => {
   }, []);
 
   return (
-    <div className="h-screen w-full bg-black flex flex-col items-center justify-center overflow-hidden relative">
+    <div className="flex overflow-hidden relative flex-col justify-center items-center w-full h-screen bg-black">
       {/* Sparkles Background */}
-      <div className="w-full h-screen absolute inset-0">
+      <div className="absolute inset-0 w-full h-screen">
         <SparklesCore
           id="tsparticlesfullpage"
           background="transparent"
@@ -43,12 +43,12 @@ const ModernHero = () => {
 
       {/* Gradient Overlays */}
       <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-primary-500 to-transparent h-[2px] w-3/4 blur-sm" />
-      <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-primary-500 to-transparent h-px w-3/4" />
+      <div className="absolute top-0 inset-x-20 w-3/4 h-px bg-gradient-to-r from-transparent to-transparent via-primary-500" />
       <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-accent-500 to-transparent h-[5px] w-1/4 blur-sm" />
-      <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-accent-500 to-transparent h-px w-1/4" />
+      <div className="absolute top-0 inset-x-60 w-1/4 h-px bg-gradient-to-r from-transparent to-transparent via-accent-500" />
 
       {/* Content */}
-      <div className="relative z-20 text-center px-4 max-w-6xl mx-auto">
+      <div className="relative z-20 px-4 mx-auto max-w-6xl text-center">
         {/* Main Headline with FlipWords - Made smaller */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -63,11 +63,11 @@ const ModernHero = () => {
             <FlipWords
               words={flipWords}
               duration={2500}
-              className="text-white bg-gradient-to-r from-cyan-400 via-purple-300 to-violet-400 bg-clip-text"
+              className="text-white bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-300 to-violet-400"
             />
           </div>
           <br />
-          <span className="bg-gradient-to-r from-cyan-400 via-purple-300 to-violet-400 bg-clip-text text-transparent">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-300 to-violet-400">
             Digital Experiences
           </span>
         </motion.h1>
@@ -82,13 +82,13 @@ const ModernHero = () => {
           }`}
         >
           Transform your vision into reality with{" "}
-          <span className="text-white font-semibold">
+          <span className="font-semibold text-white">
             cutting-edge technology
           </span>{" "}
           and <span className="text-purple-300">innovative design</span>. We
           build products that{" "}
-          <span className="text-cyan-400 font-semibold">users love</span> and{" "}
-          <span className="text-violet-300 font-semibold">
+          <span className="font-semibold text-cyan-400">users love</span> and{" "}
+          <span className="font-semibold text-violet-300">
             businesses thrive on
           </span>
           .
@@ -99,17 +99,17 @@ const ModernHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+          className="flex flex-col gap-4 justify-center items-center mb-16 sm:flex-row"
         >
           <Link
             to="/get-started"
-            className="group relative inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 hover:shadow-lg hover:shadow-primary-500/25"
+            className="inline-flex relative gap-2 items-center px-8 py-4 font-semibold text-white bg-gradient-to-r rounded-full transition-all duration-200 transform hover:no-underline group hover:text-white from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 hover:scale-105 hover:shadow-lg hover:shadow-primary-500/25"
           >
             Start Your Project
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+            <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
           </Link>
 
-          <button className="group inline-flex items-center gap-2 border border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white px-8 py-4 rounded-full font-semibold transition-all duration-200 hover:bg-gray-800/50">
+          <button className="inline-flex gap-2 items-center px-8 py-4 font-semibold text-gray-300 rounded-full border border-gray-600 transition-all duration-200 group hover:border-gray-500 hover:text-white hover:bg-gray-800/50">
             <Github className="w-4 h-4" />
             Explore Our Work
           </button>
@@ -120,19 +120,19 @@ const ModernHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.0 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-8 text-gray-500 text-sm"
+          className="flex flex-col gap-8 justify-center items-center text-sm text-gray-500 sm:flex-row"
         >
-          <div className="flex items-center gap-2">
+          <div className="flex gap-2 items-center">
             <Shield className="w-4 h-4 text-green-400" />
             <span>Trusted by 100+ Companies</span>
           </div>
-          <div className="hidden sm:block w-px h-4 bg-gray-600"></div>
-          <div className="flex items-center gap-2">
+          <div className="hidden w-px h-4 bg-gray-600 sm:block"></div>
+          <div className="flex gap-2 items-center">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
             <span>24/7 Support</span>
           </div>
-          <div className="hidden sm:block w-px h-4 bg-gray-600"></div>
-          <div className="flex items-center gap-2">
+          <div className="hidden w-px h-4 bg-gray-600 sm:block"></div>
+          <div className="flex gap-2 items-center">
             <Zap className="w-4 h-4 text-yellow-400" />
             <span>Lightning Delivery</span>
           </div>

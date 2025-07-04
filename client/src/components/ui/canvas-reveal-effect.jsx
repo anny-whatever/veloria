@@ -102,7 +102,7 @@ const DotMatrix = ({
     <Shader
       source={`
         precision mediump float;
-        varying vec2 fragCoord;
+        in vec2 fragCoord;
 
         uniform float u_time;
         uniform float u_opacities[10];
@@ -110,7 +110,7 @@ const DotMatrix = ({
         uniform float u_total_size;
         uniform float u_dot_size;
         uniform vec2 u_resolution;
-        
+        out vec4 fragColor;
         float PHI = 1.61803398874989484820459;
         float random(vec2 xy) {
             return fract(tan(distance(xy * PHI, xy) * 0.5) * xy.x);
@@ -146,8 +146,8 @@ const DotMatrix = ({
 
       ${shader}
 
-      gl_FragColor = vec4(color, opacity);
-      gl_FragColor.rgb *= gl_FragColor.a;
+      fragColor = vec4(color, opacity);
+      fragColor.rgb *= fragColor.a;
         }`}
       uniforms={uniforms}
       maxFps={60}
@@ -221,19 +221,20 @@ const ShaderMaterial = ({ source, uniforms, maxFps = 60 }) => {
     const materialObject = new THREE.ShaderMaterial({
       vertexShader: `
       precision mediump float;
-      attribute vec2 uv;
-      varying vec2 vUv;
+      in vec2 coordinates;
       uniform vec2 u_resolution;
-      varying vec2 fragCoord;
+      out vec2 fragCoord;
       void main(){
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        float x = position.x;
+        float y = position.y;
+        gl_Position = vec4(x, y, 0.0, 1.0);
         fragCoord = (position.xy + vec2(1.0)) * 0.5 * u_resolution;
         fragCoord.y = u_resolution.y - fragCoord.y;
       }
       `,
       fragmentShader: source,
       uniforms: getUniforms(),
+      glslVersion: THREE.GLSL3,
       blending: THREE.CustomBlending,
       blendSrc: THREE.SrcAlphaFactor,
       blendDst: THREE.OneFactor,
@@ -252,7 +253,7 @@ const ShaderMaterial = ({ source, uniforms, maxFps = 60 }) => {
 
 const Shader = ({ source, uniforms, maxFps = 60 }) => {
   return (
-    <Canvas className="absolute inset-0 h-full w-full">
+    <Canvas className="absolute inset-0  h-full w-full">
       <ShaderMaterial source={source} uniforms={uniforms} maxFps={maxFps} />
     </Canvas>
   );

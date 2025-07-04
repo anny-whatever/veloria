@@ -145,7 +145,7 @@ function App() {
       {isBrowser && (
         <motion.button
           onClick={scrollToTop}
-          className="fixed z-50 flex items-center justify-center w-12 h-12 text-white transition-all duration-300 rounded-full shadow-lg bottom-6 right-6 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 hover:shadow-primary-500/25"
+          className="flex fixed right-6 bottom-6 z-50 justify-center items-center w-12 h-12 text-white bg-gradient-to-r rounded-full shadow-lg transition-all duration-300 from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 hover:shadow-primary-500/25"
           whileHover={{ y: -5, scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0, y: 20 }}
@@ -188,16 +188,16 @@ function App() {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center min-h-screen bg-black"
+            className="flex fixed inset-0 z-50 flex-col justify-center items-center min-h-screen bg-black"
           >
             {/* Logo */}
             <motion.div
               variants={logoVariants}
               initial="initial"
               animate="animate"
-              className="mb-6"
+              className="mb-1"
             >
-              <h1 className="text-4xl font-bold text-transparent bg-gradient-to-r from-primary-500 to-accent-700 bg-clip-text">
+              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-accent-700">
                 Veloria Labs
               </h1>
             </motion.div>
@@ -207,7 +207,7 @@ function App() {
               variants={taglineVariants}
               initial="initial"
               animate="animate"
-              className="mb-8 text-gray-600 dark:text-gray-400"
+              className="mb-1 text-gray-600 dark:text-gray-400"
             >
               Engineering Tomorrow's Products
             </motion.p>
@@ -223,7 +223,7 @@ function App() {
                 <motion.div
                   key={i}
                   variants={dotVariants}
-                  className="w-3 h-3 rounded-full bg-gradient-to-r from-primary to-secondary"
+                  className="w-3 h-3 bg-gradient-to-r rounded-full from-primary to-secondary"
                 />
               ))}
             </motion.div>
