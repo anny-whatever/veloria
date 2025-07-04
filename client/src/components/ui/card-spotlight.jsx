@@ -1,5 +1,3 @@
-"use client";
-
 import { useMotionValue, motion, useMotionTemplate } from "framer-motion";
 import React, { useState } from "react";
 import { CanvasRevealEffect } from "./canvas-reveal-effect";

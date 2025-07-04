@@ -1,4 +1,3 @@
-"use client";
 import React, { useId, useMemo } from "react";
 import { useEffect, useState, useRef } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";

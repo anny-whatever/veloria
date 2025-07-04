@@ -1,5 +1,3 @@
-"use client";
-
 import { useRef } from "react";
 import { motion } from "framer-motion";
 import DottedMap from "dotted-map";
