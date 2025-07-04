@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import Button from "../Button";
 import { Heading, default as Text } from "../Text";
 import { Link } from "react-router-dom";
+import { scrollToSection } from "../../utils/smoothScroll";
 
 const Header = () => {
   const [ref, inView] = useInView({
@@ -31,30 +32,6 @@ const Header = () => {
     // Cleanup
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const scrollToSection = (sectionId) => {
-    if (typeof window === "undefined") return;
-
-    const section = document.getElementById(sectionId);
-    if (section) {
-      // Get the navbar height to offset the scroll position
-      const navbar = document.querySelector("nav");
-      const navbarHeight = navbar ? navbar.offsetHeight : 0;
-
-      // Calculate the target position (element position - navbar height - extra padding)
-      const targetPosition =
-        section.getBoundingClientRect().top +
-        window.pageYOffset -
-        navbarHeight -
-        20;
-
-      // Smooth scroll to the calculated position
-      window.scrollTo({
-        top: targetPosition,
-        behavior: "smooth",
-      });
-    }
-  };
 
   // Animation variants
   const containerVariants = {

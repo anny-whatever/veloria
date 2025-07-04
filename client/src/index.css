@@ -190,6 +190,20 @@ a:hover {
 button {
   cursor: pointer;
   font-family: inherit;
+  text-decoration: none;
+}
+
+button:hover {
+  text-decoration: none;
+}
+
+/* Ensure no underlines on navigation buttons */
+.no-underline {
+  text-decoration: none !important;
+}
+
+.no-underline:hover {
+  text-decoration: none !important;
 }
 
 /* Focus styles for accessibility */

@@ -1,8 +1,7 @@
 // src/components/About/About.jsx
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import TeamMember from "./TeamMember";
-import { CheckCircle2 } from "lucide-react";
+import { cn } from "../../lib/utils";
 
 const About = () => {
   const [ref, inView] = useInView({
@@ -10,391 +9,310 @@ const About = () => {
     triggerOnce: true,
   });
 
-  const teamMembers = [
-    {
-      name: "Anwar Khan",
-      role: "Founder & Chief Technology Officer",
-      image: "/team-placeholder1.jpg",
-      bio: "With over 8 years of engineering leadership experience, Anwar architects scalable systems and leads technical strategy for high-growth startups.",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#",
-      },
-    },
-    {
-      name: "Pritam Das",
-      role: "Principal Engineer",
-      image: "/team-placeholder2.jpg",
-      bio: "Pritam specializes in building production-ready platforms that scale. Expert in distributed systems, DevOps, and modern engineering practices.",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#",
-      },
-    },
-    {
-      name: "Lisa Patel",
-      role: "Product Engineering Lead",
-      image: "/team-placeholder3.jpg",
-      bio: "Lisa bridges product strategy with technical implementation, ensuring MVPs ship fast while maintaining enterprise-grade quality.",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#",
-      },
-    },
-    {
-      name: "Sabia Khan",
-      role: "DevOps & Infrastructure Engineer",
-      image: "/team-placeholder4.jpg",
-      bio: "Sabia builds reliable infrastructure that scales. Expert in AWS, monitoring, security, and achieving 99.9% uptime for production systems.",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#",
-      },
-    },
-  ];
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.12,
         delayChildren: 0.3,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 40, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.6, ease: [0.6, 0.05, 0.01, 0.9] },
+      transition: { duration: 0.8, ease: [0.23, 1, 0.32, 1] },
     },
   };
 
-  const valuesAnimation = {
-    hidden: { opacity: 0, scale: 0.8 },
+  const slideFromLeft = {
+    hidden: { x: -60, opacity: 0 },
     visible: {
+      x: 0,
       opacity: 1,
-      scale: 1,
-      transition: { duration: 0.6, ease: "easeOut" },
+      transition: { duration: 0.8, ease: [0.23, 1, 0.32, 1] },
     },
   };
+
+  const slideFromRight = {
+    hidden: { x: 60, opacity: 0 },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: { duration: 0.8, ease: [0.23, 1, 0.32, 1] },
+    },
+  };
+
+  const values = [
+    "We believe in building software that stands the test of time",
+    "Speed matters, but not at the expense of quality",
+    "We're technical partners invested in your success",
+    "We integrate cutting-edge tech for competitive advantage",
+  ];
+
+  const stats = [
+    {
+      number: "8+",
+      label: "Years Building",
+      description: "Deep expertise in production systems",
+    },
+    {
+      number: "100+",
+      label: "Projects Shipped",
+      description: "From MVP to enterprise scale",
+    },
+    {
+      number: "99%",
+      label: "Client Satisfaction",
+      description: "Long-term partnership success",
+    },
+  ];
 
   return (
     <section
       id="about"
       ref={ref}
-      className="py-20 md:py-28 bg-white dark:bg-dark-300 relative overflow-hidden"
+      className="overflow-hidden relative py-24 bg-black md:py-40"
     >
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-gradient-radial from-accent/10 to-transparent rounded-full opacity-60 translate-y-1/4 translate-x-1/4 dark:from-accent/5"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={
-            inView ? { opacity: 0.6, scale: 1 } : { opacity: 0, scale: 0.8 }
-          }
-          transition={{ duration: 1.2, delay: 0.2 }}
-        ></motion.div>
+      {/* Subtle background elements */}
+      <div className="overflow-hidden absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-px h-32 bg-gradient-to-b from-transparent to-transparent transform -rotate-12 via-gray-600/20" />
+        <div className="absolute top-1/2 right-1/3 w-px h-24 bg-gradient-to-b from-transparent to-transparent transform rotate-45 via-gray-600/20" />
+        <div className="absolute bottom-1/4 left-1/2 w-px h-40 bg-gradient-to-b from-transparent to-transparent transform rotate-12 via-gray-600/20" />
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
+      <div className="container relative z-10 px-4 mx-auto md:px-6">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          {/* Section header */}
+          {/* Hero Statement */}
           <motion.div
-            className="text-center max-w-3xl mx-auto mb-16"
+            className="mx-auto mb-32 max-w-4xl text-center"
             variants={itemVariants}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-              About Veloria Labs
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300 text-lg">
-              We're a product engineering lab that partners with technical founders 
-              to build scalable, production-ready platforms that drive startup success.
-            </p>
+            <div className="mb-8">
+              <motion.div
+                className="inline-block mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                <h2 className="text-3xl font-light text-white md:text-5xl">
+                  About Veloria Labs
+                </h2>
+              </motion.div>
+              <motion.div
+                className="mx-auto w-20 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+              />
+            </div>
+            <motion.p
+              className="mx-auto max-w-3xl text-lg font-light leading-relaxed text-gray-400 md:text-xl"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+            >
+              A product engineering lab that partners with technical founders to
+              build scalable, production-ready platforms that drive startup
+              success.
+            </motion.p>
           </motion.div>
 
-          {/* Our Story */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
-            <motion.div variants={itemVariants}>
-              <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-                Our Mission
-              </h3>
-              <div className="space-y-4 text-gray-600 dark:text-gray-300">
-                <p>
-                  Veloria Labs emerged from a critical need in the startup ecosystem: 
-                  technical founders need engineering partners who understand both 
-                  rapid MVP development and enterprise-scale architecture. We bridge 
-                  the gap between "ship fast" and "build right."
-                </p>
-                <p>
-                  Our team combines startup velocity with enterprise engineering 
-                  practices. We've helped technical founders validate ideas in 
-                  weeks, not months, while building platforms that scale to 
-                  millions of users without technical debt.
-                </p>
-                <p>
-                  Today, we're the technical co-founder that startup teams wish 
-                  they had—bringing years of production experience, architectural 
-                  expertise, and a deep understanding of the startup journey.
-                </p>
-              </div>
-            </motion.div>
-
+          {/* Story Flow */}
+          <div className="mx-auto mb-32 max-w-6xl">
+            {/* Mission Block */}
             <motion.div
-              className="bg-white dark:bg-dark-100 rounded-xl p-6 shadow-md"
+              className="flex flex-col gap-16 items-start mb-24 lg:flex-row"
               variants={itemVariants}
-              whileHover={{
-                y: -5,
-                boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
-              }}
             >
-              {/* Animated SVG logo/graphic similar to the hero section */}
-              <motion.div className="w-full h-full">
-                <svg
-                  className="w-full h-full"
-                  viewBox="0 0 600 400"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <defs>
-                    <linearGradient
-                      id="gradient1About"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="100%"
-                    >
-                      <stop
-                        offset="0%"
-                        stopColor="hsl(37, 80%, 60%)"
-                        stopOpacity="0.3"
-                        className="dark:stop-opacity-20"
-                      />
-                      <stop
-                        offset="100%"
-                        stopColor="hsl(340, 45%, 65%)"
-                        stopOpacity="0.3"
-                        className="dark:stop-opacity-20"
-                      />
-                    </linearGradient>
-                    <linearGradient
-                      id="gradient2About"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="100%"
-                    >
-                      <stop
-                        offset="0%"
-                        stopColor="hsl(245, 35%, 62%)"
-                        stopOpacity="0.3"
-                        className="dark:stop-opacity-20"
-                      />
-                      <stop
-                        offset="100%"
-                        stopColor="hsl(200, 30%, 63%)"
-                        stopOpacity="0.3"
-                        className="dark:stop-opacity-20"
-                      />
-                    </linearGradient>
-                  </defs>
-
-                  {/* Brand mark */}
-                  <motion.path
-                    d="M300,80 C380,80 450,150 450,230 C450,310 380,380 300,380 C220,380 150,310 150,230 C150,150 220,80 300,80 Z"
-                    fill="none"
-                    stroke="hsl(37, 80%, 60%)"
-                    strokeWidth="5"
-                    strokeLinecap="round"
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    animate={{ pathLength: 1, opacity: 1 }}
-                    transition={{
-                      duration: 2.5,
-                      ease: "easeInOut",
-                      delay: 0.3,
-                    }}
-                    className="dark:stroke-primary-400"
-                  />
-
-                  <motion.path
-                    d="M300,120 C360,120 420,170 420,230 C420,290 360,340 300,340 C240,340 180,290 180,230 C180,170 240,120 300,120 Z"
-                    fill="none"
-                    stroke="hsl(340, 45%, 65%)"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    animate={{ pathLength: 1, opacity: 0.8 }}
-                    transition={{
-                      duration: 2.2,
-                      ease: "easeInOut",
-                      delay: 0.7,
-                    }}
-                    className="dark:stroke-secondary-400"
-                  />
-
-                  {/* V letter stylized */}
-                  <motion.path
-                    d="M250,160 L300,300 L350,160"
-                    fill="none"
-                    stroke="hsl(245, 35%, 62%)"
-                    strokeWidth="8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    animate={{ pathLength: 1, opacity: 1 }}
-                    transition={{ duration: 2, ease: "easeInOut", delay: 1 }}
-                    className="dark:stroke-accent-400"
-                  />
-
-                  {/* Floating elements */}
-                  <motion.circle
-                    cx="200"
-                    cy="150"
-                    r="15"
-                    fill="url(#gradient1About)"
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 1.2 }}
-                  />
-
-                  <motion.circle
-                    cx="400"
-                    cy="150"
-                    r="15"
-                    fill="url(#gradient2About)"
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 1.3 }}
-                  />
-
-                  <motion.circle
-                    cx="300"
-                    cy="100"
-                    r="10"
-                    fill="hsl(37, 80%, 60%)"
-                    initial={{ y: 0 }}
-                    animate={{ y: [-10, 10, -10] }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="dark:fill-primary-400"
-                  />
-
-                  <motion.circle
-                    cx="380"
-                    cy="280"
-                    r="8"
-                    fill="hsl(245, 35%, 62%)"
-                    initial={{ y: 0 }}
-                    animate={{ y: [-8, 8, -8] }}
-                    transition={{
-                      duration: 5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: 0.5,
-                    }}
-                    className="dark:fill-accent-400"
-                  />
-
-                  <motion.circle
-                    cx="220"
-                    cy="280"
-                    r="8"
-                    fill="hsl(340, 45%, 65%)"
-                    initial={{ y: 0 }}
-                    animate={{ y: [-8, 8, -8] }}
-                    transition={{
-                      duration: 6,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: 1,
-                    }}
-                    className="dark:fill-secondary-400"
-                  />
-                </svg>
+              <motion.div
+                className="flex-shrink-0 lg:w-1/3"
+                variants={slideFromLeft}
+              >
+                <div className="sticky top-32">
+                  <div className="mb-6 w-12 h-px bg-gradient-to-r from-gray-500 to-transparent" />
+                  <h3 className="mb-4 text-2xl font-light text-white md:text-3xl">
+                    Our Mission
+                  </h3>
+                  <div className="mb-6 w-6 h-px bg-gray-600" />
+                </div>
               </motion.div>
 
-              <div className="text-center mt-6">
-                <h4 className="text-xl font-bold text-primary-600 dark:text-primary-400 mb-2">
-                  Engineering Excellence
-                </h4>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Building production-ready platforms that scale from MVP to 
-                  millions of users with enterprise-grade architecture and startup velocity.
+              <motion.div
+                className="space-y-8 lg:w-2/3"
+                variants={slideFromRight}
+              >
+                <p className="text-lg font-light leading-relaxed text-gray-300">
+                  Veloria Labs emerged from a critical need in the startup
+                  ecosystem: technical founders need engineering partners who
+                  understand both rapid MVP development and enterprise-scale
+                  architecture.
                 </p>
-              </div>
+                <p className="text-lg font-light leading-relaxed text-gray-400">
+                  We bridge the gap between "ship fast" and "build
+                  right"—combining startup velocity with enterprise engineering
+                  practices to help technical founders validate ideas in weeks,
+                  not months.
+                </p>
+              </motion.div>
+            </motion.div>
+
+            {/* Approach Block */}
+            <motion.div
+              className="flex flex-col gap-16 items-start mb-24 lg:flex-row"
+              variants={itemVariants}
+            >
+              <motion.div
+                className="order-2 space-y-8 lg:w-2/3 lg:order-1"
+                variants={slideFromLeft}
+              >
+                <p className="text-lg font-light leading-relaxed text-gray-300">
+                  Today, we're the technical co-founder that startup teams wish
+                  they had—bringing years of production experience,
+                  architectural expertise, and deep understanding of the startup
+                  journey.
+                </p>
+                <p className="text-lg font-light leading-relaxed text-gray-400">
+                  We build platforms that scale to millions of users without
+                  technical debt, ensuring your success isn't limited by your
+                  technology choices.
+                </p>
+              </motion.div>
+
+              <motion.div
+                className="flex-shrink-0 order-1 lg:w-1/3 lg:order-2"
+                variants={slideFromRight}
+              >
+                <div className="sticky top-32 text-right">
+                  <div className="mb-6 ml-auto w-12 h-px bg-gradient-to-l from-gray-500 to-transparent" />
+                  <h3 className="mb-4 text-2xl font-light text-white md:text-3xl">
+                    Our Approach
+                  </h3>
+                  <div className="mb-6 ml-auto w-6 h-px bg-gray-600" />
+                </div>
+              </motion.div>
             </motion.div>
           </div>
 
-          {/* Values section */}
-          <motion.div className="mb-20" variants={itemVariants}>
-            <h3 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">
-              Our Engineering Principles
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                {
-                  title: "Technical Excellence",
-                  description:
-                    "Clean code, automated testing, and enterprise-grade architecture that scales from day one.",
-                  color: "primary",
-                },
-                {
-                  title: "Startup Velocity",
-                  description:
-                    "Ship MVPs in weeks, not months, while maintaining production-ready quality standards.",
-                  color: "accent",
-                },
-                {
-                  title: "Partnership Mindset",
-                  description:
-                    "We act as your technical co-founder, making strategic decisions that drive long-term success.",
-                  color: "primary",
-                },
-              ].map((value, index) => (
+          {/* Values List */}
+          <motion.div
+            className="mx-auto mb-32 max-w-4xl"
+            variants={itemVariants}
+          >
+            <div className="mb-16 text-center">
+              <h3 className="mb-4 text-2xl font-light text-white md:text-3xl">
+                What We Believe
+              </h3>
+              <div className="mx-auto w-16 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent" />
+            </div>
+
+            <div className="space-y-12">
+              {values.map((value, index) => (
                 <motion.div
                   key={index}
-                  className="bg-white dark:bg-dark-100 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
-                  variants={valuesAnimation}
-                  whileHover={{ y: -5 }}
+                  className={cn(
+                    "flex items-center gap-8 group",
+                    index % 2 === 0 ? "justify-start" : "justify-end"
+                  )}
+                  variants={itemVariants}
+                  whileHover={{ x: index % 2 === 0 ? 10 : -10 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <div
-                    className={`w-12 h-12 rounded-full bg-${value.color}/20 flex items-center justify-center text-${value.color}-600 dark:text-${value.color}-400 mb-4`}
-                  >
-                    <CheckCircle2 size={24} />
-                  </div>
-                  <h4 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">
-                    {value.title}
-                  </h4>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    {value.description}
-                  </p>
+                  {index % 2 === 0 ? (
+                    <>
+                      <div className="flex gap-4 items-center">
+                        <div className="w-2 h-2 bg-gray-500 rounded-full transition-colors duration-300 group-hover:bg-gray-400" />
+                        <div className="w-8 h-px bg-gray-600 transition-colors duration-300 group-hover:bg-gray-500" />
+                      </div>
+                      <p className="max-w-lg text-lg font-light text-gray-300 transition-colors duration-300 group-hover:text-white">
+                        {value}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="max-w-lg text-lg font-light text-right text-gray-300 transition-colors duration-300 group-hover:text-white">
+                        {value}
+                      </p>
+                      <div className="flex gap-4 items-center">
+                        <div className="w-8 h-px bg-gray-600 transition-colors duration-300 group-hover:bg-gray-500" />
+                        <div className="w-2 h-2 bg-gray-500 rounded-full transition-colors duration-300 group-hover:bg-gray-400" />
+                      </div>
+                    </>
+                  )}
                 </motion.div>
               ))}
             </div>
           </motion.div>
 
-          {/* Team Members */}
-          <motion.div variants={itemVariants}>
-            <h3 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">
-              Meet Our Team
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {teamMembers.map((member, index) => (
-                <TeamMember key={index} member={member} index={index} />
+          {/* Stats Integrated */}
+          <motion.div className="mx-auto max-w-4xl" variants={itemVariants}>
+            <div className="mb-20 text-center">
+              <h3 className="mb-4 text-2xl font-light text-white md:text-3xl">
+                By the Numbers
+              </h3>
+              <div className="mx-auto w-16 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent" />
+            </div>
+
+            <div className="space-y-16">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={index}
+                  className={cn(
+                    "flex flex-col gap-8 items-center group md:flex-row",
+                    index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                  )}
+                  variants={itemVariants}
+                  whileHover={{
+                    x: index % 2 === 0 ? 8 : -8,
+                    transition: { duration: 0.3 },
+                  }}
+                >
+                  <div className="flex-shrink-0">
+                    <div className="relative">
+                      <div className="absolute inset-0 rounded-lg blur-2xl transition-all duration-500 bg-gray-900/20 group-hover:bg-gray-800/30" />
+                      <div className="relative p-6 rounded-lg border backdrop-blur-sm transition-all duration-500 bg-black/40 border-gray-700/20 group-hover:border-gray-600/30">
+                        <div className="mb-1 text-4xl font-extralight text-white md:text-5xl">
+                          {stat.number}
+                        </div>
+                        <div className="text-sm font-light text-gray-400 whitespace-nowrap">
+                          {stat.label}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 text-center md:text-left">
+                    <div
+                      className={cn(
+                        "flex gap-4 items-center mb-3",
+                        index % 2 === 0
+                          ? "justify-center md:justify-start"
+                          : "justify-center md:justify-end"
+                      )}
+                    >
+                      <div className="w-8 h-px bg-gradient-to-r from-gray-600 to-gray-700 transition-all duration-300 group-hover:from-gray-500 group-hover:to-gray-600" />
+                      <div className="w-2 h-2 bg-gray-600 rounded-full transition-colors duration-300 group-hover:bg-gray-500" />
+                    </div>
+                    <p
+                      className={cn(
+                        "text-lg font-light text-gray-300 transition-colors duration-300 group-hover:text-white",
+                        index % 2 === 0
+                          ? "text-center md:text-left"
+                          : "text-center md:text-right"
+                      )}
+                    >
+                      {stat.description}
+                    </p>
+                  </div>
+                </motion.div>
               ))}
             </div>
           </motion.div>

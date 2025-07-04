@@ -8,7 +8,11 @@ import {
 
 export default function GlobalReach() {
   return (
-    <section className="px-4 py-20" style={{ backgroundColor: "#EDEDED" }}>
+    <section
+      id="connectivity"
+      className="px-4 py-20"
+      style={{ backgroundColor: "#EDEDED" }}
+    >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center">
           <motion.h2

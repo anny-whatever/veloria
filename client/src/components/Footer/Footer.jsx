@@ -4,11 +4,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Twitter,
-  Instagram,
-  Facebook,
   Linkedin,
-  Send,
-  ArrowUp,
   Mail,
   Phone,
   MapPin,
@@ -18,261 +14,161 @@ import {
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  // Define industry directories for backlinks
-  const industryDirectories = [
+  const quickLinks = [
+    { name: "Home", path: "/" },
+    { name: "Services", path: "/services" },
+    { name: "About", path: "#about" },
+    { name: "Contact", path: "#contact" },
+    { name: "Get Started", path: "/get-started" },
+  ];
+
+  const socialLinks = [
     {
-      name: "Clutch",
-      url: "https://clutch.co/profile/veloria",
-      rel: "noopener noreferrer",
+      name: "Twitter",
+      icon: <Twitter size={18} />,
+      url: "https://x.com/CursorWarrior",
     },
     {
-      name: "GoodFirms",
-      url: "https://www.goodfirms.co/company/veloria",
-      rel: "noopener noreferrer",
-    },
-    {
-      name: "DesignRush",
-      url: "https://www.designrush.com/agency/profile/veloria",
-      rel: "noopener noreferrer",
+      name: "LinkedIn",
+      icon: <Linkedin size={18} />,
+      url: "https://www.linkedin.com/company/107645819/admin/dashboard/",
     },
   ];
 
-  // Define industry associations
-  const industryAssociations = [
+  const contactInfo = [
     {
-      name: "NASSCOM",
-      url: "https://nasscom.in/",
-      rel: "noopener noreferrer",
+      icon: <Mail size={16} />,
+      text: "info@veloria.in",
+      href: "mailto:info@veloria.in",
     },
     {
-      name: "CII",
-      url: "https://www.cii.in/",
-      rel: "noopener noreferrer",
+      icon: <Phone size={16} />,
+      text: "+91 9315 360 595",
+      href: "tel:+919315360595",
     },
+    { icon: <MapPin size={16} />, text: "Mumbai, India", href: "#" },
   ];
 
   return (
-    <footer className="bg-surface-100 dark:bg-dark-100 border-t border-gray-200 dark:border-gray-800 pt-12 pb-6">
-      {/* Decorative Elements - Make sure they're visible in both modes */}
-      <div className="absolute top-10 left-10 w-96 h-96 rounded-full bg-gradient-to-r from-primary-500/20 to-secondary-500/20 dark:from-primary-400/10 dark:to-secondary-400/10 blur-3xl -z-10"></div>
-      <div className="absolute bottom-20 right-10 w-64 h-64 rounded-full bg-gradient-to-l from-accent-500/20 to-primary-500/20 dark:from-accent-400/10 dark:to-primary-400/10 blur-3xl -z-10"></div>
-      <div className="absolute top-40 right-1/4 w-32 h-32 rounded-full bg-gradient-to-tr from-secondary-500/20 to-accent-500/20 dark:from-secondary-400/10 dark:to-accent-400/10 blur-xl -z-10"></div>
+    <footer className="relative">
+      {/* Dark Gradient Background */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to bottom, #EDEDED 0%, #D0D0D0 30%, #B0B0B0 60%, #6B7280 100%)",
+        }}
+      />
 
-      {/* Additional subtle design elements */}
-      <div className="absolute bottom-40 left-1/4 w-24 h-24 rounded-full bg-gradient-to-br from-primary-500/15 to-accent-500/15 dark:from-primary-400/8 dark:to-accent-400/8 blur-xl -z-10"></div>
-      <div className="absolute top-60 left-2/3 w-16 h-16 rounded-full bg-gradient-to-tr from-secondary-500/15 to-primary-500/15 dark:from-secondary-400/8 dark:to-primary-400/8 blur-lg -z-10"></div>
+      {/* Subtle overlay patterns */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_20%,rgba(0,0,0,0.1)_0%,transparent_50%)]" />
+        <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_80%,rgba(0,0,0,0.1)_0%,transparent_50%)]" />
+      </div>
 
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div>
-            <h3 className="text-xl font-bold mb-4 text-primary-600 dark:text-primary-400">
-              Veloria
-            </h3>
-            <p className="mb-4 text-gray-700 dark:text-gray-300">
-              A leading web design and development agency delivering exceptional
-              digital experiences and custom software solutions.
-            </p>
-            <div className="flex space-x-4">
-              <a
-                href="https://twitter.com/veloria"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter"
-                className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
-              >
-                <Twitter size={20} />
-              </a>
-              <a
-                href="https://facebook.com/veloria"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
-              >
-                <Facebook size={20} />
-              </a>
-              <a
-                href="https://instagram.com/veloria"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
-              >
-                <Instagram size={20} />
-              </a>
-              <a
-                href="https://linkedin.com/company/veloria"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
-              >
-                <Linkedin size={20} />
-              </a>
-            </div>
-          </div>
+      <div className="relative px-4 py-16">
+        <div className="mx-auto max-w-6xl">
+          {/* Main Footer Content */}
+          <div className="grid gap-12 mb-12 md:grid-cols-2 lg:grid-cols-4">
+            {/* Company Info */}
+            <div className="lg:col-span-2">
+              <div className="mb-6">
+                <h3 className="mb-3 text-2xl font-bold text-gray-800">
+                  Veloria Labs
+                </h3>
+                <p className="max-w-md leading-relaxed text-gray-600">
+                  A product engineering lab that partners with technical
+                  founders to build scalable, production-ready platforms.
+                </p>
+              </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">
-              Quick Links
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  to="/"
-                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/services"
-                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
-                >
-                  Services
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/about"
-                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
-                >
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/contact"
-                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
-                >
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/get-started"
-                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
-                >
-                  Get Started
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">
-              Contact Us
-            </h3>
-            <ul className="space-y-3">
-              <li className="flex items-start">
-                <Mail
-                  size={18}
-                  className="mr-2 text-primary-600 dark:text-primary-400 mt-1 flex-shrink-0"
-                />
-                <a
-                  href="mailto:info@veloria.in"
-                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
-                >
-                  info@veloria.in
-                </a>
-              </li>
-              <li className="flex items-start">
-                <Phone
-                  size={18}
-                  className="mr-2 text-primary-600 dark:text-primary-400 mt-1 flex-shrink-0"
-                />
-                <a
-                  href="tel:+919315360595"
-                  className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
-                >
-                  +91 9315360595
-                </a>
-              </li>
-              <li className="flex items-start">
-                <MapPin
-                  size={18}
-                  className="mr-2 text-primary-600 dark:text-primary-400 mt-1 flex-shrink-0"
-                />
-                <span className="text-gray-700 dark:text-gray-300">India</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Industry Directories - For Backlinks */}
-          <div>
-            <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">
-              Industry Recognition
-            </h3>
-            <div className="mb-4">
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                Find us on:
-              </p>
-              <ul className="space-y-2">
-                {industryDirectories.map((directory, index) => (
-                  <li key={index}>
-                    <a
-                      href={directory.url}
-                      target="_blank"
-                      rel={directory.rel}
-                      className="flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
-                    >
-                      {directory.name}
-                      <ArrowUpRight size={14} className="ml-1" />
-                    </a>
-                  </li>
+              {/* Social Links */}
+              <div className="flex space-x-4">
+                {socialLinks.map((social, index) => (
+                  <motion.a
+                    key={index}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.name}
+                    className="flex justify-center items-center w-10 h-10 text-gray-500 transition-colors duration-300 hover:text-gray-800"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {social.icon}
+                  </motion.a>
                 ))}
-              </ul>
+              </div>
             </div>
+
+            {/* Quick Links */}
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                Member of:
-              </p>
-              <ul className="space-y-2">
-                {industryAssociations.map((association, index) => (
+              <h4 className="mb-6 text-lg font-semibold text-gray-800">
+                Quick Links
+              </h4>
+              <ul className="space-y-3">
+                {quickLinks.map((link, index) => (
+                  <li key={index}>
+                    <Link
+                      to={link.path}
+                      className="flex items-center text-gray-600 transition-colors duration-300 hover:text-gray-900 group"
+                    >
+                      {link.name}
+                      <ArrowUpRight
+                        size={14}
+                        className="ml-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contact Info */}
+            <div>
+              <h4 className="mb-6 text-lg font-semibold text-gray-800">
+                Contact
+              </h4>
+              <ul className="space-y-3">
+                {contactInfo.map((contact, index) => (
                   <li key={index}>
                     <a
-                      href={association.url}
-                      target="_blank"
-                      rel={association.rel}
-                      className="flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
+                      href={contact.href}
+                      className="flex items-center text-gray-600 transition-colors duration-300 hover:text-gray-900 group"
                     >
-                      {association.name}
-                      <ArrowUpRight size={14} className="ml-1" />
+                      <span className="mr-3 text-gray-500 transition-colors duration-300 group-hover:text-gray-700">
+                        {contact.icon}
+                      </span>
+                      {contact.text}
                     </a>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-        </div>
 
-        {/* Attribution Links Container - populated by BacklinkHelper */}
-        <div className="attribution-links hidden">
-          {/* This container will be populated and styled by BacklinkHelper */}
-        </div>
-
-        {/* Copyright */}
-        <div className="text-center mt-8 pt-6 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-600 dark:text-gray-400">
-          <p>
-            &copy; {currentYear} Veloria. All rights reserved.{" "}
-            <Link
-              to="/privacy-policy"
-              className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              Privacy Policy
-            </Link>{" "}
-            |{" "}
-            <Link
-              to="/terms-of-service"
-              className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              Terms of Service
-            </Link>
-          </p>
+          {/* Bottom Section */}
+          <div className="pt-8 border-t border-gray-400/30">
+            <div className="flex flex-col justify-between items-center space-y-4 md:flex-row md:space-y-0">
+              <div className="text-sm text-gray-200">
+                <p>&copy; {currentYear} Veloria. All rights reserved.</p>
+              </div>
+              <div className="flex space-x-6 text-sm">
+                <Link
+                  to="/privacy-policy"
+                  className="text-gray-300 transition-colors duration-300 hover:text-white"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  to="/terms-of-service"
+                  className="text-gray-300 transition-colors duration-300 hover:text-white"
+                >
+                  Terms of Service
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
