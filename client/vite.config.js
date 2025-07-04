@@ -38,15 +38,17 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
       },
       output: {
-        manualChunks: (id) => {
-          // Create separate chunks for large dependencies
-          if (id.includes("node_modules")) {
-            if (id.includes("react")) return "react-vendor";
-            if (id.includes("framer-motion")) return "framer-motion-vendor";
-            if (id.includes("lucide-react")) return "lucide-vendor";
-            if (id.includes("@fullcalendar")) return "fullcalendar-vendor";
-            if (id.includes("node_modules")) return "vendor";
-          }
+        manualChunks: {
+          // Explicitly group React and its ecosystem together
+          "react-vendor": ["react", "react-dom", "react-router-dom"],
+          "ui-vendor": ["framer-motion", "lucide-react"],
+          "calendar-vendor": [
+            "@fullcalendar/react",
+            "@fullcalendar/daygrid",
+            "@fullcalendar/interaction",
+            "@fullcalendar/list",
+            "@fullcalendar/timegrid",
+          ],
         },
       },
     },
