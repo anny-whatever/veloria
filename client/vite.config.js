@@ -56,14 +56,6 @@ export default defineConfig({
     cssCodeSplit: true,
     // Enable source maps in production
     sourcemap: true,
-    // Improve minification
-    minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
     // Reduce chunk size
     chunkSizeWarningLimit: 1000,
   },
@@ -96,6 +88,7 @@ export default defineConfig({
     ],
     esbuildOptions: {
       target: "es2020",
+      drop: ["console", "debugger"],
     },
   },
 });
