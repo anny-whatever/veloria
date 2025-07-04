@@ -6,6 +6,7 @@ import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import ModernHero from "./components/Hero/ModernHero";
 import Portfolio from "./components/Portfolio/Portfolio";
+import TechnicalExcellence from "./components/TechnicalExcellence/TechnicalExcellence";
 import SpotlightServices from "./components/Services/SpotlightServices";
 import GlobalReach from "./components/GlobalReach";
 import About from "./components/About/About";
@@ -172,6 +173,7 @@ function App() {
       <SpotlightServices />
       <GlobalReach />
       <Portfolio />
+      <TechnicalExcellence />
       <About />
       <Contact />
     </>

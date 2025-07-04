@@ -1,6 +1,6 @@
 "use client";
 import React, { useId, useMemo } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 import { cn } from "../../lib/utils";
@@ -18,6 +18,15 @@ export const SparklesCore = (props) => {
     particleDensity,
   } = props;
   const [init, setInit] = useState(false);
+  const [particlesReady, setParticlesReady] = useState(false);
+  const isMountedRef = useRef(false);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     initParticlesEngine(async (engine) => {
@@ -29,14 +38,22 @@ export const SparklesCore = (props) => {
 
   const controls = useAnimation();
 
-  const particlesLoaded = async (container) => {
-    if (container) {
+  // Handle animation start in useEffect when particles are ready
+  useEffect(() => {
+    if (particlesReady && isMountedRef.current) {
       controls.start({
         opacity: 1,
         transition: {
           duration: 1,
         },
       });
+    }
+  }, [particlesReady, controls]);
+
+  const particlesLoaded = async (container) => {
+    if (container && isMountedRef.current) {
+      // Set state to trigger animation in useEffect instead of calling controls.start directly
+      setParticlesReady(true);
     }
   };
 

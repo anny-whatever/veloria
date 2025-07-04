@@ -8,17 +8,17 @@ import {
 
 export default function GlobalReach() {
   return (
-    <section className="py-20 px-4" style={{ backgroundColor: "#F8F8FF" }}>
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
+    <section className="px-4 py-20" style={{ backgroundColor: "#EDEDED" }}>
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-16 text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl font-bold mb-6"
+            className="mb-6 text-4xl font-bold md:text-5xl"
           >
             <span className="text-gray-800">Global</span>{" "}
-            <span className="text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
               {"Connectivity".split("").map((letter, idx) => (
                 <motion.span
                   key={idx}
@@ -37,7 +37,7 @@ export default function GlobalReach() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
+            className="mx-auto max-w-3xl text-lg leading-relaxed text-gray-600 md:text-xl"
           >
             We serve clients <strong>anywhere in the world</strong> and excel at
             working with remote and overseas teams. Break free from geographical
@@ -90,14 +90,14 @@ export default function GlobalReach() {
           />
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid gap-8 md:grid-cols-3">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex justify-center"
           >
-            <GlowingStarsBackgroundCard>
+            <GlowingStarsBackgroundCard className="bg-[#EDEDED]">
               <GlowingStarsTitle>24/7 Availability</GlowingStarsTitle>
               <div className="flex justify-between items-end">
                 <GlowingStarsDescription>
@@ -114,7 +114,7 @@ export default function GlobalReach() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="flex justify-center"
           >
-            <GlowingStarsBackgroundCard>
+            <GlowingStarsBackgroundCard className="bg-[#EDEDED]">
               <GlowingStarsTitle>Remote Collaboration</GlowingStarsTitle>
               <div className="flex justify-between items-end">
                 <GlowingStarsDescription>
@@ -131,7 +131,7 @@ export default function GlobalReach() {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="flex justify-center"
           >
-            <GlowingStarsBackgroundCard>
+            <GlowingStarsBackgroundCard className="bg-[#EDEDED]">
               <GlowingStarsTitle>Cultural Adaptability</GlowingStarsTitle>
               <div className="flex justify-between items-end">
                 <GlowingStarsDescription>
@@ -147,11 +147,11 @@ export default function GlobalReach() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="text-center mt-12"
+          className="mt-12 text-center"
         >
-          <p className="text-lg text-gray-700 font-medium">
+          <p className="text-lg font-medium text-gray-700">
             Ready to work with a truly global team?{" "}
-            <span className="text-blue-600 font-semibold">
+            <span className="font-semibold text-blue-600">
               Let's connect across continents.
             </span>
           </p>
@@ -169,7 +169,7 @@ const ClockIcon = () => (
     viewBox="0 0 24 24"
     strokeWidth="1.5"
     stroke="currentColor"
-    className="h-4 w-4 text-white stroke-2"
+    className="w-4 h-4 text-white stroke-2"
   >
     <path
       strokeLinecap="round"
@@ -186,7 +186,7 @@ const TeamIcon = () => (
     viewBox="0 0 24 24"
     strokeWidth="1.5"
     stroke="currentColor"
-    className="h-4 w-4 text-white stroke-2"
+    className="w-4 h-4 text-white stroke-2"
   >
     <path
       strokeLinecap="round"
@@ -203,7 +203,7 @@ const GlobalIcon = () => (
     viewBox="0 0 24 24"
     strokeWidth="1.5"
     stroke="currentColor"
-    className="h-4 w-4 text-white stroke-2"
+    className="w-4 h-4 text-white stroke-2"
   >
     <path
       strokeLinecap="round"

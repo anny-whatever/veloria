@@ -16,7 +16,7 @@ export const GlowingStarsBackgroundCard = ({ className, children }) => {
         setMouseEnter(false);
       }}
       className={cn(
-        "bg-gradient-to-br from-white/90 to-gray-100/90 backdrop-blur-sm p-6 max-w-md h-full w-full rounded-2xl border border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300",
+        "p-6 w-full max-w-md h-full bg-gradient-to-br rounded-2xl border shadow-lg backdrop-blur-sm transition-all duration-300 from-white/90 to-gray-100/90 border-gray-200/50 hover:shadow-xl",
         className
       )}
     >
@@ -32,7 +32,7 @@ export const GlowingStarsDescription = ({ className, children }) => {
   return (
     <p
       className={cn(
-        "text-sm text-gray-600 max-w-[16rem] leading-relaxed",
+        "text-sm leading-relaxed text-gray-600 max-w-[16rem]",
         className
       )}
     >
@@ -43,7 +43,7 @@ export const GlowingStarsDescription = ({ className, children }) => {
 
 export const GlowingStarsTitle = ({ className, children }) => {
   return (
-    <h3 className={cn("font-bold text-xl text-gray-800 mb-2", className)}>
+    <h3 className={cn("mb-2 text-xl font-bold text-gray-800", className)}>
       {children}
     </h3>
   );
@@ -70,7 +70,7 @@ export const Illustration = ({ mouseEnter }) => {
 
   return (
     <div
-      className="h-32 p-1 w-full"
+      className="p-1 w-full h-32"
       style={{
         display: "grid",
         gridTemplateColumns: `repeat(${columns}, 1fr)`,
@@ -84,7 +84,7 @@ export const Illustration = ({ mouseEnter }) => {
         return (
           <div
             key={`matrix-col-${starIdx}`}
-            className="relative flex items-center justify-center"
+            className="flex relative justify-center items-center"
           >
             <Star
               isGlowing={mouseEnter ? true : isGlowing}
@@ -106,7 +106,7 @@ const Star = ({ isGlowing, delay }) => {
     <motion.div
       key={delay}
       initial={{
-        scale: 1,
+        scale: 2,
       }}
       animate={{
         scale: isGlowing ? [1, 1.2, 2.5, 2.2, 1.5] : 1,
@@ -117,7 +117,7 @@ const Star = ({ isGlowing, delay }) => {
         ease: "easeInOut",
         delay: delay,
       }}
-      className={cn("bg-slate-300 h-[1px] w-[1px] rounded-full relative z-20")}
+      className={cn("relative z-20 rounded-full bg-slate-300 h-[1px] w-[1px]")}
     ></motion.div>
   );
 };

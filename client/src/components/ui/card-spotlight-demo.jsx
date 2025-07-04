@@ -6,7 +6,7 @@ export default function CardSpotlightDemo() {
       <p className="text-xl font-bold relative z-20 mt-2 text-white">
         Authentication steps
       </p>
-      <div className="text-neutral-200 mt-4 relative z-20">
+      <div className="text-white-200 mt-4 relative z-20">
         Follow these steps to secure your account:
         <ul className="list-none  mt-2">
           <Step title="Enter your email address" />
@@ -15,7 +15,7 @@ export default function CardSpotlightDemo() {
           <Step title="Verify your identity" />
         </ul>
       </div>
-      <p className="text-neutral-300 mt-4 relative z-20 text-sm">
+      <p className="text-white-300 mt-4 relative z-20 text-sm">
         Ensuring your account is properly secured helps protect your personal
         information and data.
       </p>

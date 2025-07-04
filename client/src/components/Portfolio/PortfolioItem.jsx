@@ -103,7 +103,7 @@ const PortfolioItem = ({ item, index, onClick }) => {
       case "custom":
         return "bg-indigo-500";
       default:
-        return "bg-neutral";
+        return "bg-white";
     }
   };
 
@@ -122,7 +122,7 @@ const PortfolioItem = ({ item, index, onClick }) => {
       case "custom":
         return "bg-indigo-500/20";
       default:
-        return "bg-neutral/20";
+        return "bg-white/20";
     }
   };
 
@@ -141,7 +141,7 @@ const PortfolioItem = ({ item, index, onClick }) => {
       case "custom":
         return "text-indigo-500";
       default:
-        return "text-neutral";
+        return "text-white";
     }
   };
 
