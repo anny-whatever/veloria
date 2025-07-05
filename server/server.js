@@ -36,7 +36,7 @@ app.use(
         "http://localhost:3000",
         "http://localhost:5173",
         "http://localhost:4173",
-        "https://yourwebsite.com", // Replace with your actual domain
+        "https://veloria.in", // Replace with your actual domain
       ];
 
       if (allowedOrigins.indexOf(origin) !== -1) {
