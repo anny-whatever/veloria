@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, ChevronRight, ChevronLeft, Info } from "lucide-react";
-import axios from "axios";
+import { submitGetStartedForm } from "../../api";
 
 const ProjectForm = () => {
   const [step, setStep] = useState(1);
@@ -139,16 +139,15 @@ const ProjectForm = () => {
         serviceType: formData.serviceType,
       };
 
-      // Use the environment variable for the API URL
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await axios.post(`${apiUrl}/projects`, formattedData);
+      // Use the API service to submit the form
+      const response = await submitGetStartedForm(formattedData);
 
       setSubmitSuccess(true);
       setIsSubmitting(false);
     } catch (error) {
       setIsSubmitting(false);
       setSubmitError(
-        error.response?.data?.message ||
+        error ||
           "Failed to submit your project. Please try again or contact us directly."
       );
       console.error("Form submission error:", error);

@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
-import { splitVendorChunkPlugin } from "vite";
+import { splitVendorChunkPlugin, splitVendorChunk } from "vite";
 import { imagetools } from "vite-imagetools";
 
 // https://vitejs.dev/config/
@@ -38,17 +38,20 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
       },
       output: {
-        manualChunks: {
-          // Explicitly group React and its ecosystem together
-          "react-vendor": ["react", "react-dom", "react-router-dom"],
-          "ui-vendor": ["framer-motion", "lucide-react"],
-          "calendar-vendor": [
-            "@fullcalendar/react",
-            "@fullcalendar/daygrid",
-            "@fullcalendar/interaction",
-            "@fullcalendar/list",
-            "@fullcalendar/timegrid",
-          ],
+        manualChunks(id, { getModuleInfo }) {
+          if (id.includes("node_modules")) {
+            if (/(react|react-dom|react-router-dom)/.test(id)) {
+              return "react-vendor";
+            }
+            if (/(framer-motion|lucide-react)/.test(id)) {
+              return "ui-vendor";
+            }
+            if (/@fullcalendar/.test(id)) {
+              return "calendar-vendor";
+            }
+          }
+          // Fallback to Vite's default vendor chunk splitting
+          return splitVendorChunk(id, { getModuleInfo });
         },
       },
     },

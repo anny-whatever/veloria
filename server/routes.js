@@ -4,6 +4,7 @@ const rateLimit = require("express-rate-limit");
 const database = require("./database");
 const emailService = require("./emailService");
 const config = require("./config");
+const basicAuth = require("express-basic-auth");
 
 // Rate limiting middleware
 const createRateLimit = (windowMs, max) =>
@@ -270,6 +271,15 @@ router.get("/health", generalLimit, (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+// Admin authentication middleware
+router.use(
+  "/admin",
+  basicAuth({
+    users: { [config.admin.username]: config.admin.password },
+    challenge: true,
+  })
+);
 
 // Admin endpoints (basic - would need proper authentication in production)
 router.get("/admin/submissions/:type?", generalLimit, async (req, res) => {

@@ -35,6 +35,8 @@ import PayrollManagementSystem from "./pages/Services/PayrollManagementSystem";
 import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
 import TermsOfService from "./pages/Legal/TermsOfService";
 import NotFound from "./pages/NotFound";
+import AdminLayout from "./pages/Admin/AdminLayout";
+import AdminDashboardPage from "./pages/Admin/AdminDashboardPage";
 
 // Main App component with routing
 function App() {
@@ -358,9 +360,14 @@ function App() {
                 />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />
-                {/* Catch-all route for 404 page */}
-                <Route path="*" element={<NotFound />} />
               </Route>
+              {/* Admin Routes */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboardPage />} />
+              </Route>
+
+              {/* Catch-all route for 404 page - must be last */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </AnimatePresence>
         </motion.div>

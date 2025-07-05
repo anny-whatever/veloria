@@ -8,10 +8,10 @@ const isBrowser = typeof window !== "undefined";
 const getBaseUrl = () => {
   // In browser, use the environment variable or default
   if (isBrowser) {
-    return import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+    return import.meta.env.VITE_API_URL || "http://localhost:5000";
   }
   // In server environment, use a known default
-  return process.env.VITE_API_URL || "http://localhost:5000/api";
+  return process.env.VITE_API_URL || "http://localhost:5000";
 };
 
 // Create axios instance with default config
@@ -53,44 +53,69 @@ API.interceptors.response.use(
   }
 );
 
-// Project Form API
-export const submitProjectForm = async (formData) => {
+// Health Check API
+export const checkHealth = async () => {
   try {
-    const response = await API.post("/projects", formData);
+    const response = await API.get("/api/health");
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || "Error submitting project form";
+    throw error.response?.data?.message || "Health check failed";
   }
 };
 
-// Booking API
-export const scheduleDiscoveryCall = async (bookingData) => {
+// Contact Form API
+export const submitContactForm = async (contactData) => {
   try {
-    const response = await API.post("/bookings", bookingData);
+    const response = await API.post("/api/contact", contactData);
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || "Error scheduling discovery call";
+    throw error.response?.data?.message || "Error submitting contact form";
   }
 };
 
+// Get Started Form API (previously called project form)
+export const submitGetStartedForm = async (formData) => {
+  try {
+    const response = await API.post("/api/get-started", formData);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Error submitting get started form";
+  }
+};
+
+// Book Call API (previously called booking)
+export const submitBookCallForm = async (bookingData) => {
+  try {
+    const response = await API.post("/api/book-call", bookingData);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Error booking call";
+  }
+};
+
+// Admin API
+export const getAdminSubmissions = async () => {
+  try {
+    const response = await API.get("/api/admin/submissions");
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Error fetching admin submissions";
+  }
+};
+
+// Legacy function names for backward compatibility
+export const submitProjectForm = submitGetStartedForm;
+export const scheduleDiscoveryCall = submitBookCallForm;
+
+// Legacy booking cancellation (keeping in case it's used elsewhere)
 export const cancelBooking = async (bookingId, email) => {
   try {
-    const response = await API.patch(`/bookings/cancel/${bookingId}`, {
+    const response = await API.patch(`/api/bookings/cancel/${bookingId}`, {
       email,
     });
     return response.data;
   } catch (error) {
     throw error.response?.data?.message || "Error cancelling booking";
-  }
-};
-
-// Contact API
-export const submitContactForm = async (contactData) => {
-  try {
-    const response = await API.post("/contact", contactData);
-    return response.data;
-  } catch (error) {
-    throw error.response?.data?.message || "Error submitting contact form";
   }
 };
 
