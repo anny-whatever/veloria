@@ -9,6 +9,7 @@ import {
   Phone,
   MapPin,
   ArrowUpRight,
+  Github,
 } from "lucide-react";
 
 const Footer = () => {
@@ -36,6 +37,11 @@ const Footer = () => {
       name: "LinkedIn",
       icon: <Linkedin size={18} />,
       url: "https://www.linkedin.com/company/107645819/admin/dashboard/",
+    },
+    {
+      name: "GitHub",
+      icon: <Github size={18} />,
+      url: "https://github.com/anny-whatever",
     },
   ];
 

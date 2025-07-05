@@ -109,10 +109,15 @@ const ModernHero = () => {
             <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
           </Link>
 
-          <button className="inline-flex gap-2 items-center px-8 py-4 font-semibold text-gray-300 rounded-full border border-gray-600 transition-all duration-200 group hover:border-gray-500 hover:text-white hover:bg-gray-800/50">
+          <a
+            href="https://github.com/anny-whatever"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex gap-2 items-center px-8 py-4 font-semibold text-gray-300 rounded-full border border-gray-600 transition-all duration-200 group hover:border-gray-500 hover:text-white hover:bg-gray-800/50 hover:no-underline"
+          >
             <Github className="w-4 h-4" />
             Explore Our Work
-          </button>
+          </a>
         </motion.div>
 
         {/* Trust Indicators - Returned to normal size */}
